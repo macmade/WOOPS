@@ -16,7 +16,7 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops/Core/Singleton
+ * @package     Woops.Core.Singleton
  */
 interface Woops_Core_Singleton_Interface
 {

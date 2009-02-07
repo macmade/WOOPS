@@ -16,7 +16,7 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops/Core/Exception
+ * @package     Woops.Core.Exception
  */
 abstract class Woops_Core_Exception_Base extends Exception
 {

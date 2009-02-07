@@ -25,7 +25,7 @@ require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIREC
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops/Core/Class
+ * @package     Woops.Core.Class
  */
 final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
 {

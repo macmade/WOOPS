@@ -16,7 +16,7 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops/Number
+ * @package     Woops.Number
  */
 class tx_oop_Number_Utils
 {

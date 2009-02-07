@@ -16,7 +16,7 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops/Core/Singleton
+ * @package     Woops.Core.Singleton
  */
 final class Woops_Core_Singleton_Exception extends Woops_Core_Exception_Base
 {

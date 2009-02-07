@@ -16,7 +16,7 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops/Color
+ * @package     Woops.Color
  */
 class Woops_Color_Converter
 {
