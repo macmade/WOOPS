@@ -31,21 +31,6 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
     private static $_instance = NULL;
     
     /**
-     * The global lookup order
-     */
-    private $_lookupOrder     = 'GPCS';
-    
-    /**
-     * An array with references to $_GET, $_POST, $_COOKIE and $_SESSION
-     */
-    private $_requestVars     = array(
-        'G' => array(),
-        'P' => array(),
-        'C' => array(),
-        'S' => array()
-    );
-    
-    /**
      * An array with references to $_SERVER and $_ENV
      */
     private $_envVars         = array(
@@ -73,12 +58,6 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
      */
     private function __construct()
     {
-        // Stores references to the request vars
-        $this->_requestVars[ 'G' ]   = &$_GET;
-        $this->_requestVars[ 'P' ]   = &$_POST;
-        $this->_requestVars[ 'C' ]   = &$_COOKIE;
-        $this->_requestVars[ 'S' ]   = &$_SESSION;
-        
         // Stores references to the environment vars
         $this->_envVars[ '_SERVER' ] = &$_SERVER;
         $this->_envVars[ '_ENV' ]    = &$_ENV;
@@ -99,6 +78,14 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
             'Class ' . __CLASS__ . ' cannot be cloned',
             Woops_Core_Singleton_Exception::EXCEPTION_CLONE
         );
+    }
+    
+    /**
+     * 
+     */
+    public function __get( $name )
+    {
+        return $this->getVar( $name );
     }
     
     /**
@@ -269,54 +256,6 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         return $result;
     }
     
-    /**
-     * 
-     */
-    public function setLookupOrder( $lookupOrder )
-    {
-        $oldValue           = $this->_lookupOrder;
-        $this->_lookupOrder = ( string )$lookupOrder;
-        return $oldValue;
-    }
-    
-    /**
-     * 
-     */
-    public function getRequestVar( $name, $order = '' )
-    {
-        $order = ( $order ) ? $order : $this->_lookupOrder;
-        $keys  = preg_split( '//', $order );
-        
-        foreach( $keys as $key ) {
-            
-            if( isset( $this->_requestVars[ $key ][ $name ] ) ) {
-                
-                return $this->_requestVars[ $key ][ $name ];
-            }
-        }
-        
-        return false;
-    }
-    
-    /**
-     * 
-     */
-    public function requestVarExists( $name, $order = '' )
-    {
-        $order = ( $order ) ? $order : $this->_lookupOrder;
-        $keys  = preg_split( '//', $order );
-        
-        foreach( $keys as $key ) {
-            
-            if( isset( $this->_requestVars[ $key ][ $name ] ) ) {
-                
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
     
     /**
      * Get a server variable.
@@ -329,7 +268,7 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
      * @return  string  The server variable, if available
      * @see     _setServerVar
      */
-    public function getServerVar( $var )
+    public function getVar( $var )
     {
         $var = ( string )$var;
         
