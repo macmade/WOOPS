@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Number
  */
-class Woops_Number_Utils
+class Woops_Number_Utils implements Woops_Core_Static_Class_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

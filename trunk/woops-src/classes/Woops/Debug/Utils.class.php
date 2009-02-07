@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Debug
  */
-final class Woops_Debug_Utils
+final class Woops_Debug_Utils implements Woops_Core_Static_Class_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Color
  */
-class Woops_Color_Converter
+class Woops_Color_Converter implements Woops_Core_Static_Class_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
