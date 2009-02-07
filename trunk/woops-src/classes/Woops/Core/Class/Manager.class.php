@@ -155,7 +155,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             self::$_instance       = new self();
             
             // Gets the instance of the WOOPS environment
-            self::$_instance->_env = Woops_Core_Env::getInstance();
+            self::$_instance->_env = Woops_Core_Env_Getter::getInstance();
         }
         
         // Returns the unique instance
