@@ -31,6 +31,16 @@ final class Woops_Core_Env implements Woops_Core_Singleton_Interface
     private static $_instance = NULL;
     
     /**
+     * The global lookup order
+     */
+    private $_lookupOrder     = 'GPCSE';
+    
+    /**
+     * An array with references to $_GET, $_POST, $_COOKIE, $_SESSION and $_ENV
+     */
+    private $_requestVars     = array();
+    
+    /**
      * Class constructor
      * 
      * The class constructor is private to avoid multiple instances of the
@@ -39,7 +49,18 @@ final class Woops_Core_Env implements Woops_Core_Singleton_Interface
      * @return NULL
      */
     private function __construct()
-    {}
+    {
+        // Stores references to the request vars
+        $this->_requestVars = array(
+            'G' => &$_GET,
+            'P' => &$_POST,
+            'C' => &$_COOKIE,
+            'S' => &$_SESSION,
+            'E' => &$_ENV
+        );
+        
+        
+    }
     
     /**
      * Clones an instance of the class
@@ -56,6 +77,22 @@ final class Woops_Core_Env implements Woops_Core_Singleton_Interface
             'Class ' . __CLASS__ . ' cannot be cloned',
             Woops_Core_Singleton_Exception::EXCEPTION_CLONE
         );
+    }
+    
+    /**
+     * 
+     */
+    public function __get( $name )
+    {
+        return $this->getRequestVar( $name, $this->_lookupOrder );
+    }
+    
+    /**
+     * 
+     */
+    public function __isset( $name )
+    {
+        return $this->requestVarExists( $name );
     }
     
     /**
@@ -78,5 +115,53 @@ final class Woops_Core_Env implements Woops_Core_Singleton_Interface
         
         // Returns the unique instance
         return self::$_instance;
+    }
+    
+    /**
+     * 
+     */
+    public function setLookupOrder( $lookupOrder )
+    {
+        $oldValue           = $this->_lookupOrder;
+        $this->_lookupOrder = ( string )$lookupOrder;
+        return $oldValue;
+    }
+    
+    /**
+     * 
+     */
+    public function getRequestVar( $name, $order = '' )
+    {
+        $order = ( $order ) ? $order : $this->_lookupOrder;
+        $keys  = preg_split( '//', $order );
+        
+        foreach( $keys as $key ) {
+            
+            if( isset( $this->_requestVars[ $key ][ $name ] ) ) {
+                
+                return $this->_requestVars[ $key ][ $name ];
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * 
+     */
+    public function requestVarExists( $name, $order = '' )
+    {
+        $order = ( $order ) ? $order : $this->_lookupOrder;
+        $keys  = preg_split( '//', $order );
+        
+        foreach( $keys as $key ) {
+            
+            if( isset( $this->_requestVars[ $key ][ $name ] ) ) {
+                
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
