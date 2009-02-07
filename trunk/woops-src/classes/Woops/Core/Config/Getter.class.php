@@ -64,6 +64,14 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
     }
     
     /**
+     * 
+     */
+    public function __get( $name )
+    {
+        return ( isset( $this->_conf->$name ) ) ? clone( $this->_conf->$name ) : new stdClass();
+    }
+    
+    /**
      * Sets and stores the WOOPS configuration object
      * 
      * This method will create the unique instance of the class and store
@@ -119,5 +127,13 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
         
         // Returns the unique instance
         return self::$_instance;
+    }
+    
+    /**
+     * 
+     */
+    public function getVar( $section, $key )
+    {
+        return ( isset( $this->_conf->$section->$key ) ) ? $this->_conf->$section->$key : false;
     }
 }
