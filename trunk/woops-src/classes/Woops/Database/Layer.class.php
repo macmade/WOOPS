@@ -54,6 +54,11 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
     private $_dsn             = '';
     
     /**
+     * The WOOPS table prefix
+     */
+    private $_tablePrefix     = '';
+    
+    /**
      * Class constructor
      * 
      * The class constructor is private to avoid multiple instances of the
@@ -88,6 +93,10 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         $host   = $this->_conf->getVar( 'database', 'host' );
         $port   = $this->_conf->getVar( 'database', 'port' );
         $db     = $this->_conf->getVar( 'database', 'name' );
+        $prefix = $this->_conf->getVar( 'database', 'prefix' );
+        
+        // Sets the WOOPS table prefix
+        $this->_tablePrefix = ( $prefix ) ? ( string )$prefix : '';
         
         // Checks if PDO supports the Drupal database driver
         if( !isset( $this->_drivers[ $driver ] ) ) {
