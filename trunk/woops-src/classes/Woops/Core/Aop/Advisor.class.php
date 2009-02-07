@@ -953,7 +953,7 @@ abstract class Woops_Core_Aop_Advisor
      * $this->_registerJoinPoint(
      *      'joinPointName',
      *      'internalMethodName',
-     *      Woops_Core_Aop_Advisor::ADVICE_TYPE_AFTER_CALL | Woops_Core_Aop_Advisor::ADVICE_TYPE_AFTER_CALL
+     *      Woops_Core_Aop_Advisor::ADVICE_TYPE_BEFORE_CALL | Woops_Core_Aop_Advisor::ADVICE_TYPE_AFTER_CALL
      * );
      * </code>
      * 
