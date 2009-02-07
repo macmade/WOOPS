@@ -14,7 +14,7 @@
 
 var woops = null;
 
-( function()
+( function( $ )
 {
     var _instance = null;
     
@@ -26,6 +26,8 @@ var woops = null;
         }
         
         var _moduleClasses = new Array();
+        
+        this.$ = $;
         
         this.registerModuleClass = function( moduleName, moduleClass )
         {
@@ -65,6 +67,6 @@ var woops = null;
         return _instance;
     }
     
-} )();
+} )( jQuery );
 
 // ]]>
