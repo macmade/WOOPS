@@ -326,63 +326,75 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-#    public function getRelatedRecords( $id, $localTable, $foreignTable, $relationTable, $orderBy = '' )
-#    {
-#        // Table names are in uppercase
-#        $table   = strtoupper( $table );
-#        
-#        // Primary key
-#        $pKey    = 'id_' . strtolower( $table );
-#        
-#        // Starts the query
-#        $sql = 'SELECT DISTINCT '
-#             . $foreignTable
-#             . '.* FROM '
-#             . $localTable
-#             . ', '
-#             . $foreignTable
-#             . ', '
-#             . $relationTable
-#             . ' WHERE '
-#             . $localTable
-#             . '.uid = '
-#             . $relationTable
-#             . '.uid_local AND '
-#             . $foreignTable
-#             . '.uid = '
-#             . $relationTable
-#             . '.uid_foreign AND '
-#             . $relationTable
-#             . '.uid_local = '
-#             . $id
-#             . $enableFieldsAddWhere;
-#        
-#        // Checks for an ORDER BY clause
-#        if( $orderBy ) {
-#            
-#            // Adds the order by clause
-#            $sql .= ' ORDER BY ' . $orderBy;
-#        }
-#        
-#        // Prepares the PDO query
-#        $query = $this->prepare( $sql );
-#        
-#        // Executes the PDO query
-#        $query->execute( $params );
-#        
-#        // Storage
-#        $rows = array();
-#        
-#        // Process each row
-#        while( $row = $query->fetchObject() ) {
-#            
-#            // Stores the current row
-#            $rows[ $row->$pKey ] = $row;
-#        }
-#        
-#        // Returns the rows
-#        return $rows;
-#    }
+    public function getRelatedRecords( $id, $localTable, $foreignTable, $relationTable, $orderBy = '' )
+    {
+        // Primary keys
+        $pKeyLocal     = 'id_' . strtolower( $localTable );
+        $pKeyForeign   = 'id_' . strtolower( $foreignTable );
+        
+        // Table names are in uppercase
+        $localTable    = $this->_tablePrefix . strtoupper( $localTable );
+        $foreignTable  = $this->_tablePrefix . strtoupper( $foreignTable );
+        $relationTable = $this->_tablePrefix . strtoupper( $relationTable );
+        
+        // Starts the query
+        $sql = 'SELECT DISTINCT '
+             . $foreignTable
+             . '.* FROM '
+             . $localTable
+             . ', '
+             . $foreignTable
+             . ', '
+             . $relationTable
+             . ' WHERE '
+             . $localTable
+             . '.'
+             . $pKeyLocal
+             . ' = '
+             . $relationTable
+             . '.'
+             . $pKeyLocal
+             . ' AND '
+             . $foreignTable
+             . '.'
+             . $pKeyForeign
+             . ' = '
+             . $relationTable
+             . '.'
+             . $pKeyForeign
+             . ' AND '
+             . $relationTable
+             . '.'
+             . $pKeyLocal
+             . ' = '
+             . $id;
+        
+        // Checks for an ORDER BY clause
+        if( $orderBy ) {
+            
+            // Adds the order by clause
+            $sql .= ' ORDER BY ' . $orderBy;
+        }
+        
+        // Prepares the PDO query
+        $query = $this->prepare( $sql );
+        
+        // Executes the PDO query
+        $query->execute( $params );
+        
+        // Storage
+        $rows = array();
+        
+        // Process each row
+        while( $row = $query->fetchObject() ) {
+            
+            // Stores the current row
+            $rows[ $row->$pKey ] = $row;
+        }
+        
+        // Returns the rows
+        return $rows;
+    }
     
     /**
      * 
