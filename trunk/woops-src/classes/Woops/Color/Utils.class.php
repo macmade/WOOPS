@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Color
  */
-class Woops_Color_Utils
+class Woops_Color_Utils extends Woops_Core_Aop_Advisor
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
