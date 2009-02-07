@@ -300,4 +300,24 @@ abstract class Woops_Core_Exception_Base extends Exception
         // Returns the informations
         return $trace;
     }
+    
+    /**
+     * 
+     */
+    public static function getExceptionString( $class, $code = 0 )
+    {
+        if( is_object( $class ) ) {
+            
+            $code      = $class->getCode();
+            $reflector = Woops_Core_Reflection_Object::getInstance( $class );
+            
+        } else {
+            
+            $reflector = Woops_Core_Reflection_Class::getInstance( $class );
+        }
+        
+        $constants = array_flip( $reflector->getConstants() );
+        
+        return ( isset( $constants[ $code ] ) ) ? $constants[ $code ] : '';
+    }
 }
