@@ -21,6 +21,11 @@
 abstract class Woops_Core_Exception_Base extends Exception
 {
     /**
+     * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
+     */
+    const PHP_COMPATIBLE = '5.2.0';
+    
+    /**
      * Wheter to print the backtrace or not, when an exception is not caught
      */
     protected static $_debug        = true;
