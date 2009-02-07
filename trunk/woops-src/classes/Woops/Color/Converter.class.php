@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Color
  */
-class Woops_Color_Converter extends Woops_Core_Aop_Advisor
+class Woops_Color_Converter
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

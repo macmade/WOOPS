@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Number
  */
-class tx_oop_Number_Utils extends Woops_Core_Aop_Advisor
+class Woops_Number_Utils
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
