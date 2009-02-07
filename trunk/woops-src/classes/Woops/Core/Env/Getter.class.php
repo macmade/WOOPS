@@ -46,7 +46,10 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-    private $_woopsVars       = array();
+    private $_woopsVars       = array(
+        'root'      => '',
+        'source'    => ''
+    );
     
     /**
      * Class constructor
@@ -61,6 +64,20 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         // Stores references to the environment vars
         $this->_envVars[ '_SERVER' ] = &$_SERVER;
         $this->_envVars[ '_ENV' ]    = &$_ENV;
+        
+        // Stores the paths to the WOOPS root and source directories
+        $this->_woopsVars[ 'root' ]    = str_replace( 'index.php', '', $this->getVar( 'SCRIPT_FILENAME' ) );
+        $this->_woopsVars[ 'source' ]  = realpath(
+            dirname( __FILE__ )
+          . DIRECTORY_SEPARATOR
+          . '../'
+          . DIRECTORY_SEPARATOR
+          . '../'
+          . DIRECTORY_SEPARATOR
+          . '../'
+          . DIRECTORY_SEPARATOR
+          . '../'
+        ) . DIRECTORY_SEPARATOR;
     }
     
     /**
@@ -264,6 +281,21 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         return $result;
     }
     
+    /**
+     * 
+     */
+    public function getWoopsRootDir()
+    {
+        return $this->_woopsVars[ 'root' ];
+    }
+    
+    /**
+     * 
+     */
+    public function getWoopsSourceDir()
+    {
+        return $this->_woopsVars[ 'source' ];
+    }
     
     /**
      * Get a server variable.
