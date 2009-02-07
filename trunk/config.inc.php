@@ -39,3 +39,4 @@ $WOOPS_CONF->database->name        = 'woops';
 
 // The prefix to use for all WOOPS tables
 $WOOPS_CONF->database->tablePrefix = 'WOOPS_';
+

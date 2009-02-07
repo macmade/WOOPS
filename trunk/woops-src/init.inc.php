@@ -69,8 +69,14 @@ if( version_compare( PHP_VERSION, Woops_Core_Class_Manager::PHP_COMPATIBLE, '<' 
 // Registers an SPL autoload method to use to load the classes form the Woops project
 spl_autoload_register( array( 'Woops_Core_Class_Manager', 'autoLoad' ) );
 
-// Includes the configuration file
-require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'config.inc.php' );
+// Checks if the WOOPS configuration object is present
+if( !isset( $WOOPS_CONF ) || !is_object( $WOOPS_CONF ) ) {
+    
+    // No configuration
+    throw new Exception(
+        'The WOOPS configuration object does not exist. The configuration may not be included'
+    );
+}
 
 // Stores the configuration object
 Woops_Core_Config::setConfiguration( $WOOPS_CONF );
