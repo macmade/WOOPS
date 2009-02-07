@@ -41,6 +41,11 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
     protected static $_str             = NULL;
     
     /**
+     * The WOOPS cpnfiguration object
+     */
+    private static $_conf              = NULL;
+    
+    /**
      * The list of the XHTML empty tags (as in the XHTML 1.0 Strict DTD)
      */
     protected static $_emptyTags      = array(
@@ -250,21 +255,16 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str = Woops_String_Utils::getInstance();
+        self::$_str             = Woops_String_Utils::getInstance();
+        
+        // Gets the instance of the configuration object
+        self::$_conf            = Woops_Core_Config_Getter::getInstance();
+        
+        // Sets the XHTML formatting option
+        self::$_formattedOutput = ( boolean )self::$_conf->getVar( 'xhtml', 'format' );
         
         // Static variables are set
-        self::$_hasStatic = true;
-    }
-    
-    /**
-     * 
-     */
-    public static function useFormattedOutput( $value )
-    {
-        $oldValue               = self::$_formattedOutput;
-        self::$_formattedOutput = ( boolean )$value;
-        
-        return $oldValue;
+        self::$_hasStatic       = true;
     }
     
     /**
