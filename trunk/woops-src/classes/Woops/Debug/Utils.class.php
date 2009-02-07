@@ -183,7 +183,7 @@ final class Woops_Debug_Utils implements Woops_Core_Static_Class_Interface
                 
                 $dataDiv->pre = print_r( $var, true );
                 
-            } elseif( is_bool( $value ) ) {
+            } elseif( is_bool( $var ) ) {
                 
                 $value = ( $var ) ? 'true' : 'false';
                 $dataDiv->addTextData( $value );
