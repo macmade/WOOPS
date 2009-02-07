@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * WOOPS configuration class
+ * WOOPS configuration getter class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core
+ * @package     Woops.Core.Config
  */
-final class Woops_Core_Config implements Woops_Core_Singleton_Interface
+final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -70,9 +70,9 @@ final class Woops_Core_Config implements Woops_Core_Singleton_Interface
      * the WOOPS configuration object. Once it's done, this method will
      * produce an exception if called another time.
      * 
-     * @param   stdClass                    The WOOPS configuration object
+     * @param   stdClass                            The WOOPS configuration object
      * @return  NULL
-     * @throws  Woops_Core_Config_Exception If the configuration object is already set
+     * @throws  Woops_Core_Config_Getter_Exception  If the configuration object is already set
      */
     public static function setConfiguration( stdClass $conf )
     {
@@ -80,9 +80,9 @@ final class Woops_Core_Config implements Woops_Core_Singleton_Interface
         if( is_object( self::$_instance ) ) {
             
             // The configuration is already set
-            throw new Woops_Core_Config_Exception(
+            throw new Woops_Core_Config_Getter_Exception(
                 'The WOOPS configuration object already exist. You cannot configure WOOPS multiple times.',
-                Woops_Core_Config_Exception::EXCEPTION_CONFIG_ALREADY_SET
+                Woops_Core_Config_Getter_Exception::EXCEPTION_CONFIG_ALREADY_SET
             );
         }
         
@@ -101,9 +101,9 @@ final class Woops_Core_Config implements Woops_Core_Singleton_Interface
      * produce and exception, as it will mean the configuration
      * object has not been set with the setConfiguration() method.
      * 
-     * @return  Woops_Core_ClassManager     The unique instance of the class
+     * @return  Woops_Core_ClassManager             The unique instance of the class
      * @see     __construct
-     * @throws  Woops_Core_Config_Exception If the unique instance does not exist
+     * @throws  Woops_Core_Config_Getter_Exception  If the unique instance does not exist
      */
     public static function getInstance()
     {
@@ -111,9 +111,9 @@ final class Woops_Core_Config implements Woops_Core_Singleton_Interface
         if( !is_object( self::$_instance ) ) {
             
             // The configuration is not set
-            throw new Woops_Core_Config_Exception(
+            throw new Woops_Core_Config_Getter_Exception(
                 'The WOOPS configuration object does not exist. It has to be set previously with the ' . __CLASS__ . '::setConfiguration() method.',
-                Woops_Core_Config_Exception::EXCEPTION_CONFIG_NOT_SET
+                Woops_Core_Config_Getter_Exception::EXCEPTION_CONFIG_NOT_SET
             );
         }
         

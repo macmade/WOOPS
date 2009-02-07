@@ -16,9 +16,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core.Config
+ * @package     Woops.Core.Config.Getter
  */
-final class Woops_Core_Config_Exception extends Woops_Core_Exception_Base
+final class Woops_Core_Config_Getter_Exception extends Woops_Core_Exception_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
