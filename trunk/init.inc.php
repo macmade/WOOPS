@@ -57,5 +57,14 @@ require_once(
   . 'Manager.class.php'
 );
 
+// Checks the PHP version required to use the WOOPS class manager
+if( version_compare( PHP_VERSION, Woops_Core_Class_Manager::PHP_COMPATIBLE, '<' ) ) {
+    
+    // PHP version is too old
+    throw new Exception(
+        'The class Woops_Core_Class_Manager requires PHP version ' . Woops_Core_Class_Manager::PHP_COMPATIBLE . ' (actual version is ' . PHP_VERSION . ')'
+    );
+}
+
 // Registers an SPL autoload method to use to load the classes form the Woops project
 spl_autoload_register( array( 'Woops_Core_Class_Manager', 'autoLoad' ) );
