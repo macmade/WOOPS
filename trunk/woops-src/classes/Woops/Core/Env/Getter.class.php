@@ -133,15 +133,15 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
             
             case 'SCRIPT_NAME':
                 
-                $sapi = $this->getServerVar( 'PHP_SAPI_NAME' );
+                $sapi = $this->getVar( 'PHP_SAPI_NAME' );
                 
-                if( $this->getServerVar( 'ORIG_PATH_INFO' ) ) {
+                if( $this->getVar( 'ORIG_PATH_INFO' ) ) {
                     
                     $this->_serverVars[ 'ORIG_PATH_INFO' ];
                     
                 } else {
                     
-                    $this->getServerVar( 'PATH_INFO' );
+                    $this->getVar( 'PATH_INFO' );
                 }
                 
                 // Check SAPI
@@ -149,7 +149,7 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
                     
                     $scriptName = $pathInfo;
                     
-                } elseif( $this->getServerVar( 'ORIG_SCRIPT_NAME' ) ) {
+                } elseif( $this->getVar( 'ORIG_SCRIPT_NAME' ) ) {
                     
                     $scriptName = $this->_serverVars[ 'ORIG_SCRIPT_NAME' ];
                     
@@ -169,15 +169,15 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
             
             case 'SCRIPT_FILENAME':
                 
-                $sapi = $this->getServerVar( 'PHP_SAPI_NAME' );
+                $sapi = $this->getVar( 'PHP_SAPI_NAME' );
                 
-                if( $this->getServerVar( 'ORIG_PATH_TRANSLATED' ) ) {
+                if( $this->getVar( 'ORIG_PATH_TRANSLATED' ) ) {
                     
                     $pathTranslated = $this->_serverVars[ 'ORIG_PATH_TRANSLATED' ];
                     
                 } else {
                     
-                    $pathTranslated = $this->getServerVar( 'PATH_TRANSLATED' );
+                    $pathTranslated = $this->getVar( 'PATH_TRANSLATED' );
                 }
                 
                 // Check SAPI
@@ -185,7 +185,7 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
                     
                     $scriptFileName = $pathTranslated;
                     
-                } elseif( $this->getServerVar( 'ORIG_SCRIPT_FILENAME' ) ) {
+                } elseif( $this->getVar( 'ORIG_SCRIPT_FILENAME' ) ) {
                     
                     $scriptFileName = $this->_serverVars[ 'ORIG_SCRIPT_FILENAME' ];
                     
@@ -218,9 +218,9 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
                     
                     $requestUri = $this->_envVars[ $lookup ][ 'REQUEST_URI' ];
                     
-                } elseif( $this->getServerVar( 'SCRIPT_NAME' ) ) {
+                } elseif( $this->getVar( 'SCRIPT_NAME' ) ) {
                     
-                    if( $this->getServerVar( 'QUERY_STRING' ) ) {
+                    if( $this->getVar( 'QUERY_STRING' ) ) {
                         
                         $requestUri  = $this->_serverVars[ 'SCRIPT_NAME' ];
                         
@@ -238,6 +238,14 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
                 
                 // Store variable
                 $this->_serverVars[ $var ] = $requestUri;
+                $result                    = true;
+                break;
+            
+            case 'DOCUMENT_ROOT':
+                
+                $scriptName                = $this->getVar( 'SCRIPT_NAME' );
+                $scriptFileName            = $this->getVar( 'SCRIPT_FILENAME' );
+                $this->_serverVars[ $var ] = str_replace( $scriptName, '', $scriptFileName );
                 $result                    = true;
                 break;
             
