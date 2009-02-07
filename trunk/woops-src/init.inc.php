@@ -69,7 +69,7 @@ if( version_compare( PHP_VERSION, Woops_Core_Class_Manager::PHP_COMPATIBLE, '<' 
 // Registers an SPL autoload method to use to load the classes form the Woops project
 spl_autoload_register( array( 'Woops_Core_Class_Manager', 'autoLoad' ) );
 
-// Sets the error and exception handlers
+// Sets the error and exception handlers - From now every mistake will produce a fatal error
 set_exception_handler( array( 'Woops_Core_Exception_Handler', 'handleException' ) );
 set_error_handler(     array( 'Woops_Core_Error_Handler',     'handleError' ) );
 
