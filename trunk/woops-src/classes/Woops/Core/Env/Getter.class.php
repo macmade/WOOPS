@@ -47,8 +47,14 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
      * 
      */
     private $_woopsVars       = array(
-        'root'      => '',
-        'source'    => ''
+        'sys' => array(
+            'root'   => '',
+            'src'    => ''
+        ),
+        'web' => array(
+            'root'   => '',
+            'src'    => ''
+        )
     );
     
     /**
@@ -62,12 +68,15 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
     private function __construct()
     {
         // Stores references to the environment vars
-        $this->_envVars[ '_SERVER' ] = &$_SERVER;
-        $this->_envVars[ '_ENV' ]    = &$_ENV;
+        $this->_envVars[ '_SERVER' ]  = &$_SERVER;
+        $this->_envVars[ '_ENV' ]     = &$_ENV;
+        
+        $scriptFileName = $this->getVar( 'SCRIPT_FILENAME' );
+        $scriptName     = $this->getVar( 'SCRIPT_NAME' );
         
         // Stores the paths to the WOOPS root and source directories
-        $this->_woopsVars[ 'root' ]    = str_replace( 'index.php', '', $this->getVar( 'SCRIPT_FILENAME' ) );
-        $this->_woopsVars[ 'source' ]  = realpath(
+        $this->_woopsVars[ 'sys' ][ 'root' ] = str_replace( 'index.php', '', $scriptFileName );
+        $this->_woopsVars[ 'sys' ][ 'src' ]  = realpath(
             dirname( __FILE__ )
           . DIRECTORY_SEPARATOR
           . '../'
@@ -78,6 +87,28 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
           . DIRECTORY_SEPARATOR
           . '../'
         ) . DIRECTORY_SEPARATOR;
+        
+        $this->_woopsVars[ 'web' ][ 'root' ] = str_replace(
+            DIRECTORY_SEPARATOR,
+            '/',
+            str_replace(
+                'index.php',
+                '',
+                $scriptName
+            )
+        );
+        
+        $homeDir = ( substr( $scriptName, 0, 2 ) === '/~' ) ? substr( $scriptName, 0, strpos( $scriptName, '/', 1 ) ) : '';
+        
+        $this->_woopsVars[ 'web' ][ 'src' ] = $homeDir . str_replace(
+            DIRECTORY_SEPARATOR,
+            '/',
+            str_replace(
+                $this->getVar( 'DOCUMENT_ROOT' ),
+                '',
+                $this->_woopsVars[ 'sys' ][ 'src' ]
+            )
+        );
     }
     
     /**
@@ -262,10 +293,20 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
                 
                 $scriptName                = $this->getVar( 'SCRIPT_NAME' );
                 $scriptFileName            = $this->getVar( 'SCRIPT_FILENAME' );
-                $this->_serverVars[ $var ] = str_replace( $scriptName, '', $scriptFileName );
-                $result                    = true;
+                
+                if( substr( $scriptName, 0, 2 ) === '/~' ) {
+                    
+                    $secondSlashPos            = strpos( $scriptName, '/', 1 );
+                    $webPart                   = substr( $scriptName, $secondSlashPos );
+                    $this->_serverVars[ $var ] = str_replace( $webPart, '', $scriptFileName );
+                    
+                } else {
+                    
+                    $this->_serverVars[ $var ] = str_replace( $scriptName, '', $scriptFileName );
+                }
+                $result = true;
                 break;
-            
+                
             // Default processing
             default:
                 
@@ -284,17 +325,17 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-    public function getWoopsRootDir()
+    public function getPath( $path )
     {
-        return $this->_woopsVars[ 'root' ];
+        
     }
     
     /**
      * 
      */
-    public function getWoopsSourceDir()
+    public function getWebPath( $path )
     {
-        return $this->_woopsVars[ 'source' ];
+        
     }
     
     /**
