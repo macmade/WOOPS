@@ -91,9 +91,6 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
         
         // Stores a copy of the configuration object (as the global one will be erased)
         self::$_instance->_conf = clone( $conf );
-        
-        // Pass the database configuration to the database object
-        Woops_Database_Layer::setConfiguration( $conf->database );
     }
     
     /**
