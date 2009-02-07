@@ -21,6 +21,11 @@
 class Woops_Color_Utils
 {
     /**
+     * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
+     */
+    const PHP_COMPATIBLE = '5.2.0';
+    
+    /**
      * The color method to use (RGB, HSL or HSV)
      */
     protected $_colorMethod = 'RGB';
