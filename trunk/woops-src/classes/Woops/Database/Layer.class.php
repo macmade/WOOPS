@@ -236,4 +236,303 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         // Returns the unique instance
         return self::$_instance;
     }
+    
+    /**
+     * 
+     */
+    public function getRecord( $table, $id )
+    {
+        // Table names are in uppercase
+        $table  = strtoupper( $table );
+        
+        // Primary key
+        $pKey   = 'id_' . strtolower( $table );
+        
+        // Parameters for the PDO query
+        $params = array(
+            ':id' => ( int )$id
+        );
+        
+        // Prepares the PDO query
+        $query = $this->prepare(
+            'SELECT * FROM ' . $this->_tablePrefix . $table . '
+             WHERE ' . $pKey . ' = :id
+             LIMIT 1'
+        );
+        
+        // Executes the PDO query
+        $query->execute( $params );
+        
+        // Returns the record
+        return $query->fetchObject();
+    }
+    
+    /**
+     * 
+     */
+    public function getRecordsByFields( $table, array $fieldsValues, $orderBy = '' )
+    {
+        // Table names are in uppercase
+        $table   = strtoupper( $table );
+        
+        // Specified ORDER BY clause
+        $orderBy = ( $orderBy ) ? ' ORDER BY ' . $orderBy : '';
+        
+        // Primary key
+        $pKey    = 'id_' . strtolower( $table );
+        
+        // Starts the query
+        $sql     = 'SELECT * FROM ' . $this->_tablePrefix . $table . ' WHERE ';
+        
+        // Parameters for the PDO query
+        $params = array();
+        
+        // Process each field to check
+        foreach( $fieldsValues as $fieldName => $fieldValue ) {
+            
+            // Adds the parameter
+            $params[ ':' . $fieldName ] = $fieldValue;
+            
+            // Adds the statement
+            $sql .= $fieldName . ' = :' . $fieldName . ' AND ';
+        }
+        
+        // Removes the last 'AND'
+        $sql = substr( $sql, 0, -5 );
+        
+        // Adds the ORDER BY clause
+        $sql .= $orderBy;
+        
+        // Prepares the PDO query
+        $query = $this->prepare( $sql );
+        
+        // Executes the PDO query
+        $query->execute( $params );
+        
+        // Storage
+        $rows = array();
+        
+        // Process each row
+        while( $row = $query->fetchObject() ) {
+            
+            // Stores the current row
+            $rows[ $row->$pKey ] = $row;
+        }
+        
+        // Returns the rows
+        return $rows;
+    }
+    
+    /**
+     * 
+     */
+#    public function getRelatedRecords( $id, $localTable, $foreignTable, $relationTable, $orderBy = '' )
+#    {
+#        // Table names are in uppercase
+#        $table   = strtoupper( $table );
+#        
+#        // Primary key
+#        $pKey    = 'id_' . strtolower( $table );
+#        
+#        // Starts the query
+#        $sql = 'SELECT DISTINCT '
+#             . $foreignTable
+#             . '.* FROM '
+#             . $localTable
+#             . ', '
+#             . $foreignTable
+#             . ', '
+#             . $relationTable
+#             . ' WHERE '
+#             . $localTable
+#             . '.uid = '
+#             . $relationTable
+#             . '.uid_local AND '
+#             . $foreignTable
+#             . '.uid = '
+#             . $relationTable
+#             . '.uid_foreign AND '
+#             . $relationTable
+#             . '.uid_local = '
+#             . $id
+#             . $enableFieldsAddWhere;
+#        
+#        // Checks for an ORDER BY clause
+#        if( $orderBy ) {
+#            
+#            // Adds the order by clause
+#            $sql .= ' ORDER BY ' . $orderBy;
+#        }
+#        
+#        // Prepares the PDO query
+#        $query = $this->prepare( $sql );
+#        
+#        // Executes the PDO query
+#        $query->execute( $params );
+#        
+#        // Storage
+#        $rows = array();
+#        
+#        // Process each row
+#        while( $row = $query->fetchObject() ) {
+#            
+#            // Stores the current row
+#            $rows[ $row->$pKey ] = $row;
+#        }
+#        
+#        // Returns the rows
+#        return $rows;
+#    }
+    
+    /**
+     * 
+     */
+    public function insertRecord( $table, array $values )
+    {
+        // Table names are in uppercase
+        $table  = strtoupper( $table );
+        
+        // Gets the current time
+        $time   = time();
+        
+        // Parameters for the PDO query
+        $params = array(
+            ':ctime' => $time,
+            ':mtime' => $time
+        );
+        
+        // SQL for the insert statement
+        $sql  = 'INSERT INTO ' . $this->_tablePrefix . $table . ' SET';
+        
+        // Adds the creation date in the SQL query
+        $sql .= ' ctime = :ctime,';
+    
+        // Adds the modification date in the SQL query
+        $sql .= ' mtime = :mtime,';
+        
+        // Process each value
+        foreach( $values as $fieldName => $value ) {
+            
+            // Adds the PDO parameter for the current value
+            $params[ ':' . $fieldName ] = $value;
+            
+            // Adds the update statement for the current value
+            $sql .= ' ' . $fieldName . ' = :' . $fieldName . ',';
+        }
+        
+        // Removes the last comma
+        $sql  = substr( $sql, 0, -1 );
+        
+        // Prepares the PDO query
+        $query = $this->prepare( $sql );
+        
+        // Executes the PDO query
+        $query->execute( $params );
+        
+        // Returns the insert ID
+        return $this->lastInsertId();
+    }
+    
+    /**
+     * 
+     */
+    public function updateRecord( $table, $id, array $values )
+    {
+        // Table names are in uppercase
+        $table  = strtoupper( $table );
+        
+        // Primary key
+        $pKey   = 'id_' . strtolower( $table );
+        
+        // Gets the current time
+        $time   = time();
+        
+        // Parameters for the PDO query
+        $params = array(
+            ':' . $pKey => ( int )$id,
+            ':mtime'    => $time
+        );
+        
+        // SQL for the update statement
+        $sql    = 'UPDATE ' . $this->_tablePrefix . $table . ' SET';
+    
+        // Adds the modification date in the SQL query
+        $sql .= ' mtime = :mtime,';
+        
+        // Process each value
+        foreach( $values as $fieldName => $value ) {
+            
+            // Adds the PDO parameter for the current value
+            $params[ ':' . $fieldName ] = $value;
+            
+            // Adds the update statement for the current value
+            $sql .= ' ' . $fieldName . ' = :' . $fieldName . ',';
+        }
+        
+        // Removes the last comma
+        $sql  = substr( $sql, 0, -1 );
+        
+        // Adds the where clause
+        $sql .= ' WHERE ' . $pKey . ' = :' . $pKey;
+        
+        // Prepares the PDO query
+        $query = $this->prepare( $sql );
+        
+        // Executes the PDO query
+        return $query->execute( $params );
+    }
+    
+    /**
+     * 
+     */
+    public function deleteRecord( $table, $id, $deleteFromTable = false )
+    {
+        // Checks if we should really delete the record, or just set the delete flag
+        if( $deleteFromTable ) {
+            
+            // Table names are in uppercase
+            $table  = strtoupper( $table );
+            
+            // Primary key
+            $pKey   = 'id_' . strtolower( $table );
+            
+            // Parameters for the PDO query
+            $params = array(
+                ':id' => $id
+            );
+            
+            // SQL for the update statement
+            $sql = 'DELETE FROM ' . $table . ' WHERE ' . $pKey . ' = :id';
+            
+            // Prepares the PDO query
+            $query = $this->prepare( $sql );
+            
+            // Executes the PDO query
+            return $this->execute( $params );
+        }
+        
+        // Just sets the delete flag
+        return $this->updateRecord(
+            $table,
+            $id,
+            array( 'deleted' => 1 )
+        );
+    }
+    
+    /**
+     * 
+     */
+    public function removeDeletedRecords( $table )
+    {
+        // Table names are in uppercase
+        $table  = strtoupper( $table );
+        
+        // Prepares the PDO query
+        $query = $this->prepare(
+            'DELETE FROM ' . $table . ' WHERE deleted = 1'
+        );
+        
+        // Executes the PDO query
+        return $this->execute( $params );
+    }
 }
