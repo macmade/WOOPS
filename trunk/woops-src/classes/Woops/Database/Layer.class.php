@@ -95,6 +95,10 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         $db     = $this->_conf->getVar( 'database', 'name' );
         $prefix = $this->_conf->getVar( 'database', 'prefix' );
         
+        // Security - Removes some configuration variables
+        $this->_conf->deleteVar( 'database', 'user' );
+        $this->_conf->deleteVar( 'database', 'password' );
+        
         // Sets the WOOPS table prefix
         $this->_tablePrefix = ( $prefix ) ? ( string )$prefix : '';
         
