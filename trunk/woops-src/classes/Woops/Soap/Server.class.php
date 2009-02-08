@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Soap
  */
-final class Woops_Soap_Server
+class Woops_Soap_Server
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -28,7 +28,7 @@ final class Woops_Soap_Server
     /**
      * The instance of the SOAP server
      */
-    private $_soapServer = NULL;
+    protected $_soapServer = NULL;
     
     /**
      * Class constructor
