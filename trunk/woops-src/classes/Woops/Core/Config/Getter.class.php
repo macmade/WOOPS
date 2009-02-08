@@ -136,4 +136,12 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
     {
         return ( isset( $this->_conf->$section->$key ) ) ? $this->_conf->$section->$key : false;
     }
+    
+    /**
+     * 
+     */
+    public function deleteVar( $section, $key )
+    {
+        unset( $this->_conf->$section->$key );
+    }
 }
