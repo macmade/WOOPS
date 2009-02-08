@@ -87,3 +87,6 @@ Woops_Core_Config_Getter::setConfiguration( $WOOPS_CONF );
 
 // Cleans-up the global configuration object, as a copy is stored in the WOOPS configuration class
 unset( $WOOPS_CONF );
+
+// Sets the default timezone
+date_default_timezone_set( Woops_Core_Config_Getter::getInstance()->getVar( 'time', 'timezone' ) );

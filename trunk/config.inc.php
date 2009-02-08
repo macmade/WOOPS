@@ -14,6 +14,8 @@
 // Creates the WOOPS configuration object, with its sections
 $WOOPS_CONF           = new stdClass();
 $WOOPS_CONF->database = new stdClass();
+$WOOPS_CONF->time     = new stdClass();
+$WOOPS_CONF->xhtml    = new stdClass();
 
 ################################################################################
 # Database settings                                                            #
@@ -40,3 +42,16 @@ $WOOPS_CONF->database->name        = 'woops';
 // The prefix to use for all WOOPS tables
 $WOOPS_CONF->database->tablePrefix = 'WOOPS_';
 
+################################################################################
+# Date and time settings                                                               #
+################################################################################
+
+// The default timezone
+$WOOPS_CONF->time->timezone = 'Europe/Zurich';
+
+################################################################################
+# XHTML settings                                                               #
+################################################################################
+
+// Format and indent the generated XHTML code
+$WOOPS_CONF->xhtml->format = true;
