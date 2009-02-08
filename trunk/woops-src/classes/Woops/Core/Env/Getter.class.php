@@ -327,7 +327,21 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
      */
     public function getPath( $path )
     {
+        $absPath = $this->_woopsVars[ 'sys' ][ 'root' ]
+                 . str_replace( '/', DIRECTORY_SEPARATOR, $path );
         
+        return ( file_exists( $absPath ) ) ? $absPath : false;
+    }
+    
+    /**
+     * 
+     */
+    public function getSourcePath( $path )
+    {
+        $absPath = $this->_woopsVars[ 'sys' ][ 'src' ]
+                 . str_replace( '/', DIRECTORY_SEPARATOR, $path );
+        
+        return ( file_exists( $absPath ) ) ? $absPath : false;
     }
     
     /**
@@ -335,7 +349,23 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
      */
     public function getWebPath( $path )
     {
+        $webPath = $this->_woopsVars[ 'web' ][ 'root' ] . $path;
+        $absPath = $this->_woopsVars[ 'sys' ][ 'src' ]
+                 . str_replace( '/', DIRECTORY_SEPARATOR, $path );
         
+        return ( file_exists( $absPath ) ) ? $absPath : false;
+    }
+    
+    /**
+     * 
+     */
+    public function getSourceWebPath( $path )
+    {
+        $webPath = $this->_woopsVars[ 'web' ][ 'src' ] . $path;
+        $absPath = $this->_woopsVars[ 'sys' ][ 'src' ]
+                 . str_replace( '/', DIRECTORY_SEPARATOR, $path );
+        
+        return ( file_exists( $absPath ) ) ? $absPath : false;
     }
     
     /**
