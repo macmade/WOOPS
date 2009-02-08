@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Color
  */
-class Woops_Color_Converter implements Woops_Core_Static_Class_Interface
+final class Woops_Color_Converter implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -26,15 +26,66 @@ class Woops_Color_Converter implements Woops_Core_Static_Class_Interface
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * The unique instance of the class (singleton)
+     */
+    private static $_instance = NULL;
+    
+    /**
+     * The instance of the number utilities class
+     */
+    private $_number          = NULL;
+    
+    /**
      * Class constructor
      * 
-     * The class constructor is private as all methods from this class are
-     * static.
+     * The class constructor is private to avoid multiple instances of the
+     * class (singleton).
      * 
      * @return  NULL
      */
     private function __construct()
-    {}
+    {
+        // Gets the instance of the number utilities class
+        $this->_number = $this->_number->getInstance();
+    }
+    
+    /**
+     * Clones an instance of the class
+     * 
+     * A call to this method will produce an exception, as the class cannot
+     * be cloned (singleton).
+     * 
+     * @return  NULL
+     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     */
+    public function __clone()
+    {
+        throw new Woops_Core_Singleton_Exception(
+            'Class ' . __CLASS__ . ' cannot be cloned',
+            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+        );
+    }
+    
+    /**
+     * Gets the unique class instance
+     * 
+     * This method is used to get the unique instance of the class
+     * (singleton). If no instance is available, it will create it.
+     * 
+     * @return  Woops_Color_Converter   The unique instance of the class
+     */
+    public static function getInstance()
+    {
+        // Checks if the unique instance already exists
+        if( !is_object( self::$_instance ) ) {
+            
+            // Creates the unique instance
+            self::$_instance = new self();
+        }
+        
+        // Returns the unique instance
+        return self::$_instance;
+    }
     
     /**
      * Converts RGB color values into HSL
@@ -52,12 +103,12 @@ class Woops_Color_Converter implements Woops_Core_Static_Class_Interface
      * @return  array   An array with HSL color values
      * @see     Woops_Number_Utils::inRange
      */
-    public static function rgbToHsl( $R, $G, $B, $round = true )
+    public function rgbToHsl( $R, $G, $B, $round = true )
     {
         // Check correct values
-        $R = Woops_Number_Utils::inRange( $R, 0, 255 );
-        $G = Woops_Number_Utils::inRange( $G, 0, 255 );
-        $B = Woops_Number_Utils::inRange( $B, 0, 255 );
+        $R = $this->_number->inRange( $R, 0, 255 );
+        $G = $this->_number->inRange( $G, 0, 255 );
+        $B = $this->_number->inRange( $B, 0, 255 );
         
         // HSL colors storage
         $colors = array(
@@ -171,12 +222,12 @@ class Woops_Color_Converter implements Woops_Core_Static_Class_Interface
      * @return  array   An array with RGB color values
      * @see     Woops_Number_Utils::inRange
      */
-    public static function hslToRgb( $H, $S, $L, $round = true )
+    public function hslToRgb( $H, $S, $L, $round = true )
     {
         // Check correct values
-        $H = Woops_Number_Utils::inRange( $H, 0, 360 );
-        $S = Woops_Number_Utils::inRange( $S, 0, 100 );
-        $L = Woops_Number_Utils::inRange( $L, 0, 100 );
+        $H = $this->_number->inRange( $H, 0, 360 );
+        $S = $this->_number->inRange( $S, 0, 100 );
+        $L = $this->_number->inRange( $L, 0, 100 );
         
         // RGB colors storage
         $colors = array(
@@ -309,12 +360,12 @@ class Woops_Color_Converter implements Woops_Core_Static_Class_Interface
      * @return  array   An array with HSV color values
      * @see     Woops_Number_Utils::inRange
      */
-    public static function rgbToHsv( $R, $G, $B, $round = true )
+    public function rgbToHsv( $R, $G, $B, $round = true )
     {
         // Check correct values
-        $R = Woops_Number_Utils::inRange( $R, 0, 255 );
-        $G = Woops_Number_Utils::inRange( $G, 0, 255 );
-        $B = Woops_Number_Utils::inRange( $B, 0, 255 );
+        $R = $this->_number->inRange( $R, 0, 255 );
+        $G = $this->_number->inRange( $G, 0, 255 );
+        $B = $this->_number->inRange( $B, 0, 255 );
         
         // HSV colors storage
         $colors = array(
@@ -419,12 +470,12 @@ class Woops_Color_Converter implements Woops_Core_Static_Class_Interface
      * @return  array   An array with RGB color values
      * @see     Woops_Number_Utils::inRange
      */
-    public static function hsvToRgb( $H, $S, $V, $round = true )
+    public function hsvToRgb( $H, $S, $V, $round = true )
     {
         // Check correct values
-        $H = Woops_Number_Utils::inRange( $H, 0, 360 );
-        $S = Woops_Number_Utils::inRange( $S, 0, 100 );
-        $V = Woops_Number_Utils::inRange( $V, 0, 100 );
+        $H = $this->_number->inRange( $H, 0, 360 );
+        $S = $this->_number->inRange( $S, 0, 100 );
+        $V = $this->_number->inRange( $V, 0, 100 );
         
         // RGB colors storage
         $colors = array(
@@ -536,13 +587,13 @@ class Woops_Color_Converter implements Woops_Core_Static_Class_Interface
      * @see     hslToRgb
      * @see     rgbToHsv
      */
-    public static function hslToHsv( $H, $S, $L, $round = true )
+    public function hslToHsv( $H, $S, $L, $round = true )
     {
         // Convert HSL to RGB
-        $rgbColors = self::hslToRgb( $H, $S, $L, $round );
+        $rgbColors = $this->hslToRgb( $H, $S, $L, $round );
         
         // Convert RGB to HSV
-        return self::rgbToHsv(
+        return $this->rgbToHsv(
             $rgbColors[ 'R' ],
             $rgbColors[ 'G' ],
             $rgbColors[ 'B' ],
@@ -565,13 +616,13 @@ class Woops_Color_Converter implements Woops_Core_Static_Class_Interface
      * @see     hsvToRgb
      * @see     rgbToHsl
      */
-    public static function hsvToHsl( $H, $S, $V, $round = true )
+    public function hsvToHsl( $H, $S, $V, $round = true )
     {
         // Convert HSV to RGB
-        $rgbColors = self::hsvToRgb( $H, $S, $V, $round );
+        $rgbColors = $this->hsvToRgb( $H, $S, $V, $round );
         
         // Convert RGB to HSL
-        return self::rgbToHsl(
+        return $this->rgbToHsl(
             $rgbColors[ 'R' ],
             $rgbColors[ 'G' ],
             $rgbColors[ 'B' ],

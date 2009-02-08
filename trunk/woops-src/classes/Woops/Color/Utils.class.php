@@ -26,9 +26,60 @@ class Woops_Color_Utils
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * Wether the static variables are set or not
+     */
+    private static $_hasStatic   = false;
+    
+    /**
+     * The instance of the number utilities class
+     */
+    protected static $_number    = NULL;
+    
+    /**
+     * The instance of the color converter class
+     */
+    protected static $_converter = NULL;
+    
+    /**
      * The color method to use (RGB, HSL or HSV)
      */
-    protected $_colorMethod = 'RGB';
+    protected $_colorMethod      = 'RGB';
+    
+    /**
+     * Class constructor
+     * 
+     * @param   string  The color method to use (RGB, HSV or HSL)
+     * @return  NULL
+     */
+    public function __construct( $method = 'RGB' )
+    {
+        // Checks if the static variables are set
+        if( !self::$_hasStatic ) {
+            
+            // Sets the static variables
+            self::_setStaticVars();
+        }
+        
+        // Sets the color method
+        $this->setColorMethod( $method );
+    }
+    
+    /**
+     * Sets the needed static variables
+     * 
+     * @return  NULL
+     */
+    private static function _setStaticVars()
+    {
+        // Gets the instance of the number utilities
+        self::$_number    = Woops_Number_Utils::getInstance();
+        
+        // Gets the instance of the color converter
+        self::$_converter = Woop_Color_Converter::getInstance();
+        
+        // Static variables are set
+        self::$_hasStatic = true;
+    }
     
     /**
      * Sets the color method to use
@@ -76,9 +127,9 @@ class Woops_Color_Utils
      * @param   number  The third value (blue, luminosity or value, depending of the method)
      * @param   boolean Return value in uppercase
      * @return  string  The hexadecimal value of the color
-     * @see     Woops_Color_Converter::hslToRgb
-     * @see     Woops_Color_Converter::hsvToRgb
-     * @see     Woops_Number_Utils::inRange
+     * @see     Woop_Color_Converter::hslToRgb
+     * @see     Woop_Color_Converter::hsvToRgb
+     * @see     Woop_Number_Utils::inRange
      */
     public function createHexColor( $v1, $v2, $v3, $uppercase = false )
     {
@@ -86,7 +137,7 @@ class Woops_Color_Utils
         if( $this->_colorMethod === 'HSL' ) {
             
             // Convert colors
-            $colors = Woops_Color_Converter::hslToRgb( $v1, $v2, $v3 );
+            $colors = self::$_converter->hslToRgb( $v1, $v2, $v3 );
             
             // Set converted values
             $v1 = $colors[ 'R' ];
@@ -96,7 +147,7 @@ class Woops_Color_Utils
         } elseif( $this->_colorMethod === 'HSV' ) {
             
             // Convert colors
-            $colors = Woops_Color_Converter::hsvToRgb( $v1, $v2, $v3 );
+            $colors = self::$_converter->hsvToRgb( $v1, $v2, $v3 );
             
             // Set converted values
             $v1 = $colors[ 'R' ];
@@ -105,9 +156,9 @@ class Woops_Color_Utils
         }
         
         // Convert each color into hexadecimal
-        $R = dechex( Woops_Number_Utils::inRange( $v1, 0, 255 ) );
-        $G = dechex( Woops_Number_Utils::inRange( $v2, 0, 255 ) );
-        $B = dechex( Woops_Number_Utils::inRange( $v3, 0, 255 ) );
+        $R = dechex( self::$_number->inRange( $v1, 0, 255 ) );
+        $G = dechex( self::$_number->inRange( $v2, 0, 255 ) );
+        $B = dechex( self::$_number->inRange( $v3, 0, 255 ) );
         
         // Complete each color if needed
         $R = ( strlen( $R ) === 1 ) ? '0' . $R : $R;
@@ -137,8 +188,8 @@ class Woops_Color_Utils
      * @param   number  The third value (blue, luminosity or value, depending of the method)
      * @param   boolean Return value in uppercase
      * @return  string  The hexadecimal value of the modified color
-     * @see     Woops_Color_Converter::rgbToHsl
-     * @see     Woops_Color_Converter::rgbToHsv
+     * @see     Woop_Color_Converter::rgbToHsl
+     * @see     Woop_Color_Converter::rgbToHsv
      * @see     createHexColor
      */
     public function modifyHexColor( $color, $v1, $v2, $v3, $uppercase = false )
@@ -166,7 +217,7 @@ class Woops_Color_Utils
         if( $this->_colorMethod === 'HSL' ) {
             
             // Convert colors
-            $colors = Woops_Color_Converter::rgbToHsl( $R, $G, $B );
+            $colors = self::$_converter->rgbToHsl( $R, $G, $B );
             
             // Create modified color
             return $this->createHexColor(
@@ -180,7 +231,7 @@ class Woops_Color_Utils
         } elseif( $this->_colorMethod === 'HSV' ) {
             
             // Convert colors
-            $colors = Woops_Color_Converter::rgbToHsv( $R,$G,$B );
+            $colors = self::$_converter->rgbToHsv( $R,$G,$B );
             
             // Create modified color
             return $this->createHexColor(

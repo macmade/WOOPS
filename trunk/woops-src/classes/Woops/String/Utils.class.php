@@ -67,6 +67,23 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
     }
     
     /**
+     * Clones an instance of the class
+     * 
+     * A call to this method will produce an exception, as the class cannot
+     * be cloned (singleton).
+     * 
+     * @return  NULL
+     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     */
+    public function __clone()
+    {
+        throw new Woops_Core_Singleton_Exception(
+            'Class ' . __CLASS__ . ' cannot be cloned',
+            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+        );
+    }
+    
+    /**
      * Gets an ASCII control character
      * 
      * @param   string  The name of the ASCII control character

@@ -18,12 +18,17 @@
  * @version     1.0
  * @package     Woops.File.Mime
  */
-class Woops_File_Types implements Woops_Core_Static_Class_Interface
+final class Woops_File_Types implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
     const PHP_COMPATIBLE = '5.2.0';
+    
+    /**
+     * The unique instance of the class (singleton)
+     */
+    private static $_instance = NULL;
     
     /**
      * The list of the available mime types, by category, as defined by the
@@ -40,7 +45,7 @@ class Woops_File_Types implements Woops_Core_Static_Class_Interface
      *      - text
      *      - video
      */
-    protected static $_mimeTypes = array(
+    protected $_mimeTypes = array(
         'application' => array(
             'activemessage'                                    => true,    // Shapiro
             'andrew-inset'                                     => true,    // Borenstein
@@ -1018,7 +1023,7 @@ class Woops_File_Types implements Woops_Core_Static_Class_Interface
     /**
      * The list of the file extensions, with their corresponding mime-type(s)
      */
-    protected static $_fileExtensions = array(
+    protected $_fileExtensions = array(
         '3dm'       => 'x-world/x-3dmf',
         '3dmf'      => 'x-world/x-3dmf',
         'a'         => 'application/octet-stream',
@@ -1680,13 +1685,51 @@ class Woops_File_Types implements Woops_Core_Static_Class_Interface
     /**
      * Class constructor
      * 
-     * The class constructor is private as all methods from this class are
-     * static.
+     * The class constructor is private to avoid multiple instances of the
+     * class (singleton).
      * 
      * @return  NULL
      */
     private function __construct()
     {}
+    
+    /**
+     * Clones an instance of the class
+     * 
+     * A call to this method will produce an exception, as the class cannot
+     * be cloned (singleton).
+     * 
+     * @return  NULL
+     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     */
+    public function __clone()
+    {
+        throw new Woops_Core_Singleton_Exception(
+            'Class ' . __CLASS__ . ' cannot be cloned',
+            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+        );
+    }
+    
+    /**
+     * Gets the unique class instance
+     * 
+     * This method is used to get the unique instance of the class
+     * (singleton). If no instance is available, it will create it.
+     * 
+     * @return  Woops_File_Types    The unique instance of the class
+     */
+    public static function getInstance()
+    {
+        // Checks if the unique instance already exists
+        if( !is_object( self::$_instance ) ) {
+            
+            // Creates the unique instance
+            self::$_instance = new self();
+        }
+        
+        // Returns the unique instance
+        return self::$_instance;
+    }
     
     
     /**
@@ -1696,17 +1739,17 @@ class Woops_File_Types implements Woops_Core_Static_Class_Interface
      * @param   boolean If set, also returns true if the mime-type is obsolete
      * @return  boolean
      */
-    public static function isValid( $mimeType, $allowObsolete = false )
+    public function isValid( $mimeType, $allowObsolete = false )
     {
         $slashPos = strpos( $mimeType, '/' );
         $part1    = substr( $mimeType, 0, $slashPos );
         $part2    = substr( $mimeType, $slashPos + 1 );
         
-        if( $allowObsolete && isset( self::$_mimeTypes[ $part1 ][ $part2 ] ) ) {
+        if( $allowObsolete && isset( $this->_mimeTypes[ $part1 ][ $part2 ] ) ) {
             
             return true;
             
-        } elseif( !$allowObsolete && isset( self::$_mimeTypes[ $part1 ][ $part2 ] ) && self::$_mimeTypes[ $part1 ][ $part2 ] ) {
+        } elseif( !$allowObsolete && isset( $this->_mimeTypes[ $part1 ][ $part2 ] ) && $this->_mimeTypes[ $part1 ][ $part2 ] ) {
             
             return true;
         }
