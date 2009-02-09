@@ -580,4 +580,12 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
     {
         $this->_attribs = array();
     }
+    
+    /**
+     * 
+     */
+    public function getTagName()
+    {
+        return $this->_tagName;
+    }
 }
