@@ -169,6 +169,7 @@ class Woops_Xhtml_Parser
                 && substr( $value, 0, 1 ) !== '/'
                 && substr( $value, 0, 1 ) !== '#'
                 && substr( $value, 0, 7 ) !== 'http://'
+                && substr( $value, 0, 7 ) !== 'mailto:'
             ) {
                 
                 $value = $this->_pathPrefix . $value;
