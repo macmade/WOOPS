@@ -93,7 +93,7 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         $host   = $this->_conf->getVar( 'database', 'host' );
         $port   = $this->_conf->getVar( 'database', 'port' );
         $db     = $this->_conf->getVar( 'database', 'name' );
-        $prefix = $this->_conf->getVar( 'database', 'prefix' );
+        $prefix = $this->_conf->getVar( 'database', 'tablePrefix' );
         
         // Security - Removes some configuration variables
         $this->_conf->deleteVar( 'database', 'user' );
