@@ -87,8 +87,8 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
         
         $this->_pageId   = $this->_getPageId();
         $this->_langName = $this->_getLanguage();
-        $this->_page     = $this->_getPage();
-        $this->_template = $this->_getTemplate();
+        $this->_page     = $this->_getPage( $this->_pageId, $this->_langName );
+        $this->_template = $this->_getTemplate( $this->_page->id_templates );
         $this->_xhtml    = $this->_parseTemplate();
     }
     
@@ -194,13 +194,13 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-    private function _getPage()
+    private function _getPage( $id, $lang )
     {
         $page = $this->_db->getRecordsByFields(
             'pageheaders',
             array(
-                'id_pageinfos' => $this->_pageId,
-                'lang'         => $this->_langName
+                'id_pageinfos' => $id,
+                'lang'         => $lang
             )
         );
         
@@ -209,7 +209,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
             $page = $this->_db->getRecordsByFields(
                 'pageheaders',
                 array(
-                    'id_pageinfos' => $this->_pageId,
+                    'id_pageinfos' => $id,
                     'lang'         => $this->_conf->getVar( 'lang', 'defaultLanguage' )
                 )
             );
@@ -218,7 +218,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
         if( !count( $page ) ) {
             
             throw new Woops_Page_Getter_Exception(
-                'Cannot find a page record for page ID ' . $this->_pageId,
+                'Cannot find a page record for page ID ' . $id,
                 Woops_Page_Getter_Exception::EXCEPTION_NO_PAGE
             );
         }
@@ -229,9 +229,9 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-    private function _getTemplate()
+    private function _getTemplate( $id )
     {
-        $template = $this->_db->getRecord( 'templates', $this->_page->id_templates );
+        $template = $this->_db->getRecord( 'templates', $id );
         
         if( !is_object( $template ) ) {
             
@@ -239,6 +239,12 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
                 'Cannot find a template record for page ID ' . $this->_pageId,
                 Woops_Page_Getter_Exception::EXCEPTION_NO_TEMPLATE
             );
+        }
+        
+        if( $template->id_parent ) {
+            
+            $parent         = $this->_getTemplate( $template->id_parent );
+            $template->file = $parent->file;
         }
         
         return $template;
