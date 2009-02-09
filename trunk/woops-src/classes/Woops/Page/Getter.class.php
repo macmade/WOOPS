@@ -51,6 +51,11 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     private $_db              = NULL;
     
     /**
+     * The string utilities
+     */
+    private $_str             = NULL;
+    
+    /**
      * The XHTML page object
      */
     private $_xhtml           = NULL;
@@ -76,9 +81,39 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     private $_langName        = '';
     
     /**
-     * 
+     * The character set to use
+     */
+    private $_charset         = 'utf-8';
+    
+    /**
+     * The XHTML namespace
      */
     private $_xmlns           = 'http://www.w3.org/1999/xhtml';
+    
+    /**
+     * The document type to use
+     */
+    private $_dtd             = 'xhtml1-strict';
+    
+    /**
+     * The available XHTML document types
+     */
+    private $_docTypes        = array(
+        'xhtml11'             => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">',
+        'xhtml1-strict'       => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
+        'xhtml1-transitional' => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
+        'xhtml1-frameset'     => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">'
+    );
+    
+    /**
+     * Wheter to insert the document types
+     */
+    private $_docType         = true;
+    
+    /**
+     * Wheter to insert the XML declaration
+     */
+    private $_xmlDeclaration  = true;
     
     /**
      * The database row for the current page
@@ -99,6 +134,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
         $this->_env      = Woops_Core_Env_Getter::getInstance();
         $this->_request  = Woops_Core_Request_Getter::getInstance();
         $this->_db       = Woops_Database_Layer::getInstance();
+        $this->_str      = Woops_String_Utils::getInstance();
         
         $this->_pageId   = $this->_getPageId();
         $this->_langName = $this->_getLanguage();
@@ -158,7 +194,21 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
      */
     public function __toString()
     {
-        return ( string )$this->_xhtml;
+        $out = '';
+        
+        if( $this->_xmlDeclaration ) {
+            
+            $out .= '<?xml version="1.0" encoding="' . $this->_charset . '"?>' . $this->_str->NL;
+        }
+        
+        if( $this->_docType ) {
+            
+            $out .= $this->_docTypes[ $this->_dtd ] . $this->_str->NL;
+        }
+        
+        $out .= ( string )$this->_xhtml;
+        
+        return $out;
     }
     
     /**
@@ -334,6 +384,43 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     {
         $this->_head->comment( 'This page has been generated with WOOPS - eosgarden © 2009 - www.eosgarden.com' );
         $this->_head->title = $this->_page->title;
+    }
+    
+    /**
+     * 
+     */
+    public function insertXmlDeclaration( $value )
+    {
+        $this->_xmlDeclaration = ( boolean )$value;
+    }
+    
+    /**
+     * 
+     */
+    public function insertDocType( $value )
+    {
+        $this->_docType = ( boolean )$value;
+    }
+    
+    /**
+     * 
+     */
+    public function setDocType( $name )
+    {
+        $name = strtolower( $name );
+        
+        if( isset( $this->_docTypes[ $name ] ) ) {
+            
+            $this->_dtd = $name;
+        }
+    }
+    
+    /**
+     * 
+     */
+    public function setCharset( $charset )
+    {
+        $this->_charset = strtolower( $charset );
     }
     
     /**
