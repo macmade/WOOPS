@@ -293,7 +293,7 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
         $comment->_parents[] = $this;
         
         $this->_children[]                 = $comment;
-        $this->_childrenByName[ '<!--' ][] = $comment;
+        $this->_childrenByName[ '<!--' ][] = array( $this->_childrenCount, $comment );
         
         $this->_childrenCountByName[ '<!--' ]++;
         $this->_childrenCount++;
@@ -318,7 +318,7 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
         $child->_parents[] = $this;
         
         $this->_children[]                = $child;
-        $this->_childrenByName[ $name ][] = $child;
+        $this->_childrenByName[ $name ][] = array( $this->_childrenCount, $child );
         
         $this->_childrenCountByName[ $name ]++;
         $this->_childrenCount++;
@@ -429,7 +429,7 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
             $child->_parents[] = $this;
             
             $this->_children[]                           = $child;
-            $this->_childrenByName[ $child->_tagName ][] = $child;
+            $this->_childrenByName[ $child->_tagName ][] = array( $this->_childrenCount, $child );
             
             $this->_childrenCountByName[ $child->_tagName ]++;
             $this->_childrenCount++;
@@ -513,10 +513,55 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
             
             if( isset( $this->_childrenByName[ $name ][ $index ] ) ) {
                 
-                return $this->_childrenByName[ $name ][ $index ];
+                return $this->_childrenByName[ $name ][ $index ][ 1 ];
             }
         }
         
         return NULL;
+    }
+    
+    public function removeTag( $name, $index = 0 )
+    {
+        if( isset( $this->_childrenByName[ $name ] ) ) {
+            
+            if( $index === -1 ) {
+                
+                $index = $this->_childrenCountByName[ $name ] - 1;
+            }
+            
+            if( isset( $this->_childrenByName[ $name ][ $index ] ) ) {
+                
+                unset( $this->_children[ $this->_childrenByName[ $name ][ $index ][ 0 ] ] );
+                unset( $this->_childrenByName[ $name ][ $index ] );
+                
+                $this->_childrenCount--;
+                $this->_childrenCountByName[ $name ]--;
+                
+                if( !count( $this->_childrenCountByName[ $name ] ) ) {
+                    
+                    unset( $this->_childrenCountByName[ $name ] );
+                }
+                
+                if( !count( $this->_childrenCountByName ) ) {
+                    
+                    $this->_hasNodeChildren = false;
+                }
+            }
+        }
+    }
+    
+    /**
+     * 
+     */
+    public function removeAllTags()
+    {
+        if( $this->_childrenCount > 0 ) {
+              
+            $this->_children            = array();
+            $this->_childrenByName      = array();
+            $this->_childrenCountByName = array();
+            $this->_childrenCount       = 0;
+            $this->_hasNodeChildren     = false;
+        }
     }
 }
