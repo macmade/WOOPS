@@ -309,6 +309,14 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
+    public function getBody()
+    {
+        return $this->_body;
+    }
+    
+    /**
+     * 
+     */
     public function addBodyAttribute( $parameter, $value )
     {
         $this->_body[ $parameter ] = $value;
