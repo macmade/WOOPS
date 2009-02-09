@@ -350,10 +350,9 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
     public function getWebPath( $path )
     {
         $webPath = $this->_woopsVars[ 'web' ][ 'root' ] . $path;
-        $absPath = $this->_woopsVars[ 'sys' ][ 'src' ]
-                 . str_replace( '/', DIRECTORY_SEPARATOR, $path );
+        $absPath = $this->getPath( $path );
         
-        return ( file_exists( $absPath ) ) ? $absPath : false;
+        return ( file_exists( $absPath ) ) ? $webPath : false;
     }
     
     /**
@@ -362,10 +361,9 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
     public function getSourceWebPath( $path )
     {
         $webPath = $this->_woopsVars[ 'web' ][ 'src' ] . $path;
-        $absPath = $this->_woopsVars[ 'sys' ][ 'src' ]
-                 . str_replace( '/', DIRECTORY_SEPARATOR, $path );
+        $absPath = $this->getSourcePath( $path );
         
-        return ( file_exists( $absPath ) ) ? $absPath : false;
+        return ( file_exists( $absPath ) ) ? $webPath : false;
     }
     
     /**
