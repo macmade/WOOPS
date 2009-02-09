@@ -383,18 +383,18 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
                     if( $this->_hasNodeChildren ) {
                         
                         // Protect the data with CDATA, and adds a span tag for the XML compliancy
-                        $tag .= '<span><![CDATA[' . $child . ']]></span>';
+                        $tag .= '<span><![CDATA[' . trim( $child ) . ']]></span>';
                         
                     } else {
                         
                         // Protects the data with CDATA
-                        $tag .= '<![CDATA[' . $child . ']]>';
+                        $tag .= '<![CDATA[' . trim( $child ) . ']]>';
                     }
                     
                 } else {
                     
                     // String - Adds the child data
-                    $tag .= ( string )$child;
+                    $tag .= trim( ( string )$child );
                 }
             }
             
