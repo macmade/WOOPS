@@ -41,16 +41,20 @@ final class Woops_Core_Exception_Handler
      */
     public static function handleException( Exception $e )
     {
-        if( is_subclass_of( $e, 'Woops_Core_Exception_Base' ) ) {
-            
-            print $e;
-            
-        } else {
+        if( !is_subclass_of( $e, 'Woops_Core_Exception_Base' ) ) {
             
             $e = new Woops_Core_Php_Exception(
                 'Exception of type ' . get_class( $e ) . ': ' . $e->getMessage(),
                 $e->getCode(), $e->getTrace()
             );
+        }
+        
+        if( Woops_Core_Config_Getter::getInstance()->getVar( 'error', 'verbose' ) ) {
+            
+            print $e->getInfos();
+            
+        } else {
+            
             print $e;
         }
     }
