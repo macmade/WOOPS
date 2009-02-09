@@ -145,7 +145,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     {
         $id = ( int )$this->_request->woopsPageId;
         
-        if( !$this->_pageId ) {
+        if( !$id || !$this->_db->getRecord( 'pageinfos', $id ) ) {
             
             $homeRecords = $this->_db->getRecordsByFields(
                 'pageinfos',
