@@ -121,6 +121,19 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     private $_page            = array();
     
     /**
+     * The XHTML head parts
+     */
+    private $_headParts       = array(
+        'title'     => NULL,
+        'meta-http' => array(),
+        'meta-name' => array(),
+        'base'      => NULL,
+        'link'      => array(),
+        'style'      => array(),
+        'script'      => array()
+    );
+    
+    /**
      * Class constructor
      * 
      * The class constructor is private to avoid multiple instances of the
@@ -151,25 +164,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
         $this->_xhtml[ 'xml:lang' ] = $this->_langName;
         $this->_xhtml[ 'lang' ]     = $this->_langName;
         
-        $keepHead        = unserialize( $this->_template->keephead );
-        $keepTags        = array();
-        
-        foreach( $keepHead as $keepTag ) {
-            
-            if( $tag = $this->_head->getTag( $keepTag[ 0 ], $keepTag[ 1 ] ) ) {
-                
-                $keepTags[] = $tag;
-            }
-        }
-        
-        $this->_head->removeAllTags();
-        
-        $this->_buildHeader();
-        
-        foreach( $keepTags as $tag ) {
-            
-            $this->_head->addChildNode( $tag );
-        }
+        $this->_buildHeaderTags();
     }
     
     /**
@@ -194,6 +189,24 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
      */
     public function __toString()
     {
+        $this->_head->removeAllTags();
+        $this->_head->comment( 'This page has been generated with WOOPS - eosgarden © 2009 - www.eosgarden.com' );
+        
+        foreach( $this->_headParts as $headPart ) {
+            
+            if( is_array( $headPart ) ) {
+                
+                foreach( $headPart as $headPartGroup ) {
+                    
+                    $this->_head->addChildNode( $headPartGroup );
+                }
+                
+            } elseif( is_object( $headPart ) ) {
+                
+                $this->_head->addChildNode( $headPart );
+            }
+        }
+        
         $out = '';
         
         if( $this->_xmlDeclaration ) {
@@ -380,10 +393,49 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-    protected function _buildHeader()
+    protected function _buildHeaderTags()
     {
-        $this->_head->comment( 'This page has been generated with WOOPS - eosgarden © 2009 - www.eosgarden.com' );
-        $this->_head->title = $this->_page->title;
+        $this->setTitle( $this->_page->title );
+        $this->addMetaHttp( 'content-type', 'text/html; charset=' . $this->_charset );
+        $this->setLanguage( $this->_langName );
+        
+        $keepHead        = unserialize( $this->_template->keephead );
+        $keepTags        = array();
+        
+        foreach( $keepHead as $keepTag ) {
+            
+            if( $tag = $this->_head->getTag( $keepTag[ 0 ], $keepTag[ 1 ] ) ) {
+                
+                $keepTags[] = $tag;
+            }
+        }
+        
+        foreach( $keepTags as $tag ) {
+            
+            $headPart = $tag->getTagName();
+            
+            if( $headPart === 'meta' && isset( $tag[ 'name' ] ) ) {
+                
+                $headPart = 'meta-name';
+            }
+            
+            if( $headPart === 'meta' && isset( $tag[ 'name' ] ) ) {
+                
+                $headPart = 'meta-name';
+            }
+            
+            if( isset( $this->_headParts[ $headPart ] ) ) {
+                
+                if( is_array( $this->_headParts[ $headPart ] ) ) {
+                    
+                    $this->_headParts[ $headPart ][] = $tag;
+                    
+                } else {
+                    
+                    $this->_headParts[ $headPart ] = $tag;
+                }
+            }
+        }
     }
     
     /**
@@ -421,8 +473,77 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     public function setCharset( $charset )
     {
         $this->_charset     = strtolower( $charset );
-        $cType              = $this->_head->getTag( 'meta' );
+        $cType              = $this->_headParts[ 'meta' ][ 'content-type' ];
         $cType[ 'content' ] = 'text/html; charset=' . $charset;
+    }
+    
+    /**
+     * 
+     */
+    public function setTitle( $title )
+    {
+        $this->_headParts[ 'title' ] = new Woops_Xhtml_Tag( 'title' );
+        $this->_headParts[ 'title' ]->addTextData( ( string )$title );
+    }
+    
+    /**
+     * 
+     */
+    public function setLanguage( $name )
+    {
+        $this->_xhtml[ 'xml:lang' ] = $this->_langName;
+        $this->_xhtml[ 'lang' ]     = $this->_langName;
+        $this->addMetaHttp( 'content-language', $name );
+        $this->addMetaName( 'DC.Language', $name, 'NISOZ39.50' );
+    }
+    
+    /**
+     * 
+     */
+    public function addMetaName( $name, $content, $scheme = '' )
+    {
+        if( !isset( $this->_headParts[ 'meta-name' ][ $name ] ) ) {
+            
+            $this->_headParts[ 'meta-name' ][ $name ] = new Woops_Xhtml_Tag( 'meta' );
+        }
+        
+        $this->_headParts[ 'meta-name' ][ $name ][ 'name'    ] = (string)$name;
+        $this->_headParts[ 'meta-name' ][ $name ][ 'content' ] = (string)$content;
+        
+        if( $scheme ) {
+            
+            $this->_headParts[ 'meta-name' ][ $name ][ 'scheme' ] = (string)$scheme;
+            
+        } else {
+            
+            $this->_headParts[ 'meta-name' ][ $name ]->removeAttribute( 'scheme' );
+        }
+    }
+    
+    /**
+     * 
+     */
+    public function addMetaHttp( $httpEquiv, $content, $scheme = '' )
+    {
+        if( $httpEquiv !== 'content-type' || $httpEquiv !== 'content-language' ) {
+            
+            if( !isset( $this->_headParts[ 'meta-http' ][ $httpEquiv ] ) ) {
+                
+                $this->_headParts[ 'meta-http' ][ $httpEquiv ] = new Woops_Xhtml_Tag( 'meta' );
+            }
+            
+            $this->_headParts[ 'meta-http' ][ $httpEquiv ][ 'http-equiv' ] = (string)$httpEquiv;
+            $this->_headParts[ 'meta-http' ][ $httpEquiv ][ 'content' ]    = (string)$content;
+            
+            if( $scheme ) {
+                
+                $this->_headParts[ 'meta-http' ][ $httpEquiv ][ 'scheme' ] = (string)$scheme;
+                
+            } else {
+                
+                $this->_headParts[ 'meta-http' ][ $httpEquiv ]->removeAttribute( 'scheme' );
+            }
+        }
     }
     
     /**
