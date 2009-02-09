@@ -487,6 +487,6 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
             return $this->_parents[ $parentIndex ];
         }
         
-        return $this->_parents[ 0 ];
+        return NULL;
     }
 }
