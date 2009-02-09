@@ -244,6 +244,7 @@ DIV#left {
     background-image:   url( 'default/left-pattern.png' );
     background-repeat:  repeat-x;
     min-height:         575px;
+    text-align:         justify;
 }
 
 DIV#right {
