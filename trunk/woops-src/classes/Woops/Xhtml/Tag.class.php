@@ -564,4 +564,20 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
             $this->_hasNodeChildren     = false;
         }
     }
+    
+    /**
+     * 
+     */
+    public function removeAttribute( $name )
+    {
+        unset( $this->_attribs[ $name ] );
+    }
+    
+    /**
+     * 
+     */
+    public function removeAllAttributes()
+    {
+        $this->_attribs = array();
+    }
 }

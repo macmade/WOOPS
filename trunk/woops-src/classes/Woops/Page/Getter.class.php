@@ -76,6 +76,11 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     private $_langName        = '';
     
     /**
+     * 
+     */
+    private $_xmlns           = 'http://www.w3.org/1999/xhtml';
+    
+    /**
      * The database row for the current page
      */
     private $_page            = array();
@@ -103,6 +108,12 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
         
         $this->_head     = $this->_xhtml->getTag( 'head' );
         $this->_body     = $this->_xhtml->getTag( 'body' );
+        
+        $this->_xhtml->removeAllAttributes();
+        
+        $this->_xhtml[ 'xmlns' ]    = $this->_xmlns;
+        $this->_xhtml[ 'xml:lang' ] = $this->_langName;
+        $this->_xhtml[ 'lang' ]     = $this->_langName;
         
         $keepHead        = unserialize( $this->_template->keephead );
         $keepTags        = array();
@@ -222,6 +233,8 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
                 Woops_Page_Getter_Exception::EXCEPTION_NO_DEFAULT_LANG
             );
         }
+        
+        return $lang;
     }
     
     /**
