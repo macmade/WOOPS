@@ -26,6 +26,11 @@ abstract class Woops_Core_Exception_Base extends Exception
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * Wether the static variables are set or not
+     */
+    private static $_hasStatic      = false;
+    
+    /**
      * Wheter to print the backtrace or not, when an exception is not caught
      */
     protected static $_debug        = true;
@@ -46,6 +51,13 @@ abstract class Woops_Core_Exception_Base extends Exception
      */
     public function __construct( $message, $code = 0 )
     {
+        // Checks if the static variables are set
+        if( !self::$_hasStatic ) {
+            
+            // Sets the static variables
+            self::_setStaticVars();
+        }
+        
         // Calls the Exception constructor
         parent::__construct( $message, $code );
     }
@@ -67,6 +79,59 @@ abstract class Woops_Core_Exception_Base extends Exception
         
         // Returns the exception message
         return get_class( $this ) . ' exception with message "' . $this->message . '"';
+    }
+    
+    /**
+     * Sets the needed static variables
+     * 
+     * @return  NULL
+     */
+    private static function _setStaticVars()
+    {
+        // Gets the instance of the number utilities
+        self::$_debug     = ( boolean )Woops_Core_Config_Getter::getInstance()->getVar( 'error', 'verbose' );
+        
+        // Static variables are set
+        self::$_hasStatic = true;
+    }
+    
+    /**
+     * Decides wether to display the backtrace or not when an exception is
+     * not caught.
+     * 
+     * @param   boolean True if the backtrace must be displayed, otherwise false
+     * @return  boolean The previous value
+     */
+    public static function setDebugState( $value )
+    {
+        // Gets the previous state
+        $oldState     = self::$_debug;
+        
+        // Sets the new state
+        self::$_debug = ( boolean )$value;
+        
+        // Returns the previous state
+        return $oldState;
+    }
+    
+    /**
+     * 
+     */
+    public static function getExceptionString( $class, $code = 0 )
+    {
+        if( is_object( $class ) ) {
+            
+            $code      = $class->getCode();
+            $reflector = Woops_Core_Reflection_Object::getInstance( $class );
+            
+        } else {
+            
+            $reflector = Woops_Core_Reflection_Class::getInstance( $class );
+        }
+        
+        $constants = array_flip( $reflector->getConstants() );
+        
+        return ( isset( $constants[ $code ] ) ) ? $constants[ $code ] : '';
     }
     
     /**
@@ -258,25 +323,6 @@ abstract class Woops_Core_Exception_Base extends Exception
     }
     
     /**
-     * Decides wether to display the backtrace or not when an exception is
-     * not caught.
-     * 
-     * @param   boolean True if the backtrace must be displayed, otherwise false
-     * @return  boolean The previous value
-     */
-    public static function setDebugState( $value )
-    {
-        // Gets the previous state
-        $oldState     = self::$_debug;
-        
-        // Sets the new state
-        self::$_debug = ( boolean )$value;
-        
-        // Returns the previous state
-        return $oldState;
-    }
-    
-    /**
      * Gets the informations about the exception
      * 
      * @return  string  The formatted informations bout the exception
@@ -299,25 +345,5 @@ abstract class Woops_Core_Exception_Base extends Exception
         
         // Returns the informations
         return $trace;
-    }
-    
-    /**
-     * 
-     */
-    public static function getExceptionString( $class, $code = 0 )
-    {
-        if( is_object( $class ) ) {
-            
-            $code      = $class->getCode();
-            $reflector = Woops_Core_Reflection_Object::getInstance( $class );
-            
-        } else {
-            
-            $reflector = Woops_Core_Reflection_Class::getInstance( $class );
-        }
-        
-        $constants = array_flip( $reflector->getConstants() );
-        
-        return ( isset( $constants[ $code ] ) ) ? $constants[ $code ] : '';
     }
 }

@@ -43,7 +43,7 @@ final class Woops_Core_Exception_Handler
     {
         if( is_subclass_of( $e, 'Woops_Core_Exception_Base' ) ) {
             
-            print $e->getInfos();
+            print $e;
             
         } else {
             
@@ -51,7 +51,7 @@ final class Woops_Core_Exception_Handler
                 'Exception of type ' . get_class( $e ) . ': ' . $e->getMessage(),
                 $e->getCode(), $e->getTrace()
             );
-            print $e->getInfos();
+            print $e;
         }
     }
 }

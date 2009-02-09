@@ -17,6 +17,7 @@ $WOOPS_CONF->database = new stdClass();
 $WOOPS_CONF->time     = new stdClass();
 $WOOPS_CONF->lang     = new stdClass();
 $WOOPS_CONF->xhtml    = new stdClass();
+$WOOPS_CONF->error    = new stdClass();
 
 ################################################################################
 # Database settings                                                            #
@@ -55,7 +56,7 @@ $WOOPS_CONF->time->timezone = 'Europe/Zurich';
 ################################################################################
 
 // The default timezone
-$WOOPS_CONF->lang->defaultLanguage = 'en';
+#$WOOPS_CONF->lang->defaultLanguage = 'en';
 
 ################################################################################
 # XHTML settings                                                               #
@@ -63,3 +64,10 @@ $WOOPS_CONF->lang->defaultLanguage = 'en';
 
 // Format and indent the generated XHTML code
 $WOOPS_CONF->xhtml->format = true;
+
+################################################################################
+# Error related settings                                                       #
+################################################################################
+
+// Wheter the error reporting must be verbose or not (should be turned off for production boxes)
+$WOOPS_CONF->error->verbose = true;
