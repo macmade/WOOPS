@@ -44,7 +44,27 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
      * @return NULL
      */
     private function __construct()
-    {}
+    {
+        $confFile = Woops_Core_Env_Getter::getInstance()->getPath( 'config.ini.php' );
+        
+        if( !$confFile ) {
+            
+            throw new Woops_Core_Config_Getter_Exception(
+                'The WOOPS configuration file does not exist',
+                Woops_Core_Config_Getter_Exception::EXCEPTION_NO_CONFIG_FILE
+            );
+        }
+        
+        if( !is_readable( $confFile ) ) {
+            
+            throw new Woops_Core_Config_Getter_Exception(
+                'The WOOPS configuration file is not readable',
+                Woops_Core_Config_Getter_Exception::EXCEPTION_CONFIG_FILE_NOT_READABLE
+            );
+        }
+        
+        $this->_conf = parse_ini_file( $confFile, true );
+    }
     
     /**
      * Clones an instance of the class
@@ -68,61 +88,25 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
      */
     public function __get( $name )
     {
-        return ( isset( $this->_conf->$name ) ) ? clone( $this->_conf->$name ) : new stdClass();
-    }
-    
-    /**
-     * Sets and stores the WOOPS configuration object
-     * 
-     * This method will create the unique instance of the class and store
-     * the WOOPS configuration object. Once it's done, this method will
-     * produce an exception if called another time.
-     * 
-     * @param   stdClass                            The WOOPS configuration object
-     * @return  NULL
-     * @throws  Woops_Core_Config_Getter_Exception  If the configuration object is already set
-     */
-    public static function setConfiguration( stdClass $conf )
-    {
-        // Checks if the unique instance has already be created
-        if( is_object( self::$_instance ) ) {
-            
-            // The configuration is already set
-            throw new Woops_Core_Config_Getter_Exception(
-                'The WOOPS configuration object already exist. You cannot configure WOOPS multiple times.',
-                Woops_Core_Config_Getter_Exception::EXCEPTION_CONFIG_ALREADY_SET
-            );
-        }
-        
-        // Creates the unique instance
-        self::$_instance        = new self();
-        
-        // Stores a copy of the configuration object (as the global one will be erased)
-        self::$_instance->_conf = clone( $conf );
+        return ( isset( $this->_conf[ $name ] ) ) ? clone( $this->_conf[ $name ] ) : array();
     }
     
     /**
      * Gets the unique class instance
      * 
      * This method is used to get the unique instance of the class
-     * (singleton). If the instance does not exists, this method will
-     * produce and exception, as it will mean the configuration
-     * object has not been set with the setConfiguration() method.
+     * (singleton). If no instance is available, it will create it.
      * 
-     * @return  Woops_Core_Config_Getter            The unique instance of the class
+     * @return  Woops_Core_Env_Getter   The unique instance of the class
      * @see     __construct
-     * @throws  Woops_Core_Config_Getter_Exception  If the unique instance does not exist
      */
     public static function getInstance()
     {
         // Checks if the unique instance already exists
         if( !is_object( self::$_instance ) ) {
             
-            // The configuration is not set
-            throw new Woops_Core_Config_Getter_Exception(
-                'The WOOPS configuration object does not exist. It has to be set previously with the ' . __CLASS__ . '::setConfiguration() method.',
-                Woops_Core_Config_Getter_Exception::EXCEPTION_CONFIG_NOT_SET
-            );
+            // Creates the unique instance
+            self::$_instance = new self();
         }
         
         // Returns the unique instance
@@ -134,7 +118,7 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
      */
     public function getVar( $section, $key )
     {
-        return ( isset( $this->_conf->$section->$key ) ) ? $this->_conf->$section->$key : false;
+        return ( isset( $this->_conf[ $section ][ $key ] ) ) ? $this->_conf[ $section ][ $key ] : false;
     }
     
     /**
@@ -142,6 +126,6 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
      */
     public function deleteVar( $section, $key )
     {
-        unset( $this->_conf->$section->$key );
+        unset( $this->_conf[ $section ][ $key ] );
     }
 }

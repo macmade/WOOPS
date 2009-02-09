@@ -49,13 +49,21 @@ final class Woops_Core_Exception_Handler
             );
         }
         
-        if( Woops_Core_Config_Getter::getInstance()->getVar( 'error', 'verbose' ) ) {
+        $report = Woops_Core_Config_Getter::getInstance()->getVar( 'error', 'report' );
+        
+        if( $report === 'development' ) {
             
             print $e->getInfos();
+            exit();
+            
+        } elseif( $report === 'production' ) {
+            
+            print $e;
+            exit();
             
         } else {
             
-            print $e;
+            exit();
         }
     }
 }
