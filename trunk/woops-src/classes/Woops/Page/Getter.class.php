@@ -117,7 +117,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
         
         $this->_head->removeAllTags();
         
-        $this->_head->comment( 'This page has been generated with WOOPS - eosgarden © 2009 - www.eosgarden.com' );
+        $this->_buildHeader();
         
         foreach( $keepTags as $tag ) {
             
@@ -312,6 +312,15 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
         $parser = new Woops_Xhtml_Parser( $path, $templateDirRel );
         
         return $parser->getXhtmlObject();
+    }
+    
+    /**
+     * 
+     */
+    protected function _buildHeader()
+    {
+        $this->_head->comment( 'This page has been generated with WOOPS - eosgarden © 2009 - www.eosgarden.com' );
+        $this->_head->title = $this->_page->title;
     }
     
     /**
