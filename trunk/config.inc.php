@@ -15,6 +15,7 @@
 $WOOPS_CONF           = new stdClass();
 $WOOPS_CONF->database = new stdClass();
 $WOOPS_CONF->time     = new stdClass();
+$WOOPS_CONF->lang     = new stdClass();
 $WOOPS_CONF->xhtml    = new stdClass();
 
 ################################################################################
@@ -43,11 +44,18 @@ $WOOPS_CONF->database->name        = 'woops';
 $WOOPS_CONF->database->tablePrefix = 'WOOPS_';
 
 ################################################################################
-# Date and time settings                                                               #
+# Date and time settings                                                       #
 ################################################################################
 
 // The default timezone
 $WOOPS_CONF->time->timezone = 'Europe/Zurich';
+
+################################################################################
+# Language settings                                                            #
+################################################################################
+
+// The default timezone
+$WOOPS_CONF->lang->defaultLanguage = 'en';
 
 ################################################################################
 # XHTML settings                                                               #
