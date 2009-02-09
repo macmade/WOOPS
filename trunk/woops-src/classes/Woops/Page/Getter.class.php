@@ -420,7 +420,9 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
      */
     public function setCharset( $charset )
     {
-        $this->_charset = strtolower( $charset );
+        $this->_charset     = strtolower( $charset );
+        $cType              = $this->_head->getTag( 'meta' );
+        $cType[ 'content' ] = 'text/html; charset=' . $charset;
     }
     
     /**
