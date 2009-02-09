@@ -81,11 +81,6 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     private $_page            = array();
     
     /**
-     * Wheter the WOOPS comment as been added to the header
-     */
-    private $_hasWoopsComment = false;
-    
-    /**
      * Class constructor
      * 
      * The class constructor is private to avoid multiple instances of the
@@ -108,6 +103,26 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
         
         $this->_head     = $this->_xhtml->getTag( 'head' );
         $this->_body     = $this->_xhtml->getTag( 'body' );
+        
+        $keepHead        = unserialize( $this->_template->keephead );
+        $keepTags        = array();
+        
+        foreach( $keepHead as $keepTag ) {
+            
+            if( $tag = $this->_head->getTag( $keepTag[ 0 ], $keepTag[ 1 ] ) ) {
+                
+                $keepTags[] = $tag;
+            }
+        }
+        
+        $this->_head->removeAllTags();
+        
+        $this->_head->comment( 'This page has been generated with WOOPS - eosgarden © 2009 - www.eosgarden.com' );
+        
+        foreach( $keepTags as $tag ) {
+            
+            $this->_head->addChildNode( $tag );
+        }
     }
     
     /**
@@ -132,13 +147,6 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
      */
     public function __toString()
     {
-        if( !$this->_hasWoopsComment ) {
-            
-            $this->_head->comment( 'This page has been generated with WOOPS - eosgarden © 2009 - www.eosgarden.com' );
-            
-            $this->_hasWoopsComment = true;
-        }
-        
         return ( string )$this->_xhtml;
     }
     
