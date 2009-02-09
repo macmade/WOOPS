@@ -46,7 +46,7 @@ final class Woops_Color_Converter implements Woops_Core_Singleton_Interface
     private function __construct()
     {
         // Gets the instance of the number utilities class
-        $this->_number = $this->_number->getInstance();
+        $this->_number = Woop_Number_Utils::getInstance();
     }
     
     /**
