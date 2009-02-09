@@ -498,4 +498,25 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
         
         return NULL;
     }
+    
+    /**
+     * 
+     */
+    public function getTag( $name, $index = 0 )
+    {
+        if( isset( $this->_childrenByName[ $name ] ) ) {
+            
+            if( $index === -1 ) {
+                
+                $index = $this->_childrenCountByName[ $name ] - 1;
+            }
+            
+            if( isset( $this->_childrenByName[ $name ][ $index ] ) ) {
+                
+                return $this->_childrenByName[ $name ][ $index ];
+            }
+        }
+        
+        return NULL;
+    }
 }
