@@ -455,8 +455,17 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
                 
             } else {
                 
-                $this->_children[] = ( string )$data;
-                $this->_childrenCount++;
+                if( $this->_childrenCount
+                    && !( $this->_children[ $this->_childrenCount - 1 ] instanceof self )
+                ) {
+                    
+                    $this->_children[ $this->_childrenCount - 1 ] .= $data;
+                    
+                } else {
+                    
+                    $this->_children[] = ( string )$data;
+                    $this->_childrenCount++;
+                }
             }
         }
     }
