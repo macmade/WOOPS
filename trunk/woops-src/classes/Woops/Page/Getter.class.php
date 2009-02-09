@@ -43,32 +43,47 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     /**
      * The request object
      */
-    private $_request        = NULL;
+    private $_request         = NULL;
     
     /**
      * The database object
      */
-    private $_db             = NULL;
+    private $_db              = NULL;
     
     /**
      * The XHTML page object
      */
-    private $_xhtml          = NULL;
+    private $_xhtml           = NULL;
+    
+    /**
+     * The XHTML page head tag
+     */
+    private $_head            = NULL;
+    
+    /**
+     * The XHTML page body tag
+     */
+    private $_body            = NULL;
     
     /**
      * The ID of the current page
      */
-    private $_pageId         = 0;
+    private $_pageId          = 0;
     
     /**
      * The name of the current language
      */
-    private $_langName       = '';
+    private $_langName        = '';
     
     /**
      * The database row for the current page
      */
-    private $_page           = array();
+    private $_page            = array();
+    
+    /**
+     * Wheter the WOOPS comment as been added to the header
+     */
+    private $_hasWoopsComment = false;
     
     /**
      * Class constructor
@@ -90,6 +105,9 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
         $this->_page     = $this->_getPage( $this->_pageId, $this->_langName );
         $this->_template = $this->_getTemplate( $this->_page->id_templates );
         $this->_xhtml    = $this->_parseTemplate();
+        
+        $this->_head     = $this->_xhtml->getTag( 'head' );
+        $this->_body     = $this->_xhtml->getTag( 'body' );
     }
     
     /**
@@ -114,6 +132,13 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
      */
     public function __toString()
     {
+        if( !$this->_hasWoopsComment ) {
+            
+            $this->_head->comment( 'This page has been generated with WOOPS - eosgarden © 2009 - www.eosgarden.com' );
+            
+            $this->_hasWoopsComment = true;
+        }
+        
         return ( string )$this->_xhtml;
     }
     
@@ -279,5 +304,13 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
         $parser = new Woops_Xhtml_Parser( $path, $templateDirRel );
         
         return $parser->getXhtmlObject();
+    }
+    
+    /**
+     * 
+     */
+    public function addBodyAttribute( $parameter, $value )
+    {
+        $this->_body[ $parameter ] = $value;
     }
 }
