@@ -56,7 +56,7 @@ $WOOPS_CONF->time->timezone = 'Europe/Zurich';
 ################################################################################
 
 // The default timezone
-#$WOOPS_CONF->lang->defaultLanguage = 'en';
+$WOOPS_CONF->lang->defaultLanguage = 'en';
 
 ################################################################################
 # XHTML settings                                                               #
