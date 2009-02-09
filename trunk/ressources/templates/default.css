@@ -182,8 +182,11 @@ DIV#header {
 DIV#logo {
     float:              left;
     width:              300px;
-    font-size:          70px;
     text-align:         center;
+}
+
+DIV#logo SPAN {
+    font-size:          70px;
 }
 
 DIV#menu {
@@ -263,6 +266,19 @@ DIV#content-left DIV, DIV#content-right DIV {
 .center {
     text-align:         center;
 }
+
+.left {
+    float:              left;
+}
+
+.right {
+    float:              right;
+}
+
+.small {
+    font-size:          10px;
+}
+
 .image-left {
     float:              left;
 }
