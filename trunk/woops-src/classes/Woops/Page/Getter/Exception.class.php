@@ -12,7 +12,7 @@
 # $Id$
 
 /**
- * Exception class for the Woops_Lang_Getter class
+ * Exception class for the Woops_Page_Getter class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
@@ -32,6 +32,4 @@ final class Woops_Page_Getter_Exception extends Woops_Core_Exception_Base
     const EXCEPTION_NO_HOMEPAGE      = 0x02;
     const EXCEPTION_NO_PAGE          = 0x03;
     const EXCEPTION_NO_TEMPLATE      = 0x04;
-    const EXCEPTION_NO_TEMPLATE_DIR  = 0x05;
-    const EXCEPTION_NO_TEMPLATE_FILE = 0x06;
 }
