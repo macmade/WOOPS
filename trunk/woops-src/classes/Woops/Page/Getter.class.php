@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Page
  */
-final class Woops_Page_Getter
+final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
