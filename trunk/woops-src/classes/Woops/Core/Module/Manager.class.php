@@ -277,6 +277,14 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
             );
         }
         
+        if( !is_subclass_of( $abstractClass, 'Woops_Core_Module_Block' ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'The abstract class \'' . $abstractClass . '\' for block type \'' . $type . '\' does not extends the \'Woops_Core_Module_Block\' abstract class',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_INVALID_BLOCK_ABSTRACT
+            );
+        }
+        
         $this->_blockTypes[ $type ] = $abstractClass;
         $this->_blocks[ $type ]     = array();
     }
