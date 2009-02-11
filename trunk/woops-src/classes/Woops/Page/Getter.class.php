@@ -296,7 +296,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
      */
     public function getEngine()
     {
-        $this->_template->engine;
+        return $this->_template->engine;
     }
     
     /**
@@ -304,6 +304,6 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
      */
     public function getEngineOptions()
     {
-        $this->_template->engine_options;
+        return $this->_template->engine_options;
     }
 }
