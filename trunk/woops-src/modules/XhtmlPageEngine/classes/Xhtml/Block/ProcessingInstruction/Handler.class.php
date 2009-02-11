@@ -86,7 +86,7 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Block_ProcessingInstruction_Handler implem
             $error            = $content->div->strong;
             $error[ 'style' ] = 'color: #FF0000;';
             
-            $error->setTextData( '[MISSING BLOCK: ' . $options->name . ']' );
+            $error->addTextData( '[MISSING BLOCK: ' . $options->name . ']' );
             
             $content->div     = $e->getMessage();
         }
