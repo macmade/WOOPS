@@ -45,6 +45,11 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     private $_env             = NULL;
     
     /**
+     * The WOOPS module manager
+     */
+    private $_modManager      = NULL;
+    
+    /**
      * The loaded classes from the WOOPS project
      */
     private $_loadedClasses   = array();
@@ -152,10 +157,13 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
         if( !is_object( self::$_instance ) ) {
             
             // Creates the unique instance
-            self::$_instance       = new self();
+            self::$_instance              = new self();
             
             // Gets the instance of the WOOPS environment
-            self::$_instance->_env = Woops_Core_Env_Getter::getInstance();
+            self::$_instance->_env        = Woops_Core_Env_Getter::getInstance();
+            
+            // Gets the instance of the WOOPS module manager
+            self::$_instance->_modManager = Woops_Core_Module_Manager::getInstance();
         }
         
         // Returns the unique instance
@@ -192,13 +200,18 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             // Gets the class root package
             $rootPkg = substr( $className, 6, strpos( $className, '_', 6 ) - 6 );
             
-            // Checks if the requested class belongs to this project
+            // Checks if the requested class belongs to the WOOPS cources, or from a WOOPS module
             if( isset( $instance->_packages[ $rootPkg ] )
                 || isset( $instance->_packages[ $className . '.class.php' ] )
             ) {
                 
                 // Loads the class
                 return $instance->_loadClass( $className );
+                
+            } elseif( $rootPkg == 'Mod' ) {
+                
+                // Loads the class
+                return $instance->_loadClass( $className, true );
             }
         }
         
@@ -210,14 +223,29 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
      * Loads a class from this project
      * 
      * @param   string  The name of the class to load
+     * @param   boolean Wheter the requested class belongs to a WOOPS module
      * @return  boolean
      */
-    private function _loadClass( $className )
+    private function _loadClass( $className, $moduleClass = false )
     {
-        // Gets the class path
-        $classPath = $this->_classDir
-                   . str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, 6 ) )
-                   . '.class.php';
+        // Checks if we are loading a module class or not
+        if( $moduleClass ) {
+            
+            $modName   = substr( $className, 10, strpos( $className, '_', 10 ) - 10 );
+            $modPath   = $this->_modManager->getModulePath( $modName );
+            $classPath = $modPath
+                       . 'classes'
+                       . DIRECTORY_SEPARATOR
+                       . str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, strlen( $modName ) + 11 ) )
+                       . '.class.php';
+            
+        } else {
+            
+            // Gets the class path
+            $classPath = $this->_classDir
+                       . str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, 6 ) )
+                       . '.class.php';
+        }
         
         // Checks if the class file exists
         if( file_exists( $classPath ) ) {
