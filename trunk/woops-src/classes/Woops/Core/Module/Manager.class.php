@@ -303,6 +303,8 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
                 Woops_Core_Module_Manager_Exception::EXCEPTION_INVALID_BLOCK_CLASS
             );
         }
+        
+        $this->_blocks[ $type ][ $blockName ] = $blockClass;
     }
     
     /**
@@ -335,5 +337,9 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
                 Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK
             );
         }
+        
+        $blockClass = $this->_blocks[ $type ][ $blockName ];
+        
+        return new $blockClass();
     }
 }
