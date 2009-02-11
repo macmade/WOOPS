@@ -41,11 +41,6 @@ abstract class Woops_Mod_XhtmlPageEngine_Xhtml_Block extends Woops_Core_Module_B
     protected static $_db       = NULL;
     
     /**
-     * 
-     */
-    protected $_lang            = NULL;
-    
-    /**
      * Class constructor
      * 
      * @return  NULL
@@ -61,17 +56,6 @@ abstract class Woops_Mod_XhtmlPageEngine_Xhtml_Block extends Woops_Core_Module_B
             // Sets the static variables
             self::_setStaticVars();
         }
-        
-        $this->_lang = Woops_Lang_Getter::getInstance(
-            $this->_modPath
-          . 'lang'
-          . DIRECTORY_SEPARATOR,
-            'Block.'
-          . $this->_blockType
-          . '.'
-          . $this->_blockName
-          . '.'
-        );
     }
     
     /**
