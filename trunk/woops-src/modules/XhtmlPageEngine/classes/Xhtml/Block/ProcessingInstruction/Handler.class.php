@@ -69,14 +69,27 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Block_ProcessingInstruction_Handler implem
      */
     function process( stdClass $options )
     {
-        $content      = new Woops_Xhtml_Tag( 'div' );
-        $block        = self::$_modManager->getBlock( 'xhtml', $options->name );
+        $content = new Woops_Xhtml_Tag( 'div' );
         
-        $blockOptions = clone( $options );
-        
-        unset( $blockOptions->name );
-        
-        $block->getBlockContent( $content, $blockOptions );
+        try {
+            
+            $block        = self::$_modManager->getBlock( 'xhtml', $options->name );
+            
+            $blockOptions = clone( $options );
+            
+            unset( $blockOptions->name );
+            
+            $block->getBlockContent( $content, $blockOptions );
+            
+        } catch( Exception $e ) {
+            
+            $error            = $content->div->strong;
+            $error[ 'style' ] = 'color: #FF0000;';
+            
+            $error->setTextData( '[MISSING BLOCK: ' . $options->name . ']' );
+            
+            $content->div     = $e->getMessage();
+        }
         
         return $content;
     }
