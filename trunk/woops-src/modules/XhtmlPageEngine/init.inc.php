@@ -11,6 +11,11 @@
 
 # $Id$
 
+Woops_Core_Module_Manager::getInstance()->registerBlockType(
+    'xhtml',
+    'Woops_Mod_XhtmlPageEngine_Xhtml_Block_Base'
+);
+
 Woops_Xhtml_Parser::registerProcessingInstructionHandler(
     'woops-block-xhtml',
     'Woops_Mod_XhtmlPageEngine_Xhtml_Block_ProcessingInstruction_Handler'
