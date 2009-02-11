@@ -26,8 +26,58 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Block_ProcessingInstruction_Handler implem
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * Wether the static variables are set or not
+     */
+    private static $_hasStatic    = false;
+    
+    /**
+     * 
+     */
+    protected static $_modManager = NULL;
+    
+    /**
+     * Class constructor
+     * 
+     * @return  NULL
+     */
+    public function __construct()
+    {
+        // Checks if the static variables are set
+        if( !self::$_hasStatic ) {
+            
+            // Sets the static variables
+            self::_setStaticVars();
+        }
+    }
+    
+    /**
+     * Sets the needed static variables
+     * 
+     * @return  NULL
+     */
+    private static function _setStaticVars()
+    {
+        // Gets the instance of the module manager
+        self::$_modManager= Woops_Core_Module_Manager::getInstance();
+        
+        // Static variables are set
+        self::$_hasStatic = true;
+    }
+    
+    /**
      * 
      */
     function process( stdClass $options )
-    {}
+    {
+        $content      = new Woops_Xhtml_Tag( 'div' );
+        $block        = self::$_modManager->getBlock( 'xhtml', $options->name );
+        
+        $blockOptions = clone( $options );
+        
+        unset( $blockOptions->name );
+        
+        $block->getBlockContent( $content, $blockOptions );
+        
+        return $content;
+    }
 }
