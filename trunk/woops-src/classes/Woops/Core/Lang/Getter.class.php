@@ -164,7 +164,7 @@ final class Woops_Core_Lang_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-    public static function getInstance( $path, $filePrefix = '' )
+    public static function getInstance( $path )
     {
         // Checks if the default instance already exist
         if( !self::$_nbInstances ) {
@@ -177,15 +177,15 @@ final class Woops_Core_Lang_Getter implements Woops_Core_Singleton_Interface
         }
         
         // Creates the required instance if it does not exists
-        if( !isset( self::$_instances[ $path . $filePrefix ] ) ) {
+        if( !isset( self::$_instances[ $path ] ) ) {
             
             // Registers the current instance
-            self::$_instances[ $path . $filePrefix ] = new self( $path . $filePrefix );
+            self::$_instances[ $path ] = new self( $path );
             self::$_nbInstances++;
         }
         
         // Returns the required instance
-        return self::$_instances[ $path . $filePrefix ];
+        return self::$_instances[ $path ];
     }
     
     /**
