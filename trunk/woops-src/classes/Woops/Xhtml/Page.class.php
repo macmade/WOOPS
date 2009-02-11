@@ -93,7 +93,7 @@ class Woops_Xhtml_Page
     /**
      * The XHTML head parts
      */
-    protected $_headParts      = array(
+    protected $_headerParts    = array(
         'title'     => NULL,
         'meta-http' => array(),
         'meta-name' => array(),
@@ -102,6 +102,11 @@ class Woops_Xhtml_Page
         'style'     => array(),
         'script'    => array()
     );
+    
+    /**
+     * The header comments
+     */
+    protected $_headerComments = array();
     
     /**
      * Class constructor
@@ -142,7 +147,12 @@ class Woops_Xhtml_Page
         
         $this->_head->removeAllTags();
         
-        foreach( $this->_headParts as $headPart ) {
+        foreach( $this->_headerComments as $comment ) {
+            
+            $this->_head->comment( $comment );
+        }
+        
+        foreach( $this->_headerParts as $headPart ) {
             
             if( is_array( $headPart ) ) {
                 
@@ -221,7 +231,7 @@ class Woops_Xhtml_Page
     public function setCharset( $charset )
     {
         $this->_charset     = strtolower( $charset );
-        $cType              = $this->_headParts[ 'meta-http' ][ 'content-type' ];
+        $cType              = $this->_headerParts[ 'meta-http' ][ 'content-type' ];
         $cType[ 'content' ] = 'text/html; charset=' . $charset;
     }
     
@@ -230,8 +240,8 @@ class Woops_Xhtml_Page
      */
     public function setTitle( $title )
     {
-        $this->_headParts[ 'title' ] = new Woops_Xhtml_Tag( 'title' );
-        $this->_headParts[ 'title' ]->addTextData( ( string )$title );
+        $this->_headerParts[ 'title' ] = new Woops_Xhtml_Tag( 'title' );
+        $this->_headerParts[ 'title' ]->addTextData( ( string )$title );
     }
     
     /**
@@ -250,16 +260,16 @@ class Woops_Xhtml_Page
      */
     public function setBase( $href, $target = '' )
     {
-        $this->_headParts[ 'base' ]           = new Woops_Xhtml_Tag( 'title' );
-        $this->_headParts[ 'base' ][ 'href' ] = ( string )$href;
+        $this->_headerParts[ 'base' ]           = new Woops_Xhtml_Tag( 'title' );
+        $this->_headerParts[ 'base' ][ 'href' ] = ( string )$href;
         
         if( $target ) {
             
-            $this->_headParts[ 'base' ][ 'target' ] = ( string )$target;
+            $this->_headerParts[ 'base' ][ 'target' ] = ( string )$target;
             
         } else {
             
-            unset( $this->_headParts[ 'base' ][ 'target' ][ 'href' ] );
+            unset( $this->_headerParts[ 'base' ][ 'target' ][ 'href' ] );
         }
     }
     
@@ -268,21 +278,21 @@ class Woops_Xhtml_Page
      */
     public function addMetaName( $name, $content, $scheme = '' )
     {
-        if( !isset( $this->_headParts[ 'meta-name' ][ $name ] ) ) {
+        if( !isset( $this->_headerParts[ 'meta-name' ][ $name ] ) ) {
             
-            $this->_headParts[ 'meta-name' ][ $name ] = new Woops_Xhtml_Tag( 'meta' );
+            $this->_headerParts[ 'meta-name' ][ $name ] = new Woops_Xhtml_Tag( 'meta' );
         }
         
-        $this->_headParts[ 'meta-name' ][ $name ][ 'name'    ] = (string)$name;
-        $this->_headParts[ 'meta-name' ][ $name ][ 'content' ] = (string)$content;
+        $this->_headerParts[ 'meta-name' ][ $name ][ 'name'    ] = (string)$name;
+        $this->_headerParts[ 'meta-name' ][ $name ][ 'content' ] = (string)$content;
         
         if( $scheme ) {
             
-            $this->_headParts[ 'meta-name' ][ $name ][ 'scheme' ] = (string)$scheme;
+            $this->_headerParts[ 'meta-name' ][ $name ][ 'scheme' ] = (string)$scheme;
             
         } else {
             
-            unset( $this->_headParts[ 'meta-name' ][ $name ][ 'scheme' ] );
+            unset( $this->_headerParts[ 'meta-name' ][ $name ][ 'scheme' ] );
         }
     }
     
@@ -293,21 +303,21 @@ class Woops_Xhtml_Page
     {
         if( $httpEquiv !== 'content-type' || $httpEquiv !== 'content-language' ) {
             
-            if( !isset( $this->_headParts[ 'meta-http' ][ $httpEquiv ] ) ) {
+            if( !isset( $this->_headerParts[ 'meta-http' ][ $httpEquiv ] ) ) {
                 
-                $this->_headParts[ 'meta-http' ][ $httpEquiv ] = new Woops_Xhtml_Tag( 'meta' );
+                $this->_headerParts[ 'meta-http' ][ $httpEquiv ] = new Woops_Xhtml_Tag( 'meta' );
             }
             
-            $this->_headParts[ 'meta-http' ][ $httpEquiv ][ 'http-equiv' ] = (string)$httpEquiv;
-            $this->_headParts[ 'meta-http' ][ $httpEquiv ][ 'content' ]    = (string)$content;
+            $this->_headerParts[ 'meta-http' ][ $httpEquiv ][ 'http-equiv' ] = (string)$httpEquiv;
+            $this->_headerParts[ 'meta-http' ][ $httpEquiv ][ 'content' ]    = (string)$content;
             
             if( $scheme ) {
                 
-                $this->_headParts[ 'meta-http' ][ $httpEquiv ][ 'scheme' ] = (string)$scheme;
+                $this->_headerParts[ 'meta-http' ][ $httpEquiv ][ 'scheme' ] = (string)$scheme;
                 
             } else {
                 
-                unset( $this->_headParts[ 'meta-http' ][ $httpEquiv ][ 'scheme' ] );
+                unset( $this->_headerParts[ 'meta-http' ][ $httpEquiv ][ 'scheme' ] );
             }
         }
     }
@@ -364,7 +374,7 @@ class Woops_Xhtml_Page
             $link[ 'target' ] = ( string )$target;
         }
         
-        $this->_headParts[ 'link' ][] = $link;
+        $this->_headerParts[ 'link' ][] = $link;
     }
     
     /**
@@ -441,7 +451,7 @@ class Woops_Xhtml_Page
             $link[ 'charset' ] = ( string )$charset;
         }
         
-        $this->_headParts[ 'script' ][] = $script;
+        $this->_headerParts[ 'script' ][] = $script;
     }
     
     /**
@@ -474,7 +484,7 @@ class Woops_Xhtml_Page
         
         $script->addTextData( ( string )$content );
         
-        $this->_headParts[ 'script' ][] = $script;
+        $this->_headerParts[ 'script' ][] = $script;
     }
     
     /**
@@ -508,7 +518,15 @@ class Woops_Xhtml_Page
         
         $style->addTextData( ( string )$content );
         
-        $this->_headParts[ 'style' ][] = $style;
+        $this->_headerParts[ 'style' ][] = $style;
+    }
+    
+    /**
+     * 
+     */
+    public function addHeaderComment( $text )
+    {
+        $this->_headerComments[] = $text;
     }
     
     /**
@@ -522,39 +540,39 @@ class Woops_Xhtml_Page
             
             case 'title':
                 
-                $this->_headParts[ 'title' ] = $node;
+                $this->_headerParts[ 'title' ] = $node;
                 break;
             
             case 'meta':
                 
                 if( isset( $node[ 'http-equiv' ] ) ) {
                     
-                    $this->_headParts[ 'meta-http' ][] = $node;
+                    $this->_headerParts[ 'meta-http' ][] = $node;
                     
                 } elseif( isset( $node[ 'name' ] ) ) {
                     
-                    $this->_headParts[ 'meta-name' ][] = $node;
+                    $this->_headerParts[ 'meta-name' ][] = $node;
                 }
                 break;
             
             case 'base':
                 
-                $this->_headParts[ 'base' ] = $node;
+                $this->_headerParts[ 'base' ] = $node;
                 break;
             
             case 'link':
                 
-                $this->_headParts[ 'link' ][] = $node;
+                $this->_headerParts[ 'link' ][] = $node;
                 break;
             
             case 'style':
                 
-                $this->_headParts[ 'style' ][] = $node;
+                $this->_headerParts[ 'style' ][] = $node;
                 break;
             
             case 'script':
                 
-                $this->_headParts[ 'script' ][] = $node;
+                $this->_headerParts[ 'script' ][] = $node;
                 break;
         }
     }
