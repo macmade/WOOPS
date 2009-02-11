@@ -37,5 +37,5 @@ final class Woops_Core_Module_Manager_Exception extends Woops_Core_Exception_Bas
     const EXCEPTION_BLOCK_EXISTS        = 0x07;
     const EXCEPTION_NO_BLOCK_CLASS      = 0x08;
     const EXCEPTION_INVALID_BLOCK_CLASS = 0x09;
-    const EXCEPTION_INVALID_BLOCK       = 0x10;
+    const EXCEPTION_NO_BLOCK            = 0x10;
 }
