@@ -120,10 +120,6 @@ final class Woops_Lang_Getter implements Woops_Core_Singleton_Interface
                 Woops_Lang_Getter_Exception::EXCEPTION_BAD_XML
             );
         }
-        
-        // Registers the current instance
-        self::$_instances[ $path ] = $this;
-        self::$_nbInstances++;
     }
     
     /**
@@ -168,7 +164,7 @@ final class Woops_Lang_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-    public static function getInstance( $path )
+    public static function getInstance( $path, $filePrefix = '' )
     {
         // Checks if the default instance already exist
         if( !self::$_nbInstances ) {
@@ -181,13 +177,15 @@ final class Woops_Lang_Getter implements Woops_Core_Singleton_Interface
         }
         
         // Creates the required instance if it does not exists
-        if( !isset( self::$_instances[ $path ] ) ) {
+        if( !isset( self::$_instances[ $path . $filePrefix ] ) ) {
             
-            new self( $path );
+            // Registers the current instance
+            self::$_instances[ $path . $filePrefix ] = new self( $path . $filePrefix );
+            self::$_nbInstances++;
         }
         
         // Returns the required instance
-        return self::$_instances[ $path ];
+        return self::$_instances[ $path . $filePrefix ];
     }
     
     /**
