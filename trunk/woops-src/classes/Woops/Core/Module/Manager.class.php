@@ -75,8 +75,14 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
         $this->_conf = Woops_Core_Config_Getter::getInstance();
         $this->_env  = Woops_Core_Env_Getter::getInstance();
         
-        $this->_registerModuleDirectory( $this->_env->getSourcePath( 'modules' ) );
-        $this->_registerModuleDirectory( $this->_env->getPath( 'modules' ) );
+        $this->_registerModuleDirectory(
+            $this->_env->getSourcePath( 'modules/' ),
+            $this->_env->getSourceWebPath( 'modules/' )
+        );
+        $this->_registerModuleDirectory(
+            $this->_env->getPath( 'modules/' ),
+            $this->_env->getWebPath( 'modules/' )
+        );
         
         $loadedModules = $this->_conf->getVar( 'modules', 'loaded' );
         
@@ -139,7 +145,7 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-    private function _registerModuleDirectory( $path )
+    private function _registerModuleDirectory( $path, $relPath )
     {
         if( !file_exists( $path ) && !is_dir( $path ) ) {
             
@@ -171,7 +177,10 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
             }
             
             // Stores the directory name, with it's full path
-            $this->_modules[ ( string )$file ] = $file->getPathName() . DIRECTORY_SEPARATOR;
+            $this->_modules[ ( string )$file ] = array(
+                $file->getPathName() . DIRECTORY_SEPARATOR,
+                $relPath . $file->getFileName() . '/'
+            );
         }
     }
     
@@ -182,7 +191,7 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
     {
         foreach( $this->_loadedModules as $moduleName => $void ) {
             
-            $modPath = $this->_modules[ $moduleName ];
+            $modPath = $this->_modules[ $moduleName ][ 0 ];
             
             if( file_exists( $modPath . 'init.inc.php' ) ) {
                 
@@ -220,7 +229,23 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
             );
         }
         
-        return $this->_modules[ $moduleName ];
+        return $this->_modules[ $moduleName ][ 0 ];
+    }
+    
+    /**
+     * 
+     */
+    public function getModuleRelativePath( $moduleName )
+    {
+        if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'The module \'' . $moduleName . '\' is not loaded',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED
+            );
+        }
+        
+        return $this->_modules[ $moduleName ][ 1 ];
     }
     
     /**
