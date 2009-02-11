@@ -51,6 +51,11 @@ abstract class Woops_Page_Engine_Base
     protected static $_env        = NULL;
     
     /**
+     * The configuration object
+     */
+    protected static $_conf       = NULL;
+    
+    /**
      * 
      */
     final public function __construct()
@@ -75,6 +80,9 @@ abstract class Woops_Page_Engine_Base
         
         // Gets the instance of the environment object
         self::$_env        = Woops_Core_Env_Getter::getInstance();
+        
+        // Gets the instance of the configuration object
+        self::$_conf       = Woops_Core_Conf_Getter::getInstance();
         
         // Static variables are set
         self::$_hasStatic  = true;
