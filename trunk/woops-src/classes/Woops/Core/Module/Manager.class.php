@@ -204,4 +204,12 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
         
         return $this->_modules[ $moduleName ];
     }
+    
+    /**
+     * 
+     */
+    public function isLoaded( $moduleName )
+    {
+        return isset( $this->_loadedModules[ $moduleName ] );
+    }
 }
