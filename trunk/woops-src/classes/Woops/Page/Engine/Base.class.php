@@ -56,6 +56,11 @@ abstract class Woops_Page_Engine_Base
     protected static $_conf       = NULL;
     
     /**
+     * The string utilities
+     */
+    protected static $_str        = NULL;
+    
+    /**
      * 
      */
     final public function __construct()
@@ -83,6 +88,9 @@ abstract class Woops_Page_Engine_Base
         
         // Gets the instance of the configuration object
         self::$_conf       = Woops_Core_Config_Getter::getInstance();
+        
+        // Gets the instance of the string utilities
+        self::$_str        = Woops_String_Utils::getInstance();
         
         // Static variables are set
         self::$_hasStatic  = true;
