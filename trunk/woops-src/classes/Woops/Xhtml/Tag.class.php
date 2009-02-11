@@ -224,7 +224,7 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
      */
     public function key()
     {
-        if( is_object( $this->_children[ $this->_iteratorIndex ] ) ) {
+        if( $this->_children[ $this->_iteratorIndex ] instanceof self ) {
             
             return $this->_children[ $this->_iteratorIndex ]->_tagName;
             
