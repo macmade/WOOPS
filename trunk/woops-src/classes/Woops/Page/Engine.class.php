@@ -134,7 +134,7 @@ final class Woops_Page_Engine implements Woops_Core_Singleton_Interface
         if( !is_subclass_of( $engineClass, 'Woops_Page_Engine_Base' ) ) {
             
             throw new Woops_Page_Engine_Exception(
-                'The page engine \'' . $engineClass . '\' is not a valid WOOPS page engine',
+                'The page engine \'' . $engineClass . '\' is not a valid WOOPS page engine, since it does extends the \'Woops_Page_Engine_Base\' abstract class',
                 Woops_Page_Engine_Exception::EXCEPTION_ENGINE_NOT_VALID
             );
         }
