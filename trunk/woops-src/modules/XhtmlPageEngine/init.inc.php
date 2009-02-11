@@ -11,4 +11,5 @@
 
 # $Id$
 
+Woops_Xhtml_Parser::registerProcessingInstructionHandler( 'woops-module-block', 'Woops_Mod_XhtmlPageEngine_Block_ProcessingInstruction_Handler' );
 Woops_Page_Engine::getInstance()->registerPageEngineClass( 'Woops_Mod_XhtmlPageEngine_Page_Engine' );
