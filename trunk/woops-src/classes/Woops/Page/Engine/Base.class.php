@@ -82,7 +82,7 @@ abstract class Woops_Page_Engine_Base
         self::$_env        = Woops_Core_Env_Getter::getInstance();
         
         // Gets the instance of the configuration object
-        self::$_conf       = Woops_Core_Conf_Getter::getInstance();
+        self::$_conf       = Woops_Core_Config_Getter::getInstance();
         
         // Static variables are set
         self::$_hasStatic  = true;

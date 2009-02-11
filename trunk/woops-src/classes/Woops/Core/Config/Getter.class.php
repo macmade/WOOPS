@@ -121,7 +121,7 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-    private function _loadModuleConf()
+    private function _loadModuleConf( $name )
     {
         $modConf = Woops_Core_Module_Manager::getInstance()->getModulePath( $name ) . 'config.ini.php';
         
@@ -167,7 +167,7 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
     {
         if( !isset( $this->_modConf[ $name ] ) ) {
             
-            $this->_loadModuleConf();
+            $this->_loadModuleConf( $name );
         }
         
         return ( isset( $this->_modConf[ $name ][ $section ][ $key ] ) ) ? $this->_modConf[ $name ][ $section ][ $key ] : false;
