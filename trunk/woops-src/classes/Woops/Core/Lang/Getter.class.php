@@ -164,28 +164,54 @@ final class Woops_Core_Lang_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
+    private static function _createDefaultInstance()
+    {
+        // Sets the name of the default instance
+        self::$_defaultInstanceName                             = Woops_Core_Env_Getter::getInstance()->getSourcePath( 'lang/default/' );
+        
+        // Creates the default instance
+        return self::$_instances[ self::$_defaultInstanceName ] = new self( self::$_defaultInstanceName );
+    }
+    
+    /**
+     * 
+     */
     public static function getInstance( $path )
     {
         // Checks if the default instance already exist
         if( !self::$_nbInstances ) {
             
-            // Sets the name of the default instance
-            self::$_defaultInstanceName = Woops_Core_Env_Getter::getInstance()->getSourcePath( 'lang/default/' );
-            
             // Creates the default instance
-            new self( self::$_defaultInstanceName );
+            self::_createDefaultInstance();
         }
         
         // Creates the required instance if it does not exists
         if( !isset( self::$_instances[ $path ] ) ) {
             
             // Registers the current instance
-            self::$_instances[ $path ] = new self( $path );
+            $instance                  = new self( $path );
+            self::$_instances[ $path ] = $instance;
             self::$_nbInstances++;
         }
         
         // Returns the required instance
         return self::$_instances[ $path ];
+    }
+    
+    /**
+     * 
+     */
+    public static function getDefaultInstance()
+    {
+        // Checks if the default instance already exist
+        if( !self::$_nbInstances ) {
+            
+            // Creates the default instance
+            self::_createDefaultInstance();
+        }
+        
+        // Returns the default instance
+        return self::$_instances[ self::$_defaultInstanceName ];
     }
     
     /**
