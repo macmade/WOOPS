@@ -71,6 +71,8 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Block_ProcessingInstruction_Handler implem
     {
         $content = new Woops_Xhtml_Tag( 'div' );
         
+        $content->comment( 'Start of xhtml block: ' . $options->name );
+        
         try {
             
             $block        = self::$_modManager->getBlock( 'xhtml', $options->name );
@@ -90,6 +92,8 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Block_ProcessingInstruction_Handler implem
             
             $content->div     = $e->getMessage();
         }
+        
+        $content->comment( 'End of xhtml block: ' . $options->name );
         
         return $content;
     }
