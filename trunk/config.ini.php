@@ -19,24 +19,37 @@
 [database]
 
 ; The database driver to use, with PDO
+; @type string
+; @required
 driver      = mysql
 
 ; The database host
+; @type string
+; @required
 host        = localhost
 
 ; The database port
+; @type     int
+; @required
 port        = 3306
 
 ; The database username
+; @type string
+; @required
 user        = woops
 
 ; The database user password
+; @type string
+; @required
 password    = woops
 
 ; The name of the database to use
+; @type string
+; @required
 name        = woops
 
 ; The prefix to use for all WOOPS tables
+; @type string
 tablePrefix = WOOPS_
 
 ; ##############################################################################
@@ -46,6 +59,8 @@ tablePrefix = WOOPS_
 [time]
 
 ; The default timezone
+; @type string
+; @required
 timezone = Europe/Zurich
 
 ; ##############################################################################
@@ -55,6 +70,8 @@ timezone = Europe/Zurich
 [lang]
 
 ; The default language
+; @type string
+; @required
 defaultLanguage = en
 
 ; ##############################################################################
@@ -64,7 +81,8 @@ defaultLanguage = en
 [xhtml]
 
 ; Format and indent the generated XHTML code
-format               = On
+; @type boolean
+format = On
 
 ; ##############################################################################
 ; # Error related settings                                                     #
@@ -72,7 +90,11 @@ format               = On
 
 [error]
 
-; The error report type (development - production - none)
+; The error report
+; @type     select
+; @option   development
+; @option   production
+; @option   none
 report = development
 
 ; ##############################################################################
