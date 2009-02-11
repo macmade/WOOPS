@@ -57,9 +57,29 @@ class Woops_Xhtml_Comment extends Woops_Xhtml_Tag
         // Checks if the output must be XML compliant
         if( !$xmlCompliant ) {
             
-            // Returns the HTML comment
+            // Gets the indent level
             $indent = str_pad( '', $level, self::$_str->TAB );
-            return self::$_str->NL . $indent . '<!-- ' . $this->_comment . ' -->' . self::$_str->NL . $indent;
+            
+            // Support the multiline comments
+            if( strchr( $this->_comment, self::$_str->NL ) ) {
+                
+                // Starts the comment
+                $out  = self::$_str->NL . $indent . '<!-- ' . self::$_str->NL . $indent . self::$_str->NL;
+                
+                // Adds the multiline comment text
+                $out .= $indent . str_replace( self::$_str->NL, self::$_str->NL . $indent, $this->_comment );
+                
+                // Ends the comment
+                $out .= self::$_str->NL . $indent . self::$_str->NL . $indent . '-->' . self::$_str->NL;
+                
+                // Returns the multiline comment
+                return $out;
+                
+            } else {
+                
+                // Returns the single line comment
+                return self::$_str->NL . $indent . '<!-- ' . $this->_comment . ' -->' . self::$_str->NL . $indent;
+            }
         }
         
         // Do not return the HTML comment when the output must be XML compliant
