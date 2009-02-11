@@ -66,18 +66,6 @@ defaultLanguage = en
 ; Format and indent the generated XHTML code
 format               = On
 
-; The output charset
-charset              = utf-8
-
-; The XHTML document type
-doctype              = xhtml1-strict
-
-; Inserts the XML declaration
-insertXmlDeclaration = On
-
-; Inserts the XHTML document type
-insertDoctype        = On
-
 ; ##############################################################################
 ; # Error related settings                                                     #
 ; ##############################################################################
@@ -86,3 +74,12 @@ insertDoctype        = On
 
 ; The error report type (development - production - none)
 report = development
+
+; ##############################################################################
+; # Modules related settings                                                     #
+; ##############################################################################
+
+[modules]
+
+; The loaded (active) modules
+loaded[] = XhtmlPageEngine
