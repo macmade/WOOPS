@@ -75,7 +75,7 @@ class Woops_Color_Utils
         self::$_number    = Woops_Number_Utils::getInstance();
         
         // Gets the instance of the color converter
-        self::$_converter = Woop_Color_Converter::getInstance();
+        self::$_converter = Woops_Color_Converter::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;
