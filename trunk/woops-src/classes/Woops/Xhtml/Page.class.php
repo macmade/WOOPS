@@ -222,7 +222,7 @@ class Woops_Xhtml_Page
     public function setCharset( $charset )
     {
         $this->_charset     = strtolower( $charset );
-        $cType              = $this->_headParts[ 'meta' ][ 'content-type' ];
+        $cType              = $this->_headParts[ 'meta-http' ][ 'content-type' ];
         $cType[ 'content' ] = 'text/html; charset=' . $charset;
     }
     
