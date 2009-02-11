@@ -75,3 +75,6 @@ set_error_handler(     array( 'Woops_Core_Error_Handler',     'handleError' ) );
 
 // Sets the default timezone
 date_default_timezone_set( Woops_Core_Config_Getter::getInstance()->getVar( 'time', 'timezone' ) );
+
+// Loads the active modules
+Woops_Core_Module_Manager::getInstance()->loadModules();
