@@ -31,9 +31,14 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
     private static $_instance = NULL;
     
     /**
-     * The WOOPS configuration object
+     * The WOOPS configuration array
      */
-    private $_conf            = NULL;
+    private $_conf            = array();
+    
+    /**
+     * The configuration options for the WOOPS modules
+     */
+    private $_modConf         = array();
     
     /**
      * Class constructor
@@ -116,6 +121,32 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
+    private function _loadModuleConf()
+    {
+        $modConf = Woops_Core_Module_Manager::getInstance()->getModulePath( $name ) . 'config.ini.php';
+        
+        if( file_exists( $modConf ) ) {
+            
+            if( !is_readable( $modConf ) ) {
+                
+                throw new Woops_Core_Config_Getter_Exception(
+                    'The WOOPS configuration file for module \'' . $name . '\' is not readable',
+                    Woops_Core_Config_Getter_Exception::EXCEPTION_CONFIG_FILE_NOT_READABLE
+                );
+            }
+            
+            $this->_modConf[ $name ] = parse_ini_file( $modConf, true );
+        }
+        
+        if( !is_array( $this->_modConf[ $name ] ) ) {
+            
+            $this->_modConf[ $name ] = array();
+        }
+    }
+    
+    /**
+     * 
+     */
     public function getVar( $section, $key )
     {
         return ( isset( $this->_conf[ $section ][ $key ] ) ) ? $this->_conf[ $section ][ $key ] : false;
@@ -127,5 +158,26 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
     public function deleteVar( $section, $key )
     {
         unset( $this->_conf[ $section ][ $key ] );
+    }
+    
+    /**
+     * 
+     */
+    public function getModuleVar( $name, $section, $key )
+    {
+        if( !isset( $this->_modConf[ $name ] ) ) {
+            
+            $this->_loadModuleConf();
+        }
+        
+        return ( isset( $this->_modConf[ $name ][ $section ][ $key ] ) ) ? $this->_modConf[ $name ][ $section ][ $key ] : false;
+    }
+    
+    /**
+     * 
+     */
+    public function deleteModuleVar( $name, $section, $key )
+    {
+        unset( $this->_modConf[ $name ][ $section ][ $key ] );
     }
 }
