@@ -517,9 +517,9 @@ class Woops_Xhtml_Page
      */
     public function addHeadNode( Woops_Xhtml_Tag $node )
     {
-        $tag = $node->getTagName;
+        $tagName = $node->getTagName();
         
-        switch( $tag ) {
+        switch( $tagName ) {
             
             case 'title':
                 
