@@ -249,10 +249,11 @@ class Woops_Xhtml_Page
      */
     public function setLanguage( $name )
     {
+        $this->_language            = ( string )$name;
         $this->_xhtml[ 'xml:lang' ] = $this->_language;
         $this->_xhtml[ 'lang' ]     = $this->_language;
-        $this->addMetaHttp( 'content-language', $name );
-        $this->addMetaName( 'DC.Language', $name, 'NISOZ39.50' );
+        $this->addMetaHttp( 'content-language', $this->_language );
+        $this->addMetaName( 'DC.Language', $this->_language, 'NISOZ39.50' );
     }
     
     /**
