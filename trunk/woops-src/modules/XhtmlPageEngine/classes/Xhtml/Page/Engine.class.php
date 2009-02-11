@@ -16,9 +16,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Mod.XhtmlPageEngine.Page
+ * @package     Woops.Mod.XhtmlPageEngine.Xhtml.Page
  */
-class Woops_Mod_XhtmlPageEngine_Page_Engine extends Woops_Page_Engine_Base
+class Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine extends Woops_Page_Engine_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -122,9 +122,9 @@ class Woops_Mod_XhtmlPageEngine_Page_Engine extends Woops_Page_Engine_Base
         
         if( !$templateDir ) {
             
-            throw new Woops_Mod_XhtmlPageEngine_Page_Engine_Exception(
+            throw new Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine_Exception(
                 'The templates directory does not exist',
-                Woops_Mod_XhtmlPageEngine_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_DIR
+                Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_DIR
             );
         }
         
@@ -132,9 +132,9 @@ class Woops_Mod_XhtmlPageEngine_Page_Engine extends Woops_Page_Engine_Base
         
         if( !file_exists( $path ) ) {
             
-            throw new Woops_Mod_XhtmlPageEngine_Page_Engine_Exception(
+            throw new Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine_Exception(
                 'The template file for page ID ' . $this->_pageId . ' does not exist (' . $this->_template->file . ')',
-                Woops_Mod_XhtmlPageEngine_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_FILE
+                Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_FILE
             );
         }
         
