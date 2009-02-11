@@ -192,6 +192,14 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
     /**
      * 
      */
+    public function getLoadedModules()
+    {
+        return $this->_loadedModules;
+    }
+    
+    /**
+     * 
+     */
     public function getModulePath( $moduleName )
     {
         if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
