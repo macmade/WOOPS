@@ -57,8 +57,8 @@ final class Woops_Page_Engine implements Woops_Core_Singleton_Interface
      */
     private function __construct()
     {
-        $this->_conf              = Woops_Core_Config_Getter::getInstance();
-        $this->_pageGetter        = Woops_Page_Getter::getInstance();
+        $this->_conf       = Woops_Core_Config_Getter::getInstance();
+        $this->_pageGetter = Woops_Page_Getter::getInstance();
     }
     
     /**
@@ -120,5 +120,36 @@ final class Woops_Page_Engine implements Woops_Core_Singleton_Interface
      * 
      */
     public function getPageObject()
-    {}
+    {
+        $engineClass = $this->_pageGetter->getEngine();
+        
+        if( !isset( $this->_pageEngines[ $engineClass ] ) ) {
+            
+            throw new Woops_Page_Engine_Exception(
+                'The page engine \'' . $engineClass . '\' is not a registered WOOPS page engine',
+                Woops_Page_Engine_Exception::EXCEPTION_ENGINE_NOT_REGISTERED
+            );
+        }
+        
+        if( !is_subclass_of( $engineClass, 'Woops_Page_Engine_Base' ) ) {
+            
+            throw new Woops_Page_Engine_Exception(
+                'The page engine \'' . $engineClass . '\' is not a valid WOOPS page engine',
+                Woops_Page_Engine_Exception::EXCEPTION_ENGINE_NOT_VALID
+            );
+        }
+        
+        $engine        = new $engineClass();
+        
+        $engineOptions = unserialize( $this->_pageGetter->getEngineOptions() );
+        
+        if( !is_object( $engineOptions ) ) {
+            
+            $engineOptions = new stdClass();
+        }
+        
+        $engine->loadEngine( $engineOptions );
+        
+        return $engine;
+    }
 }
