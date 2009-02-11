@@ -120,7 +120,7 @@ class Woops_Debug_Utils
             
             if( is_array( $value ) ) {
                 
-                $dataCol->addTextData( self::viewArray( $value, true ) );
+                $dataCol->addChildNode( self::viewArray( $value, true ) );
                 
             } elseif( is_object( $value ) ) {
                 
@@ -177,7 +177,7 @@ class Woops_Debug_Utils
         
         if( is_array( $var ) ) {
             
-            $dataDiv->addTextData( self::viewArray( $var, true ) );
+            $dataDiv->addChildNode( self::viewArray( $var, true ) );
             
         } elseif( is_object( $var ) ) {
                 
