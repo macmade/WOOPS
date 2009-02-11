@@ -13,7 +13,7 @@
 
 Woops_Core_Module_Manager::getInstance()->registerBlockType(
     'xhtml',
-    'Woops_Mod_XhtmlPageEngine_Xhtml_Block_Base'
+    'Woops_Mod_XhtmlPageEngine_Xhtml_Block'
 );
 
 Woops_Xhtml_Parser::registerProcessingInstructionHandler(
