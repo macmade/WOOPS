@@ -16,9 +16,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Lang
+ * @package     Woops.Core.Lang
  */
-final class Woops_Lang_Getter implements Woops_Core_Singleton_Interface
+final class Woops_Core_Lang_Getter implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -103,9 +103,9 @@ final class Woops_Lang_Getter implements Woops_Core_Singleton_Interface
         
         if( !file_exists( $langFile ) ) {
             
-            throw new Woops_Lang_Getter_Exception(
+            throw new Woops_Core_Lang_Getter_Exception(
                 'The lang file does not exist (path: ' . $langFile . ')',
-                Woops_Lang_Getter_Exception::EXCEPTION_NO_LANG_FILE
+                Woops_Core_Lang_Getter_Exception::EXCEPTION_NO_LANG_FILE
             );
         }
         
@@ -115,9 +115,9 @@ final class Woops_Lang_Getter implements Woops_Core_Singleton_Interface
             
         } catch( Exception $e ) {
             
-            throw new Woops_Lang_Getter_Exception(
+            throw new Woops_Core_Lang_Getter_Exception(
                 $e->getMessage(),
-                Woops_Lang_Getter_Exception::EXCEPTION_BAD_XML
+                Woops_Core_Lang_Getter_Exception::EXCEPTION_BAD_XML
             );
         }
     }

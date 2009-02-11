@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * Exception class for the Woops_Lang_Getter class
+ * Exception class for the Woops_Core_Lang_Getter class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Lang.Getter
+ * @package     Woops.Core.Lang.Getter
  */
-final class Woops_Lang_Getter_Exception extends Woops_Core_Exception_Base
+final class Woops_Core_Lang_Getter_Exception extends Woops_Core_Exception_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
