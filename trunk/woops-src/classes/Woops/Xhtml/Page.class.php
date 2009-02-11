@@ -141,7 +141,6 @@ class Woops_Xhtml_Page
         $out = '';
         
         $this->_head->removeAllTags();
-        $this->_head->comment( 'This page has been generated with WOOPS - eosgarden © 2009 - www.eosgarden.com' );
         
         foreach( $this->_headParts as $headPart ) {
             
