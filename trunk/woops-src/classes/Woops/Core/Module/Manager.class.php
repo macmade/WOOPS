@@ -270,7 +270,7 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
         }
         
         $blockName  = $moduleName . '.' . $name;
-        $blockClass = 'Woops_Mod_' . $moduleName . '_' . $name . '_' . $type;
+        $blockClass = 'Woops_Mod_' . ucfirst( $moduleName ) . '_Block_' . ucfirst( $type ) . '_' . ucfirst( $name );
         
         if( !isset( $this->_blockTypes[ $type ] ) ) {
             
