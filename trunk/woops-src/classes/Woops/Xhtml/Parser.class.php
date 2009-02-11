@@ -252,7 +252,7 @@ class Woops_Xhtml_Parser
             $handlerClass = self::$_piHandlers[ $name ];
             $handler      = new $handlerClass();
             
-            $piParams     = preg_split( '/="|" /', $data );
+            $piParams     = preg_split( '/="|" |"$/', $data );
             
             array_pop( $piParams );
             
@@ -262,7 +262,11 @@ class Woops_Xhtml_Parser
             
             for( $i = 0; $i < $piParamsLength; $i += 2 ) {
                 
-                $options->$piParams[ $i ] = $piParams[ $i + 1 ];
+                if( isset( $piParams[ $i + 1 ] ) ) {
+                    
+                    $options->$piParams[ $i ] = $piParams[ $i + 1 ];
+                    
+                }
             }
             
             $result       = $handler->process( $options );
