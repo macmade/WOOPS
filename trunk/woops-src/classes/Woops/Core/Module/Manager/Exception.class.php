@@ -28,7 +28,14 @@ final class Woops_Core_Module_Manager_Exception extends Woops_Core_Exception_Bas
     /**
      * Error codes for the exceptions
      */
-    const EXCEPTION_NO_DIRECTORY      = 0x01;
-    const EXCEPTION_NO_MODULE         = 0x02;
-    const EXCEPTION_MODULE_NOT_LOADED = 0x03;
+    const EXCEPTION_NO_DIRECTORY        = 0x01;
+    const EXCEPTION_NO_MODULE           = 0x02;
+    const EXCEPTION_MODULE_NOT_LOADED   = 0x03;
+    const EXCEPTION_BLOCK_TYPE_EXISTS   = 0x04;
+    const EXCEPTION_NO_BLOCK_ABSTRACT   = 0x05;
+    const EXCEPTION_NO_BLOCK_TYPE       = 0x06;
+    const EXCEPTION_BLOCK_EXISTS        = 0x07;
+    const EXCEPTION_NO_BLOCK_CLASS      = 0x08;
+    const EXCEPTION_INVALID_BLOCK_CLASS = 0x09;
+    const EXCEPTION_INVALID_BLOCK       = 0x10;
 }

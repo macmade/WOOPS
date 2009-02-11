@@ -56,6 +56,16 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
     private $_loadedModules     = array();
     
     /**
+     * 
+     */
+    private $_blockTypes        = array();
+    
+    /**
+     * 
+     */
+    private $_blocks            = array();
+    
+    /**
      * Class constructor
      * 
      * @return  NULL
@@ -219,5 +229,111 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
     public function isLoaded( $moduleName )
     {
         return isset( $this->_loadedModules[ $moduleName ] );
+    }
+    
+    /**
+     * 
+     */
+    public function registerBlockType( $type, $abstractClass )
+    {
+        if( isset( $this->_blockTypes[ $type ] ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'The block type \'' . $type . '\' is already registered',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_BLOCK_TYPE_EXISTS
+            );
+        }
+        
+        if( !class_exists( $abstractClass ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'Cannot register the block type \'' . $type . '\' because it\'s abstract class (\'' . $abstractClass . '\') does not exist',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK_ABSTRACT
+            );
+        }
+        
+        $this->_blockTypes[ $type ] = $abstractClass;
+        $this->_blocks[ $type ]     = array();
+    }
+    
+    /**
+     * 
+     */
+    public function registerBlock( $type, $moduleName, $name )
+    {
+        if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'The module \'' . $moduleName . '\' is not loaded',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED
+            );
+        }
+        
+        $blockName  = $moduleName . '.' . $name;
+        $blockClass = 'Woops_Mod_' . $moduleName . '_' . $name . '_' . $type;
+        
+        if( !isset( $this->_blockTypes[ $type ] ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'Cannot register the block \'' . $blockName . '\' because it\'s its type (\'' . $type . '\') is not a registered block type',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK_TYPE
+            );
+        }
+        
+        if( isset( $this->_modulesByTypes[ $type ][ $blockName ] ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'The block \'' . $blockName . '\' is already registered for type \'' . $type . '\'',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_BLOCK_EXISTS
+            );
+        }
+        
+        if( !class_exists( $blockClass ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'The class \'' . $blockClass . '\' for block \'' . $blockName . '\' of type \'' . $type . '\' does not exist',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK_CLASS
+            );
+        }
+        
+        if( !is_subclass_of( $blockClass, $this->_blockTypes[ $type ] ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'The class \'' . $blockClass . '\' for block \'' . $blockName . '\' of type \'' . $type . '\' does not extends its type abstract class (' . $this->_blockTypes[ $type ] . ')',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_INVALID_BLOCK_CLASS
+            );
+        }
+    }
+    
+    /**
+     * 
+     */
+    public function getBlock( $type, $name )
+    {
+        $moduleName = substr( $name, 0, strpos( $name, '.' ) );
+        
+        if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'The module \'' . $moduleName . '\' is not loaded',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED
+            );
+        }
+        
+        if( !isset( $this->_moduleTypes[ $type ] ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'Cannot get the block \'' . $blockName . '\' because it\'s its type (\'' . $type . '\') is not a registered block type',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK_TYPE
+            );
+        }
+        
+        if( !isset( $this->_modulesByTypes[ $type ][ $name ] ) ) {
+            
+            throw new Woops_Core_Module_Manager_Exception(
+                'The block \'' . $blockName . '\' of type (\'' . $type . '\') does not exist',
+                Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK
+            );
+        }
     }
 }
