@@ -106,3 +106,4 @@ report = development
 ; The loaded (active) modules
 loaded[] = Admin
 loaded[] = XhtmlPageEngine
+loaded[] = HelloWorld
