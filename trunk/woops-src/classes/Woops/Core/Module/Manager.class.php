@@ -168,7 +168,7 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-    public function loadModules()
+    public function initModules()
     {
         foreach( $this->_loadedModules as $moduleName => $void ) {
             
