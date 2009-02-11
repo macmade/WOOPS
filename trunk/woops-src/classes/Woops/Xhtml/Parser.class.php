@@ -28,31 +28,36 @@ class Woops_Xhtml_Parser
     /**
      * The supported output charsets
      */
-    protected static $_charsets = array(
+    protected static $_charsets   = array(
         'ISO-8859-1' => true,
         'US-ASCII'   => true,
         'UTF-8'      => true
     );
     
     /**
+     * The processing instruction handlers
+     */
+    protected static $_piHandlers = array();
+    
+    /**
      * The XML parser object
      */
-    protected $_parser          = NULL;
+    protected $_parser            = NULL;
     
     /**
      * The root XHTML tag object
      */
-    protected $_xhtml           = NULL;
+    protected $_xhtml             = NULL;
     
     /**
      * The current XHTML tag object
      */
-    protected $_currentElement  = NULL;
+    protected $_currentElement    = NULL;
     
     /**
      * The prefix path to add to all 'src' and 'href' attributes, if relative
      */
-    protected $_pathPrefix      = '';
+    protected $_pathPrefix        = '';
     
     /**
      * Class constructor
@@ -115,6 +120,9 @@ class Woops_Xhtml_Parser
         // Sets the character data handler method
         xml_set_character_data_handler( $this->_parser, '_characterDataHandler' );
         
+        // Sets the processing instruction handler method
+        xml_set_processing_instruction_handler( $this->_parser, '_processingInstructionHandler' );
+        
         // Sets the default data handler method
         xml_set_default_handler( $this->_parser, '_defaultHandler' );
         
@@ -145,6 +153,42 @@ class Woops_Xhtml_Parser
         
         // Frees the parser
         xml_parser_free( $this->_parser );
+    }
+    
+    /**
+     * 
+     */
+    public static function registerProcessingInstructionHandler( $name, $className )
+    {
+        if( isset( self::$_piHandlers[ $name ] ) ) {
+            
+            throw new Woops_Xhtml_Parser_Exception(
+                'The processing instruction \'' . $name . '\' is already registered',
+                Woops_Xhtml_Parser_Exception::EXCEPTION_PI_EXISTS
+            );
+        }
+        
+        if( !class_exists( $className ) ) {
+            
+            throw new Woops_Xhtml_Parser_Exception(
+                'Cannot register unexisting class \'' . $className . '\' as a processing instruction handler',
+                Woops_Xhtml_Parser_Exception::EXCEPTION_NO_PI_CLASS
+            );
+        }
+        
+        $interfaces = class_implements( $className );
+        
+        if( !is_array( $interfaces )
+            || !isset( $interfaces[ 'Woops_Xhtml_ProcessingInstruction_Handler_Interface' ] )
+        ) {
+            
+            throw new Woops_Xhtml_Parser_Exception(
+                'The class \'' . $className . '\' is not a valid processing instruction handler, since it does not implement the \'Woops_Xhtml_ProcessingInstruction_Handler_Interface\' interface',
+                Woops_Xhtml_Parser_Exception::EXCEPTION_INVALID_PI_CLASS
+            );
+        }
+        
+        self::$_piHandlers[ $name ] = $className;
     }
     
     /**
@@ -195,6 +239,42 @@ class Woops_Xhtml_Parser
         if( trim( $data ) !== '' ) {
             
             $this->_currentElement->addTextData( $data );
+        }
+    }
+    
+    /**
+     * 
+     */
+    protected function _processingInstructionHandler( $parser, $name, $data )
+    {
+        if( isset( self::$_piHandlers[ $name ] ) ) {
+            
+            $handlerClass = self::$_piHandlers[ $name ];
+            $handler      = new $handlerClass();
+            
+            $piParams     = preg_split( '/="|" /', $data );
+            
+            array_pop( $piParams );
+            
+            $piParamsLength = count( $piParams );
+            
+            $options      = new stdClass();
+            
+            for( $i = 0; $i < $piParamsLength; $i += 2 ) {
+                
+                $options->$piParams[ $i ] = $piParams[ $i + 1 ];
+            }
+            
+            $result       = $handler->process( $options );
+            
+            if( is_object( $result ) && $result instanceof Woops_Xhtml_Tag ) {
+                
+                $this->_currentElement->addChildNode( $result );
+                
+            } else {
+                
+                $this->_currentElement->addTextData( $result );
+            }
         }
     }
     
