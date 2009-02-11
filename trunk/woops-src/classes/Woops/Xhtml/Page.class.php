@@ -260,7 +260,7 @@ class Woops_Xhtml_Page
             
         } else {
             
-            $this->_headParts[ 'base' ][ 'target' ]->removeAttribute( 'href' );
+            unset( $this->_headParts[ 'base' ][ 'target' ][ 'href' ] );
         }
     }
     
@@ -283,7 +283,7 @@ class Woops_Xhtml_Page
             
         } else {
             
-            $this->_headParts[ 'meta-name' ][ $name ]->removeAttribute( 'scheme' );
+            unset( $this->_headParts[ 'meta-name' ][ $name ][ 'scheme' ] );
         }
     }
     
@@ -308,7 +308,7 @@ class Woops_Xhtml_Page
                 
             } else {
                 
-                $this->_headParts[ 'meta-http' ][ $httpEquiv ]->removeAttribute( 'scheme' );
+                unset( $this->_headParts[ 'meta-http' ][ $httpEquiv ][ 'scheme' ] );
             }
         }
     }
@@ -510,6 +510,54 @@ class Woops_Xhtml_Page
         $style->addTextData( ( string )$content );
         
         $this->_headParts[ 'style' ][] = $style;
+    }
+    
+    /**
+     * 
+     */
+    public function addHeadNode( Woops_Xhtml_Tag $node )
+    {
+        $tag = $node->getTagName;
+        
+        switch( $tag ) {
+            
+            case 'title':
+                
+                $this->_headParts[ 'title' ] = $node;
+                break;
+            
+            case 'meta':
+                
+                if( isset( $node[ 'http-equiv' ] ) ) {
+                    
+                    $this->_headParts[ 'meta-http' ][] = $node;
+                    
+                } elseif( isset( $node[ 'name' ] ) ) {
+                    
+                    $this->_headParts[ 'meta-name' ][] = $node;
+                }
+                break;
+            
+            case 'base':
+                
+                $this->_headParts[ 'base' ] = $node;
+                break;
+            
+            case 'link':
+                
+                $this->_headParts[ 'link' ][] = $node;
+                break;
+            
+            case 'style':
+                
+                $this->_headParts[ 'style' ][] = $node;
+                break;
+            
+            case 'script':
+                
+                $this->_headParts[ 'script' ][] = $node;
+                break;
+        }
     }
     
     /**
