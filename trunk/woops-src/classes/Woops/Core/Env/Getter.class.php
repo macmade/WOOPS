@@ -74,41 +74,16 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         $scriptFileName = $this->getVar( 'SCRIPT_FILENAME' );
         $scriptName     = $this->getVar( 'SCRIPT_NAME' );
         
-        // Stores the paths to the WOOPS root and source directories
-        $this->_woopsVars[ 'sys' ][ 'root' ] = str_replace( 'index.php', '', $scriptFileName );
-        $this->_woopsVars[ 'sys' ][ 'src' ]  = realpath(
-            dirname( __FILE__ )
-          . DIRECTORY_SEPARATOR
-          . '../'
-          . DIRECTORY_SEPARATOR
-          . '../'
-          . DIRECTORY_SEPARATOR
-          . '../'
-          . DIRECTORY_SEPARATOR
-          . '../'
-        ) . DIRECTORY_SEPARATOR;
+        $this->_woopsVars[ 'sys' ][ 'root' ] = dirname( $scriptFileName ) . DIRECTORY_SEPARATOR;
+        $this->_woopsVars[ 'sys' ][ 'src' ]  = $this->_woopsVars[ 'sys' ][ 'root' ] . 'woops-src' . DIRECTORY_SEPARATOR;
+        $this->_woopsVars[ 'web' ][ 'root' ] = str_replace( DIRECTORY_SEPARATOR, '/', dirname( $scriptName ) );
         
-        $this->_woopsVars[ 'web' ][ 'root' ] = str_replace(
-            DIRECTORY_SEPARATOR,
-            '/',
-            str_replace(
-                'index.php',
-                '',
-                $scriptName
-            )
-        );
+        if( substr( $this->_woopsVars[ 'web' ][ 'root' ], -1 !== '/' ) ) {
+            
+            $this->_woopsVars[ 'web' ][ 'root' ] .= '/';
+        }
         
-        $homeDir = ( substr( $scriptName, 0, 2 ) === '/~' ) ? substr( $scriptName, 0, strpos( $scriptName, '/', 1 ) ) : '';
-        
-        $this->_woopsVars[ 'web' ][ 'src' ] = $homeDir . str_replace(
-            DIRECTORY_SEPARATOR,
-            '/',
-            str_replace(
-                $this->getVar( 'DOCUMENT_ROOT' ),
-                '',
-                $this->_woopsVars[ 'sys' ][ 'src' ]
-            )
-        );
+        $this->_woopsVars[ 'web' ][ 'src' ]  = $this->_woopsVars[ 'web' ][ 'root' ] . 'woops-src/';
     }
     
     /**
