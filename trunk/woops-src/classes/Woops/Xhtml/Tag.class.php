@@ -230,7 +230,7 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
             
         } else {
             
-            return $this->_iteratorIndex;
+            return '';
         }
     }
     
@@ -456,23 +456,16 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
     {
         if( !isset( self::$_emptyTags[ $this->_tagName ] ) ) {
             
-            if( $data instanceof self ) {
+            if( $this->_childrenCount
+                && !( $this->_children[ $this->_childrenCount - 1 ] instanceof self )
+            ) {
                 
-                $this->addChildNode( $data );
+                $this->_children[ $this->_childrenCount - 1 ] .= $data;
                 
             } else {
                 
-                if( $this->_childrenCount
-                    && !( $this->_children[ $this->_childrenCount - 1 ] instanceof self )
-                ) {
-                    
-                    $this->_children[ $this->_childrenCount - 1 ] .= $data;
-                    
-                } else {
-                    
-                    $this->_children[] = ( string )$data;
-                    $this->_childrenCount++;
-                }
+                $this->_children[] = ( string )$data;
+                $this->_childrenCount++;
             }
         }
     }
