@@ -12,7 +12,7 @@
 # $Id$
 
 Woops_Core_Module_Manager::getInstance()->registerBlock(
-    'xhtml',
+    'cms',
     $moduleName,
     'SayHello'
 );

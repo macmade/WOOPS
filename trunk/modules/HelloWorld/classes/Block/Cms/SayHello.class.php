@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * Hello world XHTML block
+ * Hello world CMS block
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Mod.HelloWorld.Block.Xhtml
+ * @package     Woops.Mod.HelloWorld.Block.Cms
  */
-class Woops_Mod_HelloWorld_Block_Xhtml_SayHello extends Woops_Mod_XhtmlPageEngine_Xhtml_Block
+class Woops_Mod_HelloWorld_Block_Cms_SayHello extends Woops_Mod_Cms_Block
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
