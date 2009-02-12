@@ -18,4 +18,4 @@ require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'woops-src' . DIRECTOR
 $PAGE = Woops_Page_Engine::getInstance()->getPageObject();
 
 // Prints the current page
-print $PAGE;
+print $PAGE->writePage();
