@@ -76,18 +76,48 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         $this->_envVars[ '_SERVER' ]  = &$_SERVER;
         $this->_envVars[ '_ENV' ]     = &$_ENV;
         
-        $scriptFileName = $this->getVar( 'SCRIPT_FILENAME' );
-        $scriptName     = $this->getVar( 'SCRIPT_NAME' );
+        // Gets the directories for the script name and the script file name
+        $scriptFileDir = dirname( $this->getVar( 'SCRIPT_FILENAME' ) );
+        $scriptDir     = dirname( $this->getVar( 'SCRIPT_NAME' ) );
         
-        $this->_woopsVars[ 'sys' ][ 'root' ] = dirname( $scriptFileName ) . DIRECTORY_SEPARATOR;
+        // Gets the absolute path to the WOOPS sources (here we are in classes/Woops/Core/Env/)
+        $sourceAbsPath  = realpath(
+            dirname( __FILE__ )
+          . DIRECTORY_SEPARATOR
+          . '..'
+          . DIRECTORY_SEPARATOR
+          . '..'
+          . DIRECTORY_SEPARATOR
+          . '..'
+          . DIRECTORY_SEPARATOR
+          . '..'
+        ) . DIRECTORY_SEPARATOR;
+        
+        // Checks if the current script is inside the WOOPS sources (first level only)
+        if( realpath( $scriptFileDir ) . DIRECTORY_SEPARATOR === $sourceAbsPath ) {
+            
+            // The WOOPS root is in the parent directory
+            $this->_woopsVars[ 'sys' ][ 'root' ] = substr( $scriptFileDir, 0, strrpos( $scriptFileDir, DIRECTORY_SEPARATOR ) ) . DIRECTORY_SEPARATOR;
+            $this->_woopsVars[ 'web' ][ 'root' ] = substr( $scriptDir, 0, strrpos( $scriptDir, '/' ) ) . '/';
+            
+        } else {
+            
+            // The WOOPS root is in the same directory
+            $this->_woopsVars[ 'sys' ][ 'root' ] = $scriptFileDir . DIRECTORY_SEPARATOR;
+            $this->_woopsVars[ 'web' ][ 'root' ] = str_replace( DIRECTORY_SEPARATOR, '/', $scriptDir );
+        }
+        
+        // Sets the path to the WOOPS sources (we are not using the path computed before, in order to deal with symbolic links)
         $this->_woopsVars[ 'sys' ][ 'src' ]  = $this->_woopsVars[ 'sys' ][ 'root' ] . 'woops-src' . DIRECTORY_SEPARATOR;
-        $this->_woopsVars[ 'web' ][ 'root' ] = str_replace( DIRECTORY_SEPARATOR, '/', dirname( $scriptName ) );
         
+        // Adds a trailing slash to the relative path of the WOOPS root (this may be needed if we are using user home dirs)
         if( substr( $this->_woopsVars[ 'web' ][ 'root' ], -1 !== '/' ) ) {
             
+            // Adds the trailing slash
             $this->_woopsVars[ 'web' ][ 'root' ] .= '/';
         }
         
+        // Sets the relative path to the WOOPS sources
         $this->_woopsVars[ 'web' ][ 'src' ]  = $this->_woopsVars[ 'web' ][ 'root' ] . 'woops-src/';
     }
     
