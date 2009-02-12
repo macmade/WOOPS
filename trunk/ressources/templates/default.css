@@ -163,6 +163,13 @@ TH {
     text-align:         center;
 }
 
+INPUT {
+    border:             solid 1px #CCCCCC;
+    color:              #333333;
+    background-color:   #FFFFFF;
+    padding:            5px;
+}
+
 DIV#frame {
     width:              980px;
     margin-left:        auto;
@@ -241,7 +248,7 @@ DIV#content {
 DIV#left {
     float:              left;
     width:              300px;
-    background-image:   url( 'default/left-pattern.png' );
+    background-image:   url( 'default/pattern.png' );
     background-repeat:  repeat-x;
     min-height:         575px;
     text-align:         justify;
