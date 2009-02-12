@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Core.Module
  */
-abstract class Woops_Core_Module_Base
+abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -87,6 +87,9 @@ abstract class Woops_Core_Module_Base
      */
     public function __construct()
     {
+        // Call the parent constructor
+        parent::__construct();
+        
         // Checks if the static variables are set
         if( !self::$_hasStatic ) {
             
