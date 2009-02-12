@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * Exception class for the Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine class
+ * Exception class for the Woops_Mod_Cms_Page_Engine class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Mod.XhtmlPageEngine.Xhtml.Page.Engine
+ * @package     Woops.Mod.Cms.Page.Engine
  */
-final class Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine_Exception extends Woops_Core_Exception_Base
+final class Woops_Mod_Cms_Page_Engine_Exception extends Woops_Core_Exception_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

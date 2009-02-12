@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * XHTML page engine
+ * CMS page engine
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Mod.XhtmlPageEngine.Xhtml.Page
+ * @package     Woops.Mod.Cms.Page
  */
-class Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine extends Woops_Page_Engine_Base
+class Woops_Mod_Cms_Page_Engine extends Woops_Page_Engine_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -88,10 +88,10 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine extends Woops_Page_Engine_Base
             }
         }
         
-        $charset              = self::$_conf->getModuleVar( 'XhtmlPageEngine', 'pageEngine', 'charset' );
-        $doctype              = self::$_conf->getModuleVar( 'XhtmlPageEngine', 'pageEngine', 'doctype' );
-        $insertXmlDeclaration = self::$_conf->getModuleVar( 'XhtmlPageEngine', 'pageEngine', 'insertXmlDeclaration' );
-        $insertDoctype        = self::$_conf->getModuleVar( 'XhtmlPageEngine', 'pageEngine', 'insertDoctype' );
+        $charset              = self::$_conf->getModuleVar( 'Cms', 'pageEngine', 'charset' );
+        $doctype              = self::$_conf->getModuleVar( 'Cms', 'pageEngine', 'doctype' );
+        $insertXmlDeclaration = self::$_conf->getModuleVar( 'Cms', 'pageEngine', 'insertXmlDeclaration' );
+        $insertDoctype        = self::$_conf->getModuleVar( 'Cms', 'pageEngine', 'insertDoctype' );
         
         $this->_page->setCharset( $charset );
         $this->_page->setDocType( $doctype );
@@ -112,9 +112,9 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine extends Woops_Page_Engine_Base
         
         if( !$templateDir ) {
             
-            throw new Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine_Exception(
+            throw new Woops_Mod_Cms_Page_Engine_Exception(
                 'The templates directory does not exist',
-                Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_DIR
+                Woops_Mod_Cms_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_DIR
             );
         }
         
@@ -122,9 +122,9 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine extends Woops_Page_Engine_Base
         
         if( !file_exists( $path ) ) {
             
-            throw new Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine_Exception(
+            throw new Woops_Mod_Cms_Page_Engine_Exception(
                 'The template file for page ID ' . $this->_pageId . ' does not exist (' . $this->_template->file . ')',
-                Woops_Mod_XhtmlPageEngine_Xhtml_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_FILE
+                Woops_Mod_Cms_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_FILE
             );
         }
         

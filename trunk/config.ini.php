@@ -104,6 +104,4 @@ report = development
 [modules]
 
 ; The loaded (active) modules
-loaded[] = Admin
-loaded[] = XhtmlPageEngine
-loaded[] = HelloWorld
+loaded[] = Cms

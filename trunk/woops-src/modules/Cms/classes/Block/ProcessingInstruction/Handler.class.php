@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * Handler for the 'woops-block-xhtml' XHTML processing instructions
+ * Handler for the 'woops-cms-block' XHTML processing instructions
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Mod.XhtmlPageEngine.Xhtml.Block.ProcessingInstruction
+ * @package     Woops.Mod.Cms.Block.ProcessingInstruction
  */
-class Woops_Mod_XhtmlPageEngine_Xhtml_Block_ProcessingInstruction_Handler implements Woops_Xhtml_ProcessingInstruction_Handler_Interface
+class Woops_Mod_Cms_Block_ProcessingInstruction_Handler implements Woops_Xhtml_ProcessingInstruction_Handler_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -72,11 +72,11 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Block_ProcessingInstruction_Handler implem
         $content            = new Woops_Xhtml_Tag( 'div' );
         $content[ 'class' ] = str_replace( '.', '-', $options->name );
         
-        $content->comment( 'Start of xhtml block: ' . $options->name );
+        $content->comment( 'Start of CMS block: ' . $options->name );
         
         try {
             
-            $block        = self::$_modManager->getBlock( 'xhtml', $options->name );
+            $block        = self::$_modManager->getBlock( 'cms', $options->name );
             
             $blockOptions = clone( $options );
             
@@ -106,7 +106,7 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Block_ProcessingInstruction_Handler implem
             }
         }
         
-        $content->comment( 'End of xhtml block: ' . $options->name );
+        $content->comment( 'End of CMS block: ' . $options->name );
         
         return $content;
     }

@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * Abstract for the XHTML blocks
+ * Abstract for the CMS blocks
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Mod.XhtmlPageEngine.Xhtml
+ * @package     Woops.Mod.Cms
  */
-abstract class Woops_Mod_XhtmlPageEngine_Xhtml_Block extends Woops_Core_Module_Block
+abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
