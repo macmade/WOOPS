@@ -48,7 +48,27 @@ class Woops_Mod_Cms_Page_Engine extends Woops_Page_Engine_Base
     /**
      * 
      */
-    public function __toString()
+    private function _parseTemplate()
+    {
+        $path = self::$_env->getPath( self::$_pageGetter->getTemplate() );
+        
+        if( !$path ) {
+            
+            throw new Woops_Mod_Cms_Page_Engine_Exception(
+                'The template file for page ID ' . self::$_pageGetter->getPageId() . ' does not exist (' . self::$_pageGetter->getTemplate() . ')',
+                Woops_Mod_Cms_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_FILE
+            );
+        }
+        
+        $parser = new Woops_Xhtml_Parser( $path, dirname( self::$_env->getWebPath( self::$_pageGetter->getTemplate() ) ) . '/' );
+        
+        return $parser->getXhtmlObject();
+    }
+    
+    /**
+     * 
+     */
+    public function writePage()
     {
         return ( string )$this->_page;
     }
@@ -100,37 +120,6 @@ class Woops_Mod_Cms_Page_Engine extends Woops_Page_Engine_Base
         
         $this->_page->setTitle( self::$_pageGetter->getTitle() );
         $this->_page->setLanguage( self::$_pageGetter->getLanguage() );
-    }
-    
-    /**
-     * 
-     */
-    private function _parseTemplate()
-    {
-        $templateDir    = self::$_env->getPath( 'ressources/templates/' );
-        $templateDirRel = self::$_env->getWebPath( 'ressources/templates/' );
-        
-        if( !$templateDir ) {
-            
-            throw new Woops_Mod_Cms_Page_Engine_Exception(
-                'The templates directory does not exist',
-                Woops_Mod_Cms_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_DIR
-            );
-        }
-        
-        $path = $templateDir . self::$_pageGetter->getTemplate();
-        
-        if( !file_exists( $path ) ) {
-            
-            throw new Woops_Mod_Cms_Page_Engine_Exception(
-                'The template file for page ID ' . $this->_pageId . ' does not exist (' . $this->_template->file . ')',
-                Woops_Mod_Cms_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_FILE
-            );
-        }
-        
-        $parser = new Woops_Xhtml_Parser( $path, $templateDirRel );
-        
-        return $parser->getXhtmlObject();
     }
     
     /**

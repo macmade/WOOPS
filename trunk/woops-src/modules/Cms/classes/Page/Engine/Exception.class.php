@@ -28,6 +28,5 @@ final class Woops_Mod_Cms_Page_Engine_Exception extends Woops_Core_Exception_Bas
     /**
      * Error codes for the exceptions
      */
-    const EXCEPTION_NO_TEMPLATE_DIR  = 0x01;
-    const EXCEPTION_NO_TEMPLATE_FILE = 0x02;
+    const EXCEPTION_NO_TEMPLATE_FILE = 0x01;
 }
