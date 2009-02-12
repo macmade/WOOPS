@@ -77,11 +77,14 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         $this->_envVars[ '_ENV' ]     = &$_ENV;
         
         // Gets the directories for the script name and the script file name
-        $scriptFileDir = dirname( $this->getVar( 'SCRIPT_FILENAME' ) );
-        $scriptDir     = dirname( $this->getVar( 'SCRIPT_NAME' ) );
+        $scriptFileDir                = dirname( $this->getVar( 'SCRIPT_FILENAME' ) );
+        $scriptDir                    = dirname( $this->getVar( 'SCRIPT_NAME' ) );
+        
+        // Gets the real path of the current script (we may have symbolic links)
+        $realScriptFileDir            = realpath( $scriptFileDir );
         
         // Gets the absolute path to the WOOPS sources (here we are in classes/Woops/Core/Env/)
-        $sourceAbsPath  = realpath(
+        $sourceAbsPath = realpath(
             dirname( __FILE__ )
           . DIRECTORY_SEPARATOR
           . '..'
@@ -93,12 +96,15 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
           . '..'
         ) . DIRECTORY_SEPARATOR;
         
-        // Checks if the current script is inside the WOOPS sources (first level only)
-        if( realpath( $scriptFileDir ) . DIRECTORY_SEPARATOR === $sourceAbsPath ) {
+        // Checks if the current script is inside the WOOPS sources
+        if( strpos( $realScriptFileDir, $sourceAbsPath ) === 0 ) {
+            
+            // Offset for strpos, to keep only the path to the sources
+            $offset = strlen( str_replace( $sourceAbsPath, '', $realScriptFileDir ) );
             
             // The WOOPS root is in the parent directory
-            $this->_woopsVars[ 'sys' ][ 'root' ] = substr( $scriptFileDir, 0, strrpos( $scriptFileDir, DIRECTORY_SEPARATOR ) ) . DIRECTORY_SEPARATOR;
-            $this->_woopsVars[ 'web' ][ 'root' ] = substr( $scriptDir, 0, strrpos( $scriptDir, '/' ) ) . '/';
+            $this->_woopsVars[ 'sys' ][ 'root' ] = substr( $scriptFileDir, 0, strrpos( $scriptFileDir, DIRECTORY_SEPARATOR, -$offset ) ) . DIRECTORY_SEPARATOR;
+            $this->_woopsVars[ 'web' ][ 'root' ] = substr( $scriptDir, 0, strrpos( $scriptDir, '/', -$offset ) );
             
         } else {
             
@@ -119,6 +125,9 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         
         // Sets the relative path to the WOOPS sources
         $this->_woopsVars[ 'web' ][ 'src' ]  = $this->_woopsVars[ 'web' ][ 'root' ] . 'woops-src/';
+        
+        print_r( $this->_woopsVars );
+        exit();
     }
     
     /**
