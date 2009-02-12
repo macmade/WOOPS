@@ -41,6 +41,11 @@ abstract class Woops_Mod_XhtmlPageEngine_Xhtml_Block extends Woops_Core_Module_B
     protected static $_db       = NULL;
     
     /**
+     * 
+     */
+    protected $_cssPrefix       = '';
+    
+    /**
      * Class constructor
      * 
      * @return  NULL
@@ -56,6 +61,8 @@ abstract class Woops_Mod_XhtmlPageEngine_Xhtml_Block extends Woops_Core_Module_B
             // Sets the static variables
             self::_setStaticVars();
         }
+        
+        $this->_cssPrefix = $this->_modName . '-' . $this->_blockName . '-';
     }
     
     /**
@@ -69,5 +76,13 @@ abstract class Woops_Mod_XhtmlPageEngine_Xhtml_Block extends Woops_Core_Module_B
         
         // Static variables are set
         self::$_hasStatic = true;
+    }
+    
+    /**
+     * 
+     */
+    protected function _cssClass( Woops_Xhtml_Tag $tag, $name )
+    {
+        $tag[ 'class' ] = $this->_cssPrefix . $name;
     }
 }
