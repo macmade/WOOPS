@@ -62,7 +62,7 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
             self::_setStaticVars();
         }
         
-        $this->_cssPrefix = $this->_modName . '-' . $this->_blockName . '-';
+        $this->_cssPrefix = str_replace( '_', '-', $this->_modClass ) . '-';
     }
     
     /**
