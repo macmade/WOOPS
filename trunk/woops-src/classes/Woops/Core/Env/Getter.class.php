@@ -26,6 +26,11 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * The name of the WOOPS source directory
+     */
+    const WOOPS_SOURCE_DIRNAME = 'woops-src';
+    
+    /**
      * The unique instance of the class (singleton)
      */
     private static $_instance = NULL;
@@ -114,7 +119,7 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         }
         
         // Sets the path to the WOOPS sources (we are not using the path computed before, in order to deal with symbolic links)
-        $this->_woopsVars[ 'sys' ][ 'src' ]  = $this->_woopsVars[ 'sys' ][ 'root' ] . 'woops-src' . DIRECTORY_SEPARATOR;
+        $this->_woopsVars[ 'sys' ][ 'src' ]  = $this->_woopsVars[ 'sys' ][ 'root' ] . self::WOOPS_SOURCE_DIRNAME . DIRECTORY_SEPARATOR;
         
         // Adds a trailing slash to the relative path of the WOOPS root (this may be needed if we are using user home dirs)
         if( substr( $this->_woopsVars[ 'web' ][ 'root' ], -1 !== '/' ) ) {
@@ -124,7 +129,7 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         }
         
         // Sets the relative path to the WOOPS sources
-        $this->_woopsVars[ 'web' ][ 'src' ]  = $this->_woopsVars[ 'web' ][ 'root' ] . 'woops-src/';
+        $this->_woopsVars[ 'web' ][ 'src' ]  = $this->_woopsVars[ 'web' ][ 'root' ] . self::WOOPS_SOURCE_DIRNAME . '/';
     }
     
     /**
