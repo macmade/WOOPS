@@ -125,9 +125,6 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         
         // Sets the relative path to the WOOPS sources
         $this->_woopsVars[ 'web' ][ 'src' ]  = $this->_woopsVars[ 'web' ][ 'root' ] . 'woops-src/';
-        
-        print_r( $this->_woopsVars );
-        exit();
     }
     
     /**
