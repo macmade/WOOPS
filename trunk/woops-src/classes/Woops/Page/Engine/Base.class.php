@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Page.Engine
  */
-abstract class Woops_Page_Engine_Base
+abstract class Woops_Page_Engine_Base extends Woops_Core_Aop_Advisor
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -28,7 +28,7 @@ abstract class Woops_Page_Engine_Base
     /**
      * 
      */
-    abstract public function __toString();
+    abstract public function writePage();
     
     /**
      * 
