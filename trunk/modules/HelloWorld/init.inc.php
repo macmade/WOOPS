@@ -14,5 +14,6 @@
 Woops_Core_Module_Manager::getInstance()->registerBlock(
     'cms',
     $moduleName,
-    'SayHello'
+    'SayHello',
+    'Woops_Mod_HelloWorld_SayHello'
 );
