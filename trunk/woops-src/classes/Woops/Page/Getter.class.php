@@ -246,6 +246,14 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
+    public function getPageId()
+    {
+        return $this->_pageId;
+    }
+    
+    /**
+     * 
+     */
     public function getTitle()
     {
         return $this->_page->title;
