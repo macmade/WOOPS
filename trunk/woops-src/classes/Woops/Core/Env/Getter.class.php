@@ -31,6 +31,11 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
     private static $_instance = NULL;
     
     /**
+     * The WOOPS module manager
+     */
+    private $_modManager      = NULL;
+    
+    /**
      * An array with references to $_SERVER and $_ENV
      */
     private $_envVars         = array(
@@ -126,7 +131,10 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         if( !is_object( self::$_instance ) ) {
             
             // Creates the unique instance
-            self::$_instance = new self();
+            self::$_instance              = new self();
+            
+            // Gets the module manager
+            self::$_instance->_modManager = Woops_Core_Module_Manager::getInstance();
         }
         
         // Returns the unique instance
@@ -302,10 +310,35 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
      */
     public function getPath( $path )
     {
-        $absPath = $this->_woopsVars[ 'sys' ][ 'root' ]
-                 . str_replace( '/', DIRECTORY_SEPARATOR, $path );
-        
-        return ( file_exists( $absPath ) ) ? $absPath : false;
+        if( substr( $path, 0, 12 ) === 'woops-mod://' ) {
+            
+            try {
+                
+                $moduleName = substr( $path, 12, strpos( $path, '/', 12 ) - 12 );
+                $modPath    = $this->_modManager->getModulePath( $moduleName );
+                $absPath    = $modPath . str_replace( '/', DIRECTORY_SEPARATOR, substr( $path, 13 + strlen( $moduleName ) ) );
+                
+                return ( file_exists( $absPath ) ) ? $absPath : false;
+                
+            } catch( Exception $e ) {
+                
+                if( $e->getCode() === Woops_Core_Module_Manager::EXCEPTION_MODULE_NOT_LOADED ) {
+                    
+                    return false;
+                    
+                } else {
+                    
+                    throw $e;
+                }
+            }
+            
+        } else {
+            
+            $absPath = $this->_woopsVars[ 'sys' ][ 'root' ]
+                     . str_replace( '/', DIRECTORY_SEPARATOR, $path );
+            
+            return ( file_exists( $absPath ) ) ? $absPath : false;
+        }
     }
     
     /**
@@ -324,10 +357,37 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
      */
     public function getWebPath( $path )
     {
-        $webPath = $this->_woopsVars[ 'web' ][ 'root' ] . $path;
-        $absPath = $this->getPath( $path );
+        if( !$this->getPath( $path ) ) {
+            
+            return false;
+        }
         
-        return ( file_exists( $absPath ) ) ? $webPath : false;
+        if( substr( $path, 0, 12 ) === 'woops-mod://' ) {
+            
+            try {
+                
+                $moduleName = substr( $path, 12, strpos( $path, '/', 12 ) - 12 );
+                $modPath    = $this->_modManager->getModuleRelativePath( $moduleName );
+                $webPath    = $modPath . substr( $path, 13 + strlen( $moduleName ) );
+                
+            } catch( Exception $e ) {
+                
+                if( $e->getCode() === Woops_Core_Module_Manager::EXCEPTION_MODULE_NOT_LOADED ) {
+                    
+                    return false;
+                    
+                } else {
+                    
+                    throw $e;
+                }
+            }
+            
+        } else {
+            
+            $webPath = $this->_woopsVars[ 'web' ][ 'root' ] . $path;
+        }
+        
+        return $webPath;
     }
     
     /**
