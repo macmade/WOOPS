@@ -69,7 +69,8 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Block_ProcessingInstruction_Handler implem
      */
     function process( stdClass $options )
     {
-        $content = new Woops_Xhtml_Tag( 'div' );
+        $content            = new Woops_Xhtml_Tag( 'div' );
+        $content[ 'class' ] = str_replace( '.', '-', $options->name );
         
         $content->comment( 'Start of xhtml block: ' . $options->name );
         
@@ -85,12 +86,24 @@ class Woops_Mod_XhtmlPageEngine_Xhtml_Block_ProcessingInstruction_Handler implem
             
         } catch( Exception $e ) {
             
-            $error            = $content->div->strong;
-            $error[ 'style' ] = 'color: #FF0000;';
+            $code = $e->getCode();
             
-            $error->addTextData( '[MISSING BLOCK: ' . $options->name . ']' );
-            
-            $content->div     = $e->getMessage();
+            if(    $code === Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK
+                || $code === Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK_TYPE
+                || $code === Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED
+            ) {
+                
+                $error            = $content->div->strong;
+                $error[ 'style' ] = 'color: #FF0000;';
+                
+                $error->addTextData( '[BLOCK ERROR: ' . $options->name . ']' );
+                
+                $content->div     = $e->getMessage();
+                
+            } else {
+                
+                throw $e;
+            }
         }
         
         $content->comment( 'End of xhtml block: ' . $options->name );
