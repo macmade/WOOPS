@@ -106,3 +106,4 @@ report = development
 ; The loaded (active) modules
 loaded[] = Cms
 loaded[] = HelloWorld
+loaded[] = ModManager
