@@ -118,3 +118,4 @@ loaded[] = Cms
 loaded[] = Admin
 loaded[] = ModManager
 loaded[] = HelloWorld
+loaded[] = AopTest
