@@ -184,7 +184,7 @@ class Woops_File_Ini_Parser
                             // Creates the storage array
                             $this->_values[ $section ][ $key ] = array(
                                 'value'    => array(),
-                                'comments' => $comments
+                                'comments' => $this->_processComments( $comments )
                             );
                             
                             // Resets the comments
@@ -199,7 +199,7 @@ class Woops_File_Ini_Parser
                         // Adds the variable value
                         $this->_values[ $section ][ $key ] = array(
                             'value'    => $value,
-                            'comments' => $comments
+                            'comments' => $this->_processComments( $comments )
                         );
                         
                         // Resets the comments
@@ -220,7 +220,7 @@ class Woops_File_Ini_Parser
                             // Creates the storage array
                             $this->_values[ $key ] = array(
                                 'value'    => array(),
-                                'comments' => $comments
+                                'comments' => $this->_processComments( $comments )
                             );
                             
                             // Resets the comments
@@ -235,7 +235,7 @@ class Woops_File_Ini_Parser
                         // Adds the variable value
                         $this->_values[ $key ] = array(
                             'value'    => $value,
-                            'comments' => $comments
+                            'comments' => $this->_processComments( $comments )
                         );
                         
                         // Resets the comments
@@ -244,5 +244,81 @@ class Woops_File_Ini_Parser
                 }
             }
         }
+    }
+    
+    /**
+     * Process raw INI comments, to check for JavaDoc-like instructions
+     * 
+     * @param   array   An array with lines of raw INI comments
+     * @return  array   An array with the processed comments
+     */
+    protected function _processComments( array $rawComments )
+    {
+        // Storage array
+        $comments = array(
+            'title'       => '',
+            'description' => '',
+            'type'        => '',
+            'required'    => false
+        );
+        
+        // Process each comment line
+        foreach( $rawComments as $comment ) {
+            
+            // Checks if we are reading a JavaDoc-like instruction or a normal comment
+            if( substr( $comment, 0, 1 ) !== '@' ) {
+                
+                // Checks if the comment has to be interpreted as a title, or description (which can be multiline)
+                if( !$comments[ 'title' ] ) {
+                    
+                    // Adds the title
+                    $comments[ 'title' ] = $comment;
+                    
+                } elseif( !$comments[ 'description' ] ) {
+                    
+                    // Starts the description
+                    $comments[ 'description' ] = $comment;
+                    
+                } else {
+                    
+                    // Adds the current line to the existing description
+                    $comments[ 'description' ] .= ' ' . $comment;
+                }
+                
+                // Process the nex line
+                continue;
+            }
+            
+            // Checks if we are reading a @type instruction
+            if( substr( $comment, 0, 5 ) == '@type' ) {
+                
+                // Sets the type
+                $comments[ 'type' ] = trim( substr( $comment, 5 ) );
+            }
+            
+            // Checks if we are reading a @required instruction
+            if( substr( $comment, 0, 9 ) == '@required' ) {
+                
+                // Sets the required state
+                $comments[ 'required' ] = true;
+            }
+            
+            // Checks if we are reading an @option instruction
+            if( substr( $comment, 0, 7 ) == '@option' ) {
+                
+                // Checks if options were already added or not
+                if( !isset( $comments[ 'options' ] ) ) {
+                    
+                    // Creates the storage array for the options
+                    $comments[ 'options' ] = array();
+                }
+                
+                // Adds the option
+                $comments[ 'options' ][] = trim( substr( $comment, 7 ) );
+            }
+        }
+        
+        // Returns the processed comments
+        return $comments;
     }
 }
