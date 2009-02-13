@@ -3,8 +3,8 @@
 <!-- $Id$  -->
 
 <woops-lang>
-    <labels>
-        <hello>Hello World, from the WOOPS 'HelloWord' module!</hello>
-        <method>Called method was %s</method>
-    </labels>
+	<labels>
+		<hello>Hello World, from the WOOPS 'HelloWord' module!</hello>
+		<method>Called method was %s</method>
+	</labels>
 </woops-lang>

@@ -3,16 +3,16 @@
 <!-- $Id$  -->
 
 <woops-module-infos>
-    <title>Module manager</title>
-    <description>Allows you to manage, load and configure the modules available on your WOOPS installation.</description>
-    <author>Jean-David Gadina</author>
-    <company>eosgarden</company>
-    <email>macmade@eosgarden.com</email>
-    <version>0.0.0</version>
-    <category>Core</category>
-    <state>experimental</state>
-    <dependancies>
-        <Cms />
-        <Admin />
-    </dependancies>
+	<title>Module manager</title>
+	<description>Allows you to manage, load and configure the modules available on your WOOPS installation.</description>
+	<author>Jean-David Gadina</author>
+	<company>eosgarden</company>
+	<email>macmade@eosgarden.com</email>
+	<version>0.0.0</version>
+	<category>Core</category>
+	<state>experimental</state>
+	<dependancies>
+		<Cms />
+		<Admin />
+	</dependancies>
 <woops-module-infos>
