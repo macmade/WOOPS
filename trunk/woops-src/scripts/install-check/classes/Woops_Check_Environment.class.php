@@ -25,7 +25,7 @@ class Woops_Check_Environment
             'status'  => '',
             'success' => 'The running PHP version (<strong>{VERSION}</strong>) is able to run WOOPS.',
             'warning' => '',
-            'error'   => 'The running PHP version (<strong>{VERSION}</strong>) is too low. The required version is <strong>5.2.0</strong>.',
+            'error'   => 'The running PHP version (<strong>{VERSION}</strong>) is too low. The minimal required version is <strong>5.2.0</strong>.',
             'replace' => array()
         ),
         'errorReporting' => array(

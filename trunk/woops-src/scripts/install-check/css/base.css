@@ -306,6 +306,18 @@ DIV#w3c IMG {
     margin-bottom:          10px;
 }
 
+.check-error .status {
+    color:                  #AA0000;
+}
+
+.check-warning .status {
+    color:                  #AA8800;
+}
+
+.check-success .status {
+    color:                  #00AA00;
+}
+
 .message {
     font-size:              12px;
 }
