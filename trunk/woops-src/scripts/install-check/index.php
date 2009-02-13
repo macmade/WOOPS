@@ -76,6 +76,26 @@
 
 ?>
 				</div>
+				<div class="clearer"></div>
+				<div>
+					<h2>PHP configuration</h2>
+					<div class="infos">
+					    This section is mainly informative.<br />
+					    WOOPS should run even if the settings below are incorrect, but this may cause issues in future versions of WOOPS or PHP.<br /><br />
+					    You are encouraged to correct any possible problem.
+					</div>
+<?php
+
+	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Configuration.class.php' );
+	
+	$CHECK = new Woops_Check_Configuration();
+	
+	print $CHECK->getStatus();
+	
+	unset( $CHECK );
+
+?>
+				</div>
 			</div>
 			<div id="footer">
 				<div id="copyright">

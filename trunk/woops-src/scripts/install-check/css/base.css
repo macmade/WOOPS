@@ -212,6 +212,15 @@ DIV#w3c IMG {
     float:                  right;
 }
 
+.clearer {
+    clear:                  both;
+}
+
+.infos {
+    margin-bottom:          10px;
+    font-size:              10px;
+}
+
 .check-error {
     text-align:             left;
     margin-bottom:          20px;
