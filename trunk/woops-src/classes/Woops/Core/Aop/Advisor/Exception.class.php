@@ -34,4 +34,5 @@ final class Woops_Core_Aop_Advisor_Exception extends Woops_Core_Exception_Base
     const EXCEPTION_INVALID_ADVICE_TYPE       = 0x04;
     const EXCEPTION_JOINPOINT_EXISTS          = 0x05;
     const EXCEPTION_ADVICE_TYPE_NOT_PERMITTED = 0x06;
+    const EXCEPTION_NO_CLASS                  = 0x07;
 }

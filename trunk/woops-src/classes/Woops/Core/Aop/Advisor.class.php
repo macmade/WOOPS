@@ -103,6 +103,16 @@ abstract class Woops_Core_Aop_Advisor
     const JOINPOINT_METHOD_SUFFIX     = '_AopJoinPoint';
     
     /**
+     * The WOOPS configuration object
+     */
+    private static $_conf             = NULL;
+    
+    /**
+     * Wheter the AOP features must be turned on
+     */
+    private static $_enableAop        = true;
+    
+    /**
      * The join points defined in each child class
      */
     private static $_joinPoints       = array();
@@ -131,6 +141,33 @@ abstract class Woops_Core_Aop_Advisor
         0x00001000 => array(),
         0x00002000 => array(),
         0x00004000 => array()
+    );
+    
+    /**
+     * The global advice types
+     */
+    protected static $_globalAdvices  = array(
+        0x00000001,
+        0x00000002,
+        0x00000004,
+        0x00000008,
+        0x00000010,
+        0x00000020,
+        0x00000040,
+        0x00000050,
+        0x00000100,
+        0x00000200
+    );
+    
+    /**
+     * The user advice types
+     */
+    protected static $_userAdvices    = array(
+        0x00000400,
+        0x00000800,
+        0x00001000,
+        0x00002000,
+        0x00004000
     );
     
     /**
@@ -423,7 +460,10 @@ abstract class Woops_Core_Aop_Advisor
         if( !isset( self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ] ) ) {
             
             // Error - The join point has not been registered
-            throw new Woops_Core_Aop_Advisor_Exception( 'No joint point named ' . $name . '. Call to undefined method ' . $this->_className . '::' . $name . '()', Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_JOINPOINT );
+            throw new Woops_Core_Aop_Advisor_Exception(
+                'No joint point named ' . $name . '. Call to undefined method ' . $this->_className . '::' . $name . '()',
+                Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_JOINPOINT
+            );
         }
         
         // Gets the method to use and the allowed advices type for the join point
@@ -473,6 +513,9 @@ abstract class Woops_Core_Aop_Advisor
                 }
             }
             
+            // Flag to know if an exception was thrown
+            $exceptionThrown = false;
+            
             // We are catching exceptions from the internal method, so we'll be able to run the 'afterThrowing' advices
             try {
                 
@@ -480,6 +523,9 @@ abstract class Woops_Core_Aop_Advisor
                 $returnValue = self::_invoke( array( $this, $method ), $args );
                 
             } catch( Exception $e ) {
+                
+                // An exception was thrown
+                $exceptionThrown = true;
                 
                 // Checks if we can have advices to catch exceptions thrown from the internal method, and if so, if such advices are available
                 if(    !count( self::$_advices[ self::ADVICE_TYPE_AFTER_THROWING ][ $this->_className ][ $name ] )
@@ -522,7 +568,7 @@ abstract class Woops_Core_Aop_Advisor
             }
             
             // Checks if we have a return value, meaning no exception was thrown
-            if( isset( $returnValue ) ) {
+            if( !$exceptionThrown ) {
                 
                 // Checks if we ca have advices that will be able to modify the return value of the internal method
                 if( self::ADVICE_TYPE_BEFORE_RETURN & $allowedAdviceType ) {
@@ -577,16 +623,6 @@ abstract class Woops_Core_Aop_Advisor
      */
     private static function _invoke( $callback, array $args = array(), $joinPoint = '' )
     {
-        // Ensures the callback is valid
-        if( !is_callable( $callback ) ) {
-            
-            // Creates the exception message
-            $exceptionMessage = ( $joinPoint ) ? 'Invalid advice callback for join point ' . $joinPoint : 'Invalid callback';
-            
-            // Error - The callback is not valid
-            throw new Woops_Core_Aop_Advisor_Exception( $exceptionMessage, Woops_Core_Aop_Advisor_Exception::EXCEPTION_INVALID_ADVICE_CALLBACK );
-        }
-        
         // Gets the number of arguments to pass to the callbak
         $argsCount = count( $args );
         
@@ -796,6 +832,36 @@ abstract class Woops_Core_Aop_Advisor
      */
     final public static function addAdvice( $type, $callback, $target, $joinPoint = '' )
     {
+        // Checks if the configuration object exists
+        if( !is_object( self::$_conf ) ) {
+            
+            // Gets the instance of the configuration object
+            self::$_conf      = Woops_Core_Config_Getter::getInstance();
+            
+            // Gets the AOP mode from the configuration to know if it's turned on or not
+            self::$_enableAop = self::$_conf->getVar( 'aop', 'generateAopClasses' );
+        }
+        
+        // Checks if the AOP features must be turned off
+        if( defined( 'WOOPS_AOP_MODE_OFF' ) || !self::$_enableAop ) {
+            
+            // Nothing to do, as AOP is disabled
+            return true;
+        }
+        
+        // Ensures the callback is valid
+        if( !is_callable( $callback ) ) {
+            
+            // Creates the exception message
+            $exceptionMessage = ( $joinPoint ) ? 'Invalid advice callback for join point ' . $joinPoint : 'Invalid callback';
+            
+            // Error - The callback is not valid
+            throw new Woops_Core_Aop_Advisor_Exception(
+                $exceptionMessage,
+                Woops_Core_Aop_Advisor_Exception::EXCEPTION_INVALID_ADVICE_CALLBACK
+            );
+        }
+        
         // Checks if the callback must be executed for a specific object or for all instances
         if( is_object( $target ) ) {
             
@@ -808,62 +874,138 @@ abstract class Woops_Core_Aop_Advisor
             // Callback will be executed for all instances
             $className  = $target;
             $objectHash = false;
+            
+            // Checks if the class exists
+            if( !class_exists( $className ) ) {
+                
+                // Error - Unexisting class
+                throw new Woops_Core_Aop_Advisor_Exception(
+                    'Cannot add an advice on unexisting class ' . $className,
+                    Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_CLASS
+                );
+            }
         }
         
         // Checks if the advice type is for a specific join point or not
         if( $type & self::ADVICE_TYPE_GLOBAL ) {
             
-            // Checks if the storage array for the advice exists
-            if( !isset( self::$_advices[ $type ][ $className ] ) ) {
+            // Process the global advice types
+            foreach( self::$_globalAdvices as $adviceType ) {
                 
-                // Creates the storage array for the advice
-                self::$_advices[ $type ][ $className ] = array();
+                // Checks if the requested type matches a global advice type
+                if( $type & $adviceType ) {
+                    
+                    // Checks if the storage array for the advice exists
+                    if( !isset( self::$_advices[ $adviceType ][ $className ] ) ) {
+                        
+                        // Creates the storage array for the advice
+                        self::$_advices[ $adviceType ][ $className ] = array();
+                    }
+                    
+                    // Adds the advice callback for the join point
+                    self::$_advices[ $adviceType ][ $className ][] = array( $callback, $objectHash );
+                }
             }
             
-            // Adds the advice callback for the join point
-            self::$_advices[ $type ][ $className ][] = array( $callback, $objectHash );
+            // The advice(s) was(were) added
             return true;
             
-        } else {
+        } elseif( $type & self::ADVICE_TYPE_USER_DEFINED ) {
+            
+            // Checks if a join point is specified
+            if( !$joinPoint ) {
+                
+                // Error - A join point must be specified
+                throw new Woops_Core_Aop_Advisor_Exception(
+                    'A join point must be specified for that type of advice',
+                    Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_JOINPOINT
+                );
+            }
             
             // Checks if the join point exists
             if( !isset( self::$_joinPointsByName[ $className ][ $joinPoint ] ) ) {
                 
-                // Error - No such join point in the target class
-                throw new Woops_Core_Aop_Advisor_Exception( 'The join point ' . $joinPoint .' does not exist in class ' . $className, Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_JOINPOINT );
+                // Creates a reflection object for the class
+                // If no instance exist at the moment the advice is added, the automatic join points won't be declared, so we'll have to check it manually
+                $reflection = Woops_Core_Reflection_Class::getInstance( $className );
+                
+                // Name of the method
+                $methodName = $joinPoint . self::JOINPOINT_METHOD_SUFFIX;
+                
+                // Checks if we are processing an automatic join point
+                if( !$reflection->hasMethod( $methodName )
+                    || !$reflection->getMethod( $methodName )->isPublic()
+                ) {
+                    
+                    // Error - No such join point in the target class
+                    throw new Woops_Core_Aop_Advisor_Exception(
+                        'The join point ' . $joinPoint .' does not exist in class ' . $className,
+                        Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_JOINPOINT
+                    );
+                }
+                
+                // Process the user advice types
+                foreach( self::$_userAdvices as $adviceType ) {
+                    
+                    // Checks if the requested type matches a user advice type
+                    if( $type & $adviceType ) {
+                        
+                        // Checks if the storage array for the requested join point exists
+                        if( !isset( self::$_advices[ $adviceType ][ $className ][ $joinPoint ] ) ) {
+                            
+                            // Creates the storage array
+                            self::$_advices[ $adviceType ][ $className ][ $joinPoint ] = array();
+                        }
+                        
+                        // Adds the advice
+                        self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array( $callback, $objectHash );
+                    }
+                }
+                
+                // The advice(s) was(were) added
+                return true;
+            }
+                
+            // Storage for the allowed advice types
+            $allowedAdviceTypes = 0;
+            
+            // Process the join points for each instance of the target class
+            foreach( self::$_joinPoints[ $className ] as $joinPoints ) {
+                
+                // Adds the allowed types of advices for the joint point
+                $allowedAdviceTypes |= $joinPoints[ $joinPoint ][ 1 ];
             }
             
-            // Checks the advice type
-            if( $type & self::ADVICE_TYPE_USER_DEFINED ) {
+            // Process the user advice types
+            foreach( self::$_userAdvices as $adviceType ) {
                 
-                // Storage for the allowed advice types
-                $allowedAdviceTypes = 0;
-                
-                // Process the join points for each instance of the target class
-                foreach( self::$_joinPoints[ $className ] as $joinPoints ) {
+                // Checks if the requested type matches a user advice type
+                if( $type & $adviceType ) {
                     
-                    // Adds the allowed types of advices for the joint point
-                    $allowedAdviceTypes |= $joinPoints[ $joinPoint ][ 1 ];
+                    // Checks if the advice type is allowed
+                    if( $adviceType & $allowedAdviceTypes ) {
+                        
+                        // Adds the advice callback for the join point
+                        self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array( $callback, $objectHash );
+                        return true;
+                    
+                    } else {
+                        
+                        // Error - The advice type is not allowed for the join point
+                        throw new Woops_Core_Aop_Advisor_Exception(
+                            'Advice of type ' . $adviceType . ' is not permitted for join point ' . $joinPoint,
+                            Woops_Core_Aop_Advisor_Exception::EXCEPTION_ADVICE_TYPE_NOT_PERMITTED
+                        );
+                    }
                 }
-                
-                // Checks if the advice type is allowed
-                if( $type & $allowedAdviceTypes ) {
-                    
-                    // Adds the advice callback for the join point
-                    self::$_advices[ $type ][ $className ][ $joinPoint ][] = array( $callback, $objectHash );
-                    return true;
-                
-                } else {
-                    
-                    // Error - The advice type is not allowed for the join point
-                    throw new Woops_Core_Aop_Advisor_Exception( 'Advice of type ' . $type . ' is not permitted for join point ' . $joinPoint, Woops_Core_Aop_Advisor_Exception::EXCEPTION_ADVICE_TYPE_NOT_PERMITTED );
-                }
-                
             }
         }
         
         // Error - Advice type is invalid
-        throw new Woops_Core_Aop_Advisor_Exception( 'Invalid advice type (' . $type . ')', Woops_Core_Aop_Advisor_Exception::EXCEPTION_INVALID_ADVICE_TYPE );
+        throw new Woops_Core_Aop_Advisor_Exception(
+            'Invalid advice type (' . $type . ')',
+            Woops_Core_Aop_Advisor_Exception::EXCEPTION_INVALID_ADVICE_TYPE
+        );
     }
     
     /**
@@ -884,16 +1026,20 @@ abstract class Woops_Core_Aop_Advisor
             self::$_publicMethods[ $this->_className ] = array();
             
             // Creates the storage arrays for the join points
-            self::$_joinPoints[ $this->_className ]                                  = array();
-            self::$_joinPointsByName[ $this->_className ]                            = array();
+            self::$_joinPoints[ $this->_className ]       = array();
+            self::$_joinPointsByName[ $this->_className ] = array();
             
-            // Creates the storage arrays for the advices
-            self::$_advices[ self::ADVICE_TYPE_VALID_CALL ][ $this->_className ]     = array();
-            self::$_advices[ self::ADVICE_TYPE_BEFORE_CALL ][ $this->_className ]    = array();
-            self::$_advices[ self::ADVICE_TYPE_BEFORE_RETURN ][ $this->_className ]  = array();
-            self::$_advices[ self::ADVICE_TYPE_AFTER_CALL ][ $this->_className ]     = array();
-            self::$_advices[ self::ADVICE_TYPE_AFTER_THROWING ][ $this->_className ] = array();
-        
+            // Process the user advice types
+            foreach( self::$_userAdvices as $adviceType ) {
+                
+                // Checks if the storage array exists (it could, if an advice was added before the creation of an instance of the current class)
+                if( !isset( self::$_advices[ $adviceType ][ $this->_className ] ) ) {
+                    
+                    // Creates the advice storage array for the current class
+                    self::$_advices[ $adviceType ][ $this->_className ] = array();
+                }
+            }
+            
             // Creates a reflection object for the current instance
             $reflection = Woops_Core_Reflection_Object::getInstance( $this );
             
@@ -971,7 +1117,10 @@ abstract class Woops_Core_Aop_Advisor
         if( !method_exists( $this, $method ) ) {
             
             // Error - The method does not exist
-            throw new Woops_Core_Aop_Advisor_Exception( 'The method ' . $method . ' for join point ' . $name .' does not exist in class ' . $this->_className, Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_JOINPOINT_METHOD );
+            throw new Woops_Core_Aop_Advisor_Exception(
+                'The method ' . $method . ' for join point ' . $name .' does not exist in class ' . $this->_className,
+                Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_JOINPOINT_METHOD
+            );
         }
         
         // Checks if the storage array for the joint points of the current object already exists
@@ -985,15 +1134,22 @@ abstract class Woops_Core_Aop_Advisor
         if( isset( self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ] ) ) {
             
             // Error - A joint point with the same name already exists
-            throw new Woops_Core_Aop_Advisor_Exception( 'A join point named ' . $name . ' is already registered for object ' . $this->_objectHash . ' of class ' . $this->_className, Woops_Core_Aop_Advisor_Exception::EXCEPTION_JOINPOINT_EXISTS );
+            throw new Woops_Core_Aop_Advisor_Exception(
+                'A join point named ' . $name . ' is already registered for object ' . $this->_objectHash . ' of class ' . $this->_className,
+                Woops_Core_Aop_Advisor_Exception::EXCEPTION_JOINPOINT_EXISTS
+            );
         }
         
-        // Creates the storage arrays for the advices on the join point
-        self::$_advices[ self::ADVICE_TYPE_VALID_CALL ][ $this->_className ][ $name ]     = array();
-        self::$_advices[ self::ADVICE_TYPE_BEFORE_CALL ][ $this->_className ][ $name ]    = array();
-        self::$_advices[ self::ADVICE_TYPE_BEFORE_RETURN ][ $this->_className ][ $name ]  = array();
-        self::$_advices[ self::ADVICE_TYPE_AFTER_CALL ][ $this->_className ][ $name ]     = array();
-        self::$_advices[ self::ADVICE_TYPE_AFTER_THROWING ][ $this->_className ][ $name ] = array();
+        // Process the user advice types
+        foreach( self::$_userAdvices as $adviceType ) {
+                    
+            // Checks if the storage array exists (it could, if an advice was added before the creation of an instance of the current class)
+            if( !isset( self::$_advices[ $adviceType ][ $this->_className ][ $name ] ) ) {
+                
+                // Creates the advice storage array for the join point
+                self::$_advices[ $adviceType ][ $this->_className ][ $name ] = array();
+            }
+        }
         
         // Registers the join point
         self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ] = array( $method, $availableAdviceTypes );
