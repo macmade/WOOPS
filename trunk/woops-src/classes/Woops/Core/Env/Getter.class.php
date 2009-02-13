@@ -104,12 +104,11 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         // Checks if the current script is inside the WOOPS sources
         if( strpos( $realScriptFileDir, $sourceAbsPath ) === 0 ) {
             
-            // Offset for strpos, to keep only the path to the sources
-            $offset = strlen( str_replace( $sourceAbsPath, '', $realScriptFileDir ) );
+            $offset = strlen( self::WOOPS_SOURCE_DIRNAME . DIRECTORY_SEPARATOR . str_replace( $sourceAbsPath, '', $realScriptFileDir ) );
             
             // The WOOPS root is in the parent directory
-            $this->_woopsVars[ 'sys' ][ 'root' ] = substr( $scriptFileDir, 0, strrpos( $scriptFileDir, DIRECTORY_SEPARATOR, -$offset ) ) . DIRECTORY_SEPARATOR;
-            $this->_woopsVars[ 'web' ][ 'root' ] = substr( $scriptDir, 0, strrpos( $scriptDir, '/', -$offset ) );
+            $this->_woopsVars[ 'sys' ][ 'root' ] = substr( $scriptFileDir, 0, -$offset );
+            $this->_woopsVars[ 'web' ][ 'root' ] = substr( $scriptDir, 0, -$offset );
             
         } else {
             
