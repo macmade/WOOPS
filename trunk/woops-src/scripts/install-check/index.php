@@ -1,3 +1,11 @@
+<?php
+	
+	// Aborts the script. This is recommended on production boxes, as this
+	// script may reveal important informations on the server.
+	#exit();
+	
+?>
+
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- $Id$ -->
