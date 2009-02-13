@@ -22,38 +22,38 @@ class Woops_Check_Configuration
     var $checks = array(
         'short_open_tag'                 => array(
             'value'   => false,
-            'success' => 'The {VAR} directive is turned <strong>off</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>on</strong>.<br /><br />This feature can cause major portability issues.<br />It is recommended never to use this. You should really turn this off!',
+            'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major portability issues.<br />It is recommended never to use this. You should really turn this off!',
         ),
         'asp_tags'                       => array(
             'value'   => false,
-            'success' => 'The {VAR} directive is turned <strong>off</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>on</strong>.<br /><br />This feature can cause major portability issues.<br />It is recommended never to use this. You should really turn this off!',
+            'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major portability issues.<br />It is recommended never to use this. You should really turn this off!',
         ),
         'allow_call_time_pass_reference' => array(
             'value'   => false,
-            'success' => 'The {VAR} directive is turned <strong>off</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>on</strong>.<br /><br />This feature will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
+            'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
         ),
         'safe_mode'                      => array(
             'value'   => false,
-            'success' => 'The {VAR} directive is turned <strong>off</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>on</strong>.<br /><br />This feature will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
+            'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
         ),
         'register_globals'               => array(
             'value'   => false,
-            'success' => 'The {VAR} directive is turned <strong>off</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>on</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
+            'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
         ),
         'magic_quotes_gpc'               => array(
             'value'   => false,
-            'success' => 'The {VAR} directive is turned <strong>off</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>on</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
+            'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
         ),
         'magic_quotes_runtime'           => array(
             'value'   => false,
-            'success' => 'The {VAR} directive is turned <strong>off</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>on</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
+            'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
         ),
     );
     
