@@ -36,4 +36,20 @@ final class Woops_Core_Reflection_Class extends Woops_Core_Reflection_Base
             array( $className )
         );
     }
+    
+    /**
+     * 
+     */
+    public function isSingleton()
+    {
+        return $this->_reflector->implementsInterface( 'Woops_Core_Singleton_Interface' );
+    }
+    
+    /**
+     * 
+     */
+    public function isAopReady()
+    {
+        return $this->_reflector->isSubclassOf( 'Woops_Core_Aop_Advisor' );
+    }
 }

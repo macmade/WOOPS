@@ -56,7 +56,7 @@ class Woops_Core_Aop_Class_Builder
         
         $this->_classCode    = file_get_contents( $filePath );
         
-        if( $reflection->isSubclassOf( 'Woops_Core_Aop_Advisor' ) ) {
+        if( $reflection->isAopReady() ) {
             
             $this->_classAopCode = preg_replace(
                 '/([\s\t]*public\s+function\s+)([^_(]+)/',
