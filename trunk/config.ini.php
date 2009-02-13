@@ -91,7 +91,7 @@ format = On
 [aop]
 
 ; Allows the generation of AOP classes in the class cache. Only turn off on production boxes!
-; @type     boolean
+; @type boolean
 enable = On
 
 ; ##############################################################################
