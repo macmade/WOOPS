@@ -4,6 +4,13 @@
 	// script may reveal important informations on the server.
 	#exit();
 	
+	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Environment.class.php' );
+	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Filesystem.class.php' );
+	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Configuration.class.php' );
+	
+	$CHECK_ENV  = new Woops_Check_Environment();
+	$CHECK_FS   = new Woops_Check_Filesystem();
+	$CHECK_CONF = new Woops_Check_Configuration();
 ?>
 
 <?xml version="1.0" encoding="utf-8"?>
@@ -50,53 +57,23 @@
 				<h1>WOOPS installation check</h1>
 				<div class="left">
 					<h2>PHP environment</h2>
-<?php
-
-	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Environment.class.php' );
-	
-	$CHECK = new Woops_Check_Environment();
-	
-	print $CHECK->getStatus();
-	
-	unset( $CHECK );
-
-?>
+					<?php print $CHECK_ENV->getStatus() ?>
 				</div>
 				<div class="right">
 					<h2>Filesystem</h2>
-<?php
-
-	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Filesystem.class.php' );
-	
-	$CHECK = new Woops_Check_Filesystem();
-	
-	print $CHECK->getStatus();
-	
-	unset( $CHECK );
-
-?>
+					<?php print $CHECK_FS->getStatus() ?>
 				</div>
 				<div class="clearer"></div>
 				<div>
 					<h2>PHP configuration</h2>
 					<div class="infos">
-					    <div>
-                            This section is mainly informative.<br />
-                            WOOPS should run even if the settings below are incorrect, but this may cause issues in future versions of WOOPS or PHP.<br /><br />
-                            You are encouraged to correct any possible problem.
-					    </div>
+						<div>
+							This section is mainly informative.<br />
+							WOOPS should run even if the settings below are incorrect, but this may cause issues in future versions of WOOPS or PHP.<br /><br />
+							You are encouraged to correct any possible problem.
+						</div>
 					</div>
-<?php
-
-	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Configuration.class.php' );
-	
-	$CHECK = new Woops_Check_Configuration();
-	
-	print $CHECK->getStatus();
-	
-	unset( $CHECK );
-
-?>
+					<?php print $CHECK_CONF->getStatus() ?>
 				</div>
 			</div>
 			<div id="footer">
