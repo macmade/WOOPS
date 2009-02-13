@@ -207,6 +207,9 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                 // The cache directory does not exist
                 self::_error( 'The cache directory for the WOOPS classes is not writeable' );
             }
+            
+            // Adds the WOOPS version to the HTTP headers
+            header( 'X-WOOPS-VERSION: ' . Woops_Core_Informations::WOOPS_VERSION );
         }
         
         // Returns the unique instance
