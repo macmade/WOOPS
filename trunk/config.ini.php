@@ -92,7 +92,7 @@ format = On
 
 ; Prevent the classes matching this pattern to be stored in the class cache
 ; @type     string
-cacheDenyPattern = 
+cacheDenyPattern =
 
 ; ##############################################################################
 ; # Error related settings                                                     #

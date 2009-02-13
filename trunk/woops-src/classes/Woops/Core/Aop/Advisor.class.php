@@ -870,7 +870,8 @@ abstract class Woops_Core_Aop_Advisor
      * Registers the automatic joint points of a class
      * 
      * This method will register a join point for each public method of the
-     * current class ending with and underscore.
+     * current class ending with the value of the JOINPOINT_METHOD_SUFFIX
+     * constant.
      * 
      * @return  NULL
      */
@@ -902,8 +903,8 @@ abstract class Woops_Core_Aop_Advisor
             // Process each method
             foreach( $methods as $method ) {
                 
-                // Do not process methods starting with an underscore
-                if( substr( $method->name, 0, 1 ) !== '_' ) {
+                // Controls if the method name has the join point suffix
+                if( substr( $method->name, -strlen( self::JOINPOINT_METHOD_SUFFIX ) ) === self::JOINPOINT_METHOD_SUFFIX ) {
                     
                     // Name of the join point
                     $joinPointName = substr( $method->name, 0, -strlen( self::JOINPOINT_METHOD_SUFFIX ) );
