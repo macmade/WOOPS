@@ -462,7 +462,7 @@ class Woops_Xhtml_Page
         
         if( $charset ) {
             
-            $link[ 'charset' ] = ( string )$charset;
+            $script[ 'charset' ] = ( string )$charset;
         }
         
         $this->_headerParts[ 'script' ][] = $script;

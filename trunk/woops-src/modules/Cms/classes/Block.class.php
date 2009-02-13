@@ -33,17 +33,51 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
     /**
      * Wether the static variables are set or not
      */
-    private static $_hasStatic  = false;
+    private static $_hasStatic               = false;
     
     /**
-     * 
+     * Whether the jQuery framework has been included
      */
-    protected static $_db       = NULL;
+    private static $_hasJQuery               = false;
     
     /**
-     * 
+     * Whether the jQuery UI framework has been included
      */
-    protected $_cssPrefix       = '';
+    private static $_hasJQueryUi             = false;
+    
+    /**
+     * The webtoolkit scripts that have been included
+     */
+    private static $_webtoolkitLoadedScripts = array();
+    
+    /**
+     * The jQuery plugins that have been included
+     */
+    private static $_jQueryLoadedPlugins     = array();
+    
+    /**
+     * The dependancies for the jQuery plugins
+     */
+    private static $_jQueryPluginsDeps       = array(
+        'accordion' => array(
+            'dimensions'
+        )
+    );
+    
+    /**
+     * The database object
+     */
+    protected static $_db                    = NULL;
+    
+    /**
+     * The XHTML page object
+     */
+    protected static $_page                  = NULL;
+    
+    /**
+     * The CSS prefix for the current class
+     */
+    protected $_cssPrefix                    = '';
     
     /**
      * Class constructor
@@ -73,9 +107,120 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
     private static function _setStaticVars()
     {
         self::$_db        = Woops_Database_Layer::getInstance();
+        self::$_page      = Woops_Page_Engine::getInstance()->getPageObject()->getXhtmlPage();
         
         // Static variables are set
         self::$_hasStatic = true;
+    }
+    
+    /**
+     * 
+     */
+    private function _addJs( $path )
+    {
+        if( $webPath = self::$_env->getSourceWebPath( $path ) ) {
+            
+            self::$_page->addJavaScriptSource( $webPath, false, 'utf-8' );
+        }
+    }
+    
+    /**
+     * Includes the jQuery JS framework
+     * 
+     * @return  NULL
+     */
+    protected function _includeJQuery()
+    {
+        // Only includes the script once
+        if( self::$_hasJQuery === false ) {
+            
+            // Adds the JS script
+            $this->_addJs( 'deps/javascript/jquery/jquery.js' );
+            
+            // Script has been included
+            self::$_hasJQuery = true;
+        }
+    }
+    
+    /**
+     * Includes the jQuery UI JS framework
+     * 
+     * @return  NULL
+     */
+    protected function _includeJQueryUi()
+    {
+        // Only includes the script once
+        if( self::$_hasJQueryUi === false ) {
+            
+            // Adds the JS script
+            $this->_addJs( 'deps/javascript/jquery-ui/jquery-ui.js' );
+            
+            // Script has been included
+            self::$_hasJQueryUi = true;
+        }
+    }
+    
+    /**
+     * Includes a Webtoolkit script
+     * 
+     * Available scripts are:
+     * - base64
+     * - crc32
+     * - md5
+     * - sha1
+     * - sha256
+     * - url
+     * - utf8
+     * 
+     * @param   string  The name of the script to include
+     * @return  NULL
+     * @see     Oop_Core_ClassManager::getModuleRelativePath
+     */
+    protected function _includeWebtoolkitScript( $script )
+    {
+        // Only includes the script once
+        if( !isset( self::$_webtoolkitLoadedScripts[ $script ] ) ) {
+            
+            // Adds the JS script
+            $this->_addJs( 'deps/javascript/webtoolkit/' . $script .'.js' );
+            
+            // Script has been included
+            self::$_webtoolkitLoadedScripts[ $script ] = true;
+        }
+    }
+    
+    /**
+     * Includes a jQuery plugin
+     * 
+     * Available plugins are:
+     * - accordion
+     * - dimensions
+     * 
+     * @param   string  The name of the plugin to include
+     * @return  NULL
+     */
+    protected function _includeJQueryPlugin( $plugin )
+    {
+        // Only includes the script once
+        if( !isset( self::$_jQueryLoadedPlugins[ $plugin ] ) ) {
+            
+            // Checks for dependancies
+            if( isset( self::$_jQueryPluginsDeps[ $plugin ] ) ) {
+                
+                // Process each dependancy
+                foreach( self::$_jQueryPluginsDeps[ $plugin ] as $deps ) {
+                    
+                    // Includes the plugin
+                    $this->_includeJQueryPlugin( $deps );
+                }
+            }
+            
+            // Adds the JS script
+            $this->_addJs( 'deps/javascript/jquery/jquery.' . $script .'.js' );
+            
+            // Script has been included
+            self::$_jQueryLoadedPlugins[ $plugin ] = true;
+        }
     }
     
     /**

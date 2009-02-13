@@ -31,14 +31,14 @@ final class Woops_Page_Engine implements Woops_Core_Singleton_Interface
     private static $_instance   = NULL;
     
     /**
-     * The configuration object
-     */
-    private $_conf              = NULL;
-    
-    /**
      * The page getter object
      */
     private $_pageGetter        = NULL;
+    
+    /**
+     * The active page engine
+     */
+    private $_pageEngine        = NULL;
     
     /**
      * The registered page engine classes
@@ -57,7 +57,6 @@ final class Woops_Page_Engine implements Woops_Core_Singleton_Interface
      */
     private function __construct()
     {
-        $this->_conf       = Woops_Core_Config_Getter::getInstance();
         $this->_pageGetter = Woops_Page_Getter::getInstance();
     }
     
@@ -121,35 +120,38 @@ final class Woops_Page_Engine implements Woops_Core_Singleton_Interface
      */
     public function getPageObject()
     {
-        $engineClass = $this->_pageGetter->getEngine();
-        
-        if( !isset( $this->_pageEngines[ $engineClass ] ) ) {
+        if( !is_object( $this->_pageEngine ) ) {
             
-            throw new Woops_Page_Engine_Exception(
-                'The page engine \'' . $engineClass . '\' is not a registered WOOPS page engine',
-                Woops_Page_Engine_Exception::EXCEPTION_ENGINE_NOT_REGISTERED
-            );
+            $engineClass = $this->_pageGetter->getEngine();
+            
+            if( !isset( $this->_pageEngines[ $engineClass ] ) ) {
+                
+                throw new Woops_Page_Engine_Exception(
+                    'The page engine \'' . $engineClass . '\' is not a registered WOOPS page engine',
+                    Woops_Page_Engine_Exception::EXCEPTION_ENGINE_NOT_REGISTERED
+                );
+            }
+            
+            if( !is_subclass_of( $engineClass, 'Woops_Page_Engine_Base' ) ) {
+                
+                throw new Woops_Page_Engine_Exception(
+                    'The page engine \'' . $engineClass . '\' is not a valid WOOPS page engine, since it does extends the \'Woops_Page_Engine_Base\' abstract class',
+                    Woops_Page_Engine_Exception::EXCEPTION_ENGINE_NOT_VALID
+                );
+            }
+            
+            $this->_pageEngine = new $engineClass();
+            
+            $engineOptions     = unserialize( $this->_pageGetter->getEngineOptions() );
+            
+            if( !is_object( $engineOptions ) ) {
+                
+                $engineOptions = new stdClass();
+            }
+            
+            $this->_pageEngine->loadEngine( $engineOptions );
         }
         
-        if( !is_subclass_of( $engineClass, 'Woops_Page_Engine_Base' ) ) {
-            
-            throw new Woops_Page_Engine_Exception(
-                'The page engine \'' . $engineClass . '\' is not a valid WOOPS page engine, since it does extends the \'Woops_Page_Engine_Base\' abstract class',
-                Woops_Page_Engine_Exception::EXCEPTION_ENGINE_NOT_VALID
-            );
-        }
-        
-        $engine        = new $engineClass();
-        
-        $engineOptions = unserialize( $this->_pageGetter->getEngineOptions() );
-        
-        if( !is_object( $engineOptions ) ) {
-            
-            $engineOptions = new stdClass();
-        }
-        
-        $engine->loadEngine( $engineOptions );
-        
-        return $engine;
+        return $this->_pageEngine;
     }
 }
