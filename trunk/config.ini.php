@@ -90,9 +90,9 @@ format = On
 
 [aop]
 
-; Prevent the classes matching this pattern to be stored in the class cache
-; @type     string
-cacheDenyPattern =
+; Allows the generation of AOP classes in the class cache. Only turn off on production boxes!
+; @type     boolean
+generateAopClasses = On
 
 ; ##############################################################################
 ; # Error related settings                                                     #
