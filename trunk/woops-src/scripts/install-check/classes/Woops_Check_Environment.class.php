@@ -32,7 +32,7 @@ class Woops_Check_Environment
             'title'   => 'Error reporting level',
             'status'  => '',
             'success' => 'The error reporting level is set to the maximum value.',
-            'warning' => 'The error reporting level is too low.<br /><br />WOOPS sets the error reporting level at it\'s maximum value (E_ALL | E_STRICT). As every PHP error (even a simple notice) will result as a fatal error, when using WOOPS, please ensure this is not a problem for you.<br /><br />The current error reporting level is <strong>{LEVEL}</strong>.',
+            'warning' => 'The error reporting level is too low.<br /><br />WOOPS sets the error reporting level at it\'s maximum value (E_ALL | E_STRICT, which is 8191). As every PHP error (even a simple notice) will result as a fatal error, when using WOOPS, please ensure this is not a problem for you.<br /><br />The current error reporting level is <strong>{LEVEL}</strong>.',
             'error'   => '',
             'replace' => array()
         ),
@@ -129,7 +129,7 @@ class Woops_Check_Environment
         $reporting          = error_reporting();
         $replace[ 'LEVEL' ] = $reporting;
         
-        if( defined( 'E_STRICT' ) && $reporting == E_ALL | E_STRICT ) {
+        if( defined( 'E_STRICT' ) && $reporting == ( E_ALL | E_STRICT ) ) {
             
             return 'SUCCESS';
         }
@@ -139,7 +139,7 @@ class Woops_Check_Environment
     
     function checkSpl( &$replace )
     {
-        return ( function_exists( 'spl_autoload' ) ) ? 'SUCCESS' : 'ERROR';
+        return ( function_exists( 'spl_autoload' ) && is_callable( 'spl_autoload' ) ) ? 'SUCCESS' : 'ERROR';
     }
     
     function checkReflection( &$replace )
