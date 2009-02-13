@@ -1,0 +1,275 @@
+/* <![CDATA[ */
+
+/*
+
+################################################################################
+#                                                                              #
+#                WOOPS - Web Object Oriented Programming System                #
+#                                                                              #
+#                               COPYRIGHT NOTICE                               #
+#                                                                              #
+# (c) 2009 eosgarden - Jean-David Gadina (macmade@eosgarden.com)               #
+# All rights reserved                                                          #
+################################################################################
+
+*/
+
+/* $I$ */
+
+BODY {
+    margin:                 0px;
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              14px;
+    line-height:            normal;
+    text-decoration:        none;
+    font-family:            Arial, Helvetica, Verdana, Geneva, Swiss, SunSans-Regular, sans-serif;
+    background-color:       #444444;
+    background-image:       url( 'background.png' );
+}
+
+TD, LI {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              14px;
+    line-height:            normal;
+    text-decoration:        none;
+    font-family:            Arial, Helvetica, Verdana, Geneva, Swiss, SunSans-Regular, sans-serif;
+    background-color:       inherit;
+}
+
+H1 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              32px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+}
+
+H2 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              26px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+    border-bottom:          solid 1px #CCCCCC;
+    padding-bottom:         5px;
+}
+
+H3 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              20px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+    border-bottom:          solid 1px #CCCCCC;
+    padding-bottom:         5px;
+}
+
+H4 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              18px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+}
+
+H5 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              16px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+}
+
+H6 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              14px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+}
+
+A {
+    text-decoration:        none;
+}
+
+A:link {
+    color:                  #00559A;
+    text-decoration:        none;
+    background-color:       inherit;
+}
+
+A:visited {
+    color:                  #91A8BE;
+    background-color:       inherit;
+}
+
+A:hover {
+    color:                  #BB1D22;
+    text-decoration:        underline;
+    background-color:       inherit;
+}
+
+A:active {
+    color:                  #BB1D22;
+    text-decoration:        underline;
+    background-color:       inherit;
+}
+
+IMG {
+    border:                 none;
+}
+
+TABLE {
+    border:                 solid 1px #CCCCCC;
+    border-collapse:        collapse;
+    width:                  100%;
+    margin-top:             14px;
+    margin-bottom:          14px;
+}
+
+TD {
+    border:                 solid 1px #CCCCCC;
+    padding:                5px;
+    text-align:             center;
+}
+
+TH {
+    border:                 solid 1px #CCCCCC;
+    padding:                5px;
+    background-color:       #F1F8FF;
+    color:                  inherit;
+    text-align:             center;
+}
+
+INPUT {
+    border:                 solid 1px #CCCCCC;
+    color:                  #333333;
+    background-color:       #FFFFFF;
+    padding:                5px;
+}
+
+DIV#frame {
+    width:                  800px;
+    margin-left:            auto;
+    margin-top:             50px;
+    margin-right:           auto;
+    margin-bottom:          50px;
+    padding:                10px;
+    background-color:       #FFFFFF;
+    color:                  inherit;
+}
+
+DIV#content {
+    text-align:             center;
+    padding:                20px;
+    overflow:               hidden;
+    height:                 100%;
+}
+
+DIV#footer {
+    margin-top:             10px;
+    text-align:             center;
+    font-size:              10px;
+}
+
+DIV#w3c {
+    margin-top:             10px;
+}
+
+DIV#w3c IMG {
+    margin-left:            10px;
+}
+
+.left {
+    width:                  45%;
+    float:                  left;
+}
+
+.right {
+    width:                  45%;
+    float:                  right;
+}
+
+.check-error {
+    text-align:             left;
+    margin-bottom:          20px;
+    background-color:       #FFC0C0;
+    border:                 solid 1px #CCCCCC;
+    padding-left:           10px;
+    padding-right:          10px;
+    padding-bottom:         10px;
+}
+
+.check-warning {
+    text-align:             left;
+    margin-bottom:          20px;
+    background-color:       #FFEFC0;
+    border:                 solid 1px #CCCCCC;
+    padding-left:           10px;
+    padding-right:          10px;
+    padding-bottom:         10px;
+}
+
+.check-success {
+    text-align:             left;
+    margin-bottom:          20px;
+    background-color:       #CAFFC0;
+    border:                 solid 1px #CCCCCC;
+    padding-left:           10px;
+    padding-right:          10px;
+    padding-bottom:         10px;
+}
+
+.check-error H4 {
+    padding-left:           20px;
+    background-image:       url( 'error.png' );
+    background-repeat:      no-repeat;
+    background-position:    0px 2px;
+}
+
+.check-warning H4 {
+    padding-left:           20px;
+    background-image:       url( 'warning.png' );
+    background-repeat:      no-repeat;
+    background-position:    0px 2px;
+}
+
+.check-success H4 {
+    padding-left:           20px;
+    background-image:       url( 'success.png' );
+    background-repeat:      no-repeat;
+    background-position:    0px 2px;
+}
+
+.status {
+    font-size:              10px;
+    margin-bottom:          10px;
+}
+
+.message {
+    font-size:              12px;
+}
+
+/* ]]> */

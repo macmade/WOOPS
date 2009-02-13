@@ -1,0 +1,158 @@
+<?php
+################################################################################
+#                                                                              #
+#                WOOPS - Web Object Oriented Programming System                #
+#                                                                              #
+#                               COPYRIGHT NOTICE                               #
+#                                                                              #
+# (c) 2009 eosgarden - Jean-David Gadina (macmade@eosgarden.com)               #
+# All rights reserved                                                          #
+################################################################################
+
+# $Id$
+
+/**
+ * Woops PHP environment check (PHP 4 class, as we want this to run on all boxes)
+ *
+ * @author      Jean-David Gadina <macmade@eosgarden.com>
+ * @version     1.0
+ */
+class Woops_Check_Environment
+{
+    var $checks = array(
+        'phpVersion' => array(
+            'title'   => 'PHP version',
+            'status'  => '',
+            'success' => 'The running PHP version (<strong>{VERSION}</strong>) is able to run WOOPS.',
+            'warning' => '',
+            'error'   => 'The running PHP version (<strong>{VERSION}</strong>) is too low. The required version is <strong>5.2.0</strong>.',
+            'replace' => array()
+        ),
+        'errorReporting' => array(
+            'title'   => 'Error reporting level',
+            'status'  => '',
+            'success' => 'The error reporting level is set to the maximum value.',
+            'warning' => 'The error reporting level is too low.<br /><br />WOOPS sets the error reporting level at it\'s maximum value (E_ALL | E_STRICT). As every PHP error (even a simple notice) will result as a fatal error, when using WOOPS, please ensure this is not a problem for you.<br /><br />The current error reporting level is <strong>{LEVEL}</strong>.',
+            'error'   => '',
+            'replace' => array()
+        ),
+        'spl' => array(
+            'title'   => 'SPL - Standard PHP Library',
+            'status'  => '',
+            'success' => 'The SPL classes and functions are available.',
+            'warning' => '',
+            'error'   => 'The SPL classes and functions are not available on your PHP installation.<br /><br />Please compile PHP with the SPL support.',
+            'replace' => array()
+        ),
+        'reflection' => array(
+            'title'   => 'Reflection',
+            'status'  => '',
+            'success' => 'The reflection classes are available.',
+            'warning' => '',
+            'error'   => 'The reflection classes are not available on your PHP installation.<br /><br />Please compile PHP with the reflection support.',
+            'replace' => array()
+        ),
+        'simpleXml' => array(
+            'title'   => 'Simple XML',
+            'status'  => '',
+            'success' => 'The Simple XML classes and functions are available.',
+            'warning' => '',
+            'error'   => 'The Simple XML classes and functions are not available on your PHP installation.<br /><br />Please compile PHP with the Simple XML support.',
+            'replace' => array()
+        ),
+        'pdo' => array(
+            'title'   => 'PDO - PHP Data Object',
+            'status'  => '',
+            'success' => 'The PDO class is available.<br /><br />Available drivers are: <strong>{DRIVERS}</strong>.',
+            'warning' => '',
+            'error'   => 'The PDO class is not available on your PHP installation.<br /><br />Please compile PHP with the PDO support.',
+            'replace' => array()
+        )
+    );
+    
+    function Woops_Check_Environment()
+    {
+        foreach( $this->checks as $key => $value ) {
+            
+            $checkMethod = 'check' . ucfirst( $key );
+            $this->checks[ $key ][ 'status' ] = $this->$checkMethod( $this->checks[ $key ][ 'replace' ] );
+        }
+    }
+    
+    function getStatus()
+    {
+        $out = array();
+        
+        foreach( $this->checks as $key => $value ) {
+            
+            $status  = $value[ 'status' ];
+            $message = $value[ strtolower( $status ) ];
+            
+            foreach( $value[ 'replace' ] as $pattern => $replace ) {
+                
+                $message = str_replace( '{' . $pattern . '}', $replace, $message );
+            }
+            
+            $out[] = '<div class="check-' . strtolower( $status ) . '">';
+            $out[] = '<h4>' . $value[ 'title' ] . '</h4>';
+            $out[] = '<div class="status">Status: ' . $status . '</div>';
+            $out[] = '<div class="message">' . $message . '</div>';
+            $out[] = '</div>';
+        }
+        
+        return implode( chr( 10 ), $out );
+    }
+    
+    function checkPhpVersion( &$replace )
+    {
+        $version              = phpversion();
+        $replace[ 'VERSION' ] = $version;
+        
+        if( version_compare( $version, '5.2.0', '<' ) ) {
+            
+            return 'ERROR';
+        }
+        
+        return 'SUCCESS';
+    }
+    
+    function checkErrorReporting( &$replace )
+    {
+        $reporting          = error_reporting();
+        $replace[ 'LEVEL' ] = $reporting;
+        
+        if( defined( 'E_STRICT' ) && $reporting == E_ALL | E_STRICT ) {
+            
+            return 'SUCCESS';
+        }
+        
+        return 'WARNING';
+    }
+    
+    function checkSpl( &$replace )
+    {
+        return ( function_exists( 'spl_autoload' ) ) ? 'SUCCESS' : 'ERROR';
+    }
+    
+    function checkReflection( &$replace )
+    {
+        return ( class_exists( 'Reflection' ) ) ? 'SUCCESS' : 'ERROR';
+    }
+    
+    function checkSimpleXml( &$replace )
+    {
+        return ( class_exists( 'SimpleXMLElement' ) ) ? 'SUCCESS' : 'ERROR';
+    }
+    
+    function checkPdo( &$replace )
+    {
+        if( class_exists( 'PDO' ) ) {
+            
+            $replace[ 'DRIVERS' ] = implode( ', ', pdo_drivers() );
+            
+            return 'SUCCESS';
+        }
+        
+        return 'ERROR';
+    }
+}
