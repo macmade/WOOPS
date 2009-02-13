@@ -133,7 +133,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
      */
     private function _getPageId()
     {
-        $id = ( int )$this->_request->woopsPageId;
+        $id = ( int )$this->_request->pid;
         
         if( !$id || !$this->_db->getRecord( 'pageinfos', $id ) ) {
             
@@ -165,7 +165,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
      */
     private function _getLanguage()
     {
-        $lang = $this->_request->woopsLanguage;
+        $lang = $this->_request->lang;
         
         if( !$lang ) {
             
