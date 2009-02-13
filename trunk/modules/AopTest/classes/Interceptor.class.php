@@ -28,11 +28,22 @@ class Woops_Mod_AopTest_Interceptor
     /**
      * 
      */
-    public static function intercept( Woops_Xhtml_Tag $content, stdClass $options )
+    public static function interceptBefore( Woops_Xhtml_Tag $content, stdClass $options )
     {
-        $message            = $content->div;
+        $message            = $content->div->pre;
         $message[ 'class' ] = 'small';
         
         $message->addTextData( 'AOP before call interception: ' . __METHOD__ );
+    }
+    
+    /**
+     * 
+     */
+    public static function interceptAfter( Woops_Xhtml_Tag $content, stdClass $options )
+    {
+        $message            = $content->div->pre;
+        $message[ 'class' ] = 'small';
+        
+        $message->addTextData( 'AOP after call interception: ' . __METHOD__ );
     }
 }
