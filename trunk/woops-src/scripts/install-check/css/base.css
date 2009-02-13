@@ -228,46 +228,55 @@ DIV#w3c IMG {
 .check-error {
     text-align:             left;
     margin-bottom:          20px;
-    background-color:       #FFC0C0;
+    background-color:       #EC9C95;
     border:                 solid 1px #CCCCCC;
     padding-left:           10px;
     padding-right:          10px;
     padding-bottom:         10px;
+    background-image:       url( 'bg-error.png' );
+    background-repeat:      repeat-x;
 }
 
 .check-warning {
     text-align:             left;
     margin-bottom:          20px;
-    background-color:       #FFEFC0;
+    background-color:       #F9E49A;
     border:                 solid 1px #CCCCCC;
     padding-left:           10px;
     padding-right:          10px;
     padding-bottom:         10px;
+    background-image:       url( 'bg-warning.png' );
+    background-repeat:      repeat-x;
 }
 
 .check-success {
     text-align:             left;
     margin-bottom:          20px;
-    background-color:       #CAFFC0;
+    background-color:       #BFF79A;
     border:                 solid 1px #CCCCCC;
     padding-left:           10px;
     padding-right:          10px;
     padding-bottom:         10px;
+    background-image:       url( 'bg-success.png' );
+    background-repeat:      repeat-x;
 }
 
 .check-error H4 {
+    background-color:       transparent;
     background-image:       url( 'error.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
 .check-warning H4 {
+    background-color:       transparent;
     background-image:       url( 'warning.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
 .check-success H4 {
+    background-color:       transparent;
     background-image:       url( 'success.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
