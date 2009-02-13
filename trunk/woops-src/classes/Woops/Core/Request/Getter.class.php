@@ -84,7 +84,7 @@ final class Woops_Core_Request_Getter implements Woops_Core_Singleton_Interface
      */
     public function __get( $name )
     {
-        return $this->getVar( $name, $this->_lookupOrder );
+        return $this->getWoopsVar( $name, $this->_lookupOrder );
     }
     
     /**
@@ -92,7 +92,7 @@ final class Woops_Core_Request_Getter implements Woops_Core_Singleton_Interface
      */
     public function __isset( $name )
     {
-        return $this->varExists( $name, $this->_lookupOrder );
+        return $this->woopsVarExists( $name, $this->_lookupOrder );
     }
     
     /**
@@ -149,6 +149,25 @@ final class Woops_Core_Request_Getter implements Woops_Core_Singleton_Interface
     /**
      * 
      */
+    public function getWoopsVar( $name, $order = '' )
+    {
+        $order = ( $order ) ? $order : $this->_lookupOrder;
+        $keys  = preg_split( '//', $order );
+        
+        foreach( $keys as $key ) {
+            
+            if( isset( $this->_requestVars[ $key ][ 'woops' ][ $name ] ) ) {
+                
+                return $this->_requestVars[ $key ][ 'woops' ][ $name ];
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * 
+     */
     public function varExists( $name, $order = '' )
     {
         $order = ( $order ) ? $order : $this->_lookupOrder;
@@ -157,6 +176,25 @@ final class Woops_Core_Request_Getter implements Woops_Core_Singleton_Interface
         foreach( $keys as $key ) {
             
             if( isset( $this->_requestVars[ $key ][ $name ] ) ) {
+                
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * 
+     */
+    public function woopsVarExists( $name, $order = '' )
+    {
+        $order = ( $order ) ? $order : $this->_lookupOrder;
+        $keys  = preg_split( '//', $order );
+        
+        foreach( $keys as $key ) {
+            
+            if( isset( $this->_requestVars[ $key ][ 'woops' ][ $name ] ) ) {
                 
                 return true;
             }
