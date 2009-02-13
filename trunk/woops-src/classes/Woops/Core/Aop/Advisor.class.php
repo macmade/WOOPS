@@ -895,7 +895,7 @@ abstract class Woops_Core_Aop_Advisor
             self::$_advices[ self::ADVICE_TYPE_AFTER_THROWING ][ $this->_className ] = array();
         
             // Creates a reflection object for the current instance
-            $reflection = new ReflectionObject( $this );
+            $reflection = Woops_Core_Reflection_Object::getInstance( $this );
             
             // Gets all the public methods
             $methods    = $reflection->getMethods( ReflectionMethod::IS_PUBLIC );
