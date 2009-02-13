@@ -4,7 +4,7 @@
 
 <woops-module-infos>
 	<title>Hello World</title>
-	<description>A simple demo plugin.</description>
+	<description>A simple demo module.</description>
 	<author>Jean-David Gadina</author>
 	<company>eosgarden</company>
 	<email>macmade@eosgarden.com</email>
