@@ -67,7 +67,15 @@ class Woops_Check_Environment
             'warning' => '',
             'error'   => 'The PDO class is not available on your PHP installation.<br /><br />Please compile PHP with the PDO support.',
             'replace' => array()
-        )
+        ),
+        'fsockOpen' => array(
+            'title'   => 'Socket connection',
+            'status'  => '',
+            'success' => 'The PHP fsockopen() function is available.',
+            'warning' => '',
+            'error'   => 'The PHP fsockopen() function is not available. This is required in order to enable the generation of AOP classes in the class cache.',
+            'replace' => array()
+        ),
     );
     
     function Woops_Check_Environment()
@@ -154,5 +162,10 @@ class Woops_Check_Environment
         }
         
         return 'ERROR';
+    }
+    
+    function checkFsockOpen( &$replace )
+    {
+        return ( function_exists( 'fsockopen' ) && is_callable( 'fsockopen' ) ) ? 'SUCCESS' : 'ERROR';
     }
 }
