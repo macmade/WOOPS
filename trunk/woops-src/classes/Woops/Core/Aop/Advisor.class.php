@@ -100,7 +100,7 @@ abstract class Woops_Core_Aop_Advisor
     /**
      * The suffix for the join point public methods
      */
-    const JOINPOINT_METHOD_SUFFIX     = 'JoinPoint';
+    const JOINPOINT_METHOD_SUFFIX     = '_AopJoinPoint';
     
     /**
      * The join points defined in each child class
