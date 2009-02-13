@@ -157,6 +157,15 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     }
     
     /**
+     * 
+     */
+    private static function _error( $message )
+    {
+        print __CLASS__ . 'error: ' . $message . '. The script has been aborted.';
+        exit();
+    }
+    
+    /**
      * Gets the unique class instance
      * 
      * This method is used to get the unique instance of the class
@@ -189,14 +198,14 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             if( !self::$_instance->_cacheDirectory || !is_dir( self::$_instance->_cacheDirectory ) ) {
                 
                 // The cache directory does not exist
-                $this->_error( 'The cache directory for the WOOPS classes does not exist' );
+                self::_error( 'The cache directory for the WOOPS classes does not exist' );
             }
             
             // Checks if the cache directory is writeable
             if( !is_writeable( self::$_instance->_cacheDirectory ) ) {
                 
                 // The cache directory does not exist
-                $this->_error( 'The cache directory for the WOOPS classes is not writeable' );
+                self::_error( 'The cache directory for the WOOPS classes is not writeable' );
             }
         }
         
@@ -251,15 +260,6 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
         
         // The requested class does not belong to this project
         return false;
-    }
-    
-    /**
-     * 
-     */
-    private function _error( $message )
-    {
-        print __CLASS__ . 'error: ' . $message . '. The script has been aborted.';
-        exit();
     }
     
     /**
@@ -332,7 +332,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                               . $classPath;
                     
                     // The class is not defined
-                    $this->_error( $errorMsg );
+                    self::_error( $errorMsg );
                 }
                 
             } else {
@@ -347,7 +347,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                               . $classPath;
                     
                     // The class is not defined
-                    $this->_error( $errorMsg );
+                    self::_error( $errorMsg );
                 }
                 
                 // Checks if the PHP_COMPATIBLE constant is defined
@@ -358,7 +358,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                               . $className;
                     
                     // Class does not respect the project conventions
-                    $this->_error( $errorMsg );
+                    self::_error( $errorMsg );
                 }
                 
                 // Gets the minimal PHP version required (eval() is required as late static bindings are implemented only in PHP 5.3)
@@ -377,7 +377,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                               . ')';
                     
                     // PHP version is too old
-                    $this->_error( $errorMsg );
+                    self::_error( $errorMsg );
                 }
             }
             
@@ -435,7 +435,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                       . $className;
             
             // The cache version was not built
-            $this->_error( $errorMsg );
+            self::_error( $errorMsg );
         }
         
         // New line character
@@ -465,7 +465,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                       . $className;
             
             // Problem connecting to the build script
-            $this->_error( $errorMsg );
+            self::_error( $errorMsg );
         }
         
         // Build state
@@ -506,7 +506,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                       . $className;
             
             // The cache version was not built
-            $this->_error( $errorMsg );
+            self::_error( $errorMsg );
         }
     }
     
