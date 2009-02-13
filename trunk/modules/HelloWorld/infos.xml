@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- $Id$  -->
+
+<woops-module-infos>
+	<title>Hello World</title>
+	<description>A simple demo plugin.</description>
+	<author>Jean-David Gadina</author>
+	<company>eosgarden</company>
+	<email>macmade@eosgarden.com</email>
+	<version>0.0.0</version>
+	<category>Example</category>
+	<state>stable</state>
+	<dependancies>
+		<Cms />
+	</dependancies>
+<woops-module-infos>
