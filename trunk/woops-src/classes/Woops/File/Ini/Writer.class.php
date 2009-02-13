@@ -79,7 +79,7 @@ class Woops_File_Ini_Writer
                         
                         foreach( $sectionValue as $arrayValue ) {
                             
-                        $ini .= $sectionKey . '[] = ' . $arrayValue . self::$_str->NL;
+                            $ini .= $sectionKey . '[] = ' . $arrayValue . self::$_str->NL;
                         }
                         
                     } else {
