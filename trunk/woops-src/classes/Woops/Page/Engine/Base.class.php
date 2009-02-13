@@ -65,6 +65,9 @@ abstract class Woops_Page_Engine_Base extends Woops_Core_Aop_Advisor
      */
     final public function __construct()
     {
+        // Calls the parent constructor
+        parent::__construct();
+        
         // Checks if the static variables are set
         if( !self::$_hasStatic ) {
             
