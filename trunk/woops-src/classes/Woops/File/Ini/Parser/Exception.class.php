@@ -28,4 +28,6 @@ final class Woops_File_Ini_Parser_Exception extends Woops_Core_Exception_Base
     /**
      * Error codes for the exceptions
      */
+    const EXCEPTION_NO_FILE           = 0x01;
+    const EXCEPTION_FILE_NOT_READABLE = 0x02;
 }
