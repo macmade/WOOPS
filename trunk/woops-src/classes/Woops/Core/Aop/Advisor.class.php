@@ -839,7 +839,7 @@ abstract class Woops_Core_Aop_Advisor
             self::$_conf      = Woops_Core_Config_Getter::getInstance();
             
             // Gets the AOP mode from the configuration to know if it's turned on or not
-            self::$_enableAop = self::$_conf->getVar( 'aop', 'generateAopClasses' );
+            self::$_enableAop = self::$_conf->getVar( 'aop', 'enable' );
         }
         
         // Checks if the AOP features must be turned off

@@ -54,9 +54,9 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     private $_modManager       = NULL;
     
     /**
-     * Wheter to use AOP classes (generated and stored in tha class cache)
+     * Wheter to use AOP classes (generated and stored in the class cache)
      */
-    private $_useAopClasses    = '';
+    private $_enableAop       = '';
     
     /**
      * The cache directory for the AOP classes
@@ -189,7 +189,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             self::$_instance->_modManager       = Woops_Core_Module_Manager::getInstance();
             
             // Gets the class cache deny pattern
-            self::$_instance->_useAopClasses    = Woops_Core_Config_Getter::getInstance()->getVar( 'aop', 'generateAopClasses' );
+            self::$_instance->_enableAop        = Woops_Core_Config_Getter::getInstance()->getVar( 'aop', 'enable' );
             
             // Gets the class cache directory
             self::$_instance->_cacheDirectory   = self::$_instance->_env->getPath( 'cache/classes/' );
@@ -297,7 +297,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             if( defined( 'WOOPS_AOP_MODE_OFF' )
                 || substr( $className, 0, 11 ) === 'Woops_Core_'
                 || substr( $className, -9 ) === 'Interface'
-                || !$this->_useAopClasses
+                || !$this->_enableAop
             ) {
                 
                 // Includes the original class file
