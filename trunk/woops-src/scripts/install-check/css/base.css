@@ -14,7 +14,7 @@
 
 */
 
-/* $I$ */
+/* $Id$ */
 
 BODY {
     margin:                 0px;
@@ -168,6 +168,10 @@ INPUT {
     color:                  #333333;
     background-color:       #FFFFFF;
     padding:                5px;
+}
+
+PRE {
+    color:                  #00559A;
 }
 
 DIV#frame {
