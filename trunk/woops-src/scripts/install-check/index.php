@@ -56,11 +56,11 @@
 				<h1>WOOPS installation check</h1>
 				<div class="left">
 					<h2>PHP environment</h2>
-					<?php print $CHECK_ENV->getStatus() ?>
+					<?php print $CHECK_ENV->getStatus(); ?>
 				</div>
 				<div class="right">
 					<h2>Filesystem</h2>
-					<?php print $CHECK_FS->getStatus() ?>
+					<?php print $CHECK_FS->getStatus(); ?>
 				</div>
 				<div class="clearer"></div>
 				<div>
@@ -72,7 +72,7 @@
 							You are encouraged to correct any possible problem.
 						</div>
 					</div>
-					<?php print $CHECK_CONF->getStatus() ?>
+					<?php print $CHECK_CONF->getStatus(); ?>
 				</div>
 			</div>
 			<div id="footer">
