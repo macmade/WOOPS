@@ -112,7 +112,7 @@ abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
               . '.'
             );
             
-         } catch( Exception $e ) {
+         } catch( Woops_Core_Lang_Getter_Exception $e ) {
             
             if( $e->getCode() === Woops_Core_Lang_Getter_Exception::EXCEPTION_NO_LANG_FILE ) {
                 

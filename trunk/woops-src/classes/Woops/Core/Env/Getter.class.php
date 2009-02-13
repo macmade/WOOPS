@@ -360,9 +360,9 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
                 
                 return ( file_exists( $absPath ) ) ? $absPath : false;
                 
-            } catch( Exception $e ) {
+            } catch( Woops_Core_Module_Manager_Exception $e ) {
                 
-                if( $e->getCode() === Woops_Core_Module_Manager::EXCEPTION_MODULE_NOT_LOADED ) {
+                if( $e->getCode() === Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED ) {
                     
                     return false;
                     

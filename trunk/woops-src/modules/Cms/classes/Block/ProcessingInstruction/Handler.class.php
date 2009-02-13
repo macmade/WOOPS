@@ -84,7 +84,7 @@ class Woops_Mod_Cms_Block_ProcessingInstruction_Handler implements Woops_Xhtml_P
             
             $block->getBlockContent( $content, $blockOptions );
             
-        } catch( Exception $e ) {
+        } catch( Woops_Core_Module_Manager_Exception $e ) {
             
             $code = $e->getCode();
             
