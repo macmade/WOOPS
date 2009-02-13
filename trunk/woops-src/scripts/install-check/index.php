@@ -12,7 +12,6 @@
 	$CHECK_FS   = new Woops_Check_Filesystem();
 	$CHECK_CONF = new Woops_Check_Configuration();
 ?>
-
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- $Id$ -->
