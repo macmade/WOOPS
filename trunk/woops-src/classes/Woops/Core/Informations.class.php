@@ -28,7 +28,7 @@ final class Woops_Core_Informations
     /**
      * The WOOPS version
      */
-    const VERSION        = '0.0.0';
+    const WOOPS_VERSION  = '0.0.0';
     
     /**
      * Class constructor
