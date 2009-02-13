@@ -220,6 +220,12 @@ DIV#w3c IMG {
     clear:                  both;
 }
 
+#content H2 {
+    background-image:       url( 'cog.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
 .infos {
     margin-bottom:          10px;
     font-size:              10px;
