@@ -243,24 +243,21 @@ DIV#w3c IMG {
 }
 
 .check-error H4 {
-    padding-left:           20px;
     background-image:       url( 'error.png' );
     background-repeat:      no-repeat;
-    background-position:    0px 2px;
+    background-position:    right 2px;
 }
 
 .check-warning H4 {
-    padding-left:           20px;
     background-image:       url( 'warning.png' );
     background-repeat:      no-repeat;
-    background-position:    0px 2px;
+    background-position:    right 2px;
 }
 
 .check-success H4 {
-    padding-left:           20px;
     background-image:       url( 'success.png' );
     background-repeat:      no-repeat;
-    background-position:    0px 2px;
+    background-position:    right 2px;
 }
 
 .status {
