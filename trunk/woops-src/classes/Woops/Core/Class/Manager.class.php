@@ -37,32 +37,42 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     /**
      * The unique instance of the class (singleton)
      */
-    private static $_instance = NULL;
+    private static $_instance  = NULL;
     
     /**
      * The WOOPS environment object
      */
-    private $_env             = NULL;
+    private $_env              = NULL;
     
     /**
      * The WOOPS module manager
      */
-    private $_modManager      = NULL;
+    private $_modManager       = NULL;
+    
+    /**
+     * A pattern used to exclude some classes from the cache
+     */
+    private $_cacheDenyPattern = '';
+    
+    /**
+     * The cache directory for the classes
+     */
+    private $_cacheDirectory   = '';
     
     /**
      * The loaded classes from the WOOPS project
      */
-    private $_loadedClasses   = array();
+    private $_loadedClasses    = array();
     
     /**
      * The available top WOOPS packages
      */
-    private $_packages        = array();
+    private $_packages         = array();
     
     /**
      * The directory which contains the WOOPS classes
      */
-    private $_classDir        = '';
+    private $_classDir         = '';
     
     /**
      * Class constructor
@@ -157,13 +167,35 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
         if( !is_object( self::$_instance ) ) {
             
             // Creates the unique instance
-            self::$_instance              = new self();
+            self::$_instance                    = new self();
             
             // Gets the instance of the WOOPS environment
-            self::$_instance->_env        = Woops_Core_Env_Getter::getInstance();
+            self::$_instance->_env              = Woops_Core_Env_Getter::getInstance();
             
             // Gets the instance of the WOOPS module manager
-            self::$_instance->_modManager = Woops_Core_Module_Manager::getInstance();
+            self::$_instance->_modManager       = Woops_Core_Module_Manager::getInstance();
+            
+            // Gets the class cache deny pattern
+            self::$_instance->_cacheDenyPattern = Woops_Core_Config_Getter::getInstance()->getVar( 'aop', 'cacheDenyPattern' );
+            
+            // Gets the class cache directory
+            self::$_instance->_cacheDirectory   = self::$_instance->_env->getPath( 'cache/classes/' );
+            
+            // Checks if the cache directory exist
+            if( !self::$_instance->_cacheDirectory || !is_dir( self::$_instance->_cacheDirectory ) ) {
+                
+                // The cache directory does not exist
+                trigger_error( 'The cache directory for the WOOPS classes does not exist', E_USER_ERROR );
+                exit();
+            }
+            
+            // Checks if the cache directory is writeable
+            if( !is_writeable( self::$_instance->_cacheDirectory ) ) {
+                
+                // The cache directory does not exist
+                trigger_error( 'The cache directory for the WOOPS classes is not writeable', E_USER_ERROR );
+                exit();
+            }
         }
         
         // Returns the unique instance
@@ -250,8 +282,31 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
         // Checks if the class file exists
         if( file_exists( $classPath ) ) {
             
-            // Includes the class file
-            require_once( $classPath );
+            // Checks if we must use a cached version or not (cache is disabled for the classes form the 'Core' package)
+            if( defined( 'WOOPS_AOP_MODE_OFF' )
+                || substr( $className, 0, 11 ) === 'Woops_Core_'
+                || substr( $className, -9 ) === 'Interface'
+                || ( $this->_cacheDenyPattern && @preg_match( $this->_cacheDenyPattern, $className ) )
+            ) {
+                
+                // Includes the original class file
+                require_once( $classPath );
+                
+            } else {
+                
+                // Path to the cached version
+                $cachedClassPath = $this->_cacheDirectory . $className . '.class.php';
+                
+                // Checks if the cached version exists
+                if( !file_exists( $cachedClassPath ) ) {
+                    
+                    // Creates the cached version
+                    $this->_createCachedClass( $className, $classPath );
+                }
+                
+                // Includes the cached version
+                require_once( $cachedClassPath );
+            }
             
             // Checks if the requested class is an interface
             if( substr( $className, -9 ) === 'Interface' ) {
@@ -317,6 +372,127 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
         
         // Class file was not found
         return false;
+    }
+    
+    /**
+     * 
+     */
+    private function _createCachedClass( $className, $classPath )
+    {
+        // Gets the host informations
+        $host     = $this->_env->HTTP_HOST;
+        $port     = $this->_env->SERVER_PORT;
+        $ssl      = ( boolean )$this->_env->HTTPS;
+        $protocol = $this->_env->SERVER_PROTOCOL;
+        
+        // Gets the URL to the cache building script
+        $url      = $this->_env->getSourceWebPath( 'scripts/build-class-cache.php' );
+        
+        // Checks if we are running an SSL connection
+        $host     = ( $ssl ) ? 'ssl://' . $host : $host;
+        
+        // Checks if the protocol is defined
+        $protocol = ( $protocol ) ? $protocol : 'HTTP/1.1';
+        
+        // Query string for the build script
+        $query    = 'woops[aop][buildClass]=' . urlencode( $className );
+        
+        // Error containers
+        $errno    = 0;
+        $errstr   = '';
+        
+        // Creates a socket
+        $sock     = fsockopen( $host, $port, $errno, $errstr );
+        
+        if( !$sock ) {
+            
+            // Error message
+            $errorMsg = 'Error creating a socket for '
+                      . $host
+                      . ':'
+                      . $port
+                      . ' ('
+                      . $errstr
+                      . '). This is required to build the cached version of class '
+                      . $className;
+            
+            // The cache version was not built
+            trigger_error( $errorMsg, E_USER_ERROR );
+        }
+        
+        // New line character
+        $nl = chr( 13 ) . chr( 10 );
+        
+        // Connection for the socket
+        $req = 'GET ' . $url . '?' . $query . ' ' . $protocol . $nl
+             . 'Host: ' . $host . $nl
+             . 'Connection: Close' . $nl . $nl;
+        
+        // Connects to the build script
+        fwrite( $sock, $req );
+        
+        // Gets the connection status
+        $status = fgets( $sock, 128 );
+        
+        // Checks the status
+        if( !$status || substr( $status, -4, 2 ) !== 'OK' ) {
+            
+            // Error message
+            $errorMsg = 'Error connecting to '
+                      . $host
+                      . ':'
+                      . $port
+                      . $url
+                      . '. This is required to build the cached version of class '
+                      . $className;
+            
+            // Problem connecting to the build script
+            trigger_error( $errorMsg, E_USER_ERROR );
+        }
+        
+        // Build state
+        $buildState = 'ERROR';
+        
+        // Reads the response
+        while( !feof( $sock ) ) {
+            
+            // Gets a line
+            $line = fgets( $sock, 128 );
+            
+            // Checks for the end of the headers
+            if( $line === $nl ) {
+                
+                // No need to contine reading the response
+                break;
+            }
+            
+            // Checks for the AOP build status header
+            if( substr( $line, 0, 25 ) === 'X-WOOPS-AOP-BUILD-STATUS:' ) {
+                
+                // Sets the build state
+                $buildState = substr( $line, 26, -2 );
+                
+                // No need to contine reading the response
+                break;
+            }
+        }
+        
+        // Closes the socket
+        fclose( $sock );
+        
+        // Checks the build state
+        if( $buildState !== 'OK' ) {
+            
+            // Error message
+            $errorMsg = 'Error trying to build the cached version of class '
+                      . $className
+                      . ' (expected path:'
+                      . $cachedClassPath
+                      . ')';
+            
+            // The cache version was not built
+            trigger_error( $errorMsg, E_USER_ERROR );
+        }
     }
     
     /**

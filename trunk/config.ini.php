@@ -85,12 +85,22 @@ defaultLanguage = en
 format = On
 
 ; ##############################################################################
+; # AOP related settings                                                       #
+; ##############################################################################
+
+[aop]
+
+; Prevent the classes matching this pattern to be stored in the class cache
+; @type     string
+cacheDenyPattern = 
+
+; ##############################################################################
 ; # Error related settings                                                     #
 ; ##############################################################################
 
 [error]
 
-; The error report
+; The error reporting level
 ; @type     select
 ; @option   development
 ; @option   production
