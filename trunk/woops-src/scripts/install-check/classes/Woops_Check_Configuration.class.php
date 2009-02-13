@@ -67,7 +67,7 @@ class Woops_Check_Configuration
                 
             } else {
                 
-                $this->checks[ $key ][ 'status' ] = 'WARNING';
+                $this->checks[ $key ][ 'status' ] = 'SUCCESS';
             }
             
         }
