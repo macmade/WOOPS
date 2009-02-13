@@ -22,6 +22,10 @@ require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIREC
  * 
  * This class will handle every request to a class from this project,
  * by automatically loading the class file (thanx to the SPL).
+ * 
+ * If an error occurs, this class will simply prints the error message.
+ * No trigger_error, nor exception, as this may cause strange PHP behavior,
+ * because of the SPL autoload method.
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
@@ -185,16 +189,14 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             if( !self::$_instance->_cacheDirectory || !is_dir( self::$_instance->_cacheDirectory ) ) {
                 
                 // The cache directory does not exist
-                trigger_error( 'The cache directory for the WOOPS classes does not exist', E_USER_ERROR );
-                exit();
+                $this->_error( 'The cache directory for the WOOPS classes does not exist' );
             }
             
             // Checks if the cache directory is writeable
             if( !is_writeable( self::$_instance->_cacheDirectory ) ) {
                 
                 // The cache directory does not exist
-                trigger_error( 'The cache directory for the WOOPS classes is not writeable', E_USER_ERROR );
-                exit();
+                $this->_error( 'The cache directory for the WOOPS classes is not writeable' );
             }
         }
         
@@ -249,6 +251,15 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
         
         // The requested class does not belong to this project
         return false;
+    }
+    
+    /**
+     * 
+     */
+    private function _error( $message )
+    {
+        print __CLASS__ . 'error: ' . $message . '. The script has been aborted.';
+        exit();
     }
     
     /**
@@ -321,7 +332,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                               . $classPath;
                     
                     // The class is not defined
-                    trigger_error( $errorMsg, E_USER_ERROR );
+                    $this->_error( $errorMsg );
                 }
                 
             } else {
@@ -336,17 +347,18 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                               . $classPath;
                     
                     // The class is not defined
-                    trigger_error( $errorMsg, E_USER_ERROR );
+                    $this->_error( $errorMsg );
                 }
                 
                 // Checks if the PHP_COMPATIBLE constant is defined
                 if( !defined( $className . '::PHP_COMPATIBLE' ) ) {
                     
                     // Error message
-                    $errorMsg = 'The requested constant PHP_COMPATIBLE is not defined in class ' . $className;
+                    $errorMsg = 'The requested constant PHP_COMPATIBLE is not defined in class '
+                              . $className;
                     
                     // Class does not respect the project conventions
-                    trigger_error( $errorMsg, E_USER_ERROR );
+                    $this->_error( $errorMsg );
                 }
                 
                 // Gets the minimal PHP version required (eval() is required as late static bindings are implemented only in PHP 5.3)
@@ -356,10 +368,16 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                 if( version_compare( PHP_VERSION, $phpCompatible, '<' ) ) {
                     
                     // Error message
-                    $errorMsg = 'Class ' . $className . ' requires PHP version ' . $phpCompatible . ' (actual version is ' . PHP_VERSION . ')';
+                    $errorMsg = 'Class '
+                              . $className
+                              . ' requires PHP version '
+                              . $phpCompatible
+                              . ' (actual version is '
+                              . PHP_VERSION
+                              . ')';
                     
                     // PHP version is too old
-                    trigger_error( $errorMsg, E_USER_ERROR );
+                    $this->_error( $errorMsg );
                 }
             }
             
@@ -417,7 +435,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                       . $className;
             
             // The cache version was not built
-            trigger_error( $errorMsg, E_USER_ERROR );
+            $this->_error( $errorMsg );
         }
         
         // New line character
@@ -447,7 +465,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                       . $className;
             
             // Problem connecting to the build script
-            trigger_error( $errorMsg, E_USER_ERROR );
+            $this->_error( $errorMsg );
         }
         
         // Build state
@@ -485,13 +503,10 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             
             // Error message
             $errorMsg = 'Error trying to build the cached version of class '
-                      . $className
-                      . ' (expected path:'
-                      . $cachedClassPath
-                      . ')';
+                      . $className;
             
             // The cache version was not built
-            trigger_error( $errorMsg, E_USER_ERROR );
+            $this->_error( $errorMsg );
         }
     }
     
