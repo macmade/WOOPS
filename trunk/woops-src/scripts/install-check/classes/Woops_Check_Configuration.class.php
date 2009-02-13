@@ -23,37 +23,37 @@ class Woops_Check_Configuration
         'short_open_tag'                 => array(
             'value'   => false,
             'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major portability issues.<br />It is recommended never to use this. You should really turn this off!',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major portability issues.',
         ),
         'asp_tags'                       => array(
             'value'   => false,
             'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major portability issues.<br />It is recommended never to use this. You should really turn this off!',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major portability issues.',
         ),
         'allow_call_time_pass_reference' => array(
             'value'   => false,
             'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature will be removed in PHP 5.3.',
         ),
         'safe_mode'                      => array(
             'value'   => false,
             'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature will be removed in PHP 5.3.',
         ),
         'register_globals'               => array(
             'value'   => false,
             'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.',
         ),
         'magic_quotes_gpc'               => array(
             'value'   => false,
             'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.',
         ),
         'magic_quotes_runtime'           => array(
             'value'   => false,
             'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
-            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.<br />It is recommended never to use this. You should really turn this off!',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major security and portability issues, and will be removed in PHP 5.3.',
         ),
     );
     
@@ -67,7 +67,7 @@ class Woops_Check_Configuration
                 
             } else {
                 
-                $this->checks[ $key ][ 'status' ] = 'SUCCESS';
+                $this->checks[ $key ][ 'status' ] = 'WARNING';
             }
             
         }
