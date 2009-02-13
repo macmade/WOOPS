@@ -223,6 +223,19 @@ DIV#w3c IMG {
 .infos {
     margin-bottom:          10px;
     font-size:              10px;
+    background-color:       #9ACEF9;
+    border:                 solid 1px #CCCCCC;
+    padding-left:           10px;
+    padding-top:            10px;
+    padding-right:          10px;
+    padding-bottom:         10px;
+    background-image:       url( 'bg-infos.png' );
+    background-repeat:      repeat-x;
+}
+.infos DIV {
+    background-image:       url( 'infos.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
 }
 
 .check-error {

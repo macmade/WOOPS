@@ -80,9 +80,11 @@
 				<div>
 					<h2>PHP configuration</h2>
 					<div class="infos">
-					    This section is mainly informative.<br />
-					    WOOPS should run even if the settings below are incorrect, but this may cause issues in future versions of WOOPS or PHP.<br /><br />
-					    You are encouraged to correct any possible problem.
+					    <div>
+                            This section is mainly informative.<br />
+                            WOOPS should run even if the settings below are incorrect, but this may cause issues in future versions of WOOPS or PHP.<br /><br />
+                            You are encouraged to correct any possible problem.
+					    </div>
 					</div>
 <?php
 
