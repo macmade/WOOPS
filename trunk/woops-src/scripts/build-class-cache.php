@@ -35,6 +35,7 @@ if( $GETVARS && isset( $GETVARS[ 'aop' ][ 'buildClass' ] ) ) {
     if( $CACHEDIR
         && is_dir( $CACHEDIR )
         && is_writeable( $CACHEDIR )
+        && !file_exists( $CACHEDIR . $CLASSNAME )
     ) {
         
         // We don't want any error here
