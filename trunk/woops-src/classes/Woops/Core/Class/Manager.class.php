@@ -161,7 +161,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
      */
     private static function _error( $message )
     {
-        print __CLASS__ . 'error: ' . $message . '. The script has been aborted.';
+        print __CLASS__ . ' error: ' . $message . '. The script has been aborted.';
         exit();
     }
     
