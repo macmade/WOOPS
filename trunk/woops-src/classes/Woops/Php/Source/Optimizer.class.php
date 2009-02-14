@@ -72,6 +72,22 @@ class Woops_Php_Source_Optimizer
                     $token[ 1 ] = trim( $token[ 1 ] ) . ' ';
                 }
                 
+                // Do not keep a whitespace after a string
+                if( $token[ 0 ] === T_WHITESPACE
+                    && is_array( $lastToken )
+                    && $lastToken[ 0 ] === T_CONSTANT_ENCAPSED_STRING
+                ) {
+                    continue;
+                }
+                
+                // Removes whitespace before a string
+                if( $token[ 0 ] === T_CONSTANT_ENCAPSED_STRING
+                    && is_array( $lastToken )
+                    && $lastToken[ 0 ] === T_WHITESPACE
+                ) {
+                    array_pop( $codeLines );
+                }
+                
                 // Do not keep a whitespace after the PHP open tag
                 if( $token[ 0 ] === T_WHITESPACE
                     && is_array( $lastToken )
@@ -164,7 +180,8 @@ class Woops_Php_Source_Optimizer
                     ||   $token === '~' 
                     ||   $token === '^' 
                     ||   $token === '?' 
-                    ||   $token === ':' )
+                    ||   $token === ':' 
+                    ||   $token === ';' )
                 ) {
                     array_pop( $codeLines );
                 }
