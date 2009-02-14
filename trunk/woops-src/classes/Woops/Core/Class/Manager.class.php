@@ -20,12 +20,13 @@ require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIREC
 /**
  * WOOPS class manager
  * 
- * This class will handle every request to a class from this project,
+ * This class will handle every request to a class from the WOOPS project,
  * by automatically loading the class file (thanx to the SPL).
  * 
  * If an error occurs, this class will simply prints the error message.
  * No trigger_error, nor exception, as this may cause strange PHP behavior,
- * because of the SPL autoload method.
+ * because of the particularity of the SPL autoload method. So no fancy
+ * error reporting here, unfortunately.
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
@@ -157,11 +158,55 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     }
     
     /**
+     * Creates an error message
      * 
+     * This function will abort the current script, and writes the passed
+     * error message.
+     * As we are using the SPL autoload functionnalities, we cannot use
+     * exceptions, nor the trigger_error function, so we have to display
+     * error by ourselves.
+     * 
+     * @param   string  The error message to display.
+     * @return  NULL
      */
     private static function _error( $message )
     {
-        print __CLASS__ . ' error: ' . $message . '. The script has been aborted.';
+        // Gets the debug backtrace
+        $backTrace = debug_backtrace();
+        
+        // Gets the last method call
+        $fault     = $backTrace[ 1 ];
+        
+        // We'll try to reproduce the look of the PHP errors
+        $error   = '<b>Fatal '
+                 . __CLASS__
+                 . ' error</b>: '
+                 . $message
+                 . ' in <b>'
+                 . __FILE__
+                 . '</b> on line <b>'
+                 . $fault[ 'line' ]
+                 . '</b>';
+        
+        // Checks if HTML error must be turned off
+        if( !@ini_get( 'html_errors' ) ) {
+            
+            // Removes all HTML tags
+            $error = chr( 10 ) . strip_tags( $error );
+            
+        } else {
+            
+            // Adds a line break before the error, as PHP does
+            $error = '<br />' . $error;
+        }
+        
+        //  Gets the prepend and append strings, if any
+        $prepend = ( ini_get( 'error_prepend_string' ) ) ? ini_get( 'error_prepend_string' ) : '';
+        $append  = ( ini_get( 'error_append_string' ) )  ? ini_get( 'error_append_string' )  : '';
+        
+        
+        // Displays the PHP style error message and aborts the script
+        print $prepend . $error . $append;
         exit();
     }
     
@@ -266,11 +311,22 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     }
     
     /**
-     * Loads a class from this project
+     * Loads a class from the WOOPS project
+     * 
+     * This method will try to load a WOOPS class, either from the sources or
+     * from a module's classes directory, depending on the prefix.
+     * It will also checks for the PHP_COMPATIBLE constant, inside the class.
+     * If it does not exists, of if it's value is bigger than the current PHP
+     * version, the script will be aborted, and an error displayed.
+     * If the AOP settings are turned on, this method will also create an AOP
+     * cached version of the class, and load it from here (if it exists
+     * already in the cache, it will load it directly from there).
+     * 
      * 
      * @param   string  The name of the class to load
      * @param   boolean Wheter the requested class belongs to a WOOPS module
      * @return  boolean
+     * @see     _createCachedClass
      */
     private function _loadClass( $className, $moduleClass = false )
     {
@@ -315,7 +371,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                 if( !file_exists( $cachedClassPath ) ) {
                     
                     // Creates the cached version
-                    $this->_createCachedClass( $className, $classPath );
+                    $this->_createCachedClass( $className );
                 }
                 
                 // Includes the cached version
@@ -396,9 +452,20 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     }
     
     /**
+     * Creates an AOP cached version of a PHP class
      * 
+     * This method will creates a socket connection to the
+     * 'woops-src/scripts/build-class-cache.php' script, that will build the
+     * cached version.
+     * As the build script needs a reflection object to know if the class has
+     * AOP features, we cannot build the cached version from here, as it will
+     * mean loading the original class and then the cached one ('Cannot
+     * redeclare class XXX', you know the drill), hence the socket connection.
+     * 
+     * @param   string  The name of the class for which to build a cached version
+     * @return  NULL
      */
-    private function _createCachedClass( $className, $classPath )
+    private function _createCachedClass( $className )
     {
         // Gets the host informations
         $host     = $this->_env->HTTP_HOST;
@@ -425,6 +492,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
         // Creates a socket
         $sock     = fsockopen( $host, $port, $errno, $errstr );
         
+        // Checks if the socket is active
         if( !$sock ) {
             
             // Error message

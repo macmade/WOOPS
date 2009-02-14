@@ -57,6 +57,16 @@
  *         original exception won't be thrown if the callback method
  *         returns true
  * 
+ * Note that this class will also automatically create a join point for every
+ * public member method ending with the value of the JOINPOINT_METHOD_SUFFIX
+ * constant.
+ * If the AOP mode is turned on in the WOOPS configuration file, the WOOPS class
+ * manager will then create a cached AOP version of the WOOPS classes, by
+ * adding the AOP suffix to every public method.
+ * That behaviour allows you to code your public member methods as always
+ * (without taking care of the AOP method suffix), and to be assured an AOP
+ * join point will exist in the cached version of your class.
+ * 
  * Please take a look at the documentation for the addAdvice() method, to learn
  * more about the type of advices.
  * 
@@ -195,6 +205,7 @@ abstract class Woops_Core_Aop_Advisor
      * Otherwise, the advices won't be executed.
      * 
      * @return  NULL
+     * @see     _registerAutomaticJoinPoints
      * @see     _processGlobalAdvices
      */
     public function __construct()
@@ -264,6 +275,7 @@ abstract class Woops_Core_Aop_Advisor
      * to call this one before anything else, using parent::__get().
      * Otherwise, the advices won't be executed.
      * 
+     * @param   string  The name of the value to get
      * @return  NULL
      * @see     _processGlobalAdvices
      */
@@ -286,6 +298,8 @@ abstract class Woops_Core_Aop_Advisor
      * to call this one before anything else, using parent::__set().
      * Otherwise, the advices won't be executed.
      * 
+     * @param   string  The name of the value to set
+     * @param   mixed   The value to set
      * @return  NULL
      * @see     _processGlobalAdvices
      */
@@ -308,6 +322,7 @@ abstract class Woops_Core_Aop_Advisor
      * to call this one before anything else, using parent::__isset().
      * Otherwise, the advices won't be executed.
      * 
+     * @param   string  The name of the value to check for
      * @return  NULL
      * @see     _processGlobalAdvices
      */
@@ -330,6 +345,8 @@ abstract class Woops_Core_Aop_Advisor
      * to call this one before anything else, using parent::__unset().
      * Otherwise, the advices won't be executed.
      * 
+     * @param   string  The name of the value to unset
+     * @param   mixed   The value to set
      * @return  NULL
      * @see     _processGlobalAdvices
      */
@@ -615,11 +632,10 @@ abstract class Woops_Core_Aop_Advisor
      * must be passed to the callback, or if the callback is on a static class
      * method, as late static bindings are only available since PHP 5.3.
      * 
-     * @param   mixed                               The callback to invoke (must be a valid PHP callback)
-     * @param   array                               The arguments to pass to the callback
-     * @param   string                              The joint point for which the callback is executed (used for the error messages)
-     * @return  mixed                               The return value of the callback
-     * @throws  Woops_Core_Aop_Advisor_Exception    If the passed callback is not a valid PHP callback
+     * @param   mixed   The callback to invoke (must be a valid PHP callback)
+     * @param   array   The arguments to pass to the callback
+     * @param   string  The joint point for which the callback is executed (used for the error messages)
+     * @return  mixed   The return value of the callback
      */
     private static function _invoke( $callback, array $args = array(), $joinPoint = '' )
     {
@@ -822,10 +838,13 @@ abstract class Woops_Core_Aop_Advisor
      *         returns true
      * 
      * @param   int                                 The type of the advice (one of the Woops_Core_Aop_Advisor::ADVICE_TYPE_XXX constant)
-     * @param   mixed                               The callback to invoke (must be a valid PHP callback)
+     * @param   callback                            The callback to invoke (must be a valid PHP callback)
      * @param   mixed                               The target on which to place the advice (either a class name or an object)
      * @param   string                              The join point on which to place the advice
      * @return  boolean
+     * @throws  Woops_Core_Aop_Advisor_Exception   If the passed callback is not a valid PHP callback
+     * @throws  Woops_Core_Aop_Advisor_Exception   If the target class does not exist
+     * @throws  Woops_Core_Aop_Advisor_Exception   If the no join point is specified, when trying to register a user advice type
      * @throws  Woops_Core_Aop_Advisor_Exception   If the join point has not been registered in the target
      * @throws  Woops_Core_Aop_Advisor_Exception   If the advice type is not allowed for the join point
      * @throws  Woops_Core_Aop_Advisor_Exception   If the advice type does not exist
@@ -1011,11 +1030,12 @@ abstract class Woops_Core_Aop_Advisor
     /**
      * Registers the automatic joint points of a class
      * 
-     * This method will register a join point for each public method of the
-     * current class ending with the value of the JOINPOINT_METHOD_SUFFIX
+     * This method will register a join point for each public member method of
+     * the current class ending with the value of the JOINPOINT_METHOD_SUFFIX
      * constant.
      * 
      * @return  NULL
+     * @see     _registerJoinPoint
      */
     final private function _registerAutomaticJoinPoints()
     {
@@ -1048,6 +1068,12 @@ abstract class Woops_Core_Aop_Advisor
             
             // Process each method
             foreach( $methods as $method ) {
+                
+                // Do not process static methods
+                if( $method->isStatic() ) {
+                    
+                    continue;
+                }
                 
                 // Controls if the method name has the join point suffix
                 if( substr( $method->name, -strlen( self::JOINPOINT_METHOD_SUFFIX ) ) === self::JOINPOINT_METHOD_SUFFIX ) {

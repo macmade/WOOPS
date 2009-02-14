@@ -49,12 +49,12 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
     );
     
     /**
-     * 
+     * The processed server variables (for $_SERVER and $_ENV )
      */
     private $_serverVars      = array();
     
     /**
-     * 
+     * The WOOPS variables
      */
     private $_woopsVars       = array(
         'sys' => array(
@@ -149,7 +149,11 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
     }
     
     /**
+     * Get a server variable.
      * 
+     * @param   string  The server variable to get
+     * @return  string  The server variable, if available
+     * @see     getVar
      */
     public function __get( $name )
     {
@@ -173,7 +177,7 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
             // Creates the unique instance
             self::$_instance              = new self();
             
-            // Gets the module manager
+            // Gets the module manager instance
             self::$_instance->_modManager = Woops_Core_Module_Manager::getInstance();
         }
         
@@ -185,7 +189,7 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
      * Register an server variable.
      *
      * This method is used to register a server variable (either $_SERVER or $_ENV).
-     * Valid server variables will be stored in static property $_serverVars.
+     * Valid server variables will be stored in the _serverVars property.
      * 
      * @param   string  The server variable to register
      * @return  boolean
@@ -447,6 +451,7 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
      * This method is used to get a server variable (either $_SERVER or $_ENV),
      * If the variable is not already registered, it will
      * first set it using method _setServerVar.
+     * Priority is given to $_SERVER, then $_ENV.
      * 
      * @param   string  The server variable to get
      * @return  string  The server variable, if available
@@ -454,21 +459,27 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
      */
     public function getVar( $var )
     {
+        // Ensures we have a string
         $var = ( string )$var;
         
+        // Checks if the varaible exists, or if it has to be processed
         if( isset( $this->_serverVars[ $var ] ) ) {
             
+            // Returns the existing variable
             return $this->_serverVars[ $var ];
             
         } elseif( $this->_setServerVar( $var, '_SERVER' ) ) {
             
+            // Looks in $_SERVER
             return $this->_serverVars[ $var ];
             
         } elseif( $this->_setServerVar( $var, '_ENV' ) ) {
             
+            // Looks in $_ENV
             return $this->_serverVars[ $var ];
         }
         
+        // No such variable
         return false;
     }
 }

@@ -14,6 +14,13 @@
 /**
  * AOP class builder
  * 
+ * This class will process a class file and add the AOP method suffix
+ * (the value of the Woops_Core_Aop_Advisor::JOINPOINT_METHOD_SUFFIX constant)
+ * to every public member method, if the class is a subclass of the AOP advisor
+ * class.
+ * That behaviour will allow an automatic AOP join point, for all the public
+ * member methods of the class.
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Core.Aop.Class
@@ -24,6 +31,12 @@ class Woops_Core_Aop_Class_Builder
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
     const PHP_COMPATIBLE = '5.2.0';
+    
+    /**
+     * The regular expression used to find the public member methods of  class,
+     * even tha abstract ones.
+     */
+    const PUBLIC_METHODS_REGEXP = '/([\s\t]*public\s+function\s+)([^_(]+)/';
     
     /**
      * The PHP code of the class
@@ -43,35 +56,46 @@ class Woops_Core_Aop_Class_Builder
      */
     public function __construct( $className )
     {
+        // Checks if the class exists
         if( !class_exists( $className ) ) {
             
+            // Error - No such class
             throw new Woops_Core_Aop_Class_Builder_Exception(
                 'The class ' . $className . ' does not exist',
                 Woops_Core_Aop_Class_Builder_Exception::EXCEPTION_NO_CLASS
             );
         }
         
+        // Gets a reflection class object
         $reflection          = Woops_Core_Reflection_Class::getInstance( $className );
+        
+        // Gets the path to the PHP file
         $filePath            = $reflection->getFileName();
         
+        // Gets the PHP code
         $this->_classCode    = file_get_contents( $filePath );
         
+        // Checks if the class is a subclass of the AOP advisor class
         if( $reflection->isAopReady() ) {
             
+            // Adds the AOP method suffix to all the public methods
             $this->_classAopCode = preg_replace(
-                '/([\s\t]*public\s+function\s+)([^_(]+)/',
+                self::PUBLIC_METHODS_REGEXP,
                 '\1\2' . Woops_Core_Aop_Advisor::JOINPOINT_METHOD_SUFFIX,
                 $this->_classCode
             );
             
         } else {
             
+            // Nothing to do, the class does not have AOP features
             $this->_classAopCode = $this->_classCode;
         }
     }
     
     /**
+     * Gets the AOP version of the class
      * 
+     * @return  string  The PHP code of the AOP version of the class
      */
     public function __toString()
     {

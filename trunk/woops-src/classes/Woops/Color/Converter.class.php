@@ -73,6 +73,7 @@ final class Woops_Color_Converter implements Woops_Core_Singleton_Interface
      * (singleton). If no instance is available, it will create it.
      * 
      * @return  Woops_Color_Converter   The unique instance of the class
+     * @see     __construct
      */
     public static function getInstance()
     {
