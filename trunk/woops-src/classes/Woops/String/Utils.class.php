@@ -86,6 +86,10 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
     /**
      * Gets an ASCII control character
      * 
+     * Valid name are: NUL, SOH, STX, ETX, EOT, ENQ, ACK, BEL, BS, TAB, LF, VT,
+     * FF, CR, SO, SI, DLE, DC1, DC2, DC3, DC4, NAK, SYN, ETB, CAN, EM, SUB,
+     * ESC, FS, GS, RS, US, SPC and NL.
+     * 
      * @param   string  The name of the ASCII control character
      * @return  string  The ASCII control character
      */
@@ -100,7 +104,7 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
      * This method is used to get the unique instance of the class
      * (singleton). If no instance is available, it will create it.
      * 
-     * @return  Woops_Core_ClassManager The unique instance of the class
+     * @return  Woops_String_Utils  The unique instance of the class
      * @see     __construct
      */
     public static function getInstance()

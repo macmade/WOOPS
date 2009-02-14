@@ -65,6 +65,7 @@ final class Woops_Time_Utils implements Woops_Core_Singleton_Interface
      * (singleton). If no instance is available, it will create it.
      * 
      * @return  Woops_Time_Utils    The unique instance of the class
+     * @see     __construct
      */
     public static function getInstance()
     {
