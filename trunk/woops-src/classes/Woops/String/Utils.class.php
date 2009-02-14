@@ -139,27 +139,27 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
         if( $stripNull ) {
             
             // Erases ASCII null characters
-            $text = str_replace( $this->_asciiTable[ 0 ], '', $text );
+            $text = str_replace( $this->_asciiTable[ 'NUL' ], '', $text );
         }
         
         // DOS CR + LF (u000D + u000A / chr(13) + chr( 10 ))
         $text = str_replace(
-            $this->_asciiTable[ 13 ] . $this->_asciiTable[ 10 ],
-            $this->_asciiTable[ 10 ],
+            $this->_asciiTable[ 'CR' ] . $this->_asciiTable[ 'LF' ],
+            $this->_asciiTable[ 'LF' ],
             $text
         );
         
         // LF + CR (u000A + u000D / chr( 10 ) + chr(13))
         $text = str_replace(    
-            $this->_asciiTable[ 10 ] . $this->_asciiTable[ 13 ],
-            $this->_asciiTable[ 10 ],
+            $this->_asciiTable[ 'LF' ] . $this->_asciiTable[ 'CR' ],
+            $this->_asciiTable[ 'LF' ],
             $text
         );
         
         // Macintosh CR (u000D / chr(13))
         $text = str_replace(
-            $this->_asciiTable[ 13 ],
-            $this->_asciiTable[ 10 ],
+            $this->_asciiTable[ 'CR' ],
+            $this->_asciiTable[ 'LF' ],
             $text
         );
         
