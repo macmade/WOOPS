@@ -12,9 +12,9 @@
 # $Id$
 
 // As we are building cached version of classes, we don't want the WOOPS class
-// manager to load classes from the AOP cache, as this will result in an
-// infinite number of calls to this script, through a socket.
-define( 'WOOPS_AOP_MODE_OFF', true );
+// manager to load classes from the cache, as this will result in an
+// infinite number of calls to this script, through a socket. 
+define( 'WOOPS_CLASS_CACHE_MODE_OFF', true );
 
 // Includes the initialization script
 require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'init.inc.php' );

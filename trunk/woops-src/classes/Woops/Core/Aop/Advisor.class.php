@@ -861,8 +861,8 @@ abstract class Woops_Core_Aop_Advisor
             self::$_enableAop = self::$_conf->getVar( 'aop', 'enable' );
         }
         
-        // Checks if the AOP features must be turned off
-        if( defined( 'WOOPS_AOP_MODE_OFF' ) || !self::$_enableAop ) {
+        // If we are not using class caching, the AOP features must be turned off
+        if( defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) || !self::$_enableAop ) {
             
             // Nothing to do, as AOP is disabled
             return true;

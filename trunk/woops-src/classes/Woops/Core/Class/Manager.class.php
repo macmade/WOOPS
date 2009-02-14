@@ -370,7 +370,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
         $cachedClassPath = $this->_cacheDirectory . $className . '.class.php';
                 
         // Checks if the cache is enabled and if the class exists in the cache
-        if( $this->_classCache && file_exists( $cachedClassPath ) && !defined( 'WOOPS_AOP_MODE_OFF' ) ) {
+        if( $this->_classCache && file_exists( $cachedClassPath ) && !defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) ) {
             
             // Includes the cached version
             require_once( $cachedClassPath );
@@ -403,7 +403,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             if( file_exists( $classPath ) ) {
                 
                 // Checks if we must use a cached version or not (cache is disabled for the classes form the 'Core' package)
-                if( !$this->_classCache || defined( 'WOOPS_AOP_MODE_OFF' ) ) {
+                if( !$this->_classCache || defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) ) {
                     
                     // Includes the original class file
                     require_once( $classPath );
