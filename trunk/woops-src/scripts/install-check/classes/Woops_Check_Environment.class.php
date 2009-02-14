@@ -28,6 +28,14 @@ class Woops_Check_Environment
             'error'   => 'The running PHP version (<strong>{VERSION}</strong>) is too low. The minimal required version is <strong>5.2.0</strong>.',
             'replace' => array()
         ),
+        'zendCompat'  => array(
+            'title'   => 'Zend Engine 1 compatibility',
+            'status'  => '',
+            'success' => 'The compatibility mode with Zend Engine 1 (PHP 4) is disabled.',
+            'warning' => '',
+            'error'   => 'The compatibility mode with Zend Engine 1 (PHP 4) is enabled.<br /><br />WOOPS cannot run with this setting turned on, as this will change the behavior of the object model. Please disable it.',
+            'replace' => array()
+        ),
         'errorReporting' => array(
             'title'   => 'Error reporting level',
             'status'  => '',
@@ -122,6 +130,11 @@ class Woops_Check_Environment
         }
         
         return 'SUCCESS';
+    }
+    
+    function checkZendCompat()
+    {
+        return ( ini_get( 'zend.ze1_compatibility_mode' ) ) ? 'ERROR' : 'SUCCESS';
     }
     
     function checkErrorReporting( &$replace )

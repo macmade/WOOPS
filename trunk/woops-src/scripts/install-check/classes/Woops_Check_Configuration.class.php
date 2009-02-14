@@ -40,6 +40,11 @@ class Woops_Check_Configuration
             'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
             'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature will be removed in PHP 5.3.',
         ),
+        'register_long_arrays'           => array(
+            'value'   => false,
+            'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
+            'warning' => 'The {VAR} directive is turned <strong>ON</strong>.<br /><br />This feature can cause major portability issues, and will be removed in PHP 5.3.',
+        ),
         'register_globals'               => array(
             'value'   => false,
             'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
