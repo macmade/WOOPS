@@ -46,7 +46,9 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
      * The class constructor is private to avoid multiple instances of the
      * class (singleton).
      * 
-     * @return NULL
+     * @return  NULL
+     * @throws  Woops_Core_Config_Getter_Exception  If the configuration file does not exist
+     * @throws  Woops_Core_Config_Getter_Exception  If the configuration file is not writeable
      */
     private function __construct()
     {
@@ -132,6 +134,7 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
      * 
      * @param   string  The name of the module
      * @return  NULL
+     * @throws  Woops_Core_Config_Getter_Exception  If the configuration file is not readable
      */
     private function _loadModuleConf( $name )
     {

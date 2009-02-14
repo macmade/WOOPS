@@ -1717,6 +1717,7 @@ final class Woops_File_Types implements Woops_Core_Singleton_Interface
      * (singleton). If no instance is available, it will create it.
      * 
      * @return  Woops_File_Types    The unique instance of the class
+     * @see     __construct
      */
     public static function getInstance()
     {
@@ -1741,10 +1742,12 @@ final class Woops_File_Types implements Woops_Core_Singleton_Interface
      */
     public function isValid( $mimeType, $allowObsolete = false )
     {
+        // Gets the mime type parts
         $slashPos = strpos( $mimeType, '/' );
         $part1    = substr( $mimeType, 0, $slashPos );
         $part2    = substr( $mimeType, $slashPos + 1 );
         
+        // Checks the mime type
         if( $allowObsolete && isset( $this->_mimeTypes[ $part1 ][ $part2 ] ) ) {
             
             return true;

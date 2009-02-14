@@ -28,7 +28,8 @@ final class Woops_File_Ini_Writer_Exception extends Woops_Core_Exception_Base
     /**
      * Error codes for the exceptions
      */
-    const EXCEPTION_NO_FILE            = 0x01;
-    const EXCEPTION_FILE_NOT_WRITEABLE = 0x02;
-    const EXCEPTION_WRITE_ERROR        = 0x03;
+    const EXCEPTION_NO_DIR             = 0x01;
+    const EXCEPTION_DIR_NOT_WRITEABLE  = 0x02;
+    const EXCEPTION_FILE_NOT_WRITEABLE = 0x03;
+    const EXCEPTION_WRITE_ERROR        = 0x04;
 }

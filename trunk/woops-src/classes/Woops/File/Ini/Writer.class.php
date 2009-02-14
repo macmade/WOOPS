@@ -33,22 +33,20 @@ class Woops_File_Ini_Writer
     /**
      * The string utilities
      */
-    private static $_str       = NULL;
+    protected static $_str     = NULL;
     
     /**
-     * 
+     * The INI values
      */
     protected $_ini            = array();
     
     /**
      * Class constructor
      * 
-     * The class constructor is private as all methods from this class are
-     * static.
-     * 
+     * @param   array   An array with the INI values (may have sections, as sub-arrays)
      * @return  NULL
      */
-    private function __construct( array $ini )
+    public function __construct( array $ini )
     {
         // Checks if the static variables are set
         if( !self::$_hasStatic ) {
@@ -57,39 +55,52 @@ class Woops_File_Ini_Writer
             self::_setStaticVars();
         }
         
+        // Stores the INI values
         $this->_ini = $ini;
     }
     
     /**
+     * Gets the INI values as an INI file
      * 
+     * @return  string  An INI file
      */
     public function __toString()
     {
+        // Storage
         $ini = '';
         
+        // Process each value
         foreach( $this->_ini as $key => $value ) {
             
+            // Checks if we have a sub-array, meaning we have a section
             if( is_array( $value ) ) {
                 
+                // Adds the section name
                 $ini .= '[' . $key . ']' . self::$_str->NL;
                 
+                // Process each section value
                 foreach( $value as $sectionKey => $sectionValue ) {
                     
+                    // Checks if the value is an array
                     if( is_array( $sectionValue ) ) {
                         
+                        // Process each sub-value
                         foreach( $sectionValue as $arrayValue ) {
                             
+                            // Adds the array value
                             $ini .= $sectionKey . '[] = ' . $arrayValue . self::$_str->NL;
                         }
                         
                     } else {
                         
+                        // Adds the section value
                         $ini .= $sectionKey . ' = ' . $sectionValue . self::$_str->NL;
                     }
                 }
                 
             } else {
                 
+                // Adds the value
                 $ini .= $key . ' = ' . $value . self::$_str->NL;
             }
         }
@@ -110,30 +121,64 @@ class Woops_File_Ini_Writer
     }
     
     /**
+     * Writes the INI values to a file
      * 
+     * @param   string  The name of the file to write
+     * @param   string  The path of the file to write (directory name)
+     * @return  NULL
+     * @throws  Woops_File_Ini_Writer_Exception If the directory does not exists
+     * @throws  Woops_File_Ini_Writer_Exception If the directory is not writeable
+     * @throws  Woops_File_Ini_Writer_Exception If the file is not writeable
+     * @throws  Woops_File_Ini_Writer_Exception If a write error occured
      */
-    public function toFile( $filePath )
+    public function toFile( $fileName, $filePath )
     {
-        if( !file_exists( $filePath ) || !is_file( $filePath ) ) {
+        // Checks if the path ends with a directory separator
+        if( substr( $filePath, 0, -1 ) !== DIRECTORY_SEPARATOR ) {
             
+            // Adds the directory separator to the end of the path
+            $filePath .= DIRECTORY_SEPARATOR;
+        }
+        
+        // Complete path to the file
+        $fullPath = $filePath . $fileName;
+        
+        // Checks if the directory exists
+        if( !file_exists( $filePath ) || !is_dir( $filePath ) ) {
+            
+            // Error - No such directory
             throw new Woops_File_Ini_Writer_Exception(
-                'The specified file does not exist (path: ' . $filePath . ')',
-                Woops_File_Ini_Writer_Exception::EXCEPTION_NO_FILE
+                'The directory does not exist (path: ' . $fullPath . ')',
+                Woops_File_Ini_Writer_Exception::EXCEPTION_NO_DIR
             );
         }
         
-        if( !is_writeable( $filePath ) ) {
+        // If the file does not exist, checks if the directory is writeable
+        if( !file_exists( $filePath ) && !is_writeable( $filePath ) ) {
             
+            // Error - Directory not writeable
             throw new Woops_File_Ini_Writer_Exception(
-                'The specified file is not writeable (path: ' . $filePath . ')',
+                'The directory is not writeable (path: ' . $filePath . ')',
+                Woops_File_Ini_Writer_Exception::EXCEPTION_DIR_NOT_WRITEABLE
+            );
+        }
+        
+        // If the file exists, checks if it is writeable
+        if( file_exists( $filePath ) && !is_writeable( $filePath ) ) {
+            
+            // Error - The file is not writeable
+            throw new Woops_File_Ini_Writer_Exception(
+                'The file is not writeable (path: ' . $fullPath . ')',
                 Woops_File_Ini_Writer_Exception::EXCEPTION_FILE_NOT_WRITEABLE
             );
         }
         
+        // Tries to write the file
         if( !file_put_contents( $filePath, ( string )$this ) ) {
             
+            // Error - Cannot write the file
             throw new Woops_File_Ini_Writer_Exception(
-                'Cannot write the ini file (path: ' . $filePath . ')',
+                'Cannot write the ini file (path: ' . $fullPath . ')',
                 Woops_File_Ini_Writer_Exception::EXCEPTION_WRITE_ERROR
             );
         }

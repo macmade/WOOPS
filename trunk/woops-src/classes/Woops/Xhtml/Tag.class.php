@@ -354,7 +354,7 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
             $tag .= ' ' . $key . '="' . $value . '"';
         }
         
-        // Checks if we children to display
+        // Checks if we have children to display
         if( !$this->_childrenCount ) {
             
             // No - Checks if the tag is self closed
