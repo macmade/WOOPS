@@ -55,7 +55,12 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     private $_modManager       = NULL;
     
     /**
-     * Wheter to use AOP classes (generated and stored in the class cache)
+     * Wheter to enable the class cache
+     */
+    private $_classCache      = '';
+    
+    /**
+     * Wheter to use AOP classes (if true, the class cache will be automatically enabled)
      */
     private $_enableAop       = '';
     
@@ -249,24 +254,40 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             // Gets the instance of the WOOPS module manager
             self::$_instance->_modManager       = Woops_Core_Module_Manager::getInstance();
             
-            // Gets the class cache deny pattern
+            // Checks if we must use AOP classes
             self::$_instance->_enableAop        = Woops_Core_Config_Getter::getInstance()->getVar( 'aop', 'enable' );
             
-            // Gets the class cache directory
-            self::$_instance->_cacheDirectory   = self::$_instance->_env->getPath( 'cache/classes/' );
-            
-            // Checks if the cache directory exist
-            if( !self::$_instance->_cacheDirectory || !is_dir( self::$_instance->_cacheDirectory ) ) {
+            // If AOP is enabled, the class cache must also be enabled
+            if( self::$_instance->_enableAop ) {
                 
-                // The cache directory does not exist
-                self::_error( 'The cache directory for the WOOPS classes does not exist' );
+                // Enables the class cache
+                self::$_instance->_classCache = true;
+                
+            } else {
+                
+                // Checks if we must use a class cache
+                self::$_instance->_classCache = Woops_Core_Config_Getter::getInstance()->getVar( 'classCache', 'enable' );
             }
             
-            // Checks if the cache directory is writeable
-            if( !is_writeable( self::$_instance->_cacheDirectory ) ) {
+            // Checks if we must use cached classes
+            if( self::$_instance->_classCache ) {
                 
-                // The cache directory does not exist
-                self::_error( 'The cache directory for the WOOPS classes is not writeable' );
+                // Gets the class cache directory
+                self::$_instance->_cacheDirectory = self::$_instance->_env->getPath( 'cache/classes/' );
+                
+                // Checks if the cache directory exist
+                if( !self::$_instance->_cacheDirectory || !is_dir( self::$_instance->_cacheDirectory ) ) {
+                    
+                    // The cache directory does not exist
+                    self::_error( 'The cache directory for the WOOPS classes does not exist' );
+                }
+                
+                // Checks if the cache directory is writeable
+                if( !is_writeable( self::$_instance->_cacheDirectory ) ) {
+                    
+                    // The cache directory does not exist
+                    self::_error( 'The cache directory for the WOOPS classes is not writeable' );
+                }
             }
             
             // Adds the WOOPS version to the HTTP headers
@@ -338,7 +359,6 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
      * cached version of the class, and load it from here (if it exists
      * already in the cache, it will load it directly from there).
      * 
-     * 
      * @param   string  The name of the class to load
      * @param   boolean Wheter the requested class belongs to a WOOPS module
      * @return  boolean
@@ -346,125 +366,130 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
      */
     private function _loadClass( $className, $moduleClass = false )
     {
-        // Checks if we are loading a module class or not
-        if( $moduleClass ) {
+        // Path to the cached version of the class
+        $cachedClassPath = $this->_cacheDirectory . $className . '.class.php';
+                
+        // Checks if the cache is enabled and if the class exists in the cache
+        if( $this->_classCache && file_exists( $cachedClassPath ) && !defined( 'WOOPS_AOP_MODE_OFF' ) ) {
             
-            $modName   = substr( $className, 10, strpos( $className, '_', 10 ) - 10 );
-            $modPath   = $this->_modManager->getModulePath( $modName );
-            $classPath = $modPath
-                       . 'classes'
-                       . DIRECTORY_SEPARATOR
-                       . str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, strlen( $modName ) + 11 ) )
-                       . '.class.php';
+            // Includes the cached version
+            require_once( $cachedClassPath );
+            
+            // Sets the class path
+            $classPath = $cachedClassPath;
             
         } else {
             
-            // Gets the class path
-            $classPath = $this->_classDir
-                       . str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, 6 ) )
-                       . '.class.php';
-        }
-        
-        // Checks if the class file exists
-        if( file_exists( $classPath ) ) {
-            
-            // Checks if we must use a cached version or not (cache is disabled for the classes form the 'Core' package)
-            if( defined( 'WOOPS_AOP_MODE_OFF' )
-                || substr( $className, 0, 11 ) === 'Woops_Core_'
-                || substr( $className, -9 ) === 'Interface'
-                || !$this->_enableAop
-            ) {
+            // Checks if we are loading a module class or not
+            if( $moduleClass ) {
                 
-                // Includes the original class file
-                require_once( $classPath );
+                $modName   = substr( $className, 10, strpos( $className, '_', 10 ) - 10 );
+                $modPath   = $this->_modManager->getModulePath( $modName );
+                $classPath = $modPath
+                           . 'classes'
+                           . DIRECTORY_SEPARATOR
+                           . str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, strlen( $modName ) + 11 ) )
+                           . '.class.php';
                 
             } else {
                 
-                // Path to the cached version
-                $cachedClassPath = $this->_cacheDirectory . $className . '.class.php';
+                // Gets the class path
+                $classPath = $this->_classDir
+                           . str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, 6 ) )
+                           . '.class.php';
+            }
+            
+            // Checks if the class file exists
+            if( file_exists( $classPath ) ) {
                 
-                // Checks if the cached version exists
-                if( !file_exists( $cachedClassPath ) ) {
+                // Checks if we must use a cached version or not (cache is disabled for the classes form the 'Core' package)
+                if( !$this->_classCache || defined( 'WOOPS_AOP_MODE_OFF' ) ) {
+                    
+                    // Includes the original class file
+                    require_once( $classPath );
+                    
+                } else {
                     
                     // Creates the cached version
                     $this->_createCachedClass( $className );
-                }
-                
-                // Includes the cached version
-                require_once( $cachedClassPath );
-            }
-            
-            // Checks if the requested class is an interface
-            if( substr( $className, -9 ) === 'Interface' ) {
-                
-                // Checks if the interface is defined
-                if( !interface_exists( $className ) ) {
                     
-                    // Error message
-                    $errorMsg = 'The interface '
-                              . $className
-                              . ' is not defined in file '
-                              . $classPath;
-                    
-                    // The class is not defined
-                    self::_error( $errorMsg );
+                    // Includes the cached version
+                    require_once( $cachedClassPath );
                 }
-                
             } else {
-                    
-                // Checks if the class is defined
-                if( !class_exists( $className ) ) {
-                    
-                    // Error message
-                    $errorMsg = 'The class '
-                              . $className
-                              . ' is not defined in file '
-                              . $classPath;
-                    
-                    // The class is not defined
-                    self::_error( $errorMsg );
-                }
                 
-                // Checks if the PHP_COMPATIBLE constant is defined
-                if( !defined( $className . '::PHP_COMPATIBLE' ) ) {
-                    
-                    // Error message
-                    $errorMsg = 'The requested constant PHP_COMPATIBLE is not defined in class '
-                              . $className;
-                    
-                    // Class does not respect the project conventions
-                    self::_error( $errorMsg );
-                }
-                
-                // Gets the minimal PHP version required (eval() is required as late static bindings are implemented only in PHP 5.3)
-                eval( '$phpCompatible = ' . $className . '::PHP_COMPATIBLE;' );
-                
-                // Checks the PHP version
-                if( version_compare( PHP_VERSION, $phpCompatible, '<' ) ) {
-                    
-                    // Error message
-                    $errorMsg = 'Class '
-                              . $className
-                              . ' requires PHP version '
-                              . $phpCompatible
-                              . ' (actual version is '
-                              . PHP_VERSION
-                              . ')';
-                    
-                    // PHP version is too old
-                    self::_error( $errorMsg );
-                }
+                // Class file was not found
+                return false;
             }
-            
-            // Adds the class to the loaded classes array
-            $this->_loadedClasses[ $className ] = $classPath;
-            
-            // Class was successfully loaded
-            return true;
         }
         
-        // Class file was not found
-        return false;
+        // Checks if the requested class is an interface
+        if( substr( $className, -9 ) === 'Interface' ) {
+            
+            // Checks if the interface is defined
+            if( !interface_exists( $className ) ) {
+                
+                // Error message
+                $errorMsg = 'The interface '
+                          . $className
+                          . ' is not defined in file '
+                          . $classPath;
+                
+                // The class is not defined
+                self::_error( $errorMsg );
+            }
+            
+        } else {
+            
+            // Checks if the class is defined
+            if( !class_exists( $className ) ) {
+                
+                // Error message
+                $errorMsg = 'The class '
+                          . $className
+                          . ' is not defined in file '
+                          . $classPath;
+                
+                // The class is not defined
+                self::_error( $errorMsg );
+            }
+            
+            // Checks if the PHP_COMPATIBLE constant is defined
+            if( !defined( $className . '::PHP_COMPATIBLE' ) ) {
+                
+                // Error message
+                $errorMsg = 'The requested constant PHP_COMPATIBLE is not defined in class '
+                          . $className;
+                
+                // Class does not respect the project conventions
+                self::_error( $errorMsg );
+            }
+            
+            // Gets the minimal PHP version required (eval() is required as late static bindings are implemented only in PHP 5.3)
+            eval( '$phpCompatible = ' . $className . '::PHP_COMPATIBLE;' );
+            
+            // Checks the PHP version
+            if( version_compare( PHP_VERSION, $phpCompatible, '<' ) ) {
+                
+                // Error message
+                $errorMsg = 'Class '
+                          . $className
+                          . ' requires PHP version '
+                          . $phpCompatible
+                          . ' (actual version is '
+                          . PHP_VERSION
+                          . ')';
+                
+                // PHP version is too old
+                self::_error( $errorMsg );
+            }
+        }
+        
+        // Adds the class to the loaded classes array
+        $this->_loadedClasses[ $className ] = $classPath;
+        
+        // Class was successfully loaded
+        return true;
     }
     
     /**
@@ -499,7 +524,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
         $protocol = ( $protocol ) ? $protocol : 'HTTP/1.1';
         
         // Query string for the build script
-        $query    = 'woops[aop][buildClass]=' . urlencode( $className );
+        $query    = 'woops[classCache][className]=' . urlencode( $className );
         
         // Error containers
         $errno    = 0;
@@ -572,10 +597,10 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             }
             
             // Checks for the AOP build status header
-            if( substr( $line, 0, 25 ) === 'X-WOOPS-AOP-BUILD-STATUS:' ) {
+            if( substr( $line, 0, 33 ) === 'X-WOOPS-CLASS-CACHE-BUILD-STATUS:' ) {
                 
                 // Sets the build state
-                $buildState = substr( $line, 26, -2 );
+                $buildState = substr( $line, 34, -2 );
                 
                 // No need to contine reading the response
                 break;

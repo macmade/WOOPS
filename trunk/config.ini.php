@@ -19,36 +19,43 @@
 [database]
 
 ; The database driver to use, with PDO
+; 
 ; @type string
 ; @required
 driver      = mysql
 
 ; The database host
+; 
 ; @type string
 ; @required
 host        = localhost
 
 ; The database port
+; 
 ; @type     int
 ; @required
 port        = 3306
 
 ; The database username
+; 
 ; @type string
 ; @required
 user        = woops
 
 ; The database user password
+; 
 ; @type string
 ; @required
 password    = woops
 
 ; The name of the database to use
+; 
 ; @type string
 ; @required
 name        = woops
 
 ; The prefix to use for all WOOPS tables
+; 
 ; @type string
 tablePrefix = WOOPS_
 
@@ -59,6 +66,7 @@ tablePrefix = WOOPS_
 [time]
 
 ; The default timezone
+; 
 ; @type string
 ; @required
 timezone = Europe/Zurich
@@ -70,6 +78,7 @@ timezone = Europe/Zurich
 [lang]
 
 ; The default language
+; 
 ; @type string
 ; @required
 defaultLanguage = en
@@ -81,8 +90,25 @@ defaultLanguage = en
 [xhtml]
 
 ; Format and indent the generated XHTML code
+; 
 ; @type boolean
 format = On
+
+; ##############################################################################
+; # Class cache related settings                                               #
+; ##############################################################################
+
+[classCache]
+
+; Allows WOOPS classes to be stored in the class cache directory.
+; 
+; @type boolean
+enable   = On
+
+; Optimizes the PHP source code before putting classes in the cache.
+; 
+; @type boolean
+optimize = On
 
 ; ##############################################################################
 ; # AOP related settings                                                       #
@@ -90,7 +116,11 @@ format = On
 
 [aop]
 
-; Allows the generation of AOP classes in the class cache. Only turn off on production boxes!
+; Allows the generation of AOP classes. Only turn off on production boxes!
+; 
+; Note that if this settings is on, the class cache option will automatically
+; be enabled.
+; 
 ; @type boolean
 enable = On
 
@@ -101,6 +131,7 @@ enable = On
 [error]
 
 ; The error reporting level
+; 
 ; @type     select
 ; @option   development
 ; @option   production

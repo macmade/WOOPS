@@ -34,19 +34,29 @@ class Woops_Core_Aop_Class_Builder
     
     /**
      * The regular expression used to find the public member methods of  class,
-     * even tha abstract ones.
+     * even the abstract ones.
      */
     const PUBLIC_METHODS_REGEXP = '/([\s\t]*public\s+function\s+)([^_(]+)/';
     
     /**
+     * Wether the static variables are set or not
+     */
+    private static $_hasStatic  = false;
+    
+    /**
+     * The string utilities
+     */
+    protected static $_str      = NULL;
+    
+    /**
      * The PHP code of the class
      */
-    protected $_classCode    = '';
+    protected $_classCode       = '';
     
     /**
      * The AOP version of the class PHP code
      */
-    protected $_classAopCode = '';
+    protected $_classAopCode    = '';
     
     /**
      * Class constructor
@@ -56,6 +66,13 @@ class Woops_Core_Aop_Class_Builder
      */
     public function __construct( $className )
     {
+        // Checks if the static variables are set
+        if( !self::$_hasStatic ) {
+            
+            // Sets the static variables
+            self::_setStaticVars();
+        }
+        
         // Checks if the class exists
         if( !class_exists( $className ) ) {
             
@@ -100,5 +117,19 @@ class Woops_Core_Aop_Class_Builder
     public function __toString()
     {
         return $this->_classAopCode;
+    }
+    
+    /**
+     * Sets the needed static variables
+     * 
+     * @return  NULL
+     */
+    private static function _setStaticVars()
+    {
+        // Gets the instance of the string utilities
+        self::$_str       = Woops_String_Utils::getInstance();
+        
+        // Static variables are set
+        self::$_hasStatic = true;
     }
 }
