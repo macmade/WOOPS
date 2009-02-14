@@ -64,7 +64,7 @@
 				</div>
 				<div class="clearer"></div>
 				<div>
-					<h2>PHP configuration</h2>
+					<h2>PHP configuration / recommendations</h2>
 					<div class="infos">
 						<div>
 							This section is mainly informative.<br />

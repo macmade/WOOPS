@@ -306,6 +306,16 @@ DIV#w3c IMG {
     margin-bottom:          10px;
 }
 
+.about {
+    font-size:              10px;
+    margin-top:             10px;
+    padding-left:           20px;
+    padding-top:            2px;
+    background-image:       url( 'help.png' );
+    background-repeat:      no-repeat;
+    background-position:    0px 0px;
+}
+
 .check-error .status {
     color:                  #AA0000;
 }
