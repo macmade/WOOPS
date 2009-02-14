@@ -20,13 +20,13 @@ define( 'WOOPS_AOP_MODE_OFF', true );
 require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'init.inc.php' );
 
 // Gets incomming GET variables
-$GETVARS = Woops_Core_Request_Getter::getInstance()->woops;
+$GETVARS = Woops_Core_Request_Getter::getInstance()->aop;
 
 // Checks the GET variables
-if( $GETVARS && isset( $GETVARS[ 'aop' ][ 'buildClass' ] ) ) {
+if( $GETVARS && isset( $GETVARS[ 'buildClass' ] ) ) {
     
     // Name and path of the class to build
-    $CLASSNAME = $GETVARS[ 'aop' ][ 'buildClass' ];
+    $CLASSNAME = $GETVARS[ 'buildClass' ];
     
     // Path to the cache directory
     $CACHEDIR  = Woops_Core_Env_Getter::getInstance()->getPath( 'cache/classes/' );
