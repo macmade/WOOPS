@@ -89,6 +89,22 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
      */
     private function __construct()
     {
+        // Checks the PHP version required to run this class
+        if( version_compare( PHP_VERSION, self::PHP_COMPATIBLE, '<' ) ) {
+            
+            // Error message
+            $errorMsg = 'Class '
+                      . __CLASS__
+                      . ' requires PHP version '
+                      . self::PHP_COMPATIBLE
+                      . ' (actual version is '
+                      . PHP_VERSION
+                      . ')';
+            
+            // PHP version is too old
+            self::_error( $errorMsg );
+        }
+        
         // Stores the directory containing the WOOPS classes
         $this->_classDir = realpath(
             dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
