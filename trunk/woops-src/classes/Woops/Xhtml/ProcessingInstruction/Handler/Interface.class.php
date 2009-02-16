@@ -27,5 +27,5 @@ interface Woops_Xhtml_ProcessingInstruction_Handler_Interface
      * @param   
      * @return  
      */
-    function process( stdClass $options );
+    public function process( stdClass $options );
 }
