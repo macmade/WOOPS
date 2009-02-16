@@ -634,10 +634,9 @@ abstract class Woops_Core_Aop_Advisor
      * 
      * @param   mixed   The callback to invoke (must be a valid PHP callback)
      * @param   array   The arguments to pass to the callback
-     * @param   string  The joint point for which the callback is executed (used for the error messages)
      * @return  mixed   The return value of the callback
      */
-    private static function _invoke( $callback, array $args = array(), $joinPoint = '' )
+    private static function _invoke( $callback, array $args = array() )
     {
         // Gets the number of arguments to pass to the callbak
         $argsCount = count( $args );
