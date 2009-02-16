@@ -291,7 +291,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             }
             
             // Adds the WOOPS version to the HTTP headers
-            header( 'X-WOOPS-VERSION: ' . Woops_Core_Informations::WOOPS_VERSION );
+            header( 'X-WOOPS-VERSION: ' . Woops_Core_Informations::WOOPS_VERSION . '-' . Woops_Core_Informations::WOOPS_VERSION_SUFFIX );
         }
         
         // Returns the unique instance
@@ -383,6 +383,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             // Checks if we are loading a module class or not
             if( $moduleClass ) {
                 
+                // Gets the path to the module class
                 $modName   = substr( $className, 10, strpos( $className, '_', 10 ) - 10 );
                 $modPath   = $this->_modManager->getModulePath( $modName );
                 $classPath = $modPath
@@ -402,7 +403,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
             // Checks if the class file exists
             if( file_exists( $classPath ) ) {
                 
-                // Checks if we must use a cached version or not (cache is disabled for the classes form the 'Core' package)
+                // Checks if we must use a cached version or not
                 if( !$this->_classCache || defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) ) {
                     
                     // Includes the original class file
