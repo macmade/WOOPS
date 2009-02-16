@@ -28,28 +28,119 @@ class Woops_Php_Source_Optimizer
     /**
      * The optimized PHP code
      */
-    protected $_optimizedCode = '';
+    protected $_optimizedCode       = '';
+    
+    /**
+     * The names of the PHP superglobal variables
+     */
+    protected static $_superGlobals = array(
+        '$_COOKIE'  => true,
+        '$_ENV'     => true,
+        '$_FILES'   => true,
+        '$_GET'     => true,
+        '$_POST'    => true,
+        '$_REQUEST' => true,
+        '$_SERVER'  => true,
+        '$_SESSION' => true,
+        '$GLOBALS'  => true
+    );
     
     /**
      * Class constructor
      * 
      * @param   string  The PHP code to optimize
+     * @param   boolean Wheter to rename local variables with the shortest possible name
      * @return  NULL
      */
-    public function __construct( $source )
+    public function __construct( $source, $renameVariables = true )
     {
         // Gets the code tokens
-        $tokens = token_get_all( ( string )$source );
+        $tokens      = token_get_all( ( string )$source );
         
-        // Storage
-        $codeLines = array();
-        $lastToken = false;
+        // Storage for the code lines to keep
+        $codeLines   = array();
+        
+        // Global variables inside a function
+        $funcGlobals = array();
+        
+        // Local variables inside a function
+        $funcVars    = array();
+        
+        // Last processed token
+        $lastToken   = false;
+        
+        // Flag to know if we are inside a function
+        $inFunc      = false;
+        
+        // Flag to know if we are in a global variables declaration
+        $inGlobal    = false;
+        
+        // Flag to know if we are in an abstract function declaration
+        $inAbstract  = false;
+        
+        // Block level, when inside a function
+        $level       = 0;
+        
+        // Count for the local variables (when inside function)
+        $varCount    = 0;
         
         // Process each token
         foreach( $tokens as $key => $token ) {
             
             // Checks if the token is an array
             if( is_array( $token ) ) {
+                
+                // Checks if we are declaring an abstract function
+                if( $token[ 0 ] === T_ABSTRACT ) {
+                    
+                    $inAbstract = true;
+                }
+                
+                // Checks if we are declaring a function
+                if( $token[ 0 ] === T_FUNCTION ) {
+                    
+                    $inFunc      = true;
+                    $funcGlobals = array();
+                    $funcVars    = array();
+                    $varCount    = 0;
+                }
+                
+                // Checks if we are declaring global variables inside a function
+                if( $inFunc && $token[ 0 ] === T_GLOBAL ) {
+                    
+                    $inGlobal = true;
+                }
+                
+                // Checks if we are declaring a global variable
+                if( $inGlobal && $token[ 0 ] === T_VARIABLE ) {
+                    
+                    $funcGlobals[ $token[ 1 ] ] = true;
+                }
+                
+                // Checks if we are using a variable, and it's local, so we can rename it
+                if( $inFunc
+                    && !$inGlobal
+                    && $token[ 0 ] === T_VARIABLE
+                    && !isset( self::$_superGlobals[ $token[ 1 ] ] )
+                    && !isset( self::$_superGlobals[ $token[ 1 ] ] )
+                    && $token[ 1 ] !== '$this'
+                    && ( !is_array( $lastToken ) || $lastToken[ 0 ] !== T_PAAMAYIM_NEKUDOTAYIM )
+                ) {
+                    // Has the variable been renamed already?
+                    if( isset( $funcVars[ $token[ 1 ] ] ) ) {
+                        
+                        // Yes, gets the sort name
+                        $token[ 1 ] = $funcVars[ $token[ 1 ] ];
+                        
+                    } else {
+                        
+                        // No, generates a new name, and stores it
+                        $varName                 = $this->_generateVarName( $varCount );
+                        $funcVars[ $token[ 1 ] ] = '$' . $varName;
+                        $token[ 1 ]              = '$' . $varName;
+                        $varCount++;
+                    }
+                }
                 
                 // Do not process comments or whitespace
                 if( $token[ 0 ] === T_COMMENT
@@ -162,7 +253,52 @@ class Woops_Php_Source_Optimizer
                 // Stores the code for the current token
                 $codeLines[] = $token[ 1 ];
                 
+                // Removes spaces on a cast
+                if( $token[ 0 ] === T_ARRAY_CAST
+                    || $token[ 0 ] === T_BOOL_CAST
+                    || $token[ 0 ] === T_DOUBLE_CAST
+                    || $token[ 0 ] === T_INT_CAST
+                    || $token[ 0 ] === T_OBJECT_CAST
+                    || $token[ 0 ] === T_STRING_CAST
+                    || $token[ 0 ] === T_UNSET_CAST
+                ) {
+                    $token[ 1 ] = str_replace( ' ', '', $token[ 1 ] );
+                }
+                
             } else {
+                
+                // Checks for the end of the global variables declaration
+                if( $inGlobal && $token === ';' ) {
+                    
+                    $inGlobal = false;
+                }
+                
+                // Checks for the end of an abstract function declaration
+                if( $inAbstract && $inFunc && $token === ';' ) {
+                    
+                    $inAbstract = false;
+                    $inFunc     = false;
+                }
+                
+                // If inside a function, detect the start of a code block
+                if( $inFunc && $token === '{' ) {
+                    
+                    $level++;
+                }
+                
+                // If inside a function, detect the start of a code block
+                if( $inFunc && $token === '}' ) {
+                    
+                    $level--;
+                    
+                    // Checks the code block level
+                    if( $level === 0 ) {
+                        
+                        // End of the current function
+                        $inFunc = false;
+                        $level  = 0;
+                    }
+                }
                 
                 // Removes whitespace before some characters
                 if( is_array( $lastToken )
@@ -181,7 +317,19 @@ class Woops_Php_Source_Optimizer
                     ||   $token === '^' 
                     ||   $token === '?' 
                     ||   $token === ':' 
-                    ||   $token === ';' )
+                    ||   $token === ';' 
+                    ||   $token === '+' 
+                    ||   $token === '-' 
+                    ||   $token === '/' 
+                    ||   $token === '%' 
+                    ||   $token === '>' 
+                    ||   $token === '<' 
+                    ||   $token === '>>'
+                    ||   $token === '<<'
+                    ||   $token === '++'
+                    ||   $token === '--'
+                    ||   $token === '!'
+                    ||   $token === ',' )
                 ) {
                     array_pop( $codeLines );
                 }
@@ -206,5 +354,26 @@ class Woops_Php_Source_Optimizer
     public function __toString()
     {
         return $this->_optimizedCode;
+    }
+    
+    /**
+     * Generates the shortest variable name, with a-z and A-Z
+     * 
+     * @param   int     The number of the variable
+     * @return  string  The name of the variable
+     */
+    protected function _generateVarName( $int )
+    {
+        // Checks if we'll have to use more that a character
+        if( $int < 52 ) {
+            
+            // Single character
+            return ( ( ( $int = $int % 52 ) > 25 ) ? chr( 39 + $int ) : chr( 97 + $int ) );
+            
+        } else {
+            
+            // Multiple characters
+            return $this->_generateVarName( ( $int / 52 ) - 1 ) . ( ( ( $int = $int % 52 ) > 25 ) ? chr( 39 + $int ) : chr( 97 + $int ) );
+        }
     }
 }
