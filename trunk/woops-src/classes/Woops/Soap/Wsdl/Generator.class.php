@@ -21,6 +21,11 @@
 class Woops_Soap_Wsdl_Generator
 {
     /**
+     * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
+     */
+    const PHP_COMPATIBLE = '5.2.0';
+    
+    /**
      * The URI of the WSDL namespace
      */
     const NAMESPACE_WSDL          = 'http://schemas.xmlsoap.org/wsdl/';
@@ -44,6 +49,16 @@ class Woops_Soap_Wsdl_Generator
      * The URI of the XSD namespace
      */
     const NAMESPACE_XSD           =  'http://www.w3.org/2001/XMLSchema';
+    
+    /**
+     * Wether the static variables are set or not
+     */
+    private static $_hasStatic    = false;
+    
+    /**
+     * The WOOPS environment object
+     */
+    protected static $_env        = NULL;
     
     /**
      * The instance of the XML writer
@@ -83,17 +98,28 @@ class Woops_Soap_Wsdl_Generator
     /**
      * Class constructor
      * 
-     * @param   mixed   The class that will handle the SOAP requests, either as a string or as an object
-     * @param   string  The URL of the web service
+     * @param   mixed                           The class that will handle the SOAP requests, either as a string or as an object
+     * @param   string                          The URL of the web service
      * @return  NULL
+     * @throws  Soap_Wsdl_Generator_Exception   If the XmlWriter class is not available
      */
     public function __construct( $handlerClass, $url )
     {
+        // Checks if the static variables are set
+        if( !self::$_hasStatic ) {
+            
+            // Sets the static variables
+            self::_setStaticVars();
+        }
+        
         // Checks for the XmlWriter class
-        if( !class_exists( 'XmlWriter' ) ) {
+        if( !class_exists( 'XMLWriter' ) ) {
             
             // Error - XmlWriter is not available
-            throw new Soap_Wsdl_Generator_Exception( 'The XmlWriter class is not available', Soap_Wsdl_Generator_Exception::EXCEPTION_NO_XML_WRITER );
+            throw new Soap_Wsdl_Generator_Exception(
+                'The XMLWriter class is not available',
+                Soap_Wsdl_Generator_Exception::EXCEPTION_NO_XML_WRITER
+            );
         }
         
         // Checks if we have an object or a class name
@@ -108,7 +134,7 @@ class Woops_Soap_Wsdl_Generator
         } else {
             
             // Creates the reflection object
-            $this->_reflection = new ReflectionClass( $handlerClass );
+            $this->_reflection = Woops_Core_Reflection_Class::getInstance( $handlerClass );
             
             // Stores the web service name
             $this->_name       = $handlerClass;
@@ -118,7 +144,7 @@ class Woops_Soap_Wsdl_Generator
         $this->_url            = $url;
         
         // Stores the web service target namespace
-        $this->_tns            = ( isset( $_SERVER[ 'SSL' ] ) && $_SERVER[ 'SSL' ] ) ? 'https://' . $_SERVER[ 'HTTP_HOST' ] . '/' . $this->_name : 'http://' . $_SERVER[ 'HTTP_HOST' ] . '/' . $this->_name;
+        $this->_tns            = ( self::$_env->SSL ) ? 'https://' . self::$_env->HTTP_HOST . '/' . $this->_name : 'http://' . self::$_env->HTTP_HOST . '/' . $this->_name;
         
         // Gets and stores the available SOAP procedures
         $this->_soapProcedures = $this->_getSoapProcedures();
@@ -149,7 +175,24 @@ class Woops_Soap_Wsdl_Generator
     }
     
     /**
+     * Sets the needed static variables
      * 
+     * @return  NULL
+     */
+    private static function _setStaticVars()
+    {
+        // Gets the instance of the number utilities
+        self::$_env       = Woops_Core_Env_Getter::getInstance();
+        
+        // Static variables are set
+        self::$_hasStatic = true;
+    }
+    
+    /**
+     * Gets the available SOAP procedures (public member methods of the handler
+     * class)
+     * 
+     * @return  array   An array with the available SOAP procedures
      */
     protected function _getSoapProcedures()
     {
@@ -185,7 +228,9 @@ class Woops_Soap_Wsdl_Generator
     }
     
     /**
+     * Creates a WSDL file for the handler class
      * 
+     * @return  NULL
      */
     protected function _createWsdl()
     {

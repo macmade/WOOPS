@@ -30,4 +30,5 @@ final class Woops_Soap_Server_Exception extends Woops_Core_Exception_Base
      */
     const EXCEPTION_NO_SOAP    = 0x01;
     const EXCEPTION_NO_INI_SET = 0x02;
+    const EXCEPTION_BAD_METHOD = 0x03;
 }

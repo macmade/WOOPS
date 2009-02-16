@@ -60,6 +60,68 @@ class Woops_Soap_Server
     }
     
     /**
+     * PHP method calls overloading
+     * 
+     * This method will reroute all the call on this object to the SOAP server
+     * object.
+     * 
+     * @param   string                      The name of the called method
+     * @param   array                       The arguments for the called method
+     * @return  mixed                       The result of the SOAP server method called
+     * @throws  Woops_Soap_Server_Exception If the called method does not exist
+     */
+    public function __call( $name, array $args = array() )
+    {
+        // Checks if the method can be called
+        if( !is_callable( array( $this->_soapServer, $name ) ) ) {
+            
+            // Called method does not exist
+            throw new Woops_Soap_Server_Exception(
+                'The method \'' . $name . '\' cannot be called on the PDO object',
+                Woops_Soap_Server_Exception::EXCEPTION_BAD_METHOD
+            );
+        }
+        
+        // Gets the number of arguments
+        $argCount = count( $args );
+        
+        // We won't use call_user_func_array, as it cannot return references
+        switch( $argCount ) {
+            
+            case 1:
+                
+                return $this->_soapServer->$name( $args[ 0 ] );
+                break;
+            
+            case 2:
+                
+                return $this->_soapServer->$name( $args[ 0 ], $args[ 1 ] );
+                break;
+            
+            case 3:
+                
+                return $this->_soapServer->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ] );
+                break;
+            
+            case 4:
+                
+                return $this->_soapServer->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ] );
+                break;
+                break;
+            
+            case 5:
+                
+                return $this->_soapServer->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ] );
+                break;
+            
+            default:
+                
+                return $this->_soapServer->$name();
+                break;
+        }
+    }
+    
+    /**
      * Sets the WSDL cache property (PHP configuration value)
      * 
      * @param   boolean Wether to cache the WSDL files
@@ -98,56 +160,5 @@ class Woops_Soap_Server
     {
         $this->_soapServer->setClass( $className, $args );
         $this->_soapServer->handle();
-    }
-    
-    /**
-     * Gets the available SOAP procedures
-     * 
-     * @return  array   An array with the available SOAP procedures
-     */
-    public function getFunctions()
-    {
-        return $this->_soapServer->getFunctions();
-    }
-    
-    /**
-     * Sets the persistence mode of the SOAP server
-     * 
-     * @param   int     One of the SOAP_PERSISTENCE_XXX constants
-     * @return  NULL
-     */
-    public function setPersistence( $mode )
-    {
-        $this->_soapServer->setPersistence( $mode );
-    }
-    
-    /**
-     * Issues a SoapServer fault indicating an error
-     * 
-     * @param   string  The error code
-     * @param   string  The error message
-     * @param   string  
-     * @param   mixed   
-     * @param   string  
-     * @return  NULL
-     */
-    public function fault( $code, $string, $actor = false, $details = false, $name = false )
-    {
-        if( $actor === false ) {
-            
-            $this->_soapServer->setPersistence( $code, $string );
-            
-        } elseif( $details === false ) {
-            
-            $this->_soapServer->setPersistence( $code, $string, $actor );
-            
-        } elseif( $name === false ) {
-            
-            $this->_soapServer->setPersistence( $code, $string, $actor, $details );
-            
-        } else {
-            
-            $this->_soapServer->setPersistence( $code, $string, $actor, $details, $name );
-        }
     }
 }
