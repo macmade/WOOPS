@@ -213,11 +213,17 @@ class Woops_Php_Source_Optimizer
         // Flag to know if we are in an abstract function declaration
         $inAbstract  = false;
         
+        // Flag to know if we are in a double quoted string declaration
+        $inString    = false;
+        
         // Block level, when inside a function
         $level       = 0;
         
         // Count for the local variables (when inside function)
         $varCount    = 0;
+        
+        // Number of processed tokens
+        $tokenCount  = 0;
         
         // Process each token
         foreach( $tokens as $key => $token ) {
@@ -252,8 +258,9 @@ class Woops_Php_Source_Optimizer
                     $funcGlobals[ $token[ 1 ] ] = true;
                 }
                 
-                // Checks if we are using a variable, and it's local, so we can rename it
-                if( $inFunc
+                // Checks if we are using a variable, and if it's local, so we can rename it
+                if( $renameVariables
+                    && $inFunc
                     && !$inGlobal
                     && $token[ 0 ] === T_VARIABLE
                     && !isset( self::$_superGlobals[ $token[ 1 ] ] )
@@ -274,6 +281,24 @@ class Woops_Php_Source_Optimizer
                         $funcVars[ $token[ 1 ] ] = '$' . $varName;
                         $token[ 1 ]              = '$' . $varName;
                         $varCount++;
+                    }
+                }
+                
+                // Checks if we are inside a double quoted string and using a variable
+                if( $inString && $token[ 0 ] === T_VARIABLE ) {
+                    
+                    // Checks if the variable is the first element of the double quoted string
+                    if( !is_array( $lastToken ) && $lastToken === '\'' ) {
+                        
+                        // Removes the start of the string, and adds the variable with concatenation
+                        array_pop( $codeLines );
+                        $tokenCount--;
+                        $token[ 1 ] = $token[ 1 ] . ' . \'';
+                        
+                    } else {
+                        
+                        // Use concatenation
+                        $token[ 1 ] = '\' . ' . $token[ 1 ] . ' . \'';
                     }
                 }
                 
@@ -312,6 +337,7 @@ class Woops_Php_Source_Optimizer
                     && $lastToken[ 0 ] === T_WHITESPACE
                 ) {
                     array_pop( $codeLines );
+                    $tokenCount--;
                 }
                 
                 // Do not keep a whitespace after the PHP open tag
@@ -329,6 +355,7 @@ class Woops_Php_Source_Optimizer
                     && $lastToken[ 0 ] === T_WHITESPACE
                 ) {
                     array_pop( $codeLines );
+                    $tokenCount--;
                 }
                 
                 // Do not keep a whitespace after the PHP assignation and comparison tokens
@@ -383,6 +410,7 @@ class Woops_Php_Source_Optimizer
                     ||   $token[ 0 ] === T_IS_NOT_IDENTICAL )
                 ) {
                     array_pop( $codeLines );
+                    $tokenCount--;
                 }
                 
                 // Stores the code for the current token
@@ -435,6 +463,33 @@ class Woops_Php_Source_Optimizer
                     }
                 }
                 
+                // Checks if we are in a double quoted string declaration
+                if( $token === '"' ) {
+                    
+                    // Replaces by a single quote
+                    $token = '\'';
+                    
+                    // Beginning or end of the double quoted string?
+                    if( $inString ) {
+                        
+                        // Checks if the last token was a variable inside the string
+                        if( is_array( $lastToken ) && $lastToken[ 0 ] === T_VARIABLE ) {
+                            
+                            // Removes the last concatenation
+                            $codeLines[ $tokenCount - 1 ] = substr( $codeLines[ $tokenCount - 1 ], 0, -4 );
+                            $token                  = '';
+                        }
+                        
+                        // End of the string
+                        $inString = false;
+                        
+                    } else {
+                        
+                        // Beginning of the string
+                        $inString = true;
+                    }
+                }
+                
                 // Removes whitespace before some characters
                 if( is_array( $lastToken )
                     && $lastToken[ 0 ] === T_WHITESPACE
@@ -467,6 +522,7 @@ class Woops_Php_Source_Optimizer
                     ||   $token === ',' )
                 ) {
                     array_pop( $codeLines );
+                    $tokenCount--;
                 }
                 
                 // Stores the code
@@ -475,6 +531,9 @@ class Woops_Php_Source_Optimizer
             
             // Stores the last token
             $lastToken = $token;
+            
+            // Increases the token count
+            $tokenCount++;
         }
         
         // Stores the optimized code
