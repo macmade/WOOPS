@@ -316,11 +316,34 @@ class Woops_Php_Source_Optimizer
                     continue;
                 }
                 
-                // Do not keep carriage return after the PHP open tag
-                if( $token[ 0 ] === T_OPEN_TAG
-                    || $token[ 0 ] === T_OPEN_TAG_WITH_ECHO
-                ) {
-                    $token[ 1 ] = trim( $token[ 1 ] ) . ' ';
+                // PHP open tag normalization
+                if( $token[ 0 ] === T_OPEN_TAG ) {
+                    
+                    // Ensures we are not using ASP tags, nor short tags, and removes un-needed whitespaces
+                    $token[ 1 ] = '<?php ';
+                }
+                
+                // PHP open tag with echo normalization
+                if( $token[ 0 ] === T_OPEN_TAG_WITH_ECHO ) {
+                    
+                    // Adds a normalized PHP tag, and adds a call to the echo() function
+                    $token[ 1 ] = '<?php echo ';
+                }
+                
+                // Converts all numbers to their decimal value
+                if( $token[ 0 ] === T_LNUMBER ) {
+                    
+                    // Detects hexadecimal or octal notations
+                    if( substr( $token[ 1 ], 0, 2 ) === '0x' ) {
+                        
+                        // Hexadecimal
+                        $token[ 1 ] = hexdec( $token[ 1 ] );
+                        
+                    } elseif( substr( $token[ 1 ], 0, 1 ) === '0' ) {
+                        
+                        // Octal
+                        $token[ 1 ] = octdec( $token[ 1 ] );
+                    }
                 }
                 
                 // Do not keep a whitespace after a string
