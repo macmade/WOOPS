@@ -46,6 +46,16 @@ class Woops_Php_Source_Optimizer
     );
     
     /**
+     * The allowed characters for the generation of variable names
+     */
+    protected static $_varNameChars = array(
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    );
+    
+    /**
      * Class constructor
      * 
      * @param   string  The PHP code to optimize
@@ -56,6 +66,131 @@ class Woops_Php_Source_Optimizer
     {
         // Gets the code tokens
         $tokens      = token_get_all( ( string )$source );
+        
+        # ----------------------------------------------------------------------
+        # List of the available PHP tokens:
+        # 
+        # - T_ABSTRACT
+        # - T_AND_EQUAL
+        # - T_ARRAY
+        # - T_ARRAY_CAST
+        # - T_AS
+        # - T_BAD_CHARACTER
+        # - T_BOOL_CAST
+        # - T_BOOLEAN_AND
+        # - T_BOOLEAN_OR
+        # - T_BREAK
+        # - T_CASE
+        # - T_CATCH
+        # - T_CHARACTER
+        # - T_CLASS
+        # - T_CLASS_C
+        # - T_CLONE
+        # - T_CLOSE_TAG
+        # - T_COMMENT
+        # - T_CONCAT_EQUAL
+        # - T_CONST
+        # - T_CONSTANT_ENCAPSED_STRING
+        # - T_CONTINUE
+        # - T_CURLY_OPEN
+        # - T_DEC
+        # - T_DECLARE
+        # - T_DEFAULT
+        # - T_DIV_EQUAL
+        # - T_DNUMBER
+        # - T_DO
+        # - T_DOC_COMMENT
+        # - T_DOLLAR_OPEN_CURLY_BRACES
+        # - T_DOUBLE_ARROW
+        # - T_DOUBLE_CAST
+        # - T_DOUBLE_COLON
+        # - T_ECHO
+        # - T_ELSE
+        # - T_ELSEIF
+        # - T_EMPTY
+        # - T_ENCAPSED_AND_WHITESPACE
+        # - T_END_HEREDOC
+        # - T_ENDDECLARE
+        # - T_ENDFOR
+        # - T_ENDFOREACH
+        # - T_ENDIF
+        # - T_ENDSWITCH
+        # - T_ENDWHILE
+        # - T_EVAL
+        # - T_EXIT
+        # - T_EXTENDS
+        # - T_FILE
+        # - T_FINAL
+        # - T_FOR
+        # - T_FOREACH
+        # - T_FUNC_C
+        # - T_FUNCTION
+        # - T_GLOBAL
+        # - T_HALT_COMPILER
+        # - T_IF
+        # - T_IMPLEMENTS
+        # - T_INC
+        # - T_INCLUDE
+        # - T_INCLUDE_ONCE
+        # - T_INLINE_HTML
+        # - T_INSTANCEOF
+        # - T_INT_CAST
+        # - T_INTERFACE
+        # - T_IS_EQUAL
+        # - T_IS_GREATER_OR_EQUAL
+        # - T_IS_IDENTICAL
+        # - T_IS_NOT_EQUAL
+        # - T_IS_NOT_IDENTICAL
+        # - T_IS_SMALLER_OR_EQUAL
+        # - T_ISSET
+        # - T_LINE
+        # - T_LIST
+        # - T_LNUMBER
+        # - T_LOGICAL_AND
+        # - T_LOGICAL_OR
+        # - T_LOGICAL_XOR
+        # - T_MINUS_EQUAL
+        # - T_ML_COMMENT (deprecated)
+        # - T_MOD_EQUAL
+        # - T_MUL_EQUAL
+        # - T_NEW
+        # - T_NUM_STRING
+        # - T_OBJECT_CAST
+        # - T_OBJECT_OPERATOR
+        # - T_OLD_FUNCTION (deprecated)
+        # - T_OPEN_TAG
+        # - T_OPEN_TAG_WITH_ECHO
+        # - T_OR_EQUAL
+        # - T_PAAMAYIM_NEKUDOTAYIM
+        # - T_PLUS_EQUAL
+        # - T_PRINT
+        # - T_PRIVATE
+        # - T_PROTECTED
+        # - T_PUBLIC
+        # - T_REQUIRE
+        # - T_REQUIRE_ONCE
+        # - T_RETURN
+        # - T_SL
+        # - T_SL_EQUAL
+        # - T_SR
+        # - T_SR_EQUAL
+        # - T_START_HEREDOC
+        # - T_STATIC
+        # - T_STRING
+        # - T_STRING_CAST
+        # - T_STRING_VARNAME
+        # - T_SWITCH
+        # - T_THROW
+        # - T_TRY
+        # - T_UNSET
+        # - T_UNSET_CAST
+        # - T_USE
+        # - T_VAR
+        # - T_VARIABLE
+        # - T_WHILE
+        # - T_WHITESPACE
+        # - T_XOR_EQUAL
+        # ----------------------------------------------------------------------
         
         // Storage for the code lines to keep
         $codeLines   = array();
@@ -368,12 +503,12 @@ class Woops_Php_Source_Optimizer
         if( $int < 52 ) {
             
             // Single character
-            return ( ( ( $int = $int % 52 ) > 25 ) ? chr( 39 + $int ) : chr( 97 + $int ) );
+            return self::$_varNameChars[ $int % 52 ];
             
         } else {
             
             // Multiple characters
-            return $this->_generateVarName( ( $int / 52 ) - 1 ) . ( ( ( $int = $int % 52 ) > 25 ) ? chr( 39 + $int ) : chr( 97 + $int ) );
+            return $this->_generateVarName( ( $int / 52 ) - 1 ) . self::$_varNameChars[ $int % 52 ];
         }
     }
 }
