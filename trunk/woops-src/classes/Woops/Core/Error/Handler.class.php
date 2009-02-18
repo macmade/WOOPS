@@ -45,6 +45,11 @@ final class Woops_Core_Error_Handler
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * 
+     */
+    private static $_disabledErrors = 0;
+    
+    /**
      * Class constructor
      * 
      * The class constructor is private as all methods from this class are
@@ -60,9 +65,28 @@ final class Woops_Core_Error_Handler
      */
     public static function handleError( $code , $message, $file = '', $line = 0, array $context = array() )
     {
-        throw new Woops_Core_Php_Error_Exception(
-            Woops_Core_Exception_Base::getExceptionString( 'Woops_Core_Php_Error_Exception', $code ) . ': ' . $message,
-            $code
-        );
+        if( !( $code & self::$_disabledErrors ) ) {
+            
+            throw new Woops_Core_Php_Error_Exception(
+                Woops_Core_Exception_Base::getExceptionString( 'Woops_Core_Php_Error_Exception', $code ) . ': ' . $message,
+                $code
+            );
+        }
+    }
+    
+    /**
+     * 
+     */
+    public static function disableErrorReporting( $type )
+    {
+        self::$_disabledErrors |= $type;
+    }
+    
+    /**
+     * 
+     */
+    public static function resetErrorReporting()
+    {
+        self::$_disabledErrors = 0;
     }
 }
