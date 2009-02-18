@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * Exception class for the Woops_Core_Aop_Advisor class
+ * Exception class for the Woops_Core_Callback_Helper class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Core.Aop.Advisor
  */
-final class Woops_Core_Aop_Advisor_Exception extends Woops_Core_Exception_Base
+final class Woops_Core_Callback_Helper_Exception extends Woops_Core_Exception_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -28,10 +28,5 @@ final class Woops_Core_Aop_Advisor_Exception extends Woops_Core_Exception_Base
     /**
      * Error codes for the exceptions
      */
-    const EXCEPTION_NO_JOINPOINT              = 0x01;
-    const EXCEPTION_NO_JOINPOINT_METHOD       = 0x02;
-    const EXCEPTION_INVALID_ADVICE_TYPE       = 0x03;
-    const EXCEPTION_JOINPOINT_EXISTS          = 0x04;
-    const EXCEPTION_ADVICE_TYPE_NOT_PERMITTED = 0x05;
-    const EXCEPTION_NO_CLASS                  = 0x06;
+    const EXCEPTION_INVALID_CALLBACK = 0x01;
 }

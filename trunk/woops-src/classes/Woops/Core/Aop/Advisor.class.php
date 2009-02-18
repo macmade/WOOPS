@@ -432,7 +432,6 @@ abstract class Woops_Core_Aop_Advisor
      * @param   string                  The name of the PHP magic method
      * @param   array                   An array with the arguments to pass to the advice callback
      * @return  NULL        
-     * @see     _invoke
      */
     private static function _processGlobalAdvices( $type, Woops_Core_Aop_Advisor $object, $method, array $args = array() )
     {
@@ -452,7 +451,7 @@ abstract class Woops_Core_Aop_Advisor
                 if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
                     
                     // Invokes the advice callback
-                    self::_invoke( $advice[ 0 ], $args, $method );
+                    $advice[ 0 ]->invoke( $args );
                 }
             }
         }
@@ -469,7 +468,6 @@ abstract class Woops_Core_Aop_Advisor
      * @param   array                               The arguments to pass to the join point method
      * @return  mixed                               The return value of the join point method
      * @throws  Woops_Core_Aop_Advisor_Exception    If the called join point has not been registered
-     * @see     _invoke
      */
     public function __call( $name, array $args = array() )
     {
@@ -487,8 +485,14 @@ abstract class Woops_Core_Aop_Advisor
         $method            = self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ][ 0 ];
         $allowedAdviceType = self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ][ 1 ];
         
+        // Creates a callback for the internal method
+        $methodCallback    = new Woops_Core_Callback_Helper( array( $this, $method ) );
+        
+        // Creates a reflection object for the internal method
+        $ref               = Woops_Core_Reflection_Method::getInstance( $this, $method );
+        
         // By default, the call on the join point internal method is allowed
-        $valid = true;
+        $valid             = true;
         
         // Checks if we can have advices to validate the call to the internal method
         if( self::ADVICE_TYPE_VALID_CALL & $allowedAdviceType ) {
@@ -500,7 +504,7 @@ abstract class Woops_Core_Aop_Advisor
                 if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
                     
                     // Invokes the validation advice
-                    $valid = self::_invoke( $advice[ 0 ], $args, $this, $name );
+                    $valid = $advice[ 0 ]->invoke( $args );
                     
                     // Checks if an advice is preventing the execution of the internal method
                     if( $valid === false ) {
@@ -525,7 +529,7 @@ abstract class Woops_Core_Aop_Advisor
                     if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
                         
                         // Invokes the advice
-                        self::_invoke( $advice[ 0 ], $args, $this, $name );
+                        $advice[ 0 ]->invoke( $args );
                     }
                 }
             }
@@ -536,8 +540,17 @@ abstract class Woops_Core_Aop_Advisor
             // We are catching exceptions from the internal method, so we'll be able to run the 'afterThrowing' advices
             try {
                 
-                // Gets the return value of the internal method
-                $returnValue = self::_invoke( array( $this, $method ), $args );
+                // Checks if the internal method returns a reference
+                if( $ref->returnsReference() ) {
+                    
+                    // Gets the return value of the internal method
+                    $returnValue =& $methodCallback->invoke( $args );
+                    
+                } else {
+                    
+                    // Gets the return value of the internal method
+                    $returnValue =  $methodCallback->invoke( $args );
+                }
                 
             } catch( Exception $e ) {
                 
@@ -564,7 +577,7 @@ abstract class Woops_Core_Aop_Advisor
                         if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
                             
                             // Invokes the advice
-                            $exceptionCaught = self::_invoke( $advice[ 0 ], array( $e, $this ), $this, $name );
+                            $exceptionCaught = $advice[ 0 ]->invoke( array( $e, $this ) );
                             
                             // Checks if the exception has been caught by the advice
                             if( $exceptionCaught === true ) {
@@ -597,7 +610,7 @@ abstract class Woops_Core_Aop_Advisor
                         if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
                             
                             // Invokes the advice and stores the return value
-                            $returnValue = self::_invoke( $advice[ 0 ], array( $returnValue, $args ), $this, $name );
+                            $returnValue = $advice[ 0 ]->invoke( array( $returnValue, $args ) );
                         }
                     }
                 }
@@ -612,7 +625,7 @@ abstract class Woops_Core_Aop_Advisor
                         if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
                             
                             // Invokes the advice
-                            self::_invoke( $advice[ 0 ], $args, $this, $name );
+                            $advice[ 0 ]->invoke( $args );
                         }
                     }
                 }
@@ -620,173 +633,6 @@ abstract class Woops_Core_Aop_Advisor
                 // Returns the return value
                 return $returnValue;
             }
-        }
-    }
-    
-    /**
-     * Invokes a callback
-     * 
-     * This method is used to avoid having to call the call_user_func_array()
-     * function, which is slow and may have problems dealing with references.
-     * The call_user_func_array() will only be used if more than ten arguments
-     * must be passed to the callback, or if the callback is on a static class
-     * method, as late static bindings are only available since PHP 5.3.
-     * 
-     * @param   mixed   The callback to invoke (must be a valid PHP callback)
-     * @param   array   The arguments to pass to the callback
-     * @return  mixed   The return value of the callback
-     */
-    private static function _invoke( $callback, array $args = array() )
-    {
-        // Gets the number of arguments to pass to the callbak
-        $argsCount = count( $args );
-        
-        // Checks if the callback is an array
-        if( is_array( $callback ) ) {
-            
-            // Check if we need to make a member or a static call
-            if( is_object( $callback[ 0 ] ) ) {
-                
-                // Gets the object and the method to use
-                $object = $callback[ 0 ];
-                $method = $callback[ 1 ];
-                
-                // Checks the number of arguments
-                // This will avoid a call to call_user_func_array if the number of arguments is lower than ten
-                switch( $argsCount ) {
-                    
-                    case 0:
-                        
-                        return $object->$method();
-                        break;
-                    
-                    case 1:
-                        
-                        return $object->$method( $args[ 0 ] );
-                        break;
-                    
-                    case 2:
-                        
-                        return $object->$method( $args[ 0 ], $args[ 1 ] );
-                        break;
-                    
-                    case 3:
-                        
-                        return $object->$method( $args[ 0 ], $args[ 1 ], $args[ 2 ] );
-                        break;
-                    
-                    case 4:
-                        
-                        return $object->$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ] );
-                        break;
-                    
-                    case 5:
-                        
-                        return $object->$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ] );
-                        break;
-                    
-                    case 6:
-                        
-                        return $object->$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ] );
-                        break;
-                    
-                    case 7:
-                        
-                        return $object->$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ] );
-                        break;
-                    
-                    case 8:
-                        
-                        return $object->$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ] );
-                        break;
-                    
-                    case 9:
-                        
-                        return $object->$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ], $args[ 8 ] );
-                        break;
-                    
-                    case 10:
-                        
-                        return $object->$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ], $args[ 8 ], $args[ 9 ] );
-                        break;
-                    
-                    // More than ten arguments - We'll use call_user_func_array()
-                    default:
-                        
-                        return call_user_func_array( $callback, $args );
-                        break;
-                }
-                
-            }
-            
-            // Static call - We'll use call_user_func_array() as late static bindings are only available since PHP 5.3
-            return call_user_func_array( $callback, $args );
-        }
-        
-        // Checks the number of arguments
-        // This will avoid a call to call_user_func_array if the number of arguments is lower than ten
-        switch( $argsCount ) {
-                    
-            case 0:
-                
-                return $callback();
-                break;
-            
-            case 1:
-                
-                return $callback( $args[ 0 ] );
-                break;
-            
-            case 2:
-                
-                return $callback( $args[ 0 ], $args[ 1 ] );
-                break;
-            
-            case 3:
-                
-                return $callback( $args[ 0 ], $args[ 1 ], $args[ 2 ] );
-                break;
-            
-            case 4:
-                
-                return $callback( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ] );
-                break;
-            
-            case 5:
-                
-                return $callback( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ] );
-                break;
-            
-            case 6:
-                
-                return $callback( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ] );
-                break;
-            
-            case 7:
-                
-                return $callback( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ] );
-                break;
-            
-            case 8:
-                
-                return $callback( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ] );
-                break;
-            
-            case 9:
-                
-                return $callback( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ], $args[ 8 ] );
-                break;
-            
-            case 10:
-                
-                return $callback( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ], $args[ 8 ], $args[ 9 ] );
-                break;
-            
-            default:
-                
-                // More than ten arguments - We'll use call_user_func_array()
-                return call_user_func_array( $callback, $args );
-                break;
         }
     }
     
@@ -867,19 +713,6 @@ abstract class Woops_Core_Aop_Advisor
             return true;
         }
         
-        // Ensures the callback is valid
-        if( !is_callable( $callback ) ) {
-            
-            // Creates the exception message
-            $exceptionMessage = ( $joinPoint ) ? 'Invalid advice callback for join point ' . $joinPoint : 'Invalid callback';
-            
-            // Error - The callback is not valid
-            throw new Woops_Core_Aop_Advisor_Exception(
-                $exceptionMessage,
-                Woops_Core_Aop_Advisor_Exception::EXCEPTION_INVALID_ADVICE_CALLBACK
-            );
-        }
-        
         // Checks if the callback must be executed for a specific object or for all instances
         if( is_object( $target ) ) {
             
@@ -921,7 +754,10 @@ abstract class Woops_Core_Aop_Advisor
                     }
                     
                     // Adds the advice callback for the join point
-                    self::$_advices[ $adviceType ][ $className ][] = array( $callback, $objectHash );
+                    self::$_advices[ $adviceType ][ $className ][] = array(
+                        new Woops_Core_Callback_Helper( $callback ),
+                        $objectHash
+                    );
                 }
             }
             
@@ -976,7 +812,10 @@ abstract class Woops_Core_Aop_Advisor
                         }
                         
                         // Adds the advice
-                        self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array( $callback, $objectHash );
+                        self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array(
+                            new Woops_Core_Callback_Helper( $callback ),
+                            $objectHash
+                        );
                     }
                 }
                 
@@ -1004,7 +843,10 @@ abstract class Woops_Core_Aop_Advisor
                     if( $adviceType & $allowedAdviceTypes ) {
                         
                         // Adds the advice callback for the join point
-                        self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array( $callback, $objectHash );
+                        self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array(
+                            new Woops_Core_Callback_Helper( $callback ),
+                            $objectHash
+                        );
                         return true;
                     
                     } else {
