@@ -411,8 +411,32 @@ class Woops_Xml_Tag implements ArrayAccess, Iterator
             
             $this->_children[ 0 ] .= ( string )$data;
         }
+    }
+    
+    /**
+     * 
+     */
+    public function setTextData( $data )
+    {
+        if( $this->_type === self::TYPE_NODE ) {
+            
+            throw new Woops_Xml_Tag_Exception(
+                'Cannot set text data in the current tag as it already contains nodes',
+                Woops_Xml_Tag_Exception::EXCEPTION_INVALID_TAG_TYPE
+            );
+        }
         
+        $this->_type = self::TYPE_DATA;
         
+        if( !isset( $this->_children[ 0 ] ) ) {
+            
+            $this->_children[ 0 ] = ( string )$data;
+            $this->_childrenCount++;
+            
+        } else {
+            
+            $this->_children[ 0 ] = ( string )$data;
+        }
     }
     
     /**
@@ -441,7 +465,9 @@ class Woops_Xml_Tag implements ArrayAccess, Iterator
      */
     public function getTag( $name, $index = 0 )
     {
-        if( isset( $this->_childrenByName[ $name ] ) ) {
+        if( $this->_type === self::TYPE_NODE
+            && isset( $this->_childrenByName[ $name ] )
+        ) {
             
             if( $index === -1 ) {
                 
@@ -457,9 +483,14 @@ class Woops_Xml_Tag implements ArrayAccess, Iterator
         return NULL;
     }
     
+    /**
+     * 
+     */
     public function removeTag( $name, $index = 0 )
     {
-        if( isset( $this->_childrenByName[ $name ] ) ) {
+        if( $this->_type === self::TYPE_NODE
+            && isset( $this->_childrenByName[ $name ] )
+        ) {
             
             if( $index === -1 ) {
                 
@@ -481,7 +512,7 @@ class Woops_Xml_Tag implements ArrayAccess, Iterator
                 
                 if( !count( $this->_childrenCountByName ) ) {
                     
-                    $this->_hasNodeChildren = false;
+                    $this->_type = 0;
                 }
             }
         }
@@ -492,13 +523,13 @@ class Woops_Xml_Tag implements ArrayAccess, Iterator
      */
     public function removeAllTags()
     {
-        if( $this->_childrenCount > 0 ) {
+        if( $this->_type === self::TYPE_NODE ) {
               
             $this->_children            = array();
             $this->_childrenByName      = array();
             $this->_childrenCountByName = array();
             $this->_childrenCount       = 0;
-            $this->_hasNodeChildren     = false;
+            $this->_type                = 0;
         }
     }
     

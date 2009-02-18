@@ -527,6 +527,9 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
         return NULL;
     }
     
+    /**
+     * 
+     */
     public function removeTag( $name, $index = 0 )
     {
         if( isset( $this->_childrenByName[ $name ] ) ) {
