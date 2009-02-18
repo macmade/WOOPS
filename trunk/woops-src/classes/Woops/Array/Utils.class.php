@@ -36,7 +36,7 @@ final class Woops_Array_Utils implements Woops_Core_Singleton_Interface
      * The class constructor is private to avoid multiple instances of the
      * class (singleton).
      * 
-     * @return  NULL
+     * @return  void
      */
     private function __construct()
     {}
@@ -47,7 +47,7 @@ final class Woops_Array_Utils implements Woops_Core_Singleton_Interface
      * A call to this method will produce an exception, as the class cannot
      * be cloned (singleton).
      * 
-     * @return  NULL
+     * @return  void
      * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()

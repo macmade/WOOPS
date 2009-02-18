@@ -73,7 +73,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
     /**
      * Class constructor
      * 
-     * @return  NULL
+     * @return  void
      */
     private function __construct()
     {
@@ -95,7 +95,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
      * A call to this method will produce an exception, as the class cannot
      * be cloned (singleton).
      * 
-     * @return  NULL
+     * @return  void
      * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()

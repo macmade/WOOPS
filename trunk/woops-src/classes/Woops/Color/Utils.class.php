@@ -49,7 +49,7 @@ class Woops_Color_Utils
      * Class constructor
      * 
      * @param   string  The color method to use (RGB, HSV or HSL)
-     * @return  NULL
+     * @return  void
      */
     public function __construct( $method = 'RGB' )
     {
@@ -67,7 +67,7 @@ class Woops_Color_Utils
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {
@@ -85,7 +85,7 @@ class Woops_Color_Utils
      * Sets the color method to use
      * 
      * @param   string  The color method to use (RGB, HSV or HSL)
-     * @return  NULL
+     * @return  void
      */
     public function setColorMethod( $method )
     {

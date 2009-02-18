@@ -200,7 +200,7 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
     /**
      * Moves the position to the first tag (SPL Iterator method)
      * 
-     * @return  NULL
+     * @return  void
      */
     public function rewind()
     {
@@ -237,7 +237,7 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
     /**
      * Moves the position to the next tag (SPL Iterator method)
      * 
-     * @return  NULL
+     * @return  void
      */
     public function next()
     {
@@ -257,7 +257,7 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {

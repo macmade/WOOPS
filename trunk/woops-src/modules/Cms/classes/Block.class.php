@@ -82,7 +82,7 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
     /**
      * Class constructor
      * 
-     * @return  NULL
+     * @return  void
      */
     public function __construct()
     {
@@ -102,7 +102,7 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {
@@ -127,7 +127,7 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
     /**
      * Includes the jQuery JS framework
      * 
-     * @return  NULL
+     * @return  void
      */
     protected function _includeJQuery()
     {
@@ -145,7 +145,7 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
     /**
      * Includes the jQuery UI JS framework
      * 
-     * @return  NULL
+     * @return  void
      */
     protected function _includeJQueryUi()
     {
@@ -173,7 +173,7 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
      * - utf8
      * 
      * @param   string  The name of the script to include
-     * @return  NULL
+     * @return  void
      * @see     Oop_Core_ClassManager::getModuleRelativePath
      */
     protected function _includeWebtoolkitScript( $script )
@@ -197,7 +197,7 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
      * - dimensions
      * 
      * @param   string  The name of the plugin to include
-     * @return  NULL
+     * @return  void
      */
     protected function _includeJQueryPlugin( $plugin )
     {

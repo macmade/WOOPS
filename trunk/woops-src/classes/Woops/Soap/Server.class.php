@@ -34,7 +34,7 @@ class Woops_Soap_Server
      * Class constructor
      * 
      * @param   string  The URL to the WSDL file
-     * @return  NULL
+     * @return  void
      */
     public function __construct( $wsdl )
     {
@@ -154,7 +154,7 @@ class Woops_Soap_Server
      * 
      * @param   string  The name of the class
      * @param   array   An optional array with the arguments to pass to the class constructor
-     * @return  NULL
+     * @return  void
      */
     public function setHandlerClass( $className, array $args = array() )
     {

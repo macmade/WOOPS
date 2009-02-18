@@ -44,7 +44,7 @@ class Woops_File_Ini_Writer
      * Class constructor
      * 
      * @param   array   An array with the INI values (may have sections, as sub-arrays)
-     * @return  NULL
+     * @return  void
      */
     public function __construct( array $ini )
     {
@@ -109,7 +109,7 @@ class Woops_File_Ini_Writer
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {
@@ -125,7 +125,7 @@ class Woops_File_Ini_Writer
      * 
      * @param   string  The name of the file to write
      * @param   string  The path of the file to write (directory name)
-     * @return  NULL
+     * @return  void
      * @throws  Woops_File_Ini_Writer_Exception If the directory does not exists
      * @throws  Woops_File_Ini_Writer_Exception If the directory is not writeable
      * @throws  Woops_File_Ini_Writer_Exception If the file is not writeable

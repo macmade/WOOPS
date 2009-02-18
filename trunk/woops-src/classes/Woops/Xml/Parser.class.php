@@ -60,7 +60,7 @@ class Woops_Xml_Parser
      * @param   string  The path of the file to parse
      * @param   string  A prefix path to add to all 'src' and 'href' attributes, if relative
      * @param   string  The output charset (default is UTF-8)
-     * @return  NULL
+     * @return  void
      */
     public function __construct( $file, $charset = 'UTF-8' )
     {

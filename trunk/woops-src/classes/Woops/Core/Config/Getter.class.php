@@ -46,7 +46,7 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
      * The class constructor is private to avoid multiple instances of the
      * class (singleton).
      * 
-     * @return  NULL
+     * @return  void
      * @throws  Woops_Core_Config_Getter_Exception  If the configuration file does not exist
      * @throws  Woops_Core_Config_Getter_Exception  If the configuration file is not writeable
      */
@@ -85,7 +85,7 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
      * A call to this method will produce an exception, as the class cannot
      * be cloned (singleton).
      * 
-     * @return  NULL
+     * @return  void
      * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()
@@ -133,7 +133,7 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
      * Reads a configuration file from a WOOPS module
      * 
      * @param   string  The name of the module
-     * @return  NULL
+     * @return  void
      * @throws  Woops_Core_Config_Getter_Exception  If the configuration file is not readable
      */
     private function _loadModuleConf( $name )

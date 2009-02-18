@@ -62,7 +62,7 @@ class Woops_Core_Aop_Class_Builder
      * Class constructor
      * 
      * @param   string  The name of the class for which to build an AOP version
-     * @return  NULL
+     * @return  void
      */
     public function __construct( $className )
     {
@@ -122,7 +122,7 @@ class Woops_Core_Aop_Class_Builder
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {

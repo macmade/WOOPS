@@ -39,7 +39,7 @@ class Woops_Core_Callback_Helper
      * Class sonstructor
      * 
      * @param   callback    The PHP callback
-     * @return  NULL
+     * @return  void
      */
     public function __construct( $callback )
     {

@@ -79,7 +79,7 @@ abstract class Woops_Page_Engine_Base extends Woops_Core_Aop_Advisor
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {

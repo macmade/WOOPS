@@ -114,7 +114,7 @@ class Woops_Xhtml_Page
      * The class constructor is private to avoid multiple instances of the
      * class (singleton).
      * 
-     * @return  NULL
+     * @return  void
      */
     public function __construct()
     {
@@ -195,7 +195,7 @@ class Woops_Xhtml_Page
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {

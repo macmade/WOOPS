@@ -47,7 +47,7 @@ abstract class Woops_Core_Exception_Base extends Exception
      * 
      * @param   string  The exception message
      * @param   int     The exception code, if any
-     * @return  NULL
+     * @return  void
      */
     public function __construct( $message, $code = 0 )
     {
@@ -84,7 +84,7 @@ abstract class Woops_Core_Exception_Base extends Exception
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {

@@ -31,7 +31,7 @@ final class Woops_Core_Exception_Handler
      * The class constructor is private as all methods from this class are
      * static.
      * 
-     * @return  NULL
+     * @return  void
      */
     private function __construct()
     {}

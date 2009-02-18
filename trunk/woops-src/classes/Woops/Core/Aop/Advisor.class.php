@@ -204,7 +204,7 @@ abstract class Woops_Core_Aop_Advisor
      * to call this one before anything else, using parent::__construct().
      * Otherwise, the advices won't be executed.
      * 
-     * @return  NULL
+     * @return  void
      * @see     _registerAutomaticJoinPoints
      * @see     _processGlobalAdvices
      */
@@ -233,7 +233,7 @@ abstract class Woops_Core_Aop_Advisor
      * to call this one before anything else, using parent::__destruct().
      * Otherwise, the advices won't be executed.
      * 
-     * @return  NULL
+     * @return  void
      * @see     _processGlobalAdvices
      */
     public function __destruct()
@@ -254,7 +254,7 @@ abstract class Woops_Core_Aop_Advisor
      * to call this one before anything else, using parent::__clone().
      * Otherwise, the advices won't be executed.
      * 
-     * @return  NULL
+     * @return  void
      * @see     _processGlobalAdvices
      */
     public function __clone()
@@ -276,7 +276,7 @@ abstract class Woops_Core_Aop_Advisor
      * Otherwise, the advices won't be executed.
      * 
      * @param   string  The name of the value to get
-     * @return  NULL
+     * @return  void
      * @see     _processGlobalAdvices
      */
     public function __get( $name )
@@ -300,7 +300,7 @@ abstract class Woops_Core_Aop_Advisor
      * 
      * @param   string  The name of the value to set
      * @param   mixed   The value to set
-     * @return  NULL
+     * @return  void
      * @see     _processGlobalAdvices
      */
     public function __set( $name, $value )
@@ -323,7 +323,7 @@ abstract class Woops_Core_Aop_Advisor
      * Otherwise, the advices won't be executed.
      * 
      * @param   string  The name of the value to check for
-     * @return  NULL
+     * @return  void
      * @see     _processGlobalAdvices
      */
     public function __isset( $name )
@@ -347,7 +347,7 @@ abstract class Woops_Core_Aop_Advisor
      * 
      * @param   string  The name of the value to unset
      * @param   mixed   The value to set
-     * @return  NULL
+     * @return  void
      * @see     _processGlobalAdvices
      */
     public function __unset( $name )
@@ -369,7 +369,7 @@ abstract class Woops_Core_Aop_Advisor
      * to call this one before anything else, using parent::__sleep().
      * Otherwise, the advices won't be executed.
      * 
-     * @return  NULL
+     * @return  void
      * @see     _processGlobalAdvices
      */
     public function __sleep()
@@ -390,7 +390,7 @@ abstract class Woops_Core_Aop_Advisor
      * to call this one before anything else, using parent::__wakeup().
      * Otherwise, the advices won't be executed.
      * 
-     * @return  NULL
+     * @return  void
      * @see     _processGlobalAdvices
      */
     public function __wakeup()
@@ -411,7 +411,7 @@ abstract class Woops_Core_Aop_Advisor
      * to call this one before anything else, using parent::__toString().
      * Otherwise, the advices won't be executed.
      * 
-     * @return  NULL
+     * @return  void
      * @see     _processGlobalAdvices
      */
     public function __toString()
@@ -431,7 +431,7 @@ abstract class Woops_Core_Aop_Advisor
      * @param   Woops_Core_Aop_Advisor  The instance of the child class (will be added as first argument of the advice callback)
      * @param   string                  The name of the PHP magic method
      * @param   array                   An array with the arguments to pass to the advice callback
-     * @return  NULL        
+     * @return  void        
      */
     private static function _processGlobalAdvices( $type, Woops_Core_Aop_Advisor $object, $method, array $args = array() )
     {
@@ -875,7 +875,7 @@ abstract class Woops_Core_Aop_Advisor
      * the current class ending with the value of the JOINPOINT_METHOD_SUFFIX
      * constant.
      * 
-     * @return  NULL
+     * @return  void
      * @see     _registerJoinPoint
      */
     final private function _registerAutomaticJoinPoints()
@@ -974,7 +974,7 @@ abstract class Woops_Core_Aop_Advisor
      * @param   string                              The name of the join point
      * @param   string                              The method to use when the join point is called
      * @param   int                                 The type of advices that are available for the join point (typically a bitwise operation with some Woops_Core_Aop_Advisor::ADVICE_TYPE_XXX constants)
-     * @return  NULL
+     * @return  void
      * @throws  Woops_Core_Aop_Advisor_Exception    If the joint point method does not exist
      * @throws  Woops_Core_Aop_Advisor_Exception    If a join point with the same name is already registered
      */

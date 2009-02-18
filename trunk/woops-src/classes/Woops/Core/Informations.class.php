@@ -41,7 +41,7 @@ final class Woops_Core_Informations
      * The class constructor is private as this class should never been
      * instanciated (it doesn't contains any methods).
      * 
-     * @return  NULL
+     * @return  void
      */
     private function __construct()
     {}

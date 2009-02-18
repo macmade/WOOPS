@@ -64,7 +64,7 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
      * The class constructor is private to avoid multiple instances of the
      * class (singleton).
      * 
-     * @return  NULL
+     * @return  void
      * @throws  Woops_Mod_Pdo_Database_Engine_Exception If PDO is not available
      */
     private function __construct()
@@ -118,7 +118,7 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
      * A call to this method will produce an exception, as the class cannot
      * be cloned (singleton).
      * 
-     * @return  NULL
+     * @return  void
      * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()
@@ -158,7 +158,7 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
      * @param   int                                     The database port
      * @param   string                                  The name of the database to use
      * @param   string                                  The prefix for the database tables
-     * @return  NULL
+     * @return  void
      * @throws  Woops_Mod_Pdo_Database_Engine_Exception If the requested driver is not available
      */
     public function load( $driver, $host, $port, $database, $tablePrefix )
@@ -183,7 +183,7 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
     /**
      * Database connection
      * 
-     * @return  NULL
+     * @return  void
      * @throws  Woops_Mod_Pdo_Database_Engine_Exception If the database connection failed to be established
      */
     public function connect( $user, $pass )
@@ -207,7 +207,7 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
     /**
      * Database disconnection
      * 
-     * @return  NULL
+     * @return  void
      */
     public function disconnect()
     {

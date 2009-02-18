@@ -100,7 +100,7 @@ class Woops_Soap_Wsdl_Generator
      * 
      * @param   mixed                           The class that will handle the SOAP requests, either as a string or as an object
      * @param   string                          The URL of the web service
-     * @return  NULL
+     * @return  void
      * @throws  Soap_Wsdl_Generator_Exception   If the XmlWriter class is not available
      */
     public function __construct( $handlerClass, $url )
@@ -177,7 +177,7 @@ class Woops_Soap_Wsdl_Generator
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {
@@ -230,7 +230,7 @@ class Woops_Soap_Wsdl_Generator
     /**
      * Creates a WSDL file for the handler class
      * 
-     * @return  NULL
+     * @return  void
      */
     protected function _createWsdl()
     {

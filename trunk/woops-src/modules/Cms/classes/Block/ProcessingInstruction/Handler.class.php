@@ -38,7 +38,7 @@ class Woops_Mod_Cms_Block_ProcessingInstruction_Handler implements Woops_Xhtml_P
     /**
      * Class constructor
      * 
-     * @return  NULL
+     * @return  void
      */
     public function __construct()
     {
@@ -53,7 +53,7 @@ class Woops_Mod_Cms_Block_ProcessingInstruction_Handler implements Woops_Xhtml_P
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {

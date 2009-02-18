@@ -83,7 +83,7 @@ abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
     /**
      * Class constructor
      * 
-     * @return  NULL
+     * @return  void
      */
     public function __construct()
     {
@@ -128,7 +128,7 @@ abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {

@@ -33,7 +33,7 @@ class Woops_Xhtml_Comment extends Woops_Xhtml_Tag
     /**
      * Class constructor
      * 
-     * @return  NULL
+     * @return  void
      * @see     Woops_Xhtml_Tag::__construct
      */
     public function __construct( $text )

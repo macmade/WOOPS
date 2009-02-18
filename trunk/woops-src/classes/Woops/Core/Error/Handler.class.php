@@ -55,7 +55,7 @@ final class Woops_Core_Error_Handler
      * The class constructor is private as all methods from this class are
      * static.
      * 
-     * @return  NULL
+     * @return  void
      */
     private function __construct()
     {}

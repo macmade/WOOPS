@@ -127,7 +127,7 @@ class Woops_Vcard_Generator
     /**
      * Class constructor
      * 
-     * @return  NULL
+     * @return  void
      */
     public function __construct()
     {
@@ -150,7 +150,7 @@ class Woops_Vcard_Generator
     /**
      * Sets the needed static variables
      * 
-     * @return  NULL
+     * @return  void
      */
     private static function _setStaticVars()
     {

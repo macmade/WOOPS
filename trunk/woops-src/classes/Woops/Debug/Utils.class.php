@@ -31,7 +31,7 @@ class Woops_Debug_Utils
      * The class constructor is private as all methods from this class are
      * static.
      * 
-     * @return  NULL
+     * @return  void
      */
     private function __construct()
     {}

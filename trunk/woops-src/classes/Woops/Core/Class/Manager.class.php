@@ -90,7 +90,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
      * The class constructor is private to avoid multiple instances of the
      * class (singleton).
      * 
-     * @return NULL
+     * @return void
      */
     private function __construct()
     {
@@ -167,7 +167,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
      * A call to this method will produce an exception, as the class cannot
      * be cloned (singleton).
      * 
-     * @return  NULL
+     * @return  void
      * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()
@@ -188,7 +188,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
      * error by ourselves.
      * 
      * @param   string  The error message to display.
-     * @return  NULL
+     * @return  void
      */
     private static function _error( $message )
     {
@@ -505,7 +505,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
      * redeclare class XXX', you know the drill), hence the socket connection.
      * 
      * @param   string  The name of the class for which to build a cached version
-     * @return  NULL
+     * @return  void
      */
     private function _createCachedClass( $className )
     {
