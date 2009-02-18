@@ -531,7 +531,84 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      * 
      */
     public function insertRecord( $table, array $values )
-    {}
+    {
+        // Table names are in uppercase
+        $table  = strtoupper( $table );
+        
+        // Gets the current time
+        $time   = time();
+        
+        // Oracle support
+        if( $this->_oracle ) {
+            
+            // Parameters for the PDO query
+            $params = array(
+                'ctime' => $time,
+                'mtime' => $time
+            );
+            
+            // SQL for the insert statement
+            $sql  = 'INSERT INTO ' . $this->_tablePrefix . $table . ' SET';
+            
+            // Adds the creation date in the SQL query
+            $sql .= ' ctime = :ctime,';
+        
+            // Adds the modification date in the SQL query
+            $sql .= ' mtime = :mtime,';
+            
+            // Process each value
+            foreach( $values as $fieldName => $value ) {
+                
+                // Adds the PDO parameter for the current value
+                $params[ $fieldName ] = $value;
+                
+                // Adds the update statement for the current value
+                $sql .= ' ' . $fieldName . ' = :' . $fieldName . ',';
+            }
+            
+        } else {
+            
+            // Parameters for the PDO query
+            $params = array(
+                $time,
+                $time
+            );
+            
+            // SQL for the insert statement
+            $sql  = 'INSERT INTO ' . $this->_tablePrefix . $table . ' SET';
+            
+            // Adds the creation date in the SQL query
+            $sql .= ' ctime = ?,';
+        
+            // Adds the modification date in the SQL query
+            $sql .= ' mtime = ?,';
+            
+            // Process each value
+            foreach( $values as $fieldName => $value ) {
+                
+                // Adds the PDO parameter for the current value
+                $params[] = $value;
+                
+                // Adds the update statement for the current value
+                $sql .= ' ' . $fieldName . ' = ?,';
+            }
+        }
+        
+        // Removes the last comma
+        $sql  = substr( $sql, 0, -1 );
+        
+        // Not sure ADODB is completely error free
+        Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
+        
+        // Executes the ADODB query
+        $this->Execute( $sql, $params );
+        
+        // Resets the error reporting
+        Woops_Core_Error_Handler::resetErrorReporting();
+        
+        // Returns the insert ID
+        return $this->lastInsertId();
+    }
     
     /**
      * 
