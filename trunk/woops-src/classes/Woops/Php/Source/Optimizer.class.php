@@ -279,7 +279,7 @@ class Woops_Php_Source_Optimizer
                     && !$inGlobal
                     && $token[ 0 ] === T_VARIABLE
                     && !isset( self::$_superGlobals[ $token[ 1 ] ] )
-                    && !isset( self::$_superGlobals[ $token[ 1 ] ] )
+                    && !isset( $funcGlobals[ $token[ 1 ] ] )
                     && $token[ 1 ] !== '$this'
                     && ( !is_array( $lastToken ) || $lastToken[ 0 ] !== T_PAAMAYIM_NEKUDOTAYIM )
                 ) {
@@ -300,34 +300,45 @@ class Woops_Php_Source_Optimizer
                 }
                 
                 // Checks if we are declaring code that has to be evaluated
-                if( $inEval && $token[ 0 ] === T_CONSTANT_ENCAPSED_STRING ) {
+                if( $renameVariables
+                    && $inFunc
+                    && $inEval
+                    && $token[ 0 ] === T_CONSTANT_ENCAPSED_STRING
+                ) {
                     
                     // Finds all variables in the evaluated code
                     $matches = array();
-                    preg_match_all( '/\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/', $token[ 1 ], $matches );
+                    preg_match_all( '/[^:]*(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/', $token[ 1 ], $matches );
                     
                     // Checks if variables were found
                     if( is_array( $matches ) ) {
                         
                         // Sorts the variables
-                        arsort($matches[ 0 ]);
+                        arsort($matches[ 1 ]);
                         
                         // Process each variable
-                        foreach( $matches[ 0 ] as $var ) {
+                        foreach( $matches[ 1 ] as $var ) {
                             
-                            // Has the variable been renamed already?
-                            if( isset( $funcVars[ $var ] ) ) {
+                            // May we rename the variable?
+                            if( !isset( self::$_superGlobals[ $var ] )
+                                && !isset( $funcGlobals[ $var ] )
+                                && $var !== '$this'
+                            ) {
                                 
-                                // Yes, gets the sort name
-                                $token[ 1 ] = str_replace( $var, $funcVars[ $var ], $token[ 1 ] );
-                                
-                            } else {
-                                
-                                // No, generates a new name, and stores it
-                                $varName                 = $this->_generateVarName( $varCount );
-                                $funcVars[ $token[ 1 ] ] = '$' . $varName;
-                                $token[ 1 ]              = str_replace( $var, $varName, $token[ 1 ] );
-                                $varCount++;
+                                // Has the variable been renamed already?
+                                if( isset( $funcVars[ $var ] ) ) {
+                                    
+                                    // Yes, gets the sort name
+                                    $token[ 1 ] = str_replace( $var, $funcVars[ $var ], $token[ 1 ] );
+                                    
+                                } else {
+                                    
+                                    // No, generates a new name, and stores it
+                                    $varName                 = $this->_generateVarName( $varCount );
+                                    $funcVars[ $token[ 1 ] ] = '$' . $varName;
+                                    $token[ 1 ]              = str_replace( $var, $varName, $token[ 1 ] );
+                                    $varCount++;
+                                }
                             }
                         }
                     }
