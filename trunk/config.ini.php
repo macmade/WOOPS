@@ -120,7 +120,7 @@ format = On
 ; Allows WOOPS classes to be stored in the class cache directory.
 ; 
 ; @type boolean
-enable   = Off
+enable   = On
 
 ; Optimizes the PHP source code before putting classes in the cache.
 ; 
@@ -139,7 +139,7 @@ optimize = On
 ; be enabled.
 ; 
 ; @type boolean
-enable = Off
+enable = On
 
 ; ##############################################################################
 ; # Error related settings                                                     #
