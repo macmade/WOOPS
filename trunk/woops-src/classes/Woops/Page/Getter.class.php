@@ -80,7 +80,7 @@ final class Woops_Page_Getter implements Woops_Core_Singleton_Interface
         $this->_conf     = Woops_Core_Config_Getter::getInstance();
         $this->_env      = Woops_Core_Env_Getter::getInstance();
         $this->_request  = Woops_Core_Request_Getter::getInstance();
-        $this->_db       = Woops_Database_Layer::getInstance();
+        $this->_db       = Woops_Database_Layer::getInstance()->getEngine();
         $this->_str      = Woops_String_Utils::getInstance();
         
         $this->_pageId   = $this->_getPageId();

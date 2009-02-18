@@ -106,7 +106,7 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
      */
     private static function _setStaticVars()
     {
-        self::$_db        = Woops_Database_Layer::getInstance();
+        self::$_db        = Woops_Database_Layer::getInstance()->getEngine();
         self::$_page      = Woops_Page_Engine::getInstance()->getPageObject()->getXhtmlPage();
         
         // Static variables are set

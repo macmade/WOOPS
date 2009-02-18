@@ -18,7 +18,13 @@
 
 [database]
 
-; The database driver to use, with PDO
+; The default database engine to use
+; 
+; @type string
+; @required
+engine      = pdo
+
+; The database driver to use
 ; 
 ; @type string
 ; @required
@@ -52,7 +58,7 @@ password    = woops
 ; 
 ; @type string
 ; @required
-name        = woops
+database    = woops
 
 ; The prefix to use for all WOOPS tables
 ; 
@@ -145,6 +151,7 @@ report = development
 [modules]
 
 ; The loaded (active) modules
+loaded[] = Pdo
 loaded[] = Cms
 loaded[] = Admin
 loaded[] = ModManager
