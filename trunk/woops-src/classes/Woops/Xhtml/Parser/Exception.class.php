@@ -16,7 +16,7 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Soap.Server
+ * @package     Woops.Xhtml.Parser
  */
 final class Woops_Xhtml_Parser_Exception extends Woops_Core_Exception_Base
 {
