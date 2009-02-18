@@ -537,7 +537,92 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      * 
      */
     public function updateRecord( $table, $id, array $values )
-    {}
+    {
+        // Table names are in uppercase
+        $table  = strtoupper( $table );
+        
+        // Primary key
+        $pKey   = 'id_' . strtolower( $table );
+        
+        // Gets the current time
+        $time   = time();
+        
+        // Oracle support
+        if( $this->_oracle ) {
+            
+            // Parameters for the ADODB query
+            $params = array(
+                $pKey => ( int )$id,
+                'mtime'    => $time
+            );
+            
+            // SQL for the update statement
+            $sql    = 'UPDATE ' . $this->_tablePrefix . $table . ' SET';
+        
+            // Adds the modification date in the SQL query
+            $sql .= ' mtime = :mtime,';
+            
+            // Process each value
+            foreach( $values as $fieldName => $value ) {
+                
+                // Adds the ADODB parameter for the current value
+                $params[ $fieldName ] = $value;
+                
+                // Adds the update statement for the current value
+                $sql .= ' ' . $fieldName . ' = :' . $fieldName . ',';
+            }
+            
+            // Removes the last comma
+            $sql  = substr( $sql, 0, -1 );
+            
+            // Adds the where clause
+            $sql .= ' WHERE ' . $pKey . ' = :' . $pKey;
+            
+        } else {
+            
+            // Parameters for the ADODB query
+            $params = array(
+                $time
+            );
+            
+            // SQL for the update statement
+            $sql    = 'UPDATE ' . $this->_tablePrefix . $table . ' SET';
+        
+            // Adds the modification date in the SQL query
+            $sql .= ' mtime = ?,';
+            
+            // Process each value
+            foreach( $values as $fieldName => $value ) {
+                
+                // Adds the ADODB parameter for the current value
+                $params[] = $value;
+                
+                // Adds the update statement for the current value
+                $sql .= ' ' . $fieldName . ' = ?,';
+            }
+            
+            // Removes the last comma
+            $sql  = substr( $sql, 0, -1 );
+            
+            // Adds the primary key parameter
+            $params[] = ( int )$id;
+            
+            // Adds the where clause
+            $sql .= ' WHERE ' . $pKey . ' = ?';
+        }
+        
+        // Not sure ADODB is completely error free
+        Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
+        
+        // Executes the ADODB query
+        $query = $this->Execute( $sql, $params );
+        
+        // Resets the error reporting
+        Woops_Core_Error_Handler::resetErrorReporting();
+        
+        // Returns the query result
+        return $query;
+    }
     
     /**
      * 
@@ -618,6 +703,6 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
         Woops_Core_Error_Handler::resetErrorReporting();
         
         // Returns the query result
-        return $ret
+        return $ret;
     }
 }
