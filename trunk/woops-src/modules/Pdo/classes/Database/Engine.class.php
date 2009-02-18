@@ -247,6 +247,64 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
     /**
      * 
      */
+    public function lastInsertId()
+    {
+        return $this->_pdo->lastInsertId();
+    }
+    
+    /**
+     * 
+     */
+    public function fetchAssoc( $res )
+    {
+        if( $res instanceof PDOStatement ) {
+            
+            return ( array )$res->fetchObject();
+        }
+        
+        throw new Woops_Mod_Pdo_Database_Engine_Exception(
+            'Passed argument is not a valid PDO statement',
+            Woops_Mod_Pdo_Database_Engine_Exception::EXCEPTION_INVALID_STATEMENT
+        );
+    }
+    
+    /**
+     * 
+     */
+    public function fetchObject( $res )
+    {
+        if( $res instanceof PDOStatement ) {
+            
+            return $res->fetchObject();
+        }
+        
+        throw new Woops_Mod_Pdo_Database_Engine_Exception(
+            'Passed argument is not a valid PDO statement',
+            Woops_Mod_Pdo_Database_Engine_Exception::EXCEPTION_INVALID_STATEMENT
+        );
+    }
+    
+    /**
+     * 
+     */
+    public function errorCode()
+    {
+        return $this->_pdo->errorCode();
+    }
+    
+    /**
+     * 
+     */
+    public function errorMessage()
+    {
+        $infos = $this->_pdo->errorInfo();
+        
+        return ( is_array( $infos ) && isset( $infos[ 2 ] ) ) ? $infos[ 2 ] : '';
+    }
+    
+    /**
+     * 
+     */
     public function getRecord( $table, $id )
     {
         // Table names are in uppercase
