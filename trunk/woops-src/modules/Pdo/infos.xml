@@ -9,7 +9,7 @@
 	<company>eosgarden</company>
 	<email>macmade@eosgarden.com</email>
 	<version>0.0.0</version>
-	<category>Core</category>
+	<category>DBAL</category>
 	<state>experimental</state>
 	<dependancies />
 <woops-module-infos>

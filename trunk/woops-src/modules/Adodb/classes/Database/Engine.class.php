@@ -68,7 +68,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     private function __construct()
     {
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         require_once( Woops_Core_Env_Getter::getInstance()->getPath( 'woops-mod://Adodb/ressources/adodb5/adodb.inc.php' ) );
@@ -102,7 +102,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
         // Creates a callback
         $callback = new Woops_Core_Callback_Helper( array( $this->_adodb, $name ) );
         
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         // Invokes the callback and returns it's result
@@ -165,7 +165,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     public function load( $driver, $host, $port, $database, $tablePrefix )
     {
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         // Creates the ADODB object
@@ -210,7 +210,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     public function connect( $user, $pass )
     {
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         // Tries to establish an ADODB connection
@@ -234,7 +234,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     public function disconnect()
     {
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         $this->_adodb->Close();
@@ -248,7 +248,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     public function lastInsertId()
     {
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         $id = $this->_adodb->Insert_ID();
@@ -264,7 +264,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     public function query( $sql )
     {
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         $res = $this->Execute( $sql, array() );
@@ -280,7 +280,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     public function fetchAssoc( $res )
     {
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         if( $res instanceof ADORecordSet ) {
@@ -321,7 +321,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     public function fetchObject( $res )
     {
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         if( $res instanceof ADORecordSet ) {
@@ -362,7 +362,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     public function errorCode()
     {
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         $code = $this->_adodb->ErrorNo();
@@ -378,7 +378,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     public function errorMessage()
     {
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         $msg = $this->_adodb->ErrorMsg();
@@ -426,7 +426,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
                  . '    LIMIT 1';
         }
         
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         // Executes the ADODB query
@@ -494,7 +494,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
         // Adds the ORDER BY clause
         $sql .= $orderBy;
         
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         // Executes the ADODB query
@@ -543,7 +543,59 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      * 
      */
     public function deleteRecord( $table, $id, $deleteFromTable = false )
-    {}
+    {
+        // Checks if we should really delete the record, or just set the delete flag
+        if( $deleteFromTable ) {
+            
+            // Table names are in uppercase
+            $table  = strtoupper( $table );
+            
+            // Primary key
+            $pKey   = 'id_' . strtolower( $table );
+            
+            // Oracle support
+            if( $this->_oracle ) {
+                
+                // Parameters for the ADODB query
+                $params = array(
+                    'id' => $id
+                );
+                
+                // SQL for the delete statement
+                $sql = 'DELETE FROM ' . $table . ' WHERE ' . $pKey . ' = :id';
+                
+            } else {
+                
+                // Parameters for the ADODB query
+                $params = array(
+                    $id
+                );
+                
+                // SQL for the delete statement
+                $sql = 'DELETE FROM ' . $table . ' WHERE ' . $pKey . ' = ?';
+                
+            }
+            
+            // Not sure ADODB is completely error free
+            Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
+            
+            // Prepares the ADODB query
+            $query = $this->Execute( $sql, $params );
+            
+            // Resets the error reporting
+            Woops_Core_Error_Handler::resetErrorReporting();
+            
+            // Returns the query result
+            return $query;
+        }
+        
+        // Just sets the delete flag
+        return $this->updateRecord(
+            $table,
+            $id,
+            array( 'deleted' => 1 )
+        );
+    }
     
     /**
      * 
@@ -553,16 +605,19 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
         // Table names are in uppercase
         $table  = strtoupper( $table );
         
-        // Not sure ADODB is error free
+        // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         // Executes the ADODB query
-        return $this->Execute(
+        $ret = $this->Execute(
             'DELETE FROM ' . $table . ' WHERE deleted = 1',
             array()
         );
         
         // Resets the error reporting
         Woops_Core_Error_Handler::resetErrorReporting();
+        
+        // Returns the query result
+        return $ret
     }
 }

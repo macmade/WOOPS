@@ -552,7 +552,7 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
                 ':id' => $id
             );
             
-            // SQL for the update statement
+            // SQL for the delete statement
             $sql = 'DELETE FROM ' . $table . ' WHERE ' . $pKey . ' = :id';
             
             // Prepares the PDO query
