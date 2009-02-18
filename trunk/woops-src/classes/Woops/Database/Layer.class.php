@@ -133,7 +133,7 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
             );
         }
         
-        if( !class_exists( $name ) ) {
+        if( !class_exists( $class ) ) {
             
             throw new Woops_Database_Layer_Exception(
                 'Cannot register unexisting class \'' . $class . '\' as a database engine',
