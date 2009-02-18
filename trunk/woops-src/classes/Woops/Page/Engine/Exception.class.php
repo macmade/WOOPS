@@ -29,6 +29,7 @@ final class Woops_Page_Engine_Exception extends Woops_Core_Exception_Base
      * Error codes for the exceptions
      */
     const EXCEPTION_NO_ENGINE_CLASS       = 0x01;
-    const EXCEPTION_ENGINE_NOT_REGISTERED = 0x02;
-    const EXCEPTION_ENGINE_NOT_VALID      = 0x03;
+    const EXCEPTION_INVALID_ENGINE_CLASS  = 0x02;
+    const EXCEPTION_ENGINE_NOT_REGISTERED = 0x03;
+    const EXCEPTION_ENGINE_NOT_VALID      = 0x04;
 }

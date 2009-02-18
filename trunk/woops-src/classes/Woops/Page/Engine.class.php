@@ -112,6 +112,14 @@ final class Woops_Page_Engine implements Woops_Core_Singleton_Interface
             );
         }
         
+        if( !is_subclass_of( $className, 'Woops_Page_Engine_Base' ) ) {
+            
+            throw new Woops_Page_Engine_Exception(
+                'Cannot register class \'' . $className . '\' as a page engine, since it does not extends the \'Woops_Page_Engine_Base\' abstract class',
+                Woops_Page_Engine_Exception::EXCEPTION_INVALID_ENGINE_CLASS
+            );
+        }
+        
         $this->_pageEngines[ $className ] = true;
     }
     
