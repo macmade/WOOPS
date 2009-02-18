@@ -99,6 +99,26 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
     }
     
     /**
+     * Gets an ASCII control character multiple times
+     * 
+     * Valid name are: NUL, SOH, STX, ETX, EOT, ENQ, ACK, BEL, BS, TAB, LF, VT,
+     * FF, CR, SO, SI, DLE, DC1, DC2, DC3, DC4, NAK, SYN, ETB, CAN, EM, SUB,
+     * ESC, FS, GS, RS, US, SPC and NL.
+     * 
+     * @param   string  The name of the ASCII control character
+     * @param   array   The arguments of the method. Only the first one will be used, as number of occurences of the character to return.
+     * @return  string  The ASCII control character
+     */
+    public function __call( $name, array $args )
+    {
+        // Number of characters to produce
+        $repeat = ( isset( $args[ 0 ] ) ) ? ( int )$args[ 0 ] : 1;
+        
+        // Returns the ASCII character
+        return ( $this->_asciiTable[ $name ] ) ? str_repeat( $this->_asciiTable[ $name ], $repeat ) : '';
+    }
+    
+    /**
      * Gets the unique class instance
      * 
      * This method is used to get the unique instance of the class
@@ -118,6 +138,24 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
         
         // Returns the unique instance
         return self::$_instance;
+    }
+    
+    /**
+     * Sets the character to use as the new line character
+     * 
+     * @param   string  The new line character to set
+     * @return  string  The previsou value
+     */
+    public function setNewLine( $char )
+    {
+        // Gets the current value
+        $prev                     = $this->_asciiTable[ 'NL' ];
+        
+        // Stores the new value
+        $this>_asciiTable[ 'NL' ] = ( string )$char;
+        
+        // Returns the previous value
+        return $prev;
     }
     
     /**
