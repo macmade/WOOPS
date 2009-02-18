@@ -213,6 +213,9 @@ class Woops_Php_Source_Optimizer
         // Flag to know if we are in an abstract function declaration
         $inAbstract  = false;
         
+        // Flag to know if we are in an eval() function
+        $inEval      = false;
+        
         // Flag to know if we are in a double quoted string declaration
         $inString    = false;
         
@@ -235,6 +238,18 @@ class Woops_Php_Source_Optimizer
                 if( $token[ 0 ] === T_ABSTRACT ) {
                     
                     $inAbstract = true;
+                }
+                
+                // Nothing to do for abstract classes
+                if( $inAbstract && $token[ 0 ] === T_CLASS ) {
+                    
+                    $inAbstract = false;
+                }
+                
+                // Checks if we are declaring code that will be evaluated
+                if( $token[ 0 ] === T_EVAL ) {
+                    
+                    $inEval = true;
                 }
                 
                 // Checks if we are declaring a function
@@ -281,6 +296,40 @@ class Woops_Php_Source_Optimizer
                         $funcVars[ $token[ 1 ] ] = '$' . $varName;
                         $token[ 1 ]              = '$' . $varName;
                         $varCount++;
+                    }
+                }
+                
+                // Checks if we are declaring code that has to be evaluated
+                if( $inEval && $token[ 0 ] === T_CONSTANT_ENCAPSED_STRING ) {
+                    
+                    // Finds all variables in the evaluated code
+                    $matches = array();
+                    preg_match_all( '/\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/', $token[ 1 ], $matches );
+                    
+                    // Checks if variables were found
+                    if( is_array( $matches ) ) {
+                        
+                        // Sorts the variables
+                        arsort($matches[ 0 ]);
+                        
+                        // Process each variable
+                        foreach( $matches[ 0 ] as $var ) {
+                            
+                            // Has the variable been renamed already?
+                            if( isset( $funcVars[ $var ] ) ) {
+                                
+                                // Yes, gets the sort name
+                                $token[ 1 ] = str_replace( $var, $funcVars[ $var ], $token[ 1 ] );
+                                
+                            } else {
+                                
+                                // No, generates a new name, and stores it
+                                $varName                 = $this->_generateVarName( $varCount );
+                                $funcVars[ $token[ 1 ] ] = '$' . $varName;
+                                $token[ 1 ]              = str_replace( $var, $varName, $token[ 1 ] );
+                                $varCount++;
+                            }
+                        }
                     }
                 }
                 
@@ -457,6 +506,12 @@ class Woops_Php_Source_Optimizer
                 if( $inGlobal && $token === ';' ) {
                     
                     $inGlobal = false;
+                }
+                
+                // Checks for the end of the eval() declaration
+                if( $inEval && $token === ';' ) {
+                    
+                    $inEval = false;
                 }
                 
                 // Checks for the end of an abstract function declaration
