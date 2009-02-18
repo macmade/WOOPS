@@ -48,7 +48,22 @@ interface Woops_Database_Engine_Interface
     /**
      * 
      */
+    public function affectedRows();
+    
+    /**
+     * 
+     */
     public function query( $sql );
+    
+    /**
+     * 
+     */
+    public function quote( $str );
+    
+    /**
+     * 
+     */
+    public function rowCount( $res );
     
     /**
      * 

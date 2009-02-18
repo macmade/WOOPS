@@ -262,6 +262,22 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
     /**
      * 
      */
+    public function affectedRows()
+    {
+        // Not sure ADODB is completely error free
+        Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
+        
+        $count = $this->_adodb->Affected_Rows();
+        
+        // Resets the error reporting
+        Woops_Core_Error_Handler::resetErrorReporting();
+        
+        return $count;
+    }
+    
+    /**
+     * 
+     */
     public function query( $sql )
     {
         // Not sure ADODB is completely error free
@@ -278,12 +294,44 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
     /**
      * 
      */
+    public function quote( $str )
+    {
+        return $this->_adodb->qstr( $str );
+    }
+    
+    /**
+     * 
+     */
+    public function rowCount( $res )
+    {
+        if( $res instanceof ADORecordSet ) {
+            
+            // Not sure ADODB is completely error free
+            Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
+            
+            $count = $res->RecordCount();
+            
+            // Resets the error reporting
+            Woops_Core_Error_Handler::resetErrorReporting();
+            
+            return $count;
+        }
+        
+        throw new Woops_Mod_Adodb_Database_Engine_Exception(
+            'Passed argument is not a valid ADODB record set',
+            Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_INVALID_RECORD_SET
+        );
+    }
+    
+    /**
+     * 
+     */
     public function fetchAssoc( $res )
     {
-        // Not sure ADODB is completely error free
-        Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
-        
         if( $res instanceof ADORecordSet ) {
+            
+            // Not sure ADODB is completely error free
+            Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
             
             if( $res->EOF ) {
                 
@@ -321,10 +369,10 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     public function fetchObject( $res )
     {
-        // Not sure ADODB is completely error free
-        Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
-        
         if( $res instanceof ADORecordSet ) {
+            
+            // Not sure ADODB is completely error free
+            Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
             
             if( $res->EOF ) {
                 
@@ -671,13 +719,13 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
         // Executes the ADODB query
-        $this->Execute( $sql, $params );
+        $query = $this->Execute( $sql, $params );
         
         // Resets the error reporting
         Woops_Core_Error_Handler::resetErrorReporting();
         
-        // Returns the insert ID
-        return $this->lastInsertId();
+        // Returns the result of the query
+        return $query;
     }
     
     /**

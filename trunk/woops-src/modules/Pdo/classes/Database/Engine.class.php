@@ -39,6 +39,11 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
     private $_pdo             = NULL;
     
     /**
+     * The last PDO statement
+     */
+    private $_lastStatement   = NULL;
+    
+    /**
      * The available PDO drivers
      */
     private $_drivers         = array();
@@ -220,9 +225,42 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
     /**
      * 
      */
+    public function affectedRows()
+    {
+        return ( is_object( $this->_lastStatement ) ) ? $this->_lastStatement->rowCount() : 0;
+    }
+    
+    /**
+     * 
+     */
     public function query( $sql )
     {
-        return $this->_pdo->query( $sql );
+        $this->_lastStatement = $this->_pdo->query( $sql );
+        return $this->_lastStatement;
+    }
+    
+    /**
+     * 
+     */
+    public function quote( $str )
+    {
+        return $this->_pdo->quote( $str );
+    }
+    
+    /**
+     * 
+     */
+    public function rowCount( $res )
+    {
+        if( $res instanceof PDOStatement ) {
+            
+            return ( array )$res->rowCount();
+        }
+        
+        throw new Woops_Mod_Pdo_Database_Engine_Exception(
+            'Passed argument is not a valid PDO statement',
+            Woops_Mod_Pdo_Database_Engine_Exception::EXCEPTION_INVALID_STATEMENT
+        );
     }
     
     /**
@@ -292,17 +330,17 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
         );
         
         // Prepares the PDO query
-        $query = $this->prepare(
+        $this->_lastStatement = $this->prepare(
             'SELECT * FROM ' . $this->_tablePrefix . $table . '
              WHERE ' . $pKey . ' = :id
              LIMIT 1'
         );
         
         // Executes the PDO query
-        $query->execute( $params );
+        $this->_lastStatement->execute( $params );
         
         // Returns the record
-        return $query->fetchObject();
+        return $this->_lastStatement->fetchObject();
     }
     
     /**
@@ -342,16 +380,16 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
         $sql .= $orderBy;
         
         // Prepares the PDO query
-        $query = $this->prepare( $sql );
+        $this->_lastStatement = $this->prepare( $sql );
         
         // Executes the PDO query
-        $query->execute( $params );
+        $this->_lastStatement->execute( $params );
         
         // Storage
         $rows = array();
         
         // Process each row
-        while( $row = $query->fetchObject() ) {
+        while( $row = $this->_lastStatement->fetchObject() ) {
             
             // Stores the current row
             $rows[ $row->$pKey ] = $row;
@@ -415,16 +453,16 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
         }
         
         // Prepares the PDO query
-        $query = $this->prepare( $sql );
+        $this->_lastStatement = $this->prepare( $sql );
         
         // Executes the PDO query
-        $query->execute( $params );
+        $this->_lastStatement->execute( $params );
         
         // Storage
         $rows = array();
         
         // Process each row
-        while( $row = $query->fetchObject() ) {
+        while( $row = $this->_lastStatement->fetchObject() ) {
             
             // Stores the current row
             $rows[ $row->$pKey ] = $row;
@@ -474,13 +512,10 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
         $sql  = substr( $sql, 0, -1 );
         
         // Prepares the PDO query
-        $query = $this->prepare( $sql );
+        $this->_lastStatement = $this->prepare( $sql );
         
-        // Executes the PDO query
-        $query->execute( $params );
-        
-        // Returns the insert ID
-        return $this->lastInsertId();
+        // Returns the result of the query
+        return $this->_lastStatement->execute( $params );
     }
     
     /**
@@ -526,10 +561,10 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
         $sql .= ' WHERE ' . $pKey . ' = :' . $pKey;
         
         // Prepares the PDO query
-        $query = $this->prepare( $sql );
+        $this->_lastStatement = $this->prepare( $sql );
         
         // Executes the PDO query
-        return $query->execute( $params );
+        return $this->_lastStatement->execute( $params );
     }
     
     /**
@@ -555,10 +590,10 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
             $sql = 'DELETE FROM ' . $table . ' WHERE ' . $pKey . ' = :id';
             
             // Prepares the PDO query
-            $query = $this->prepare( $sql );
+            $this->_lastStatement = $this->prepare( $sql );
             
             // Executes the PDO query
-            return $this->execute( $params );
+            return $this->_lastStatement->execute( $params );
         }
         
         // Just sets the delete flag
@@ -583,6 +618,7 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
         );
         
         // Executes the PDO query
-        return $this->execute( $params );
+        $this->_lastStatement = $this->execute( $params );
+        return $this->_lastStatement;
     }
 }
