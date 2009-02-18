@@ -69,6 +69,48 @@ final class Woops_Core_Session_Helper implements Woops_Core_Singleton_Interface
     }
     
     /**
+     * 
+     */
+    public function __get( $name )
+    {
+        return $this->getSessionData( $name );
+    }
+    
+    /**
+     * 
+     */
+    public function __set( $name, $value )
+    {
+        $this->setSessionData( $name, $value );
+    }
+    
+    /**
+     * 
+     */
+    public function __isset( $name )
+    {
+        $this->start();
+        
+        $isset = isset( $_SESSION[ $name ] );
+        
+        $this->close();
+        
+        return $isset;
+    }
+    
+    /**
+     * 
+     */
+    public function __unset( $name )
+    {
+        $this->start();
+        
+        unset( $_SESSION[ $name ] );
+        
+        $this->close();
+    }
+    
+    /**
      * Gets the unique class instance
      * 
      * This method is used to get the unique instance of the class
