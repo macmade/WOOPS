@@ -525,7 +525,77 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      * 
      */
     public function getRelatedRecords( $id, $localTable, $foreignTable, $relationTable, $orderBy = '' )
-    {}
+    {
+        // Primary keys
+        $pKeyLocal     = 'id_' . strtolower( $localTable );
+        $pKeyForeign   = 'id_' . strtolower( $foreignTable );
+        
+        // Table names are in uppercase
+        $localTable    = $this->_tablePrefix . strtoupper( $localTable );
+        $foreignTable  = $this->_tablePrefix . strtoupper( $foreignTable );
+        $relationTable = $this->_tablePrefix . strtoupper( $relationTable );
+        
+        // Starts the query
+        $sql = 'SELECT DISTINCT '
+             . $foreignTable
+             . '.* FROM '
+             . $localTable
+             . ', '
+             . $foreignTable
+             . ', '
+             . $relationTable
+             . ' WHERE '
+             . $localTable
+             . '.'
+             . $pKeyLocal
+             . ' = '
+             . $relationTable
+             . '.'
+             . $pKeyLocal
+             . ' AND '
+             . $foreignTable
+             . '.'
+             . $pKeyForeign
+             . ' = '
+             . $relationTable
+             . '.'
+             . $pKeyForeign
+             . ' AND '
+             . $relationTable
+             . '.'
+             . $pKeyLocal
+             . ' = '
+             . $id;
+        
+        // Checks for an ORDER BY clause
+        if( $orderBy ) {
+            
+            // Adds the order by clause
+            $sql .= ' ORDER BY ' . $orderBy;
+        }
+        
+        // Not sure ADODB is completely error free
+        Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
+        
+        // Executes the ADODB query
+        $query = $this->Execute( $sql, array() );
+        
+        // Storage
+        $rows = array();
+        
+        // Process each row
+        while( $row = $this->fetchObject( $query ) ) {
+            
+            // Stores the current row
+            $rows[ $row->$pKey ] = $row;
+        }
+        
+        // Resets the error reporting
+        Woops_Core_Error_Handler::resetErrorReporting();
+        
+        // Returns the rows
+        return $rows;
+    }
     
     /**
      * 
