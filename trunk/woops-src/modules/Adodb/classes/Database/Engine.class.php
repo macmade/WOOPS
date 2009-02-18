@@ -222,6 +222,14 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
     /**
      * 
      */
+    public function query( $sql )
+    {
+        return $this->Execute( $sql, array() );
+    }
+    
+    /**
+     * 
+     */
     public function fetchAssoc( $res )
     {
         if( $res instanceof ADORecordSet ) {
