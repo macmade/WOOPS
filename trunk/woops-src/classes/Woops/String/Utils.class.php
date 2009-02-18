@@ -200,7 +200,8 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
     /**
      * Generates an unique identifier
      * 
-     * This method generates a unique identifier as defined in RFC-4122.
+     * This method generates a unique identifier as defined in RFC-4122
+     * (version 4).
      * Many thanks to the contributors of the documentation for the PHP function
      * uniqid().
      * 
