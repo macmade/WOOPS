@@ -222,8 +222,7 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
      */
     public function query( $sql )
     {
-        $query = $this->prepare( $sql );
-        return $this->execute( $query, array() );
+        return $this->_pdo->query( $sql );
     }
     
     /**
