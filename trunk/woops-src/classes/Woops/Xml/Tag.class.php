@@ -66,6 +66,11 @@ class Woops_Xml_Tag implements ArrayAccess, Iterator
     protected $_tagName                = '';
     
     /**
+     * 
+     */
+    protected $_data                   = '';
+    
+    /**
      * The attributes of the current tag
      */
     protected $_attribs                = array();
@@ -300,8 +305,10 @@ class Woops_Xml_Tag implements ArrayAccess, Iterator
             $tag .= ' ' . $key . '="' . $value . '"';
         }
         
-        // Checks if we have children to display
-        if( !$this->_childrenCount ) {
+        // Checks if we have something to display in the tag
+        if( (    $this->_type === self::TYPE_NODE && !$this->_childrenCount )
+            || ( $this->_type === self::TYPE_DATA && !$this->_data )
+        ) {
             
             // No - Checks if the tag is self closed
             $tag .= ' />';
@@ -334,7 +341,7 @@ class Woops_Xml_Tag implements ArrayAccess, Iterator
             } else {
                 
                 // Protects the data with CDATA if necessary
-                $data = ( strstr( $this->_children[ 0 ], '&' ) || strstr( $this->_children[ 0 ], '<' ) ) ? '<![CDATA[' . trim( ( string )$this->_children[ 0 ] ) . ']]>' : trim( ( string )$this->_children[ 0 ] );
+                $data = ( strstr( $this->_data, '&' ) || strstr( $this->_data, '<' ) ) ? '<![CDATA[' . trim( ( string )$this->_data ) . ']]>' : trim( ( string )$this->_data );
                 
                 // Adds the data
                 $tag .= $data;
@@ -400,17 +407,9 @@ class Woops_Xml_Tag implements ArrayAccess, Iterator
             );
         }
         
-        $this->_type = self::TYPE_DATA;
+        $this->_type  = self::TYPE_DATA;
         
-        if( !isset( $this->_children[ 0 ] ) ) {
-            
-            $this->_children[ 0 ] = ( string )$data;
-            $this->_childrenCount++;
-            
-        } else {
-            
-            $this->_children[ 0 ] .= ( string )$data;
-        }
+        $this->_data .= ( string )$data;
     }
     
     /**
@@ -428,15 +427,7 @@ class Woops_Xml_Tag implements ArrayAccess, Iterator
         
         $this->_type = self::TYPE_DATA;
         
-        if( !isset( $this->_children[ 0 ] ) ) {
-            
-            $this->_children[ 0 ] = ( string )$data;
-            $this->_childrenCount++;
-            
-        } else {
-            
-            $this->_children[ 0 ] = ( string )$data;
-        }
+        $this->_data = ( string )$data;
     }
     
     /**
