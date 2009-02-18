@@ -72,7 +72,7 @@ class Woops_Check_Environment
             'title'   => 'PDO - PHP Data Object',
             'status'  => '',
             'success' => 'The PDO class is available.<br /><br />Available drivers are: <strong>{DRIVERS}</strong>.',
-            'warning' => 'The PDO class is not available on your PHP installation.<br /><br />That means you won\'t be able to use the default WOOPS database abstraction layer engine. Please ensure this is not a problem for you.',
+            'warning' => 'The PDO class is not available on your PHP installation.<br /><br />That means you won\'t be able to use the default WOOPS database abstraction layer engine, but another one, like ADODB (included in thw WOOPS sources). Please ensure this is not a problem for you.',
             'error'   => '',
             'replace' => array()
         ),
