@@ -458,5 +458,14 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      * 
      */
     public function removeDeletedRecords( $table )
-    {}
+    {
+        // Table names are in uppercase
+        $table  = strtoupper( $table );
+        
+        // Executes the ADODB query
+        return $this->Execute(
+            'DELETE FROM ' . $table . ' WHERE deleted = 1',
+            array()
+        );
+    }
 }
