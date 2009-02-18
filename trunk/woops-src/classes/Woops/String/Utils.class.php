@@ -36,6 +36,16 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
     private $_asciiTable      = array();
     
     /**
+     * Wheter the random number generator device exists
+     */
+    private $_hasRandomDevice = false;
+    
+    /**
+     * A file ressource to the random generator device, if available
+     */
+    private $_randomDevice    = NULL;
+    
+    /**
      * The name of the ASCII control characters
      */
     private $_asciiName       = array(
@@ -64,6 +74,35 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
         
         // Sets the newline character
         $this->_asciiTable[ 'NL' ] = $this->_asciiTable[ 'LF' ];
+        
+        // Checks if a random generator device is available
+        if( file_exists( '/dev/urandom' ) && is_readable( '/dev/urandom' ) ) {
+            
+            // Creates a file handle to the random generator device
+            $this->_hasRandomDevice = true;
+            $this->_randomDevice    = fopen( '/dev/urandom', 'rb' );
+            
+        } elseif( file_exists( '/dev/random' ) && is_readable( '/dev/random' ) ) {
+            
+            // Creates a file handle to the random generator device
+            $this->_hasRandomDevice = true;
+            $this->_randomDevice    = fopen( '/dev/random', 'rb' );
+        }
+    }
+    
+    /**
+     * Class destructor
+     * 
+     * @return  void
+     */
+    public function __destruct()
+    {
+        // Checks if the random device was available on construct time
+        if( $this->_hasRandomDevice ) {
+            
+            // Closes the file handle
+            fclose( $this->_randomDevice );
+        }
     }
     
     /**
@@ -156,6 +195,68 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
         
         // Returns the previous value
         return $prev;
+    }
+    
+    /**
+     * Generates an unique identifier
+     * 
+     * This method generates a unique identifier as defined in RFC-4122.
+     * Many thanks to the contributors of the documentation for the PHP function
+     * uniqid().
+     * 
+     * @return  string  An unique identifier
+     */
+    public function uniqueId()
+    {
+        // Checks if the random generator device is available
+        if( $this->_hasRandomDevice ) {
+            
+            // Gets 16 random bytes
+            $randomBits = fread( $this->_randomDevice, 16 );
+            
+        } else {
+            
+            // No, we'll have to generates the bytes by ourselves
+            $randomBits = '';
+            
+            // We want 16 bytes
+            for( $i = 0; $i < 16; $i++ ) {
+                
+                // Generates a random byte
+                $randomBits = chr( mt_rand( 0, 0xFF ) );
+            }
+        }
+        
+        // Creates the needed parts, according to RFC-4122
+        $timeLow                 = bin2hex( substr( $randomBits, 0, 4 ) );
+        $timeMid                 = bin2hex( substr( $randomBits, 4, 2 ) );
+        $timeHighAndVersion      = ( hexdec( bin2hex( substr( $randomBits, 6, 2 ) ) ) >> 4 ) | 0x4000;
+        $clockSeqHighAndReserved = ( hexdec( bin2hex( substr( $randomBits, 8, 2 ) ) ) >> 2 ) | 0x8000;
+        $node                    = bin2hex( substr( $randomBits, 10, 6 ) );
+        
+        // Puts all the parts together
+        $uid = sprintf(
+            '%08s-%04s-%04x-%04x-%012s',
+            $timeLow,
+            $timeMid,
+            $timeHighAndVersion,
+            $clockSeqHighAndReserved,
+            $node
+        );
+        
+        // Returns the unique identifier
+        return $uid;
+    }
+    
+    /**
+     * Gets an unique identifier URN ressource
+     * 
+     * @return  string  The UUID URN
+     * @see     uniqueId
+     */
+    public function uniqueIdUrn()
+    {
+        return 'urn:uuid:' . $this->uniqueId();
     }
     
     /**
