@@ -101,6 +101,17 @@ defaultLanguage = en
 format = On
 
 ; ##############################################################################
+; # XML settings                                                               #
+; ##############################################################################
+
+[xml]
+
+; Format and indent the generated XML code
+; 
+; @type boolean
+format = On
+
+; ##############################################################################
 ; # Class cache related settings                                               #
 ; ##############################################################################
 
@@ -109,7 +120,7 @@ format = On
 ; Allows WOOPS classes to be stored in the class cache directory.
 ; 
 ; @type boolean
-enable   = On
+enable   = Off
 
 ; Optimizes the PHP source code before putting classes in the cache.
 ; 
@@ -128,7 +139,7 @@ optimize = On
 ; be enabled.
 ; 
 ; @type boolean
-enable = On
+enable = Off
 
 ; ##############################################################################
 ; # Error related settings                                                     #
