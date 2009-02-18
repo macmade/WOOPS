@@ -71,7 +71,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
         // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
-        require_once( Woops_Core_Env_Getter::getInstance()->getPath( 'woops-mod://Adodb/ressources/adodb5/adodb.inc.php' ) );
+        require_once( Woops_Core_Env_Getter::getInstance()->getPath( 'woops-mod://Adodb/ressources/php/adodb5/adodb.inc.php' ) );
         
         // Resets the error reporting
         Woops_Core_Error_Handler::resetErrorReporting();
