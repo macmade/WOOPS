@@ -152,7 +152,7 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
         $prev                     = $this->_asciiTable[ 'NL' ];
         
         // Stores the new value
-        $this>_asciiTable[ 'NL' ] = ( string )$char;
+        $this->_asciiTable[ 'NL' ] = ( string )$char;
         
         // Returns the previous value
         return $prev;
