@@ -294,28 +294,32 @@ abstract class Woops_Core_Exception_Base extends Exception
      */
     protected function _getCode( $file, $line )
     {
-        // Gets all the lines from the file
-        $lines = file( $file );
-        
-        // Checks the lines array
-        if( is_array( $lines ) ) {
+        // Checks if the file exists (may not be a valid file path for eval() errors)
+        if( file_exists( $file ) ) {
             
-            // Length of the last line
-            $lineLength = strlen( $line + 3 );
+            // Gets all the lines from the file
+            $lines = file( $file );
             
-            // Gets the given line
-            $line3      = ( isset( $lines[ $line - 1 ] ) ) ? '<strong style="color: #0062A0;">' . str_pad( $line, $lineLength, 0, STR_PAD_LEFT ) . ': ' . $lines[ $line -1 ] . '</strong>' : '';
-            
-            // Gets some lines above and below the given one
-            $line0      = ( isset( $lines[ $line - 4 ] ) ) ? str_pad( $line - 3, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line - 4 ] ) : '';
-            $line1      = ( isset( $lines[ $line - 3 ] ) ) ? str_pad( $line - 2, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line - 3 ] ) : '';
-            $line2      = ( isset( $lines[ $line - 2 ] ) ) ? str_pad( $line - 1, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line - 2 ] ) : '';
-            $line4      = ( isset( $lines[ $line ] ) )     ? str_pad( $line + 1, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line ] )     : '';
-            $line5      = ( isset( $lines[ $line + 1 ] ) ) ? str_pad( $line + 2, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line + 1 ] ) : '';
-            $line6      = ( isset( $lines[ $line + 2 ] ) ) ? str_pad( $line + 3, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line + 2 ] ) : '';
-            
-            // Returns the lines
-            return '<div style="' . self::$_commonStyles . ' white-space: pre; font-family: monospace; border: solid 1px #D3E7F4; background-color: #EDF5FA; padding: 5px; margin-top: 5px;">' . $line0 . $line1 . $line2 . $line3 . $line4 . $line5 . $line6 . '</div>';
+            // Checks the lines array
+            if( is_array( $lines ) ) {
+                
+                // Length of the last line
+                $lineLength = strlen( $line + 3 );
+                
+                // Gets the given line
+                $line3      = ( isset( $lines[ $line - 1 ] ) ) ? '<strong style="color: #0062A0;">' . str_pad( $line, $lineLength, 0, STR_PAD_LEFT ) . ': ' . $lines[ $line -1 ] . '</strong>' : '';
+                
+                // Gets some lines above and below the given one
+                $line0      = ( isset( $lines[ $line - 4 ] ) ) ? str_pad( $line - 3, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line - 4 ] ) : '';
+                $line1      = ( isset( $lines[ $line - 3 ] ) ) ? str_pad( $line - 2, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line - 3 ] ) : '';
+                $line2      = ( isset( $lines[ $line - 2 ] ) ) ? str_pad( $line - 1, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line - 2 ] ) : '';
+                $line4      = ( isset( $lines[ $line ] ) )     ? str_pad( $line + 1, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line ] )     : '';
+                $line5      = ( isset( $lines[ $line + 1 ] ) ) ? str_pad( $line + 2, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line + 1 ] ) : '';
+                $line6      = ( isset( $lines[ $line + 2 ] ) ) ? str_pad( $line + 3, $lineLength, 0, STR_PAD_LEFT ) . ': ' . htmlspecialchars( $lines[ $line + 2 ] ) : '';
+                
+                // Returns the lines
+                return '<div style="' . self::$_commonStyles . ' white-space: pre; font-family: monospace; border: solid 1px #D3E7F4; background-color: #EDF5FA; padding: 5px; margin-top: 5px;">' . $line0 . $line1 . $line2 . $line3 . $line4 . $line5 . $line6 . '</div>';
+            }
         }
         
         // No lines
