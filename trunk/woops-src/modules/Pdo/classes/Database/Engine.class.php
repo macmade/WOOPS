@@ -64,9 +64,6 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
      */
     private function __construct()
     {
-        // Gets the instance of the configuration object
-        $this->_conf = Woops_Core_Config_Getter::getInstance();
-        
         // Checks if PDO is available
         if( !class_exists( 'PDO' ) ) {
             
