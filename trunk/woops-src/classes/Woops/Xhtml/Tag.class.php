@@ -384,24 +384,31 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
                         $tag .= $child->_output( $xmlCompliant, $level + 1 );
                     }
                     
-                } elseif( $xmlCompliant ) {
-                    
-                    // If we must be XML compliant, nodes and data are not allwed in a single node
-                    if( $this->_hasNodeChildren ) {
-                        
-                        // Protect the data with CDATA, and adds a span tag for the XML compliancy
-                        $tag .= '<span><![CDATA[' . trim( $child ) . ']]></span>';
-                        
-                    } else {
-                        
-                        // Protects the data with CDATA
-                        $tag .= '<![CDATA[' . trim( $child ) . ']]>';
-                    }
-                    
                 } else {
                     
-                    // String - Adds the child data
-                    $tag .= trim( ( string )$child );
+                    // Should we be XML compliant?
+                    if( $xmlCompliant ) {
+                        
+                        // Data
+                        $data = ( strstr( $child, '&' ) || strstr( $child, '<' ) ) ? '<![CDATA[' . trim( ( string )$child ) . ']]>' : trim( ( string )$child );
+                        
+                        // If we must be XML compliant, nodes and data are not allowed in a single node
+                        if( $this->_hasNodeChildren ) {
+                            
+                            // Protect the data with CDATA, and adds a span tag for the XML compliancy
+                            $tag .= '<span>' . $data . '</span>';
+                            
+                        } else {
+                            
+                            // Protects the data with CDATA
+                            $tag .= $data;
+                        }
+                    
+                    } else {
+                        
+                        // String - Adds the child data
+                        $tag .= trim( ( string )$child );
+                    }
                 }
             }
             
