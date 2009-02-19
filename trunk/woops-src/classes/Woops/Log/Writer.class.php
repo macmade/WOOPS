@@ -183,9 +183,8 @@ final class Woops_Log_Writer implements Woops_Core_Singleton_Interface
             );
         }
         
-        $ref                      = Woops_Core_Reflection_Method::getInstance( $class, 'getInstance' );
         $this->_loggers[ $class ] = array(
-            $ref->invoke( array() ),
+            Woops_Core_Class_Manager::getInstance()->getSingleton( $class ),
             $types
         );
     }

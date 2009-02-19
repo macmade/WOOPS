@@ -633,4 +633,59 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
         // Returns the loaded classes from the WOOPS project
         return $this->_loadedClasses;
     }
+    
+    /**
+     * Gets the instance of a singleton class
+     * 
+     * @param   string  The name of the class
+     * @return  object  The instance of the class
+     */
+    public function getSingleton( $className )
+    {
+        // Creates a reflection object for the requested class
+        $reflection = Woops_Core_Reflection_Class::getInstance( $className );
+        
+        // Checks if the class is a singleton
+        if( $reflection->isSingleton() ) {
+            
+            // Returns the singleton instance
+            return $reflection->getMethod( 'getInstance' )->invoke( array() );
+            
+        } else {
+            
+            // Error, the class is not a singleton
+            throw new Woops_Core_Class_Manager_Exception(
+                'The class \'' . $className . '\' is not a singleton',
+                Woops_Core_Class_Manager_Exception::EXCEPTION_NOT_SINGLETON
+            );
+        }
+    }
+    
+    /**
+     * Gets an instance of a multi-singleton class
+     * 
+     * @param   string  The name of the class
+     * @param   string  The name of the instance
+     * @return  object  The instance of the class
+     */
+    public function getMultiSingleton( $className, $instanceName )
+    {
+        // Creates a reflection object for the requested class
+        $reflection = Woops_Core_Reflection_Class::getInstance( $className );
+        
+        // Checks if the class is a multi-singleton
+        if( $reflection->isMultiSingleton() ) {
+            
+            // Returns the singleton instance
+            return $reflection->getMethod( 'getInstance' )->invoke( array( $instanceName ) );
+            
+        } else {
+            
+            // Error, the class is not a multi-singleton
+            throw new Woops_Core_Class_Manager_Exception(
+                'The class \'' . $className . '\' is not a multi-singleton',
+                Woops_Core_Class_Manager_Exception::EXCEPTION_NOT_MULTISINGLETON
+            );
+        }
+    }
 }

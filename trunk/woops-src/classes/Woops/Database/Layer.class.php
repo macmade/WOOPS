@@ -151,8 +151,7 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
             );
         }
         
-        $ref                     = Woops_Core_Reflection_Method::getInstance( $class, 'getInstance' );
-        $this->_engines[ $name ] = $ref->invoke( array() );
+        $this->_engines[ $name ] =  Woops_Core_Class_Manager::getInstance()->getSingleton( $class );
         
         static $driver;
         static $host;
