@@ -19,4 +19,9 @@
  * @package     Woops.Unit
  */
 class Woops_Unit_Speed extends Woops_Unit_Base
-{}
+{
+    /**
+     * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
+     */
+    const PHP_COMPATIBLE = '5.2.0';
+}

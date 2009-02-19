@@ -21,27 +21,7 @@
 class Woops_Unit_Length extends Woops_Unit_Base
 {
     /**
-     * 
+     * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const MILLIMETER  = 'MILLIMETER';
-    const CENTIMETER  = 'CENTIMETER';
-    const DECIMETER   = 'DECIMETER';
-    const METER       = 'METER';
-    const KILOMETER   = 'KILOMETER';
-    
-    /**
-     * 
-     */
-    protected $_defaultType = 'METER';
-    
-    /**
-     * 
-     */
-    protected $_types = array(
-        'MILLIMETER' => array( array( '*', 1000 ) ),
-        'CENTIMETER' => array( array( '*', 100 ) ),
-        'DECIMETER'  => array( array( '*', 10 ) ),
-        'METER'      => array( array( '*', 1 ) ),
-        'KILOMETER'  => array( array( '/', 1000 ) )
-    );
+    const PHP_COMPATIBLE = '5.2.0';
 }
