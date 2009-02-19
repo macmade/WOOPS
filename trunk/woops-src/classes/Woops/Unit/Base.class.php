@@ -126,7 +126,9 @@ abstract class Woops_Unit_Base
      */
     public function _convertFrom( $value, $type )
     {
-        foreach( $this->_types[ $type ] as $operation ) {
+        $operations = array_reverse( $this->_types[ $type ] );
+        
+        foreach( $operations as $operation ) {
             
             if( !is_array( $operation ) ) {
                 
