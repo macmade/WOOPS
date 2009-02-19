@@ -48,16 +48,16 @@ class Woops_Unit_Binary extends Woops_Unit_Base
      * The convertion operations for each unit from the default type
      */
     protected $_types = array(
-        'BIT'       => array( array( '*' => '8' ) ),
+        'BIT'       => array( array( '*' => 8 ) ),
         'BYTE'      => array(),
-        'KILOBYTE'  => array( array( '/', '1024' ) ),
-        'MEGABYTE'  => array( array( '/', '1048576' ) ),
-        'GIGABYTE'  => array( array( '/', '1073741824' ) ),
-        'TERABYTE'  => array( array( '/', '1099511627776' ) ),
-        'PETABYTE'  => array( array( '/', '1125899906842624' ) ),
-        'EXABYTE'   => array( array( '/', '1152921504606846976' ) ),
-        'ZETTABYTE' => array( array( '/', '1180591620717411303424' ) ),
-        'YOTTABYTE' => array( array( '/', '1208925819614629174706176' ) )
+        'KILOBYTE'  => array( array( '/', 1024 ) ),
+        'MEGABYTE'  => array( array( '/', 1048576 ) ),
+        'GIGABYTE'  => array( array( '/', 1073741824 ) ),
+        'TERABYTE'  => array( array( '/', 1099511627776 ) ),
+        'PETABYTE'  => array( array( '/', 1125899906842624 ) ),
+        'EXABYTE'   => array( array( '/', 1152921504606846976 ) ),
+        'ZETTABYTE' => array( array( '/', 1180591620717411303424 ) ),
+        'YOTTABYTE' => array( array( '/', 1208925819614629174706176 ) )
     );
 }
 
