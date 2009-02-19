@@ -24,4 +24,25 @@ class Woops_Unit_Temperature extends Woops_Unit_Base
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
     const PHP_COMPATIBLE = '5.2.0';
+    
+    /**
+     * The available units
+     */
+    const CELSIUS    = 'CELSIUS';
+    const FAHRENHEIT = 'FAHRENHEIT';
+    const KELVIN     = 'KELVIN';
+    
+    /**
+     * The default unit
+     */
+    protected $_defaultType = 'CELSIUS';
+    
+    /**
+     * The convertion operations for each unit from the default type
+     */
+    protected $_types = array(
+        'CELSIUS'    => array(),
+        'FAHRENHEIT' => array( array( '*' , 9 ), array( '/', 5 ), array( '+', 32 ) ),
+        'KELVIN'     => array( array( '-', 273.16 ) )
+    );
 }
