@@ -349,7 +349,7 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
      * @param   boolean If set, removes all HTML tags from the string before cropping
      * @return  string  The cropped string
      */
-    function crop( $str, $chars, $endString = '...', $crop2space = true, $stripTags = true )
+    function crop( $str, $chars, $endString = '...', $cropToSpace = true, $stripTags = true )
     {
         // Checks the string length
         if( strlen( $str ) < $chars ) {
@@ -377,7 +377,7 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
             $str = substr( $str, 0, $chars );
             
             // Crops only after a word?
-            if( $crop2space && strstr( $str, ' ' ) ) {
+            if( $cropToSpace && strstr( $str, ' ' ) ) {
                 
                 // Position of the last space
                 $cropPos = strrpos( $str, ' ' );
