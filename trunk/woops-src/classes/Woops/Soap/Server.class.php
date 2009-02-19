@@ -82,43 +82,11 @@ class Woops_Soap_Server
             );
         }
         
-        // Gets the number of arguments
-        $argCount = count( $args );
+        // Creates a callback
+        $callback = new Woops_Core_Callback_Helper( array( $this->_soapServer, $name ) );
         
-        // We won't use call_user_func_array, as it cannot return references
-        switch( $argCount ) {
-            
-            case 1:
-                
-                return $this->_soapServer->$name( $args[ 0 ] );
-                break;
-            
-            case 2:
-                
-                return $this->_soapServer->$name( $args[ 0 ], $args[ 1 ] );
-                break;
-            
-            case 3:
-                
-                return $this->_soapServer->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ] );
-                break;
-            
-            case 4:
-                
-                return $this->_soapServer->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ] );
-                break;
-                break;
-            
-            case 5:
-                
-                return $this->_soapServer->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ] );
-                break;
-            
-            default:
-                
-                return $this->_soapServer->$name();
-                break;
-        }
+        // Invokes the callback and returns it's result
+        return $callback->invoke( $args );
     }
     
     /**
