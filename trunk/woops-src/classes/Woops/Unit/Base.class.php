@@ -13,6 +13,9 @@
 
 /**
  * Abstract class for the unit classes
+ * 
+ * The idea of such a set of classes came from the Zend Framework, but this one
+ * works a bit differently.
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
