@@ -28,9 +28,9 @@ class Woops_Unit_Temperature extends Woops_Unit_Base
     /**
      * The available units
      */
-    const CELSIUS    = 'CELSIUS';
-    const FAHRENHEIT = 'FAHRENHEIT';
-    const KELVIN     = 'KELVIN';
+    const UNIT_CELSIUS    = 'CELSIUS';
+    const UNIT_FAHRENHEIT = 'FAHRENHEIT';
+    const UNIT_KELVIN     = 'KELVIN';
     
     /**
      * The default unit

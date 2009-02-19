@@ -28,16 +28,16 @@ class Woops_Unit_Binary extends Woops_Unit_Base
     /**
      * The available units
      */
-    const BIT       = 'BIT';
-    const BYTE      = 'BYTE';
-    const KILOBYTE  = 'KILOBYTE';
-    const MEGABYTE  = 'MEGABYTE';
-    const GIGABYTE  = 'GIGABYTE';
-    const TERABYTE  = 'TERABYTE';
-    const PETABYTE  = 'PETABYTE';
-    const EXABYTE   = 'EXABYTE';
-    const ZETTABYTE = 'ZETTABYTE';
-    const YOTTABYTE = 'YOTTABYTE';
+    const UNIT_BIT       = 'BIT';
+    const UNIT_BYTE      = 'BYTE';
+    const UNIT_KILOBYTE  = 'KILOBYTE';
+    const UNIT_MEGABYTE  = 'MEGABYTE';
+    const UNIT_GIGABYTE  = 'GIGABYTE';
+    const UNIT_TERABYTE  = 'TERABYTE';
+    const UNIT_PETABYTE  = 'PETABYTE';
+    const UNIT_EXABYTE   = 'EXABYTE';
+    const UNIT_ZETTABYTE = 'ZETTABYTE';
+    const UNIT_YOTTABYTE = 'YOTTABYTE';
     
     /**
      * The default unit
