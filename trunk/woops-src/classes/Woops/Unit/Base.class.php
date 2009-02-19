@@ -64,6 +64,23 @@ abstract class Woops_Unit_Base
     /**
      * 
      */
+    public function __call( $name, array $args = array() )
+    {
+        if( substr( $name, 0, 2 ) === 'as' ) {
+            
+            $type = strtoupper( substr( $name, 2 ) );
+            
+        } else {
+            
+            $type = $this->_defaultType;
+        }
+        
+        return ( isset( $args[ 0 ] ) ) ? $this->getValue( $type, $args[ 0 ] ) : $this->getValue( $type );
+    }
+    
+    /**
+     * 
+     */
     protected function _checkClass( Woops_Unit_Base $unit )
     {
         $unitClass = get_class( $unit );
@@ -192,7 +209,7 @@ abstract class Woops_Unit_Base
     /**
      * 
      */
-    public function getValue( $type = false )
+    public function getValue( $type = false, $round = 2 )
     {
         if( !$type ) {
             
