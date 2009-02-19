@@ -215,7 +215,7 @@ abstract class Woops_Unit_Base
     {
         $this->_checkClass( $unit );
         
-        return $this->_value > $unit->getValue( $this->_type );
+        return $this->_value > $unit->getValue();
     }
     
     /**
@@ -225,7 +225,7 @@ abstract class Woops_Unit_Base
     {
         $this->_checkClass( $unit );
         
-        return $this->_value < $unit->getValue( $this->_type );
+        return $this->_value < $unit->getValue();
     }
     
     /**
@@ -235,7 +235,7 @@ abstract class Woops_Unit_Base
     {
         $this->_checkClass( $unit );
         
-        return $this->_value == $unit->getValue( $this->_type );
+        return $this->_value == $unit->getValue();
     }
     
     /**
@@ -245,9 +245,7 @@ abstract class Woops_Unit_Base
     {
         $this->_checkClass( $unit );
         
-        $this->_value += $unit->getValue( $this->_type );
-        
-        return $this->_value;
+        $this->_value += $unit->getValue();
     }
     
     /**
@@ -257,9 +255,7 @@ abstract class Woops_Unit_Base
     {
         $this->_checkClass( $unit );
         
-        $this->_value -= $unit->getValue( $this->_type );
-        
-        return $this->_value;
+        $this->_value -= $unit->getValue();
     }
     
     /**
@@ -269,9 +265,7 @@ abstract class Woops_Unit_Base
     {
         $this->_checkClass( $unit );
         
-        $this->_value *= $unit->getValue( $this->_type );
-        
-        return $this->_value;
+        $this->_value *= $unit->getValue();
     }
     
     /**
@@ -281,8 +275,6 @@ abstract class Woops_Unit_Base
     {
         $this->_checkClass( $unit );
         
-        $this->_value /= $unit->getValue( $this->_type );
-        
-        return $this->_value;
+        $this->_value /= $unit->getValue();
     }
 }
