@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Core.Reflection
  */
-abstract class Woops_Core_Reflection_Base implements Woops_Core_Singleton_Interface
+abstract class Woops_Core_Reflection_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

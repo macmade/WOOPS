@@ -151,14 +151,6 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
             );
         }
         
-        if( !isset( $interfaces[ 'Woops_Core_Singleton_Interface' ] ) ) {
-            
-            throw new Woops_Database_Layer_Exception(
-                'Cannot register class \'' . $class . '\' as a database engine, since it does not implements the \'Woops_Core_Singleton_Interface\' interface',
-                Woops_Database_Layer_Exception::EXCEPTION_INVALID_ENGINE_CLASS
-            );
-        }
-        
         eval( '$this->_engines[ $name ] = ' . $class . '::getInstance();' );
         
         static $driver;

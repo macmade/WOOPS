@@ -12,18 +12,19 @@
 # $Id$
 
 /**
- * Interface for the singleton classes
+ * Interface for the multi singleton classes
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core.Singleton
+ * @package     Woops.Core.MultiSingleton
  */
-interface Woops_Core_Singleton_Interface
+interface Woops_Core_MultiSingleton_Interface
 {
     /**
-     * Gets the unique instance (singleton)
+     * Gets a singleton instance
      * 
+     * @param   string  The instance name
      * @return  object  The requested instance
      */
-    public static function getInstance();
+    public static function getInstance( $instanceName );
 }

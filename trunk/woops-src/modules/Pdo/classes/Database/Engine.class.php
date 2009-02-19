@@ -21,7 +21,7 @@
  * @version     1.0
  * @package     Woops.Mod.Pdo.Database
  */
-final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Interface, Woops_Core_Singleton_Interface
+final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

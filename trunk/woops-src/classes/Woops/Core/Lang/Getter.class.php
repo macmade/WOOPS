@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Core.Lang
  */
-final class Woops_Core_Lang_Getter implements Woops_Core_Singleton_Interface
+final class Woops_Core_Lang_Getter implements Woops_Core_MultiSingleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

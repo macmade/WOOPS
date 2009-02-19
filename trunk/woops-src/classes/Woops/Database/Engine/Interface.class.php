@@ -18,13 +18,8 @@
  * @version     1.0
  * @package     Woops.Database.Engine
  */
-interface Woops_Database_Engine_Interface
+interface Woops_Database_Engine_Interface extends Woops_Core_Singleton_Interface
 {
-    /**
-     * 
-     */
-    public static function getInstance();
-    
     /**
      * 
      */

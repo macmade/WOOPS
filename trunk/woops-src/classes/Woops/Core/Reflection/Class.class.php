@@ -48,6 +48,14 @@ final class Woops_Core_Reflection_Class extends Woops_Core_Reflection_Base
     /**
      * 
      */
+    public function isMultiSingleton()
+    {
+        return $this->_reflector->implementsInterface( 'Woops_Core_MultiSingleton_Interface' );
+    }
+    
+    /**
+     * 
+     */
     public function isAopReady()
     {
         return $this->_reflector->isSubclassOf( 'Woops_Core_Aop_Advisor' );
