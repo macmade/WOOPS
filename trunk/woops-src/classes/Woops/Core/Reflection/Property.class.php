@@ -28,6 +28,14 @@ final class Woops_Core_Reflection_Property extends Woops_Core_Reflection_Base
     /**
      * 
      */
+    const IS_PRIVATE   = ReflectionProperty::IS_PRIVATE;
+    const IS_PROTECTED = ReflectionProperty::IS_PROTECTED;
+    const IS_PUBLIC    = ReflectionProperty::IS_PUBLIC;
+    const IS_STATIC    = ReflectionProperty::IS_STATIC;
+    
+    /**
+     * 
+     */
     public static function getInstance( $class, $name )
     {
         return self::_getInstance(

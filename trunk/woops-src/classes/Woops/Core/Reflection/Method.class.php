@@ -28,6 +28,16 @@ final class Woops_Core_Reflection_Method extends Woops_Core_Reflection_Base
     /**
      * 
      */
+    const IS_ABSTRACT  = ReflectionMethod::IS_ABSTRACT;
+    const IS_FINAL     = ReflectionMethod::IS_FINAL;
+    const IS_PRIVATE   = ReflectionMethod::IS_PRIVATE;
+    const IS_PROTECTED = ReflectionMethod::IS_PROTECTED;
+    const IS_PUBLIC    = ReflectionMethod::IS_PUBLIC;
+    const IS_STATIC    = ReflectionMethod::IS_STATIC;
+    
+    /**
+     * 
+     */
     public static function getInstance( $class, $name )
     {
         return self::_getInstance(

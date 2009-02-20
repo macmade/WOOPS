@@ -28,6 +28,13 @@ final class Woops_Core_Reflection_Class extends Woops_Core_Reflection_Base
     /**
      * 
      */
+    const IS_EXPLICIT_ABSTRACT = ReflectionClass::IS_EXPLICIT_ABSTRACT;
+    const IS_FINAL             = ReflectionClass::IS_FINAL;
+    const IS_IMPLICIT_ABSTRACT = ReflectionClass::IS_IMPLICIT_ABSTRACT;
+    
+    /**
+     * 
+     */
     public static function getInstance( $className )
     {
         return self::_getInstance(
