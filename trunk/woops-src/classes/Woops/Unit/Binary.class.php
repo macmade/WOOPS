@@ -45,7 +45,7 @@ class Woops_Unit_Binary extends Woops_Unit_Base
     protected $_defaultType = 'BYTE';
     
     /**
-     * The convertion operations for each unit from the default type
+     * The conversion operations for each unit from the default type
      */
     protected $_types = array(
         'BIT'       => array( array( '*' => 8 ) ),
