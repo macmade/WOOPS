@@ -247,7 +247,7 @@ abstract class Woops_Core_Reflection_Base
      * @return  void
      * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
      */
-    public function __clone()
+    final private function __clone()
     {
         throw new Woops_Core_Singleton_Exception(
             'Class ' . __CLASS__ . ' cannot be cloned',
@@ -258,7 +258,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final public function __get( $name )
+    final final private function __get( $name )
     {
         return $this->_reflector->$name;
     }
@@ -266,7 +266,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final public function __set( $name, $value )
+    final final private function __set( $name, $value )
     {
         $this->_reflector->$name = $value;
     }
@@ -274,7 +274,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final public function __isset( $name )
+    final final private function __isset( $name )
     {
         return isset( $this->_reflector->$name );
     }
@@ -282,7 +282,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final public function __unset( $name )
+    final final private function __unset( $name )
     {
         unset( $this->_reflector->$name );
     }
@@ -290,7 +290,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final public function __call( $name, array $args = array() )
+    final final private function __call( $name, array $args = array() )
     {
         if( ( $name === 'getParameters' || $name === 'getExtension' )
             && ( $this->_reflectorClass === 'ReflectionFunction' )
@@ -340,7 +340,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final public function __toString()
+    final final private function __toString()
     {
         return ( string )$this->_reflector;
     }
@@ -510,7 +510,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getDeclaringFunction()
+    final private function _getDeclaringFunction()
     {
         if( !$this->_hasDeclaringFunction ) {
             
@@ -539,7 +539,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getDeclaringClass()
+    final private function _getDeclaringClass()
     {
         if( !$this->_hasDeclaringClass ) {
             
@@ -557,7 +557,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getClass()
+    final private function _getClass()
     {
         if( !$this->_hasClass ) {
             
@@ -583,7 +583,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getFunctions()
+    final private function _getFunctions()
     {
         if( !$this->_hasFunctions ) {
             
@@ -605,7 +605,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getClasses()
+    final private function _getClasses()
     {
         if( !$this->_hasClasses ) {
             
@@ -627,7 +627,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getMethod( $name )
+    final private function _getMethod( $name )
     {
         if( !isset( $this->_methods[ $name ] ) ) {
             
@@ -677,7 +677,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getMethods( $filter = 0 )
+    final private function _getMethods( $filter = 0 )
     {
         if( !$this->_hasMethods ) {
             
@@ -777,7 +777,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getConstructor()
+    final private function _getConstructor()
     {
         if( !$this->_hasConstructor ) {
             
@@ -804,7 +804,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getInterfaces()
+    final private function _getInterfaces()
     {
         if( !$this->_hasInterfaces ) {
             
@@ -826,7 +826,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getProperty( $name )
+    final private function _getProperty( $name )
     {
         if( !isset( $this->_properties[ $name ] ) ) {
             
@@ -866,7 +866,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getProperties( $filter = 0 )
+    final private function _getProperties( $filter = 0 )
     {
         if( !$this->_hasProperties ) {
             
@@ -946,7 +946,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _getParentClass()
+    final private function _getParentClass()
     {
         if( !$this->_hasParentClass ) {
             
@@ -972,7 +972,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    public function _isSubclassOf( $class )
+    final private function _isSubclassOf( $class )
     {
         if( is_object( $class ) && $class instanceof self ) {
             
