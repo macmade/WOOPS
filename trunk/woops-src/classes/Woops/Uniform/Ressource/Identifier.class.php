@@ -210,42 +210,42 @@ class Woops_Uniform_Ressource_Identifier
     protected $_scheme     = '';
     
     /**
-     * 
+     * The URI host
      */
     protected $_host       = '';
     
     /**
-     * 
+     * The URI port number
      */
     protected $_port       = 0;
     
     /**
-     * 
+     * The URI username
      */
     protected $_user       = '';
     
     /**
-     * 
+     * The URI user password
      */
     protected $_pass       = '';
     
     /**
-     * 
+     * The URI path
      */
     protected $_path       = '';
     
     /**
-     * 
+     * The URI query
      */
     protected $_query      = '';
     
     /**
-     * 
+     * THe URI fragment
      */
     protected $_fragment   = '';
     
     /**
-     * 
+     * The URI query, as key/value pairs
      */
     protected $_queryParts = array();
     
@@ -259,13 +259,13 @@ class Woops_Uniform_Ressource_Identifier
      */
     public function __construct( $uri = '' )
     {
-        // Checks if a URI is given
+        // Checks if an URI is given
         if( $uri ) {
             
             // Parses the URI
             $infos = parse_url( ( string )$uri );
             
-            // Checks for the separator
+            // Checks for a scheme
             if( !isset( $infos[ 'scheme' ] ) ) {
                 
                 // Invalid URI
@@ -297,79 +297,124 @@ class Woops_Uniform_Ressource_Identifier
             $this->_query    = ( isset( $infos[ 'query' ] ) )    ? $infos[ 'query' ]    : '';
             $this->_fragment = ( isset( $infos[ 'fragment' ] ) ) ? $infos[ 'fragment' ] : '';
             
-            // Sets the query parts
+            // Creates the query parts array
             $this->_setQueryParts();
         }
     }
     
+    /**
+     * Gets the complete URI as a string
+     * 
+     * @return  string  The complete URI
+     */
     public function __toString()
     {
+        // Checks for a scheme
         if( !$this->_scheme ) {
             
+            // Nothing to return
             return '';
         }
         
+        // Starts the URI
         $uri = $this->_scheme . ':';
         
+        // Checks if we have a host
         if( $this->_host ) {
             
+            // Builds the authority
             $uri .= '//' . $this->getAUthority();
         }
         
+        // Checks if we have a path
         if( $this->_path ) {
             
+            // Adds the path
             $uri .= $this->_path;
         }
         
+        // Checks if we have a query
         if( $this->_query ) {
             
+            // Adds the query
             $uri .= '?' . $this->_query;
         }
         
+        // Checks if we have a fragment
         if( $this->_fragment ) {
             
+            // Adds the fragment
             $uri .= '#' . $this->_fragment;
         }
         
+        // Returns the URI
         return $uri;
     }
     
     /**
+     * Sets the query parts array from the query string
      * 
+     * @return  void
      */
     protected function _setQueryParts()
     {
+        // Checks if we have a query
         if( $this->_query ) {
             
+            // Gets each part
             $parts = explode( '&', $this->_query );
             
+            // Process each part
             foreach( $parts as $part ) {
                 
+                // Gets the name and the value
                 $subParts = explode( '=', $part );
                 
+                // Adds the query element
                 $this->_queryParts[ $subParts[ 0 ] ] = ( isset( $subParts[ 1 ] ) ) ? $subParts[ 1 ] : '';
             }
         }
     }
     
     /**
+     * Sets the URI scheme
      * 
+     * @param   string                                          The URI scheme
+     * @return  void
+     * @throws  Woops_Uniform_Ressource_Identifier_Exception    If the URI scheme is invalid
      */
     public function setScheme( $value )
     {
+        // Checks for a valid scheme
+        if( !isset( self::$_schemes[ $value ] ) ) {
+            
+            // Invalid scheme
+            throw new Woops_Uniform_Ressource_Identifier_Exception(
+                'Invalid URI scheme (' . $value . ')',
+                Woops_Uniform_Ressource_Identifier_Exception::EXCEPTION_INVALID_SCHEME
+            );
+        }
+        
+        // Stores the scheme
         $this->_scheme = ( string )$value;
     }
     
     /**
+     * Sets the URI host
      * 
+     * @param   string  The URI host
+     * @return  void
      */
     public function setHost( $value )
     {
         $this->_host = ( string )$value;
-    }
+    
     
     /**
+     * Sets the URI port number
      * 
+     * @param   int The URI port number
+     * @return  void
      */
     public function setPort( $value )
     {
@@ -377,7 +422,10 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Sets the URI username
      * 
+     * @param   string  The URI username
+     * @return  void
      */
     public function setUser( $value )
     {
@@ -385,7 +433,10 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Sets the URI user password
      * 
+     * @param   string  The URI user password
+     * @return  void
      */
     public function setPass( $value )
     {
@@ -393,29 +444,54 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Sets the URI authority
      * 
+     * According to RFC-3986, th URI authority can contains a username, a user
+     * password, a host, and a port number. Only the host is required.
+     * 
+     * For instance:
+     * 
+     * <code>
+     * user:password@host:port
+     * </code
+     * 
+     * @param   string  The URI authority
+     * @return  void
      */
     public function setAuthority( $value )
     {
+        // Value has to be a string
         $value = ( string )$value;
         
+        // Checks for a user part
         if( $userPos = strpos( $value, '@' ) ) {
             
+            // Gets the user infos
             $userInfos   = explode( ':', substr( $value, 0, $userPos ) );
             $value       = substr( $value, $userPos + 1 );
             
+            // Adds the username
             $this->_user = $userInfos[ 0 ];
+            
+            // Adds the user password, if present
             $this->_pass = ( isset( $userInfos[ 1 ] ) ) ? $userInfos[ 1 ] : '';
         }
         
+        // Gets the host and port parts
         $parts = explode( ':', $value );
         
+        // Stores the host
         $this->_host = $parts[ 0 ];
+        
+        // Stores the port number, if present
         $this->_port = ( isset( $parts[ 1 ] ) ) ? $parts[ 1 ] : '';
     }
     
     /**
+     * Sets the URI path
      * 
+     * @param   string  The URI path
+     * @return  void
      */
     public function setPath( $value )
     {
@@ -423,31 +499,47 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Sets the URI query
      * 
+     * @param   mixed   Either a query string (without the leading '?') or an array as key/value pairs
+     * @return  void
      */
     public function setQuery( $value )
     {
+        // Checks if the passed argument is an array
         if( is_array( $value ) ) {
             
+            // Stores the query parts array
             $this->_queryParts = $value;
+            
+            // Storage
             $query             = '';
             
+            // Process each entry of the query parts array
             foreach( $value as $queryName => $queryValue ) {
                 
+                // Adds the current query element
                 $query .= $queryName . '=' . $queryValue . '&';
             }
             
+            // Stores the query string
             $this->_query = substr( $query, -1 );
             
         } else {
             
+            // Stores the query
             $this->_query = ( string )$value;
+            
+            // Creates the query parts array
             $this->_setQueryParts();
         }
     }
     
     /**
+     * Sets the URI fragment
      * 
+     * @param   string  The URI fragment
+     * @return  void
      */
     public function setFragment( $value )
     {
@@ -455,7 +547,9 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Gets the URI scheme
      * 
+     * @return  string  The URI scheme
      */
     public function getScheme()
     {
@@ -463,7 +557,9 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Gets the URI host
      * 
+     * @return  string  The URI host
      */
     public function getHost()
     {
@@ -471,7 +567,9 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Gets the URI username
      * 
+     * @return  string  The URI username
      */
     public function getUser()
     {
@@ -479,7 +577,9 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Gets the URI user password
      * 
+     * @return  string  The URI user password
      */
     public function getPass()
     {
@@ -487,7 +587,9 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Gets the URI port number
      * 
+     * @return  string  The URI port number
      */
     public function getPort()
     {
@@ -495,36 +597,49 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Gets the URI authority
      * 
+     * @return  string  The URI authority
      */
     public function getAuthority()
     {
+        // Storage
         $authority = '';
-            
+        
+        // Checks if we have a host
         if( $this->_host ) {
             
+            // Checks for a user part
             if( $this->_user && $this->_pass ) {
                 
+                // Adds the username and password
                 $authority .= $this->_user . ':' . $this->_pass . '@';
                 
             } elseif( $this->_user ) {
                 
+                // Adds the username
                 $authority .= $this->_user . '@';
             }
             
+            // Adds the host
             $authority .= $this->_host;
             
+            // Checks if we have a port number
             if( $this->_port ) {
                 
+                // Adds the port number
                 $authority .= ':' . $this->_port;
             }
         }
         
+        // Returns the URI authority
         return $authority;
     }
     
     /**
+     * Gets the URI path
      * 
+     * @return  string  The URI path
      */
     public function getPath()
     {
@@ -532,7 +647,9 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Gets the URI query
      * 
+     * @return  string  The URI query
      */
     public function getQuery()
     {
@@ -540,7 +657,9 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Gets the URI query parts
      * 
+     * @return  array   The URI query parts, as key/value pairs
      */
     public function getQueryParts()
     {
@@ -548,7 +667,9 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
+     * Gets the URI fragment
      * 
+     * @return  string  The URI fragment
      */
     public function getFragment()
     {
