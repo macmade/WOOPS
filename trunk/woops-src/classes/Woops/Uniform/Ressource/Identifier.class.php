@@ -408,7 +408,7 @@ class Woops_Uniform_Ressource_Identifier
     public function setHost( $value )
     {
         $this->_host = ( string )$value;
-    
+    }
     
     /**
      * Sets the URI port number
