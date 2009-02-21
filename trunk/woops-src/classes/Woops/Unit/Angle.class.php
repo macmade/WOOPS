@@ -29,7 +29,13 @@ class Woops_Unit_Angle extends Woops_Unit_Base
      * The available units
      */
     const UNIT_DEGREE = 'DEGREE';
+    const UNIT_MINUTE = 'MINUTE';
+    const UNIT_SECOND = 'SECOND';
     const UNIT_RADIAN = 'RADIAN';
+    const UNIT_GRAD   = 'GRAD';
+    const UNIT_MIL    = 'MIL';
+    const UNIT_CIRCLE = 'CIRCLE';
+    const UNIT_POINT  = 'POINT';
     
     /**
      * The default unit
@@ -41,6 +47,12 @@ class Woops_Unit_Angle extends Woops_Unit_Base
      */
     protected $_types = array(
         'DEGREE' => array(),
-        'RADIAN' => array()
+        'MINUTE' => array( array( '*', 60 ) ),
+        'SECOND' => array( array( '*', 3600 ) ),
+        'RADIAN' => array( array( '*', M_PI ), array( '/', 180 ) ),
+        'GRAD'   => array( array( '*', 10 ), array( '/', 9 ) ),
+        'MIL'    => array( array( '*', 160 ), array( '/', 9 ) ),
+        'CIRCLE' => array( array( '/', 360 ) ),
+        'POINT'  => array( array( '*', 16 ), array( '/', 180 ) )
     );
 }
