@@ -81,7 +81,7 @@ class Woops_Http_Cookie
      */
     public function __toString()
     {
-        $cookie = $this->_name . '=' . urlencode( $this->value ) . ';';
+        $cookie = $this->_name . '=' . urlencode( $this->_value ) . ';';
         
         if( $this->_expires ) {
             
@@ -95,7 +95,7 @@ class Woops_Http_Cookie
         
         if( $this->_domain ) {
             
-            $cookie .= ' path=' . $this->_domain . ';';
+            $cookie .= ' domain=' . $this->_domain . ';';
         }
         
         if( $this->_secure ) {
@@ -105,7 +105,7 @@ class Woops_Http_Cookie
         
         if( $this->_httpOnly ) {
             
-            $cookie .= ' HttpOnly';
+            $cookie .= ' HttpOnly;';
         }
         
         return $cookie;
