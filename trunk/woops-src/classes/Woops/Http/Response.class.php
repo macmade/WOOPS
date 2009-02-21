@@ -206,6 +206,45 @@ class Woops_Http_Response
     }
     
     /**
+     * Returns the HTTP response as a string
+     * 
+     * @return  string  The full HTTP response
+     */
+    public function __toString()
+    {
+        // New line character
+        $CRLF     = self::$_str->CR . self::$_str->LF;
+        
+        // Status line
+        $response = 'HTTP/'
+                  . $this->_httpVersion
+                  . ' '
+                  . $this->_code
+                  . ' '
+                  . self::$_codes[ $this->_code ]
+                  . $CRLF;
+        
+        // Process the headers
+        foreach( $this->_headers as $key => $value ) {
+            
+            // Adds the current header
+            $response .= $key
+                      .  ': '
+                      . $value
+                      . $CRLF;
+        }
+        
+        // End of the headers
+        $response .= $CRLF;
+        
+        // Adds the body
+        $response .= $this->_rawBody;
+        
+        // Returns the response as a string
+        return $response;
+    }
+    
+    /**
      * Sets the needed static variables
      * 
      * @return  void
