@@ -71,7 +71,7 @@ abstract class Woops_Unit_Base
     {
         if( substr( $name, 0, 2 ) === 'as' ) {
             
-            $type = strtoupper( substr( $name, 2 ) );
+            $type = strtoupper( preg_replace( '/(.)([A-Z])/', '\1_\2', substr( $name, 2 ) ) );
             
         } else {
             

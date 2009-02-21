@@ -60,7 +60,3 @@ class Woops_Unit_Binary extends Woops_Unit_Base
         'YOTTABYTE' => array( array( '/', 1208925819614629174706176 ) )
     );
 }
-
-
-
-        
