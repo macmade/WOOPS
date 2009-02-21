@@ -71,9 +71,19 @@ class Woops_Http_Response
     const BANDWIDTH_LIMIT_EXCEEDED        = 509;
     
     /**
+     * Wether the static variables are set or not
+     */
+    private static $_hasStatic = false;
+    
+    /**
+     * The string utilities
+     */
+    protected static $_str     = NULL;
+    
+    /**
      * The HTTP response codes, with their messages
      */
-    protected static $_codes = array(
+    protected static $_codes   = array(
         
         // Informational
         100 => 'Continue',
@@ -130,27 +140,27 @@ class Woops_Http_Response
     /**
      * The HTTP response code
      */
-    protected $_code        = 0;
+    protected $_code           = 0;
 
     /**
      * The HTTP response headers
      */
-    protected $_headers     = array();
+    protected $_headers        = array();
 
     /**
      * The HTTP response body (processed)
      */
-    protected $_body        = '';
+    protected $_body           = '';
 
     /**
      * The HTTP response body (raw)
      */
-    protected $_rawBody     = '';
+    protected $_rawBody        = '';
     
     /**
      * The version of the HTTP protocol
      */
-    protected $_httpVersion = 1.1;
+    protected $_httpVersion    = 1.1;
     
     /**
      * Class constructor
@@ -164,6 +174,13 @@ class Woops_Http_Response
      */
     public function __construct( $code, array $headers, $body = '', $httpVersion = 1.1 )
     {
+        // Checks if the static variables are set
+        if( !self::$_hasStatic ) {
+            
+            // Sets the static variables
+            self::_setStaticVars();
+        }
+        
         // Code and version should be numbers
         $code    = ( int )$code;
         $version = ( float )$version;
@@ -181,8 +198,152 @@ class Woops_Http_Response
         // Stores the response informations
         $this->_code        = $code;
         $this->_headers     = $headers;
-        $this->_body        = $body;
         $this->_httpVersion = $httpVersion;
+        $this->_rawBody     = $body;
+        
+        // Process the body, if necessary
+        $this->_body        = $this->_processBody();
+    }
+    
+    /**
+     * Sets the needed static variables
+     * 
+     * @return  void
+     */
+    private static function _setStaticVars()
+    {
+        // Gets the instance of the string utilities
+        self::$_str    = Woops_String_Utils::getInstance();
+        
+        // Static variables are set
+        self::$_hasStatic = true;
+    }
+    
+    /**
+     * Process the body, if needed, accordingly to the 'transfer-encoding'
+     * and 'content-encoding' response headers.
+     * 
+     * @return  string                          The processed body
+     * @throws  Woops_Http_Response_Exception   If the transfer-encoding is set as chunked and if the chunked content is invalid
+     * @throws  Woops_Http_Response_Exception   If the content-encoding is set as deflate and if the PHP function gzuncompress() is not available
+     * @throws  Woops_Http_Response_Exception   If the content-encoding is set as gzip and if the PHP function gzinflate() is not available
+     */
+    protected function _processBody()
+    {
+        // Checks if the 'transfer-encoding' header is set as 'chunked'
+        if( isset( $this->_headers[ 'transfer-encoding' ] )
+            && $this->_headers[ 'transfer-encoding' ] === 'chunked'
+        ) {
+            
+            // New line character
+            $CRLF     = self::$_str->CR . self::$_str->LF;
+            
+            // Gets each line of the chunked content
+            $lines    = explode( $CRLF, $this->_rawBody );
+            
+            // Number of lines
+            $linesNum = count( $lines );
+            
+            // Checks the number of lines
+            if( $linesNum < 1  ) {
+                
+                // Invalid chunked content
+                throw new Woops_Http_Response_Exception(
+                    'Invalid chunked content',
+                    Woops_Http_Response_Exception::EXCEPTION_INVALID_CHUNKED_CONTENT
+                );
+            }
+            
+            // Storage
+            $body = '';
+            
+            // Process each line
+            for( $i = 0; $i < $linesNum; $i++ ) {
+                
+                // Size of the chunk
+                $size = hexdec( trim( $lines[ $i ] ) );
+                
+                // If the chunk size is 0, there is no data left
+                if( $size === 0 ) {
+                    
+                    break;
+                }
+                
+                // Checks for the data
+                if( !isset( $lines[ $i + 1 ] ) ) {
+                    
+                    // Invalid chunked content
+                    throw new Woops_Http_Response_Exception(
+                        'Invalid chunked content',
+                        Woops_Http_Response_Exception::EXCEPTION_INVALID_CHUNKED_CONTENT
+                    );
+                }
+                
+                // Chunk data
+                $data = $lines[ $i + 1 ];
+                
+                // Checks the chunk size
+                if( strlen( $data ) !== $size ) {
+                    
+                    // Invalid chunked content
+                    throw new Woops_Http_Response_Exception(
+                        'Invalid chunked content',
+                        Woops_Http_Response_Exception::EXCEPTION_INVALID_CHUNKED_CONTENT
+                    );
+                }
+                
+                // Adds the data
+                $body .= $data
+                
+                // Process the next chunk
+                $i++;
+            }
+            
+        } else {
+            
+            // Raw body
+            $body = $this->_rawBody
+        }
+        
+        // Checks if the 'transfer-encoding' header is set
+        if( isset( $this->_headers[ 'content-encoding' ] )
+            && $this->_headers[ 'content-encoding' ] === 'deflate'
+        ) {
+            
+            // Checks if the gzuncompress() function is available
+            if( !function_exists( 'gzuncompress' ) ) {
+                
+                // Error - Cannot process the body
+                throw new Woops_Http_Response_Exception(
+                    'The PHP function \'gzuncompress()\' is not available',
+                    Woops_Http_Response_Exception::EXCEPTION_NO_GZUNCOMPRESS
+                );
+            }
+            
+            // Uncompress the body
+            $body = gzuncompress( $body );
+            
+        } elseif( isset( $this->_headers[ 'content-encoding' ] )
+            && $this->_headers[ 'content-encoding' ] === 'gzip'
+        ) {
+            
+            // Checks if the gzuncompress() function is available
+            if( !function_exists( 'gzinflate' ) ) {
+                
+                // Error - Cannot process the body
+                throw new Woops_Http_Response_Exception(
+                    'The PHP function \'gzinflate()\' is not available',
+                    Woops_Http_Response_Exception::EXCEPTION_NO_GZINFLATE
+                );
+            }
+            
+            // Inflates the body
+            $body = gzinflate( substr( $body, 10 ) );
+            
+        }
+        
+        // Returns the processed body
+        return $body
     }
     
     /**
