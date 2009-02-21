@@ -28,4 +28,5 @@ final class Woops_Http_Cookie_Exception extends Woops_Core_Exception_Base
     /**
      * Error codes for the exceptions
      */
+    const EXCEPTION_BAD_COOKIE = 0x01;
 }
