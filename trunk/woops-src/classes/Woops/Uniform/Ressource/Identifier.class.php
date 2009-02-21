@@ -256,6 +256,7 @@ class Woops_Uniform_Ressource_Identifier
      * @return  void
      * @throws  Woops_Uniform_Ressource_Identifier_Exception    If the URI is invalid
      * @throws  Woops_Uniform_Ressource_Identifier_Exception    If the URI scheme is invalid
+     * @see     _setQueryParts
      */
     public function __construct( $uri = '' )
     {
@@ -306,6 +307,7 @@ class Woops_Uniform_Ressource_Identifier
      * Gets the complete URI as a string
      * 
      * @return  string  The complete URI
+     * @see     getAuthority
      */
     public function __toString()
     {
@@ -323,7 +325,7 @@ class Woops_Uniform_Ressource_Identifier
         if( $this->_host ) {
             
             // Builds the authority
-            $uri .= '//' . $this->getAUthority();
+            $uri .= '//' . $this->getAuthority();
         }
         
         // Checks if we have a path
@@ -503,6 +505,7 @@ class Woops_Uniform_Ressource_Identifier
      * 
      * @param   mixed   Either a query string (without the leading '?') or an array as key/value pairs
      * @return  void
+     * @see     _setQueryParts
      */
     public function setQuery( $value )
     {
