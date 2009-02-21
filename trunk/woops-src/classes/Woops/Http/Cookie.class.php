@@ -74,6 +74,7 @@ class Woops_Http_Cookie
      */
     public function __construct( $name, $value = '', $expires = 0, $path = '/', $domain = '', $secure = false, $httpOnly = false )
     {
+        // Stores the cookie's parameters
         $this->_name     = ( string )$name;
         $this->_value    = ( string )$value;
         $this->_expires  = ( string )$expires;
