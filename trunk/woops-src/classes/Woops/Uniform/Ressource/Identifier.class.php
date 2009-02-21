@@ -12,7 +12,44 @@
 # $Id$
 
 /**
- * URI class (RFC-2396)
+ * URI class (RFC-3986)
+ * 
+ * A Uniform Resource Identifier (URI) provides a simple and extensible means
+ * for identifying a resource.  This specification of URI syntax and semantics
+ * is derived from concepts introduced by the World Wide Web global information
+ * initiative, whose use of these identifiers dates from 1990 and is described
+ * in "Universal Resource Identifiers in WWW" - RFC1630.
+ * 
+ * The generic URI syntax consists of a hierarchical sequence of components
+ * referred to as the scheme, authority, path, query, and fragment.
+ * 
+ * <code>
+ * URI       = scheme ":" hier-part [ "?" query ] [ "#" fragment ]
+ * 
+ * hier-part = "//" authority path-abempty
+ *           / path-absolute
+ *           / path-rootless
+ *           / path-empty
+ * </code>
+ * 
+ * The scheme and path components are required, though the path may be empty
+ * (no characters).  When authority is present, the path must either be empty
+ * or begin with a slash ("/") character.  When authority is not present, the
+ * path cannot begin with two slash characters ("//").  These restrictions
+ * result in five different ABNF rules for a path, only one of which will
+ * match any given URI reference.
+ * 
+ * The following are two example URIs and their component parts:
+ * 
+ * <code>
+ *  foo://example.com:8042/over/there?name=ferret#nose
+ *  \_/   \______________/\_________/ \_________/ \__/
+ *   |           |            |            |        |
+ * scheme     authority      path        query   fragment
+ *   |   _____________________|__
+ *  / \ /                        \
+ *  urn:example:animal:ferret:nose
+ * </code>
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
@@ -165,17 +202,52 @@ class Woops_Uniform_Ressource_Identifier
         'xmpp'            => true, // Extensible Messaging and Presence Protocol - RFC-5122
         'z39.50r'         => true, // Z39.50 Retrieval - RFC-2056
         'z39.50s'         => true  // Z39.50 Session - RFC-2056
-    }
+    );
     
     /**
      * The URI scheme
      */
-    protected $_scheme             = '';
+    protected $_scheme     = '';
     
     /**
-     * The URI scheme specific part
+     * 
      */
-    protected $_schemeSpecificPart = '';
+    protected $_host       = '';
+    
+    /**
+     * 
+     */
+    protected $_port       = 0;
+    
+    /**
+     * 
+     */
+    protected $_user       = '';
+    
+    /**
+     * 
+     */
+    protected $_pass       = '';
+    
+    /**
+     * 
+     */
+    protected $_path       = '';
+    
+    /**
+     * 
+     */
+    protected $_query      = '';
+    
+    /**
+     * 
+     */
+    protected $_fragment   = '';
+    
+    /**
+     * 
+     */
+    protected $_queryParts = array();
     
     /**
      * Class constructor
@@ -185,39 +257,205 @@ class Woops_Uniform_Ressource_Identifier
      * @throws  Woops_Uniform_Ressource_Identifier_Exception    If the URI is invalid
      * @throws  Woops_Uniform_Ressource_Identifier_Exception    If the URI scheme is invalid
      */
-    public function __construct( $uri )
+    public function __construct( $uri = '' )
     {
-        // Gets the position of the scheme separator
-        $sep = strpos( $uri, ':' );
-        
-        // Checks for the separator
-        if( !$sep ) {
+        // Checks if a URI is given
+        if( $uri ) {
             
-            // Invalid URI
-            throw new Woops_Uniform_Ressource_Identifier_Exception(
-                'Invalid URI (' . $uri . ')',
-                Woops_Uniform_Ressource_Identifier_Exception::EXCEPTION_INVALID_URI
-            );
+            // Parses the URI
+            $infos = parse_url( ( string )$uri );
+            
+            // Checks for the separator
+            if( !isset( $infos[ 'scheme' ] ) ) {
+                
+                // Invalid URI
+                throw new Woops_Uniform_Ressource_Identifier_Exception(
+                    'Invalid URI (' . $uri . ')',
+                    Woops_Uniform_Ressource_Identifier_Exception::EXCEPTION_INVALID_URI
+                );
+            }
+            
+            // Checks for a valid scheme
+            if( !isset( self::$_schemes[ $infos[ 'scheme' ] ] ) ) {
+                
+                // Invalid scheme
+                throw new Woops_Uniform_Ressource_Identifier_Exception(
+                    'Invalid URI scheme (' . $infos[ 'scheme' ] . ')',
+                    Woops_Uniform_Ressource_Identifier_Exception::EXCEPTION_INVALID_SCHEME
+                );
+            }
+            
+            // Stores the scheme
+            $this->_scheme = $infos[ 'scheme' ];
+            
+            // Stores the other informations
+            $this->_host     = ( isset( $infos[ 'host' ] ) )     ? $infos[ 'host' ]     : '';
+            $this->_port     = ( isset( $infos[ 'port' ] ) )     ? $infos[ 'port' ]     : '';
+            $this->_user     = ( isset( $infos[ 'user' ] ) )     ? $infos[ 'user' ]     : '';
+            $this->_pass     = ( isset( $infos[ 'pass' ] ) )     ? $infos[ 'pass' ]     : '';
+            $this->_path     = ( isset( $infos[ 'path' ] ) )     ? $infos[ 'path' ]     : '';
+            $this->_query    = ( isset( $infos[ 'query' ] ) )    ? $infos[ 'query' ]    : '';
+            $this->_fragment = ( isset( $infos[ 'fragment' ] ) ) ? $infos[ 'fragment' ] : '';
+            
+            // Sets the query parts
+            $this->_setQueryParts();
+        }
+    }
+    
+    public function __toString()
+    {
+        if( !$this->_scheme ) {
+            
+            return '';
         }
         
-        // Scheme and scheme specific part
-        $this->_scheme             = substr( $uri, 0, $sep );
-        $this->_schemeSpecificPart = substr( $uri, $sep + 1 );
+        $uri = $this->_scheme . ':';
         
-        if( !isset( self::$_schemes[ $this->_scheme ] ) ) {
+        if( $this->_host ) {
             
-            // Invalid scheme
-            throw new Woops_Uniform_Ressource_Identifier_Exception(
-                'Invalid URI scheme (' . $this->_scheme . ')',
-                Woops_Uniform_Ressource_Identifier_Exception::EXCEPTION_INVALID_SCHEME
-            );
+            $uri .= '//' . $this->getAUthority();
+        }
+        
+        if( $this->_path ) {
+            
+            $uri .= $this->_path;
+        }
+        
+        if( $this->_query ) {
+            
+            $uri .= '?' . $this->_query;
+        }
+        
+        if( $this->_fragment ) {
+            
+            $uri .= '#' . $this->_fragment;
+        }
+        
+        return $uri;
+    }
+    
+    /**
+     * 
+     */
+    protected function _setQueryParts()
+    {
+        if( $this->_query ) {
+            
+            $parts = explode( '&', $this->_query );
+            
+            foreach( $parts as $part ) {
+                
+                $subParts = explode( '=', $part );
+                
+                $this->_queryParts[ $subParts[ 0 ] ] = ( isset( $subParts[ 1 ] ) ) ? $subParts[ 1 ] : '';
+            }
         }
     }
     
     /**
-     * Gets the URI scheme
      * 
-     * @return  string  The URI scheme
+     */
+    public function setScheme( $value )
+    {
+        $this->_scheme = ( string )$value;
+    }
+    
+    /**
+     * 
+     */
+    public function setHost( $value )
+    {
+        $this->_host = ( string )$value;
+    }
+    
+    /**
+     * 
+     */
+    public function setPort( $value )
+    {
+        $this->_port = ( int )$value;
+    }
+    
+    /**
+     * 
+     */
+    public function setUser( $value )
+    {
+        $this->_user = ( string )$value;
+    }
+    
+    /**
+     * 
+     */
+    public function setPass( $value )
+    {
+        $this->_pass = ( string )$value;
+    }
+    
+    /**
+     * 
+     */
+    public function setAuthority( $value )
+    {
+        $value = ( string )$value;
+        
+        if( $userPos = strpos( $value, '@' ) ) {
+            
+            $userInfos   = explode( ':', substr( $value, 0, $userPos ) );
+            $value       = substr( $value, $userPos + 1 );
+            
+            $this->_user = $userInfos[ 0 ];
+            $this->_pass = ( isset( $userInfos[ 1 ] ) ) ? $userInfos[ 1 ] : '';
+        }
+        
+        $parts = explode( ':', $value );
+        
+        $this->_host = $parts[ 0 ];
+        $this->_port = ( isset( $parts[ 1 ] ) ) ? $parts[ 1 ] : '';
+    }
+    
+    /**
+     * 
+     */
+    public function setPath( $value )
+    {
+        $this->_path = ( string )$value;
+    }
+    
+    /**
+     * 
+     */
+    public function setQuery( $value )
+    {
+        if( is_array( $value ) ) {
+            
+            $this->_queryParts = $value;
+            $query             = '';
+            
+            foreach( $value as $queryName => $queryValue ) {
+                
+                $query .= $queryName . '=' . $queryValue . '&';
+            }
+            
+            $this->_query = substr( $query, -1 );
+            
+        } else {
+            
+            $this->_query = ( string )$value;
+            $this->_setQueryParts();
+        }
+    }
+    
+    /**
+     * 
+     */
+    public function setFragment( $value )
+    {
+        $this->_fragment = ( string )$value;
+    }
+    
+    /**
+     * 
      */
     public function getScheme()
     {
@@ -225,12 +463,95 @@ class Woops_Uniform_Ressource_Identifier
     }
     
     /**
-     * Gets the URI scheme specific part
      * 
-     * @return  string  The URI scheme specific part
      */
-    public function getScheme()
+    public function getHost()
     {
-        return $this->_schemeSpecificPart;
+        return $this->_host;
+    }
+    
+    /**
+     * 
+     */
+    public function getUser()
+    {
+        return $this->_user;
+    }
+    
+    /**
+     * 
+     */
+    public function getPass()
+    {
+        return $this->_pass;
+    }
+    
+    /**
+     * 
+     */
+    public function getPort()
+    {
+        return $this->_port;
+    }
+    
+    /**
+     * 
+     */
+    public function getAuthority()
+    {
+        $authority = '';
+            
+        if( $this->_host ) {
+            
+            if( $this->_user && $this->_pass ) {
+                
+                $authority .= $this->_user . ':' . $this->_pass . '@';
+                
+            } elseif( $this->_user ) {
+                
+                $authority .= $this->_user . '@';
+            }
+            
+            $authority .= $this->_host;
+            
+            if( $this->_port ) {
+                
+                $authority .= ':' . $this->_port;
+            }
+        }
+        
+        return $authority;
+    }
+    
+    /**
+     * 
+     */
+    public function getPath()
+    {
+        return $this->_path;
+    }
+    
+    /**
+     * 
+     */
+    public function getQuery()
+    {
+        return $this->_query;
+    }
+    
+    /**
+     * 
+     */
+    public function getQueryParts()
+    {
+        return $this->_queryParts;
+    }
+    
+    /**
+     * 
+     */
+    public function getFragment()
+    {
+        return $this->fragment;
     }
 }
