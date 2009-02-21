@@ -16,7 +16,7 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core.Aop.Advisor
+ * @package     Woops.Core.Callback.Helper
  */
 final class Woops_Core_Callback_Helper_Exception extends Woops_Core_Exception_Base
 {
