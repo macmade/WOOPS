@@ -517,7 +517,7 @@ class Woops_File_Gif_Parser extends Woops_File_Parser_Base
                 // Invalid sub block identifier
                 throw new Woops_File_Gif_Parser_Exception(
                     'Invalid GIF extension block identifier: \'0x' . dechex( $id ) . '\'.',
-                    Fp_Gif_Exception::EXCEPTION_BAD_EXT_ID
+                    Woops_File_Gif_Parser_Exception::EXCEPTION_BAD_EXT_ID
                 );
                 break;
         }
