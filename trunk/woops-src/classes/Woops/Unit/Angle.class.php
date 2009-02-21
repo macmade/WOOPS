@@ -47,8 +47,8 @@ class Woops_Unit_Angle extends Woops_Unit_Base
      */
     protected $_types = array(
         'DEGREE' => array(),
-        'MINUTE' => array( array( '*', 60 ) ),
-        'SECOND' => array( array( '*', 3600 ) ),
+        'MINUTE' => array( array( '/', 60 ) ),
+        'SECOND' => array( array( '/', 3600 ) ),
         'RADIAN' => array( array( '*', M_PI ), array( '/', 180 ) ),
         'GRAD'   => array( array( '*', 10 ), array( '/', 9 ) ),
         'MIL'    => array( array( '*', 160 ), array( '/', 9 ) ),
