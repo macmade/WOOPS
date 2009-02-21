@@ -179,6 +179,8 @@ class Woops_Http_Cookie
                     break;
             }
         }
+        
+        return $cookie;
     }
     
     /**
