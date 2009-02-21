@@ -60,6 +60,7 @@ abstract class Woops_File_Parser_Base
      * @throws  Woops_File_Parser_Base_Exception    If the file does not exist
      * @throws  Woops_File_Parser_Base_Exception    If the file is not readable
      * @throws  Woops_File_Parser_Base_Exception    If PHP isn't able to open a file handle
+     * @see     _parseFile
      */
     public function __construct( $file )
     {

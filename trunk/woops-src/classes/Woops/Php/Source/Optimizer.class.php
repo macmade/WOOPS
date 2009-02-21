@@ -61,6 +61,7 @@ class Woops_Php_Source_Optimizer
      * @param   string  The PHP code to optimize
      * @param   boolean Wheter to rename local variables with the shortest possible name
      * @return  void
+     * @see     _generateVarName
      */
     public function __construct( $source, $renameVariables = true )
     {

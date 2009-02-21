@@ -95,6 +95,7 @@ class Woops_Debug_Utils
      * @param   array   The array to display
      * @param   boolean Whether the result must be returned, or directly printed
      * @return  mixed   If the $return parameter is set, this method will return a Woops_Xhtml_Tag instance, otherwise NULL
+     * @see     _getVarType
      */
     public static function viewArray( array $array, $return = false )
     {
@@ -182,6 +183,7 @@ class Woops_Debug_Utils
      * @param   string  An optionnal header to display
      * @return  mixed   If the $return parameter is set, this method will return a Woops_Xhtml_Tag instance, otherwise NULL
      * @see     viewArray
+     * @see     _getVarType
      */
     public static function debug( $var, $return = false, $header = 'Debug informations' )
     {

@@ -13,9 +13,6 @@
 
 /**
  * WOOPS database layer class
- * 
- * The goal of the class is to provide WOOPS with the functionnalities of
- * PDO (PHP Data Object).
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
@@ -71,6 +68,7 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
      * This method will close the database connection on all loaded engines.
      * 
      * @return  void
+     * @see     Woops_Core_Singleton_Interface::disconnect
      */
     public function __destruct()
     {
@@ -106,6 +104,7 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
      * (singleton). If no instance is available, it will create it.
      * 
      * @return  Woops_Database_Layer    The unique instance of the class
+     * @see     __construct
      */
     public static function getInstance()
     {
@@ -121,38 +120,59 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
     }
     
     /**
+     * Registers a class as a database engine
      * 
+     * Note that the database engine class must implement the
+     * Woops_Database_Engine_Interface interface.
+     * 
+     * @param   string  The name of the database engine
+     * @param   string  The class of the database engine
+     * @return  void
+     * @throws  Woops_Database_Layer_Exception  If an engine with the same name is already registered
+     * @throws  Woops_Database_Layer_Exception  If the engine class does not exists
+     * @throws  Woops_Database_Layer_Exception  If the engine class does not implements the Woops_Database_Engine_Interface interface
+     * @see     Woops_Core_Singleton_Interface::load
+     * @see     Woops_Core_Singleton_Interface::connect
      */
     public function registerDatabaseEngineClass( $name, $class )
     {
+        // Checks for an engine with the same name
         if( isset( $this->_engines[ $name ] ) ) {
             
+            // Engine already registered
             throw new Woops_Database_Layer_Exception(
                 'The engine \'' . $name . '\' is already registered',
                 Woops_Database_Layer_Exception::EXCEPTION_ENGINE_EXISTS
             );
         }
         
+        // Checks for the engine class
         if( !class_exists( $class ) ) {
             
+            // The engine class does not exist
             throw new Woops_Database_Layer_Exception(
                 'Cannot register unexisting class \'' . $class . '\' as a database engine',
                 Woops_Database_Layer_Exception::EXCEPTION_NO_ENGINE
             );
         }
         
+        // Gets the interfaces
         $interfaces = class_implements( $class );
         
+        // Checks if the engine class implements the database engine interface
         if( !isset( $interfaces[ 'Woops_Database_Engine_Interface' ] ) ) {
             
+            // Invalid class
             throw new Woops_Database_Layer_Exception(
                 'Cannot register class \'' . $class . '\' as a database engine, since it does not implements the \'Woops_Database_Engine_Interface\' interface',
                 Woops_Database_Layer_Exception::EXCEPTION_INVALID_ENGINE_CLASS
             );
         }
         
+        // Gets and stores the instance of the database engine class
         $this->_engines[ $name ] =  Woops_Core_Class_Manager::getInstance()->getSingleton( $class );
         
+        // Database parameters
         static $driver;
         static $host;
         static $port;
@@ -161,6 +181,7 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         static $database;
         static $tablePrefix;
         
+        // Gets the configuration variables if needed
         if( !$driver ) {
             
             // Sets the default connection infos
@@ -180,28 +201,43 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         // Sets the WOOPS table prefix
         $tablePrefix = ( $tablePrefix ) ? ( string )$tablePrefix : '';
         
+        // Loads the engine
         $this->_engines[ $name ]->load( $driver, $host, $port, $database, $tablePrefix );
+        
+        // Establish a connection with the database
         $this->_engines[ $name ]->connect( $username, $password );
     }
     
     /**
+     * Gets a database engine
      * 
+     * If no engine is specified, this method will return the default database
+     * engine.
+     * 
+     * @param   string                          The name of the database engine
+     * @return  object                          The database engine
+     * @throws  Woops_Database_Layer_Exception  If the requested engine does not exist
      */
     public function getEngine( $name = '' )
     {
+        // Checks for an engine name
         if( !$name ) {
             
+            // Gets the default engine
             $name = $this->_defaultEngine;
         }
         
+        // Checks if the engine exists
         if( !isset( $this->_engines[ $name ] ) ) {
             
+            // The requested engine is not registered
             throw new Woops_Database_Layer_Exception(
                 'The engine \'' . $name . '\' is not a registered database engine',
                 Woops_Database_Layer_Exception::EXCEPTION_NO_ENGINE
             );
         }
         
+        // Returns the instance of the engine
         return $this->_engines[ $name ];
     }
 }

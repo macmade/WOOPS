@@ -130,6 +130,7 @@ final class Woops_Binary_Utils
      * @param   string  The data from which to read (passed by reference)
      * @param   int     An optionnal offset from which to read the data
      * @return  int     The signed char
+     * @see     _unpackData
      */
     public function signedChar( &$data, $dataOffset = 0 )
     {
@@ -142,6 +143,7 @@ final class Woops_Binary_Utils
      * @param   string  The data from which to read (passed by reference)
      * @param   int     An optionnal offset from which to read the data
      * @return  int     The unsigned char
+     * @see     _unpackData
      */
     public function unsignedChar( &$data, $dataOffset = 0 )
     {
@@ -154,6 +156,7 @@ final class Woops_Binary_Utils
      * @param   string  The data from which to read (passed by reference)
      * @param   int     An optionnal offset from which to read the data
      * @return  int     The signed short
+     * @see     _unpackData
      */
     public function signedShort( &$data, $dataOffset = 0 )
     {
@@ -166,6 +169,7 @@ final class Woops_Binary_Utils
      * @param   string  The data from which to read (passed by reference)
      * @param   int     An optionnal offset from which to read the data
      * @return  int     The unsigned short
+     * @see     _unpackData
      */
     public function unsignedShort( &$data, $dataOffset = 0 )
     {
@@ -178,6 +182,7 @@ final class Woops_Binary_Utils
      * @param   string  The data from which to read (passed by reference)
      * @param   int     An optionnal offset from which to read the data
      * @return  int     The big endian unsigned short
+     * @see     _unpackData
      */
     public function bigEndianUnsignedShort( &$data, $dataOffset = 0 )
     {
@@ -190,6 +195,7 @@ final class Woops_Binary_Utils
      * @param   string  The data from which to read (passed by reference)
      * @param   int     An optionnal offset from which to read the data
      * @return  int     The little endian unsigned short
+     * @see     _unpackData
      */
     public function littleEndianUnsignedShort( &$data, $dataOffset = 0 )
     {
@@ -202,6 +208,7 @@ final class Woops_Binary_Utils
      * @param   string  The data from which to read (passed by reference)
      * @param   int     An optionnal offset from which to read the data
      * @return  int     The signed long
+     * @see     _unpackData
      */
     public function signedLong( &$data, $dataOffset = 0 )
     {
@@ -214,6 +221,7 @@ final class Woops_Binary_Utils
      * @param   string  The data from which to read (passed by reference)
      * @param   int     An optionnal offset from which to read the data
      * @return  int     The unsigned long
+     * @see     _unpackData
      */
     public function unsignedLong( &$data, $dataOffset = 0 )
     {
@@ -226,6 +234,7 @@ final class Woops_Binary_Utils
      * @param   string  The data from which to read (passed by reference)
      * @param   int     An optionnal offset from which to read the data
      * @return  int     The big endian unsigned long
+     * @see     _unpackData
      */
     public function bigEndianUnsignedLong( &$data, $dataOffset = 0 )
     {
@@ -238,6 +247,7 @@ final class Woops_Binary_Utils
      * @param   string  The data from which to read (passed by reference)
      * @param   int     An optionnal offset from which to read the data
      * @return  int     The little endian unsigned long
+     * @see     _unpackData
      */
     public function littleEndianUnsignedLong( &$data, $dataOffset = 0 )
     {
@@ -254,6 +264,7 @@ final class Woops_Binary_Utils
      * @param   int     The number of bits for the fractional part (2, 8, 16 or 30)
      * @param   int     An optionnal offset from which to read the data
      * @return  float   The fixed point number
+     * @see     _unpackData
      */
     public function bigEndianFixedPoint( &$data, $integerLength, $fractionalLength, $dataOffset )
     {
@@ -294,6 +305,7 @@ final class Woops_Binary_Utils
      * @param   string  The data from which to read (passed by reference)
      * @param   int     An optionnal offset from which to read the data
      * @return  string  The ISO-639-2 language code
+     * @see     _unpackData
      */
     public function bigEndianIso639Code( &$data, $dataOffset )
     {

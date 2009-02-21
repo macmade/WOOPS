@@ -16,7 +16,7 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core.Config
+ * @package     Woops.Database.Layer
  */
 final class Woops_Database_Layer_Exception extends Woops_Core_Exception_Base
 {

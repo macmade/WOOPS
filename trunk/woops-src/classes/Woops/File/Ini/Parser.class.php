@@ -50,6 +50,7 @@ class Woops_File_Ini_Parser
      * 
      * @param   string  The path to the INI file to parse
      * @return  void
+     * @see     _parseFile
      */
     public function __construct( $path )
     {
@@ -105,6 +106,7 @@ class Woops_File_Ini_Parser
      * Parses the INI file
      * 
      * @return  void
+     * @see     _processComments
      */
     protected function _parseFile()
     {
