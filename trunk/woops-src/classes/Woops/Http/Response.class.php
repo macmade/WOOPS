@@ -28,47 +28,47 @@ class Woops_Http_Response
     /**
      * The HTTP reponse codes
      */
-    const CONTINUE                        = 100;
-    const SWITCHING_PROTOCOLS             = 101;
-    const OK                              = 200;
-    const CREATED                         = 201;
-    const ACCEPTED                        = 202;
-    const NON_AUTHORITATIVE_INFORMATION   = 203;
-    const NO_CONTENT                      = 204;
-    const RESET_CONTENT                   = 205;
-    const PARTIAL_CONTENT                 = 206;
-    const MULTIPLE_CHOICES                = 300;
-    const MOVED_PERMANENTLY               = 301;
-    const FOUND                           = 302;
-    const SEE_OTHER                       = 303;
-    const NOT_MODIFIED                    = 304;
-    const USE_PROXY                       = 305;
-    const TEMPORARY_REDIRECT              = 307;
-    const BAD_REQUEST                     = 400;
-    const UNAUTHORIZED                    = 401;
-    const PAYMENT_REQUIRED                = 402;
-    const FORBIDDEN                       = 403;
-    const NOT_FOUND                       = 404;
-    const METHOD_NOT_ALLOWED              = 405;
-    const NOT_ACCEPTABLE                  = 406;
-    const PROXY_AUTHENTIFICATION_REQUIRED = 407;
-    const REQUEST_TIMEOUT                 = 408;
-    const CONFLICT                        = 409;
-    const GONE                            = 410;
-    const LENGTH_REQUIRED                 = 411;
-    const PRECONDITION_FAILED             = 412;
-    const REQUEST_ENTITY_TOO_LARGE        = 413;
-    const REQUEST_URI_TOO_LONG            = 414;
-    const UNSUPPORTED_MEDIA_TYPE          = 415;
-    const REQUESTED_RAnGE_NOT_SATISFIABLE = 416;
-    const EXPECTATION_FAILED              = 417;
-    const INTERNAL_SERVER_ERROR           = 500;
-    const NOT_IMPLEMENTED                 = 501;
-    const BAD_GATEWAY                     = 502;
-    const SERVICE_UNAVAILABLE             = 503;
-    const GATEWAY_TIMEOUT                 = 504;
-    const HTTP_VERSION_NOT_SUPPORTED      = 505;
-    const BANDWIDTH_LIMIT_EXCEEDED        = 509;
+    const CODE_CONTINUE                        = 100;
+    const CODE_SWITCHING_PROTOCOLS             = 101;
+    const CODE_OK                              = 200;
+    const CODE_CREATED                         = 201;
+    const CODE_ACCEPTED                        = 202;
+    const CODE_NON_AUTHORITATIVE_INFORMATION   = 203;
+    const CODE_NO_CONTENT                      = 204;
+    const CODE_RESET_CONTENT                   = 205;
+    const CODE_PARTIAL_CONTENT                 = 206;
+    const CODE_MULTIPLE_CHOICES                = 300;
+    const CODE_MOVED_PERMANENTLY               = 301;
+    const CODE_FOUND                           = 302;
+    const CODE_SEE_OTHER                       = 303;
+    const CODE_NOT_MODIFIED                    = 304;
+    const CODE_USE_PROXY                       = 305;
+    const CODE_TEMPORARY_REDIRECT              = 307;
+    const CODE_BAD_REQUEST                     = 400;
+    const CODE_UNAUTHORIZED                    = 401;
+    const CODE_PAYMENT_REQUIRED                = 402;
+    const CODE_FORBIDDEN                       = 403;
+    const CODE_NOT_FOUND                       = 404;
+    const CODE_METHOD_NOT_ALLOWED              = 405;
+    const CODE_NOT_ACCEPTABLE                  = 406;
+    const CODE_PROXY_AUTHENTIFICATION_REQUIRED = 407;
+    const CODE_REQUEST_TIMEOUT                 = 408;
+    const CODE_CONFLICT                        = 409;
+    const CODE_GONE                            = 410;
+    const CODE_LENGTH_REQUIRED                 = 411;
+    const CODE_PRECONDITION_FAILED             = 412;
+    const CODE_REQUEST_ENTITY_TOO_LARGE        = 413;
+    const CODE_REQUEST_URI_TOO_LONG            = 414;
+    const CODE_UNSUPPORTED_MEDIA_TYPE          = 415;
+    const CODE_REQUESTED_RAnGE_NOT_SATISFIABLE = 416;
+    const CODE_EXPECTATION_FAILED              = 417;
+    const CODE_INTERNAL_SERVER_ERROR           = 500;
+    const CODE_NOT_IMPLEMENTED                 = 501;
+    const CODE_BAD_GATEWAY                     = 502;
+    const CODE_SERVICE_UNAVAILABLE             = 503;
+    const CODE_GATEWAY_TIMEOUT                 = 504;
+    const CODE_HTTP_VERSION_NOT_SUPPORTED      = 505;
+    const CODE_BANDWIDTH_LIMIT_EXCEEDED        = 509;
     
     /**
      * Wether the static variables are set or not
@@ -259,6 +259,71 @@ class Woops_Http_Response
     }
     
     /**
+     * Creates a response object from a string
+     * 
+     * @param   string                          The full HTTP response, with the status, headers and body
+     * @return  Woops_Http_Response             The HTTP response object
+     * @throws  Woops_Http_Response_Exception   If the HTTP status line is invalid
+     */
+    public static function createResponseObject( $str )
+    {
+        // New line character
+        $CRLF    = self::$_str->CR . self::$_str->LF;
+        
+        // Gets each line of the response
+        $lines   = explode( $CRLF, $str );
+        
+        // Status parts
+        $status  = explode( ' ', array_shift( $lines ) );
+        
+        // Checks the status parts
+        if( count( $status < 2 ) ) {
+            
+            // Invalid status line
+            throw new Woops_Http_Response_Exception(
+                'Invalid HTTP status line (' . implode( ' ', $status ) . ')',
+                Woops_Http_Response_Exception::EXCEPTION_INVALID_HTTP_STATUS
+            );
+        }
+        
+        $version = str_replace( 'HTTP/', '', $status[ 0 ] );
+        $code    = $status[ 1 ];
+        
+        // Storage for the headers
+        $headers = array();
+        
+        // Process each line
+        foreach( $lines as $line ) {
+            
+            // If the line is empty, we are at the end of the headers
+            if( $line === '' ) {
+                
+                break;
+            }
+            
+            // Gets the header name and value
+            $header = explode( $line, ':' );
+            
+            // Adds the current header
+            $headers[ trim( $header[ 0 ] ) ] = ( isset( $header[ 1 ] ) ) ? trim( $header[ 1 ] ) : '';
+        }
+        
+        // The body does not need to be splitted
+        $body = implode( $CRLF, $lines );
+        
+        // Creates the response object
+        $response = new self(
+            $code,
+            $headers,
+            $body,
+            $version
+        );
+        
+        // Returns the response object
+        return $response;
+    }
+    
+    /**
      * Process the body, if needed, accordingly to the 'transfer-encoding'
      * and 'content-encoding' response headers.
      * 
@@ -332,7 +397,7 @@ class Woops_Http_Response
                 }
                 
                 // Adds the data
-                $body .= $data
+                $body .= $data;
                 
                 // Process the next chunk
                 $i++;
@@ -341,7 +406,7 @@ class Woops_Http_Response
         } else {
             
             // Raw body
-            $body = $this->_rawBody
+            $body = $this->_rawBody;
         }
         
         // Checks if the 'transfer-encoding' header is set
@@ -382,7 +447,7 @@ class Woops_Http_Response
         }
         
         // Returns the processed body
-        return $body
+        return $body;
     }
     
     /**
