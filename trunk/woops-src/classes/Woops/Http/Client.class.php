@@ -219,10 +219,10 @@ class Woops_Http_Client
      * Class constructor
      * 
      * @param   string  The URI to connect to
-     * @param   string  THe request method (one of the METHOD_XXX constant)
+     * @param   string  The request method (one of the METHOD_XXX constant)
      * @return  void
      */
-    public function __construct( $uri, $method )
+    public function __construct( $uri, $method = self::METHOD_GET )
     {
         // Checks if the static variables are set
         if( !self::$_hasStatic ) {
@@ -929,6 +929,9 @@ class Woops_Http_Client
                 Woops_Http_Client_Exception::EXCEPTION_CONNECTED
             );
         }
+        
+        // Sets the request method to POST
+        $this->setRequestMethod( self::METHOD_POST );
         
         // Name must be a string
         $name = ( string )$name;
