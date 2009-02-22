@@ -1732,7 +1732,6 @@ final class Woops_File_Types implements Woops_Core_Singleton_Interface
         return self::$_instance;
     }
     
-    
     /**
      * Checks if a mime-type is valid
      * 
@@ -1750,13 +1749,42 @@ final class Woops_File_Types implements Woops_Core_Singleton_Interface
         // Checks the mime type
         if( $allowObsolete && isset( $this->_mimeTypes[ $part1 ][ $part2 ] ) ) {
             
+            // Valid mime-type (may be obsolete)
             return true;
             
         } elseif( !$allowObsolete && isset( $this->_mimeTypes[ $part1 ][ $part2 ] ) && $this->_mimeTypes[ $part1 ][ $part2 ] ) {
             
+            // Valid mime-type (and not obsolete)
             return true;
         }
         
+        // Invalid mime-type
+        return false;
+    }
+    
+    /**
+     * Gets the mime-type from a filename, based on it's extension
+     * 
+     * @param   string  The filename
+     * @return  mixed   The mime-type, if available, otherwise false
+     */
+    public function getMimeType( $fileName )
+    {
+        // Finds the position of the last dot
+        if( $extPos = strrpos( $fileName, '.' ) ) {
+            
+            // Gets the file extension
+            $extension = substr( $fileName, $extPos + 1 );
+            
+            // Checks if the extension is registered
+            if( isset( self::$_fileExtensions[ $extension ] ) ) {
+                
+                // Returns the corresponding mime-type
+                return self::$_fileExtensions[ $extension ];
+            }
+        }
+        
+        // Cannot find a mime-type for the filename
         return false;
     }
 }
