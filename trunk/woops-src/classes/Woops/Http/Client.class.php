@@ -185,6 +185,8 @@ class Woops_Http_Client
     /**
      * Class constructor
      * 
+     * @param   string  The URI to connect to
+     * @param   string  THe request method (one of the METHOD_XXX constant)
      * @return  void
      */
     public function __construct( $uri, $method = self::METHOD_GET )
