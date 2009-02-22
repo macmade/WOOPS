@@ -28,4 +28,10 @@ final class Woops_Http_Client_Exception extends Woops_Core_Exception_Base
     /**
      * Error codes for the exceptions
      */
+    const EXCEPTION_CONNECTED                = 0x01;
+    const EXCEPTION_NOT_CONNECTED            = 0x02;
+    const EXCEPTION_INVALID_REQUEST_METHOD   = 0x03;
+    const EXCEPTION_INVALID_AUTH_TYPE        = 0x04;
+    const EXCEPTION_INVALID_PROTOCOL_VERSION = 0x05;
+    const EXCEPTION_NO_FSOCKOPEN             = 0x06;
 }
