@@ -482,7 +482,7 @@ class Woops_Http_Client
     }
     
     /**
-     * Encodes a multipart item
+     * Encodes a multipart item (RFC-2387)
      * 
      * @param   string  The name of the item
      * @param   string  The value of the item
@@ -507,7 +507,7 @@ class Woops_Http_Client
     }
     
     /**
-     * Encodes a file as a multipart item
+     * Encodes a file as a multipart item (RFC-2387)
      * 
      * @param   string  The name of the file (as in the $_FILES array)
      * @param   string  The file name
