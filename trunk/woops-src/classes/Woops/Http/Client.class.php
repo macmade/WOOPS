@@ -63,22 +63,27 @@ class Woops_Http_Client
     /**
      * The string utilities
      */
-    private static $_str                = NULL;
+    protected static $_str              = NULL;
     
     /**
      * The array utilities
      */
-    private static $_array              = NULL;
+    protected static $_array            = NULL;
     
     /**
      * The environment object
      */
-    private static $_env                = NULL;
+    protected static $_env              = NULL;
     
     /**
      * The newline character (CR-LF)
      */
-    private static $_CRLF               = false;
+    protected static $_CRLF             = false;
+    
+    /**
+     * The boundary for the multipart/form-data encoding type
+     */
+    protected static $_boundary         = '';
     
     /**
      * The available HTTP request methods
@@ -109,11 +114,6 @@ class Woops_Http_Client
         '1.0' => true,
         '1.1' => true
     );
-    
-    /**
-     * The boundary for the multipart/form-data encoding type
-     */
-    protected static $_boundary         = '';
     
     /**
      * The HTTP request URI
@@ -214,6 +214,11 @@ class Woops_Http_Client
      * The data to send through the POST method
      */
     protected $_postData                = array();
+    
+    /**
+     * The files to upload through the POST method
+     */
+    protected $_files                   = array();
     
     /**
      * Class constructor
