@@ -470,7 +470,10 @@ class Woops_Http_Client
                 $body .= $this->_encodeFileAsMultipart( $name, basename( $infos[ 0 ] ), $infos[ 1 ], $infos[ 2 ]  );
             }
             
-            // Not implemented yet
+            // Adds the boundary
+            $body .= '--' . self::$_boundary . self::$_CRLF;
+            
+            // Return the body
             return $body;
         }
         
