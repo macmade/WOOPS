@@ -41,7 +41,6 @@ class Woops_Http_Client
      * The available HTTP authentication types
      */
     const AUTH_BASIC       = 'BASIC';
-    const AUTH_DIGEST      = 'DIGEST';
     
     /**
      * The available HTTP protocol versions
@@ -87,8 +86,7 @@ class Woops_Http_Client
      * The available HTTP authentication types
      */
     protected static $_authTypes        = array(
-        'BASIC'  => true,
-        'DIGEST' => true
+        'BASIC'  => true
     );
     
     /**
@@ -118,6 +116,16 @@ class Woops_Http_Client
      * The HTTP authentication type
      */
     protected $_authType                = '';
+    
+    /**
+     * The HTTP authentication username
+     */
+    protected $_authUser                = '';
+    
+    /**
+     * The HTTP authentication password
+     */
+    protected $_authPassword            = '';
     
     /**
      * The HTTP protocol version
@@ -288,6 +296,21 @@ class Woops_Http_Client
     }
     
     /**
+     * Creates the value of the authentication header
+     * 
+     * @return  string  The value of the authentication header
+     */
+    protected function _createAuthenticationHeader()
+    {
+        // Checks the autentication type
+        if( $this->_authType === self::AUTH_BASIC ) {
+            
+            // Username and password are encoded in base 64
+            return 'Basic ' . base64_encode( $this->_authUser . ':' . $this->_authPassword );
+        }
+    }
+    
+    /**
      * Sets the HTTP request URI
      * 
      * @param   string                              The URI
@@ -354,11 +377,13 @@ class Woops_Http_Client
      * Sets the HTTP authentication type
      * 
      * @param   string                      The HTTP authentication type (should be one of the Woops_Http_Client::AUTH_XXX constant)
+     * @param   string                      The HTTP authentication username
+     * @param   string                      The HTTP authentication password
      * @return  void
      * @throws  Woops_Http_Client_Exception If the connection has already been established
      * @throws  Woops_Http_Client_Exception If the authentication type is invalid
      */
-    public function setAuthType( $type )
+    public function setAuthType( $type, $username, $password )
     {
         // Checks the connect flag
         if( $this->_connected ) {
@@ -383,8 +408,10 @@ class Woops_Http_Client
             );
         }
         
-        // Sets the request method
-        $this->_authType = $type;
+        // Sets the authentication type, username and password
+        $this->_authType     = $type;
+        $this->_authUser     = ( string )$username;
+        $this->_authPassword = ( string )$password;
     }
     
     /**
@@ -420,7 +447,7 @@ class Woops_Http_Client
             );
         }
         
-        // Sets the request method
+        // Sets the protocol version
         $this->_protocolVersion = $version;
     }
     
@@ -443,6 +470,7 @@ class Woops_Http_Client
             );
         }
         
+        // Sets the connection timeout
         $this->_timeout = ( int )$value;
     }
     
@@ -465,6 +493,7 @@ class Woops_Http_Client
             );
         }
         
+        // Sets the connection type
         $this->_connection = ( string )$value;
     }
     
@@ -487,6 +516,7 @@ class Woops_Http_Client
             );
         }
         
+        // Sets the user-agent
         $this->_userAgent = ( string )$value;
     }
     
@@ -736,13 +766,6 @@ class Woops_Http_Client
         // Adds the user agent
         $request .= 'User-Agent: ' . $this->_userAgent . self::$_CRLF;
         
-        // Adds the headers
-        foreach( $this->_headers as $key => $value ) {
-            
-            // Adds the header
-            $request .= $key . ': ' . $value . self::$_CRLF;
-        }
-        
         // Checks for the 'Keep-Alive' parameter
         if( $this->_keepAlive ) {
             
@@ -758,6 +781,22 @@ class Woops_Http_Client
             
             // Adds the cookie header
             $request .= 'Cookie: ' . implode( ';', array_keys( $this->_cookies ) );
+        }
+        
+        // Checks for an authentication type
+        if( $this->_authType ) {
+            
+            // Adds the authorization header
+            $request .= 'Authorization: '
+                     .  $this->_createAuthenticationHeader
+                     . self::$_CRLF;
+        }
+        
+        // Adds the headers
+        foreach( $this->_headers as $key => $value ) {
+            
+            // Adds the header
+            $request .= $key . ': ' . $value . self::$_CRLF;
         }
         
         // End of the headers
