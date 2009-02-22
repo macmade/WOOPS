@@ -66,6 +66,11 @@ class Woops_Http_Client
     private static $_str                = NULL;
     
     /**
+     * The array utilities
+     */
+    private static $_array              = NULL;
+    
+    /**
      * The environment object
      */
     private static $_env                = NULL;
@@ -315,6 +320,9 @@ class Woops_Http_Client
         // Gets the instance of the string utilities
         self::$_str       = Woops_String_Utils::getInstance();
         
+        // Gets the instance of the string utilities
+        self::$_array     = Woops_Array_Utils::getInstance();
+        
         // Gets the instance of the environment object
         self::$_env       = Woops_Core_Env_Getter::getInstance();
         
@@ -430,12 +438,50 @@ class Woops_Http_Client
             
         } elseif( $this->_encType === self::ENCTYPE_MULTIPART_FORM_DATA ) {
             
+            // Gets the flat list of the POST data
+            $postData = self::$_array->flattenArray( $this->_postData );
+            
+            // Storage
+            $body = '';
+            
+            // Process each item of the POST data
+            foreach( $postData as $key => $value ) {
+                
+                // Encodes the current item as multipart
+                $body .= $this->_encodeAsMultipart( $key, $value );
+            }
+            
             // Not implemented yet
-            return '';
+            return $body;
         }
         
         // Unrecognized encoding type - Do not send anything
         return '';
+    }
+    
+    /**
+     * Encodes a multipart item
+     * 
+     * @param   string  The name of the item
+     * @param   string  The value of the item
+     * @return  string  The item encoded as multipart
+     */
+    protected function _encodeAsMultipart( $name, $value )
+    {
+        // Creates the multipart item
+        $part = '--'
+              . self::$_boundary
+              . self::$_CRLF
+              . 'Content-Disposition: form-data; name="'
+              . $name
+              . '"'
+              . self::$_CRLF
+              . self::$_CRLF
+              . $value
+              . self::$_CRLF;
+        
+        // Returns the multipart item
+        return $part;
     }
     
     /**
