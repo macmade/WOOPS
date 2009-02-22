@@ -26,7 +26,9 @@ abstract class Woops_File_Png_Chunk
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * The abstract method used to get the processed chunk data
+     * Gets the processed data
+     * 
+     * @return  stdClass    The processed data
      */
     abstract public function getProcessedData();
     

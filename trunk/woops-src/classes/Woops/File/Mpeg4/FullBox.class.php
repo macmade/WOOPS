@@ -38,7 +38,10 @@ abstract class Woops_File_Mpeg4_FullBox extends Woops_File_Mpeg4_DataAtom
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * The abstract method used to process the atom flags
+     * Process the atom flags
+     * 
+     * @param   int     The raw (unprocessed) flags
+     * @return  void
      */
     abstract protected function _processFlags( $rawFlags );
     

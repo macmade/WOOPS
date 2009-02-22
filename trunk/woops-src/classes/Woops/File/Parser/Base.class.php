@@ -26,7 +26,7 @@ abstract class Woops_File_Parser_Base
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * The abstract method used to parse the file
+     * Parses the file
      * 
      * @return  void
      */
