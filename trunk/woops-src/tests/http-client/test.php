@@ -11,8 +11,19 @@
 
 # $Id$
 
+// Includes the initialization script
+require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'init.inc.php' );
+
 // Plain text content
 header( 'Content-Type: text/plain' );
+
+// Creates some cookies
+$FOO = new Woops_Http_Cookie( 'foo', 'WOOPS test cookie #1' );
+$BAR = new Woops_Http_Cookie( 'bar', 'WOOPS test cookie #2' );
+
+// Sets the cookies
+$FOO->setCookie();
+$BAR->setCookie();
 
 // Prints the POST data
 print 'POST data ($_POST): ';

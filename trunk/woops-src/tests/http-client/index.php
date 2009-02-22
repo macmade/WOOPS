@@ -51,5 +51,12 @@ $CLIENT->connect();
 // Writes the HTTP response body
 print $CLIENT->getResponse()->getBody();
 
+// Separator
+print chr( 10 ) . '-----' . chr( 10 ) . chr( 10 );
+
+// Prints the cookies from the response
+print 'Cookies from the HTTP response: ';
+print_r( $CLIENT->getResponse()->getCookies() );
+
 // Aborts the script
 exit();
