@@ -205,49 +205,91 @@ class Woops_Uniform_Ressource_Identifier
     );
     
     /**
+     * The default ports number for the available schemes (IANA)
+     */
+    protected static $_ports   = array(
+        'aaa'             => 3868,
+        'aaas'            => 3868,
+        'acap'            => 674,
+        'cap'             => 1026,
+        'dict'            => 2628,
+        'ftp'             => 21,
+        'gopher'          => 70,
+        'http'            => 80,
+        'https'           => 443,
+        'iax'             => 4569,
+        'icap'            => 1344,
+        'imap'            => 143,
+        'ipp'             => 631,
+        'iris.beep'       => 702,
+        'ldap'            => 389,
+        'mtqp'            => 1038,
+        'mupdate'         => 3905,
+        'news'            => 2009,
+        'nfs'             => 2049,
+        'nntp'            => 119,
+        'pop'             => 110,
+        'rtsp'            => 554,
+        'sip'             => 5060,
+        'sips'            => 5061,
+        'snmp'            => 161,
+        'soap.beep'       => 605,
+        'soap.beeps'      => 605,
+        'telnet'          => 23,
+        'tftp'            => 69,
+        'tip'             => 3372,
+        'vemmi'           => 575,
+        'xmlrpc.beep'     => 602,
+        'xmlrpc.beeps'    => 602,
+        'xmpp'            => 5269,
+        'z39.50r'         => 210,
+        'z39.50s'         => 210
+    );
+    
+    /**
      * The URI scheme
      */
-    protected $_scheme     = '';
+    protected $_scheme         = '';
     
     /**
      * The URI host
      */
-    protected $_host       = '';
+    protected $_host           = '';
     
     /**
      * The URI port number
      */
-    protected $_port       = 0;
+    protected $_port           = 0;
     
     /**
      * The URI username
      */
-    protected $_user       = '';
+    protected $_user           = '';
     
     /**
      * The URI user password
      */
-    protected $_pass       = '';
+    protected $_pass           = '';
     
     /**
      * The URI path
      */
-    protected $_path       = '';
+    protected $_path           = '';
     
     /**
      * The URI query
      */
-    protected $_query      = '';
+    protected $_query          = '';
     
     /**
      * THe URI fragment
      */
-    protected $_fragment   = '';
+    protected $_fragment       = '';
     
     /**
      * The URI query, as key/value pairs
      */
-    protected $_queryParts = array();
+    protected $_queryParts    = array();
     
     /**
      * Class constructor
@@ -291,7 +333,7 @@ class Woops_Uniform_Ressource_Identifier
             
             // Stores the other informations
             $this->_host     = ( isset( $infos[ 'host' ] ) )     ? $infos[ 'host' ]     : '';
-            $this->_port     = ( isset( $infos[ 'port' ] ) )     ? $infos[ 'port' ]     : '';
+            $this->_port     = ( isset( $infos[ 'port' ] ) )     ? $infos[ 'port' ]     : 0;
             $this->_user     = ( isset( $infos[ 'user' ] ) )     ? $infos[ 'user' ]     : '';
             $this->_pass     = ( isset( $infos[ 'pass' ] ) )     ? $infos[ 'pass' ]     : '';
             $this->_path     = ( isset( $infos[ 'path' ] ) )     ? $infos[ 'path' ]     : '';
@@ -486,7 +528,7 @@ class Woops_Uniform_Ressource_Identifier
         $this->_host = $parts[ 0 ];
         
         // Stores the port number, if present
-        $this->_port = ( isset( $parts[ 1 ] ) ) ? $parts[ 1 ] : '';
+        $this->_port = ( isset( $parts[ 1 ] ) ) ? $parts[ 1 ] : 0;
     }
     
     /**
@@ -592,10 +634,19 @@ class Woops_Uniform_Ressource_Identifier
     /**
      * Gets the URI port number
      * 
+     * @param   boolean If no port is set, add the default port for the scheme, if available
      * @return  string  The URI port number
      */
-    public function getPort()
+    public function getPort( $addDefaultPort = true )
     {
+        // Checks if the port number is set
+        if( !$this->_port && $addDefaultPort && isset( self::$_ports[ $this->_scheme ] ) ) {
+            
+            // Return the default port
+            return self::$_ports[ $this->_scheme ];
+        }
+        
+        // Returns the port number
         return $this->_port;
     }
     
