@@ -71,6 +71,11 @@ class Woops_Http_Client
     protected static $_array            = NULL;
     
     /**
+     * The file types class
+     */
+    protected static $_fileTypes        = NULL;
+    
+    /**
      * The environment object
      */
     protected static $_env              = NULL;
@@ -328,6 +333,9 @@ class Woops_Http_Client
         // Gets the instance of the string utilities
         self::$_array     = Woops_Array_Utils::getInstance();
         
+        // Gets the instance of the file types class
+        self::$_fileTypes = Woops_File_Types::getInstance();
+        
         // Gets the instance of the environment object
         self::$_env       = Woops_Core_Env_Getter::getInstance();
         
@@ -456,6 +464,12 @@ class Woops_Http_Client
                 $body .= $this->_encodeAsMultipart( $key, $value );
             }
             
+            // Process each file to upload
+            foreach( $this->_files as $name => $infos ) {
+                
+                $body .= $this->_encodeFileAsMultipart( $name, basename( $infos[ 0 ] ), $infos[ 1 ], $infos[ 2 ]  );
+            }
+            
             // Not implemented yet
             return $body;
         }
@@ -483,6 +497,38 @@ class Woops_Http_Client
               . self::$_CRLF
               . self::$_CRLF
               . $value
+              . self::$_CRLF;
+        
+        // Returns the multipart item
+        return $part;
+    }
+    
+    /**
+     * Encodes a file as a multipart item
+     * 
+     * @param   string  The name of the file (as in the $_FILES array)
+     * @param   string  The file name
+     * @param   string  The mime-type of the file
+     * @param   string  The file content
+     * @return  string  The item encoded as multipart
+     */
+    protected function _encodeFileAsMultipart( $name, $fileName, $mimeType, $data )
+    {
+        // Creates the multipart item
+        $part = '--'
+              . self::$_boundary
+              . self::$_CRLF
+              . 'Content-Disposition: form-data; name="'
+              . $name
+              . '"; filename="'
+              . $fileName
+              . '"'
+              . self::$_CRLF
+              . 'Content-Type: '
+              . $mimeType
+              . self::$_CRLF
+              . self::$_CRLF
+              . $data
               . self::$_CRLF;
         
         // Returns the multipart item
@@ -921,6 +967,7 @@ class Woops_Http_Client
      * 
      * @param   string  The name of the value to set
      * @param   mixed   The value to set (can be a sub-array)
+     * @return  void
      * @throws  Woops_Http_Client_Exception If the connection has already been established
      */
     public function addPostData( $name, $value )
@@ -959,6 +1006,69 @@ class Woops_Http_Client
             // Adds the data
             $this->_postData[ $name ] = $value;
         }
+    }
+    
+    /**
+     * Adds a file to send throught the POST method
+     * 
+     * @param   string                      The name of the file, in the $_FILES array
+     * @param   string                      The path of the file to send
+     * @return  void
+     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops_Http_Client_Exception If the file does not exist
+     * @throws  Woops_Http_Client_Exception If the file is not readable
+     */
+    public function addFile( $name, $path )
+    {
+        // Checks the connect flag
+        if( $this->_connected ) {
+            
+            // Connection has been established
+            throw new Woops_Http_Client_Exception(
+                'The connection has already been established',
+                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+            );
+        }
+        
+        // Checks if the file exists
+        if( !file_exists( $path ) ) {
+            
+            // The file does not exist
+            throw new Woops_Http_Client_Exception(
+                'No such file (' . $path . ')',
+                Woops_Http_Client_Exception::EXCEPTION_NO_FILE
+            );
+        }
+        
+        // Checks if the file is readable
+        if( !file_exists( $path ) ) {
+            
+            // The file is not readable
+            throw new Woops_Http_Client_Exception(
+                'Unreadable file (' . $path . ')',
+                Woops_Http_Client_Exception::EXCEPTION_FILE_NOT_READABLE
+            );
+        }
+        
+        // Sets the request method to POST
+        $this->setRequestMethod( self::METHOD_POST );
+        
+        // Tries to get a mime-type
+        $mimeType = self::$_fileTypes->getMimeType( $path );
+        
+        // Checks for a mime-type
+        if( !$mimeType ) {
+            
+            // Default is octet-stream
+            $mimeType = 'application/octet-stream';
+        }
+        
+        // Stores the file name
+        $this->_files[ $name ] = array(
+            $path,
+            $mimeType,
+            file_get_contents( $path )
+        );
     }
     
     /**
@@ -1026,6 +1136,13 @@ class Woops_Http_Client
         
         // Sets the connect flag
         $this->_connected = true;
+        
+        // Checks if we have files to upload
+        if( $this->_requestMethod === self::METHOD_POST && count( $this->_files ) ) {
+            
+            // Sets the encoding type to multipart
+            $this->setEncodingType( self::ENCTYPE_MULTIPART_FORM_DATA );
+        }
         
         // Writes the request headers in the socket
         fwrite( $this->_socket, $this->_buildRequestHeaders() );
@@ -1258,6 +1375,27 @@ class Woops_Http_Client
     }
     
     /**
+     * Gets the files that will be sent
+     * 
+     * @return  array   An array with the files (the key is the name (as in the $_FILES array), the first entry is the file path, the second entry the mime-type, and the third entry the file content)
+     */
+    public function getFiles()
+    {
+        return $this->_files;
+    }
+    
+    /**
+     * Gets a file that will be sent
+     * 
+     * @param   string  The name of the file, in the $_FILES array
+     * @return  array   An array with the file informations (the first entry is the file path, the second entry the mime-type, and the third entry the file content)
+     */
+    public function getFile( $name )
+    {
+        return ( isset( $this->_files[ $name ] ) ) ? $this->_files[ $name ] : false;
+    }
+    
+    /**
      * Removes a header
      * 
      * @param   string                      The name of the header
@@ -1345,5 +1483,50 @@ class Woops_Http_Client
         
         // Removes all cookies
         $this->_cookies = array();
+    }
+    
+    /**
+     * Removes a file
+     * 
+     * @param   string                      The name of the file, in the $_FILES array
+     * @return  void
+     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     */
+    public function removeFile( $name )
+    {
+        // Checks the connect flag
+        if( $this->_connected ) {
+            
+            // Connection has been established
+            throw new Woops_Http_Client_Exception(
+                'The connection has already been established',
+                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+            );
+        }
+        
+        // Removes the file
+        unset( $this->_files[ $name ] );
+    }
+    
+    /**
+     * Removes all files
+     * 
+     * @return  void
+     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     */
+    public function removeFiles()
+    {
+        // Checks the connect flag
+        if( $this->_connected ) {
+            
+            // Connection has been established
+            throw new Woops_Http_Client_Exception(
+                'The connection has already been established',
+                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+            );
+        }
+        
+        // Removes all files
+        $this->_files = array();
     }
 }

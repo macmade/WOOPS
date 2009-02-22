@@ -34,4 +34,6 @@ final class Woops_Http_Client_Exception extends Woops_Core_Exception_Base
     const EXCEPTION_INVALID_AUTH_TYPE        = 0x04;
     const EXCEPTION_INVALID_PROTOCOL_VERSION = 0x05;
     const EXCEPTION_NO_FSOCKOPEN             = 0x06;
+    const EXCEPTION_NO_FILE                  = 0x07;
+    const EXCEPTION_FILE_NOT_READABLE        = 0x08;
 }
