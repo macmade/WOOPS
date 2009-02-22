@@ -163,6 +163,11 @@ class Woops_Http_Response
     protected $_httpVersion    = 1.1;
     
     /**
+     * The cookies (from the 'Set-Cookie' header)
+     */
+    protected $_cookies        = array();
+    
+    /**
      * Class constructor
      * 
      * @param   int                             The HTTP response code
@@ -304,8 +309,29 @@ class Woops_Http_Response
             // Gets the header name and value
             $header = explode( $line, ':' );
             
+            // Name and value of the header
+            $name   = trim( $header[ 0 ] );
+            $value  = ( isset( $header[ 1 ] ) ) ? trim( $header[ 1 ] ) : '';
+            
             // Adds the current header
-            $headers[ trim( $header[ 0 ] ) ] = ( isset( $header[ 1 ] ) ) ? trim( $header[ 1 ] ) : '';
+            $headers[ $name ] = $value;
+            
+            // Checks for the 'Set-Cookie' header
+            if( $name === 'Set-Cookie' && $value ) {
+                
+                // Gets each cookie
+                $cookies = explode( ',', $value );
+                
+                // Process each cookie
+                foreach( $cookies as $cookie ) {
+                    
+                    // Creates a cookie object
+                    $cookie                               = Woops_Http_Cookie::createCookieObject( trim( $cookie ) );
+                    
+                    // Stores the cookie object
+                    $this->_cookies[ $cookie->getName() ] = $cookie;
+                }
+            }
         }
         
         // The body does not need to be splitted
@@ -519,6 +545,27 @@ class Woops_Http_Response
     public function getHttpVersion()
     {
         return $this->_httpVersion;
+    }
+    
+    /**
+     * Gets the cookies (from the 'Set-Cookie' header)
+     * 
+     * @return  array   An array with instances of the Woops_Http_Cookie class
+     */
+    public function getCookies()
+    {
+        return $this->_cookies;
+    }
+    
+    /**
+     * Gets a cookie (from the 'Set-Cookie' header)
+     * 
+     * @param   string  The name of the cookie
+     * @return  mixed   An instance of the Woops_Http_Cookie class if the cookie exists, otherwise NULL
+     */
+    public function getCookie( $name )
+    {
+        return ( isset( $this->_cookies[ $name ] ) ) ? $this->_cookies[ $name ] : NULL;
     }
     
     /**
