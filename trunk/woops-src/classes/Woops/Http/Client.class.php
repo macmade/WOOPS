@@ -727,7 +727,7 @@ class Woops_Http_Client
                           . $this->_protocolVersion
                           . self::$_CRLF;
         
-        // Adds the ost name, if we are in HTTP 1.1
+        // Adds the host name, if we are in HTTP 1.1
         if( $this->_protocolVersion === 1.1 ) {
             
             $request .= 'Host: ' . $this->_uri->getHost() . self::$_CRLF;
@@ -741,6 +741,16 @@ class Woops_Http_Client
             
             // Adds the header
             $request .= $key . ': ' . $value . self::$_CRLF;
+        }
+        
+        // Adds the connection type
+        $request .= 'Connection: ' . $this->_connection . self::$_CRLF;
+        
+        // Checks if we have cookies
+        if( count( $this->_cookies ) ) {
+            
+            // Adds the cookie header
+            $request .= 'Cookie: ' . implode( ';', array_keys( $this->_cookies ) );
         }
         
         // End of the headers
