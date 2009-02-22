@@ -40,6 +40,7 @@ class Woops_Http_Client
     /**
      * The available HTTP authentication types
      */
+    const NONE             = 'NONE';
     const AUTH_BASIC       = 'BASIC';
     
     /**
@@ -86,6 +87,7 @@ class Woops_Http_Client
      * The available HTTP authentication types
      */
     protected static $_authTypes        = array(
+        'NONE'   => true,
         'BASIC'  => true
     );
     
@@ -110,12 +112,12 @@ class Woops_Http_Client
     /**
      * The HTTP request method
      */
-    protected $_requestMethod           = '';
+    protected $_requestMethod           = 'GET';
     
     /**
      * The HTTP authentication type
      */
-    protected $_authType                = '';
+    protected $_authType                = 'NONE';
     
     /**
      * The HTTP authentication username
@@ -385,7 +387,7 @@ class Woops_Http_Client
      * @throws  Woops_Http_Client_Exception If the connection has already been established
      * @throws  Woops_Http_Client_Exception If the authentication type is invalid
      */
-    public function setAuthType( $type, $username, $password )
+    public function setAuthentication( $type, $username, $password )
     {
         // Checks the connect flag
         if( $this->_connected ) {
@@ -483,7 +485,7 @@ class Woops_Http_Client
      * @return  void
      * @throws  Woops_Http_Client_Exception If the connection has already been established
      */
-    public function setConnection( $value )
+    public function setConnectionType( $value )
     {
         // Checks the connect flag
         if( $this->_connected ) {
@@ -676,16 +678,6 @@ class Woops_Http_Client
     }
     
     /**
-     * Gets the request URI
-     * 
-     * @return  Woops_Uniform_Ressource_Identifier  The URI object
-     */
-    public function getUri()
-    {
-        return $this->_uri;
-    }
-    
-    /**
      * Gets the HTTP response
      * 
      * @return  Woops_Http_Response         The HTTP response object
@@ -786,7 +778,7 @@ class Woops_Http_Client
         }
         
         // Checks for an authentication type
-        if( $this->_authType ) {
+        if( $this->_authType && $this->_authType !== 'NONE' ) {
             
             // Adds the authorization header
             $request .= 'Authorization: '
@@ -806,6 +798,19 @@ class Woops_Http_Client
         
         // Writes the request in the socket
         fwrite( $this->_socket, $request );
+        
+        // Connection was established
+        return true;
+    }
+    
+    /**
+     * Checks if the connection has been established
+     * 
+     * @return  boolean True if the connection was established
+     */
+    public function isConnected()
+    {
+        return $this->_connected;
     }
     
     /**
@@ -826,5 +831,237 @@ class Woops_Http_Client
     public function getErrorMessage()
     {
         return $this->_errStr;
+    }
+    
+    /**
+     * Gets the request URI
+     * 
+     * @return  Woops_Uniform_Ressource_Identifier  The URI object
+     */
+    public function getUri()
+    {
+        return $this->_uri;
+    }
+    
+    /**
+     * Gets the request method
+     * 
+     * @return  string  The request methods
+     */
+    public function getRequestMethod()
+    {
+        return $this->_requestMethod;
+    }
+    
+    /**
+     * Gets the authentication type
+     * 
+     * @return  string  The authentication type
+     */
+    public function getAuthType()
+    {
+        return $this->_authUser;
+    }
+    
+    /**
+     * Gets the authentication user
+     * 
+     * @return  string  The authentication user
+     */
+    public function getAuthUser()
+    {
+        return $this->_authType;
+    }
+    
+    /**
+     * Gets the authentication password
+     * 
+     * @return  string  The authentication password
+     */
+    public function getAuthPassword()
+    {
+        return $this->_authPassword;
+    }
+    
+    /**
+     * Gets the protocol version
+     * 
+     * @return  float   The protocol version type
+     */
+    public function getProtocolVersion()
+    {
+        return $this->_protocolVersion;
+    }
+    
+    /**
+     * Gets the user-agent
+     * 
+     * @return  string  The user-agent
+     */
+    public function getUserAgent()
+    {
+        return $this->_userAgent;
+    }
+    
+    /**
+     * Gets the connection type
+     * 
+     * @return  string  The connection type
+     */
+    public function getConnectionType()
+    {
+        return $this->_connection;
+    }
+    
+    /**
+     * Gets the keep-alive value
+     * 
+     * @return  int The keep-alive value
+     */
+    public function getKeepAlive()
+    {
+        return $this->_keepAlive;
+    }
+    
+    /**
+     * Gets the connection timeout
+     * 
+     * @return  int The connection timeout
+     */
+    public function getTimeout()
+    {
+        return $this->_timeout;
+    }
+    
+    /**
+     * Gets a header
+     * 
+     * @param   string  The name of the header
+     * @return  mixed   The value of the header if it's set, otherwise false
+     */
+    public function getHeader( $name )
+    {
+        return ( isset( $this->_headers[ $name ] ) ) ? $this->_headers[ $name ] : false;
+    }
+    
+    /**
+     * Gets the headers
+     * 
+     * @return  array   An array with all the headers
+     */
+    public function getHeaders()
+    {
+        return $this->_headers;
+    }
+    
+    /**
+     * Gets a cookie
+     * 
+     * @param   string  The name of the cookie
+     * @return  mixed   The value of the header if it's set, otherwise NULL
+     */
+    public function getCookie( $name )
+    {
+        return ( isset( $this->_cookies[ $name ] ) ) ? $this->_cookies[ $name ] : NULL;
+    }
+    
+    /**
+     * Gets the cookies
+     * 
+     * @return  array   An array with all the cookies
+     */
+    public function getCookies()
+    {
+        return $this->_cookies;
+    }
+    
+    /**
+     * Removes a header
+     * 
+     * @param   string                      The name of the header
+     * @return  void
+     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     */
+    public function removeHeader( $name )
+    {
+        // Checks the connect flag
+        if( $this->_connected ) {
+            
+            // Connection has been established
+            throw new Woops_Http_Client_Exception(
+                'The connection has already been established',
+                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+            );
+        }
+        
+        // Removes the header
+        unset( $this->_headers[ $name ] );
+    }
+    
+    /**
+     * Removes all headers
+     * 
+     * @return  void
+     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     */
+    public function removeHeaders()
+    {
+        // Checks the connect flag
+        if( $this->_connected ) {
+            
+            // Connection has been established
+            throw new Woops_Http_Client_Exception(
+                'The connection has already been established',
+                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+            );
+        }
+        
+        // Removes all headers
+        $this->_headers = array();
+    }
+    
+    /**
+     * Removes a cookie
+     * 
+     * @param   string                      The name of the cookie
+     * @return  void
+     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     */
+    public function removeCookie( $name )
+    {
+        // Checks the connect flag
+        if( $this->_connected ) {
+            
+            // Connection has been established
+            throw new Woops_Http_Client_Exception(
+                'The connection has already been established',
+                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+            );
+        }
+        
+        // Removes the cookie
+        unset( $this->_cookies[ $name ] );
+    }
+    
+    /**
+     * Removes all cookies
+     * 
+     * @return  void
+     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     */
+    public function removeCookies()
+    {
+        // Checks the connect flag
+        if( $this->_connected ) {
+            
+            // Connection has been established
+            throw new Woops_Http_Client_Exception(
+                'The connection has already been established',
+                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+            );
+        }
+        
+        // Removes all cookies
+        $this->_cookies = array();
     }
 }
