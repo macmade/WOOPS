@@ -111,4 +111,68 @@ final class Woops_Array_Utils implements Woops_Core_Singleton_Interface
         // Returns the list tag
         return $list;
     }
+    
+    /**
+     * Gets a flattened array from a multidimensionnal array
+     * 
+     * This method will converts a multidimensionnal array as a one-dimension
+     * array. The key of each item will represent the structure of the
+     * original multidimensionnal array. For instance:
+     * 
+     * <code>
+     * array(
+     *      'foo' => array(
+     *          'bar'   => true,
+     *          'fooBar => false
+     *      )
+     * )
+     * </code>
+     * 
+     * will be converted to:
+     * 
+     * <code>
+     * array(
+     *      'foo[bar]'    => true,
+     *      'foo[fooBar]' => false
+     * )
+     * </code>
+     * 
+     * @param   array   The array to flatten
+     * @param   string  The key prefix (used internally)
+     * @return  array   An array with all the values, flattened
+     */
+    public function flattenArray( array $array, $prefix = '' )
+    {
+        // Storage for the items
+        $items = array();
+        
+        // Process each item
+        foreach( $array as $key => $value ) {
+            
+            // Key for the current item
+            $curKey = ( $prefix ) ? $prefix . '[' . $key . ']' : $key;
+            
+            // Checks if we have a sub-array
+            if( is_array( $value ) ) {
+                
+                // Gets the sub-values
+                $subValues = $this->flattenArray( $value, $curKey );
+                
+                // Process each sub-values
+                foreach( $subValues as $subKey => $subValue ) {
+                    
+                    // Adds the current sub-value
+                    $items[ $subKey ] = $subValue;
+                }
+                
+            } else {
+                
+                // Adds the current value
+                $items[ $curKey ] = $value;
+            }
+        }
+        
+        // Returns the flattened array
+        return $items;
+    }
 }
