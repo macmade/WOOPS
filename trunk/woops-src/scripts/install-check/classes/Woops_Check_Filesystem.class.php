@@ -23,8 +23,8 @@ class Woops_Check_Filesystem
         'cache'                => array( 'status' => '', 'message' => '', 'writecheck' => false ),
         'cache/classes'        => array( 'status' => '', 'message' => '', 'writecheck' => true ),
         'cache/config'         => array( 'status' => '', 'message' => '', 'writecheck' => true ),
-        'ressources'           => array( 'status' => '', 'message' => '', 'writecheck' => false ),
-        'ressources/templates' => array( 'status' => '', 'message' => '', 'writecheck' => false ),
+        'resources'            => array( 'status' => '', 'message' => '', 'writecheck' => false ),
+        'resources/templates'  => array( 'status' => '', 'message' => '', 'writecheck' => false ),
         'uploads'              => array( 'status' => '', 'message' => '', 'writecheck' => true ),
         'temp'                 => array( 'status' => '', 'message' => '', 'writecheck' => true )
     );

@@ -34,5 +34,5 @@ INSERT INTO `WOOPS_PAGEINFOS` (`id_pageinfos`, `id_parent`, `deleted`, `ctime`, 
 # Dumping data for table `WOOPS_TEMPLATES`
 #
 INSERT INTO `WOOPS_TEMPLATES` (`id_templates`, `id_parent`, `deleted`, `ctime`, `mtime`, `title`, `file`, `engine`, `engine_options`) VALUES
-(1, 0, 0, 1230764400, 1230764400, 'WOOPS default template', 'woops-mod://Cms/ressources/templates/woops-default.html', 'Woops_Mod_Cms_Page_Engine', 'O:8:"stdClass":2:{s:6:"tagMap";a:0:{}s:8:"keepHead";a:1:{i:0;a:2:{i:0;s:4:"link";i:1;i:1;}}}'),
-(2, 0, 0, 1230764400, 1230764400, 'WOOPS administration template', 'woops-mod://Admin/ressources/templates/woops-admin.html', 'Woops_Mod_Cms_Page_Engine', 'O:8:"stdClass":2:{s:6:"tagMap";a:0:{}s:8:"keepHead";a:1:{i:0;a:2:{i:0;s:4:"link";i:1;i:1;}}}');
+(1, 0, 0, 1230764400, 1230764400, 'WOOPS default template', 'woops-mod://Cms/resources/templates/woops-default.html', 'Woops_Mod_Cms_Page_Engine', 'O:8:"stdClass":2:{s:6:"tagMap";a:0:{}s:8:"keepHead";a:1:{i:0;a:2:{i:0;s:4:"link";i:1;i:1;}}}'),
+(2, 0, 0, 1230764400, 1230764400, 'WOOPS administration template', 'woops-mod://Admin/resources/templates/woops-admin.html', 'Woops_Mod_Cms_Page_Engine', 'O:8:"stdClass":2:{s:6:"tagMap";a:0:{}s:8:"keepHead";a:1:{i:0;a:2:{i:0;s:4:"link";i:1;i:1;}}}');
