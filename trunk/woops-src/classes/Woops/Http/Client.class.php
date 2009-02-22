@@ -743,6 +743,13 @@ class Woops_Http_Client
             $request .= $key . ': ' . $value . self::$_CRLF;
         }
         
+        // Checks for the 'Keep-Alive' parameter
+        if( $this->_keepAlive ) {
+            
+            // Adds the 'Keep-Alive' header
+            $request .= 'Keep-Alive: ' . $this->_keepAlive;
+        }
+        
         // Adds the connection type
         $request .= 'Connection: ' . $this->_connection . self::$_CRLF;
         
