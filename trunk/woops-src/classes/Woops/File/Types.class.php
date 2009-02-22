@@ -1777,10 +1777,10 @@ final class Woops_File_Types implements Woops_Core_Singleton_Interface
             $extension = substr( $fileName, $extPos + 1 );
             
             // Checks if the extension is registered
-            if( isset( self::$_fileExtensions[ $extension ] ) ) {
+            if( isset( $this->_fileExtensions[ $extension ] ) ) {
                 
                 // Returns the corresponding mime-type
-                return self::$_fileExtensions[ $extension ];
+                return $this->_fileExtensions[ $extension ];
             }
         }
         
