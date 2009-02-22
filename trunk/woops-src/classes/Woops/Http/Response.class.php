@@ -212,13 +212,10 @@ class Woops_Http_Response
         $this->_body        = $body;
         
         // Checks for the 'Set-Cookie' header
-        if( isset( $headers[ 'Set-Cookie' ] ) && trim( $headers[ 'Set-Cookie' ] ) ) {
-            
-            // Gets each cookie
-            $cookies = explode( ',', $headers[ 'Set-Cookie' ] );
+        if( isset( $headers[ 'Set-Cookie' ] ) ) {
             
             // Process each cookie
-            foreach( $cookies as $cookie ) {
+            foreach( $headers[ 'Set-Cookie' ] as $cookie ) {
                 
                 // Creates a cookie object
                 $cookie                               = Woops_Http_Cookie::createCookieObject( trim( $cookie ) );
@@ -365,8 +362,24 @@ class Woops_Http_Response
             $name   = trim( $header[ 0 ] );
             $value  = ( isset( $header[ 1 ] ) ) ? trim( $header[ 1 ] ) : '';
             
-            // Adds the current header
-            $headers[ $name ] = $value;
+            // Special processing for the 'Set-Cookie' header, which can appears multiple times
+            if( $name === 'Set-Cookie' ) {
+                
+                // Checks if the storage array exists
+                if( !isset( $headers[ $name ] ) ) {
+                    
+                    // Creates the storage array for the cookies
+                    $headers[ $name ] = array();
+                }
+                
+                // Adds the cookie
+                $headers[ $name ][] = $value;
+                
+            } else {
+                
+                // Adds the current header
+                $headers[ $name ] = $value;
+            }
         }
         
         // Storage for the response body
