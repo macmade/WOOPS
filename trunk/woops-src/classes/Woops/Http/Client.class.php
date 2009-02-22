@@ -937,6 +937,11 @@ class Woops_Http_Client
     /**
      * Sets the raw data for the request body
      * 
+     * If the raw data is set, the HTTP client will ignore the POST data set
+     * with the addPostData() method and the files added with the addFile()
+     * method, so only use this if you exactly know what you are doing, and if
+     * there is no other way to do it.
+     * 
      * @param   string  The raw data for the request body
      * @param   string  An optionnal encoding type
      * @return  void
