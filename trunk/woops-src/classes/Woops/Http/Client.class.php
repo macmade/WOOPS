@@ -28,26 +28,32 @@ class Woops_Http_Client
     /**
      * The available HTTP request methods
      */
-    const METHOD_CONNECT   = 'CONNECT';
-    const METHOD_DELETE    = 'DELETE';
-    const METHOD_GET       = 'GET';
-    const METHOD_HEAD      = 'HEAD';
-    const METHOD_OPTIONS   = 'OPTIONS';
-    const METHOD_POST      = 'POST';
-    const METHOD_PUT       = 'PUT';
-    const METHOD_TRACE     = 'TRACE';
+    const METHOD_CONNECT                = 'CONNECT';
+    const METHOD_DELETE                 = 'DELETE';
+    const METHOD_GET                    = 'GET';
+    const METHOD_HEAD                   = 'HEAD';
+    const METHOD_OPTIONS                = 'OPTIONS';
+    const METHOD_POST                   = 'POST';
+    const METHOD_PUT                    = 'PUT';
+    const METHOD_TRACE                  = 'TRACE';
     
     /**
      * The available HTTP authentication types
      */
-    const NONE             = 'NONE';
-    const AUTH_BASIC       = 'BASIC';
+    const NONE                          = 'NONE';
+    const AUTH_BASIC                    = 'BASIC';
     
     /**
      * The available HTTP protocol versions
      */
-    const HTTP_VERSION_1_0 = '1.0';
-    const HTTP_VERSION_1_1 = '1.1';
+    const HTTP_VERSION_1_0              = '1.0';
+    const HTTP_VERSION_1_1              = '1.1';
+    
+    /**
+     * The POST encoding types 
+     */
+    const ENCTYPE_FORM_URL_ENCODED      = 'application/x-www-form-urlencoded';
+    const ENCTYPE_MULTIPART_FORM_DATA   = 'multipart/form-data';
     
     /**
      * Wether the static variables are set or not
@@ -100,6 +106,11 @@ class Woops_Http_Client
     );
     
     /**
+     * The boundary for the multipart/form-data encoding type
+     */
+    protected static $_boundary         = '';
+    
+    /**
      * The HTTP request URI
      */
     protected $_uri                     = NULL;
@@ -118,6 +129,11 @@ class Woops_Http_Client
      * The HTTP authentication type
      */
     protected $_authType                = 'NONE';
+    
+    /**
+     * The encoding type
+     */
+    protected $_encType                 = '';
     
     /**
      * The HTTP authentication username
@@ -185,13 +201,23 @@ class Woops_Http_Client
     protected $_connected               = false;
     
     /**
+     * Raw data for the request body
+     */
+    protected $_rawData                 = '';
+    
+    /**
+     * The data to send through the POST method
+     */
+    protected $_postData                = array();
+    
+    /**
      * Class constructor
      * 
      * @param   string  The URI to connect to
      * @param   string  THe request method (one of the METHOD_XXX constant)
      * @return  void
      */
-    public function __construct( $uri, $method = self::METHOD_GET )
+    public function __construct( $uri, $method )
     {
         // Checks if the static variables are set
         if( !self::$_hasStatic ) {
@@ -287,16 +313,129 @@ class Woops_Http_Client
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str    = Woops_String_Utils::getInstance();
+        self::$_str       = Woops_String_Utils::getInstance();
         
         // Gets the instance of the environment object
-        self::$_env    = Woops_Core_Env_Getter::getInstance();
+        self::$_env       = Woops_Core_Env_Getter::getInstance();
         
         // Sets the newline character (CR-LF)
-        self::$_CRLF   = self::$_str->CR . self::$_str->LF;
+        self::$_CRLF      = self::$_str->CR . self::$_str->LF;
+        
+        // Sets the boundary for multipart/form-data
+        self::$_boundary  = 'WOOPS-' . self::$_str->uniqueId();
         
         // Static variables are set
         self::$_hasStatic = true;
+    }
+    
+    /**
+     * Builds the request headers
+     * 
+     * @return  string  The request headers
+     */
+    protected function _buildRequestHeaders()
+    {
+        // Starts the request
+        $request          = $this->_requestMethod
+                          . ' '
+                          . $this->_uri->getPath()
+                          . ' HTTP/'
+                          . $this->_protocolVersion
+                          . self::$_CRLF;
+        
+        // Adds the host name, if we are in HTTP 1.1
+        if( $this->_protocolVersion === 1.1 ) {
+            
+            $request .= 'Host: ' . $this->_uri->getHost() . self::$_CRLF;
+        }
+        
+        // Adds the user agent
+        $request .= 'User-Agent: ' . $this->_userAgent . self::$_CRLF;
+        
+        // Checks for the 'Keep-Alive' parameter
+        if( $this->_keepAlive ) {
+            
+            // Adds the 'Keep-Alive' header
+            $request .= 'Keep-Alive: ' . $this->_keepAlive . self::$_CRLF;
+        }
+        
+        // Adds the connection type
+        $request .= 'Connection: ' . $this->_connection . self::$_CRLF;
+        
+        // Checks if we have cookies
+        if( count( $this->_cookies ) ) {
+            
+            // Adds the cookie header
+            $request .= 'Cookie: ' . implode( ';', array_keys( $this->_cookies ) );
+        }
+        
+        // Checks for an authentication type
+        if( $this->_authType && $this->_authType !== 'NONE' ) {
+            
+            // Adds the authorization header
+            $request .= 'Authorization: '
+                     .  $this->_createAuthenticationHeader
+                     . self::$_CRLF;
+        }
+        
+        // Checks if we have a content type
+        if( $this->_encType && $this->_encType === self::ENCTYPE_MULTIPART_FORM_DATA ) {
+            
+            // Adds the content type header, with the multipart boundary
+            $request .= 'Content-Type: ' . $this->_encType . '; boundary=' . self::$_boundary . self::$_CRLF;
+            
+        } elseif( $this->_encType ) {
+            
+            // Adds the content type header
+            $request .= 'Content-Type: ' . $this->_encType . self::$_CRLF;
+        }
+        
+        // Adds the headers
+        foreach( $this->_headers as $key => $value ) {
+            
+            // Adds the header
+            $request .= $key . ': ' . $value . self::$_CRLF;
+        }
+        
+        // Returns the request headers
+        return $request;
+    }
+    
+    /**
+     * Builds the request body (for POST and PUT request methods)
+     * 
+     * @return  string  The request body
+     */
+    protected function _buildRequestBody()
+    {
+        // Do we have raw data?
+        if( $this->_rawData ) {
+            
+            // Returns the raw data
+            return $this->_rawData;
+        }
+        
+        // Do we have POST data?
+        if( !count( $this->_postData ) ) {
+            
+            // Nothing to send
+            return '';
+        }
+        
+        // Checks the encoding type
+        if( $this->_encType === self::ENCTYPE_FORM_URL_ENCODED ) {
+            
+            // URL encode the POST data
+            return http_build_query( $this->_postData, '', '&' );
+            
+        } elseif( $this->_encType === self::ENCTYPE_MULTIPART_FORM_DATA ) {
+            
+            // Not implemented yet
+            return '';
+        }
+        
+        // Unrecognized encoding type - Do not send anything
+        return '';
     }
     
     /**
@@ -375,6 +514,24 @@ class Woops_Http_Client
         
         // Sets the request method
         $this->_requestMethod = $method;
+        
+        // Checks if we have an encoding type, for POST method
+        if( $method === self::METHOD_POST && !$this->_encType ) {
+            
+            // Sets the encoding type
+            $this->setEncodingType( self::ENCTYPE_FORM_URL_ENCODED );
+        }
+    }
+    
+    /**
+     * Sets the encoding type
+     * 
+     * @param   string  The encoding type
+     * @return  void
+     */
+    public function setEncodingType( $type )
+    {
+        $this->_encType = ( string )$type;
     }
     
     /**
@@ -678,6 +835,79 @@ class Woops_Http_Client
     }
     
     /**
+     * Sets the raw data for the request body
+     * 
+     * @param   string  The raw data for the request body
+     * @param   string  An optionnal encoding type
+     * @return  void
+     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     */
+    public function setRawData( $data, $encoding = '' )
+    {
+        // Checks the connect flag
+        if( $this->_connected ) {
+            
+            // Connection has been established
+            throw new Woops_Http_Client_Exception(
+                'The connection has already been established',
+                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+            );
+        }
+        
+        // Do we have an encoding?
+        if( $encoding ) {
+            
+            // Sets the encoding
+            $this->setEncodingType( $encoding );
+        }
+        
+        // Stores the raw data
+        $this->_rawData = ( string )$data;
+    }
+    
+    /**
+     * Adds data to send throught the POST method
+     * 
+     * @param   string  The name of the value to set
+     * @param   mixed   The value to set (can be a sub-array)
+     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     */
+    public function addPostData( $name, $value )
+    {
+        // Checks the connect flag
+        if( $this->_connected ) {
+            
+            // Connection has been established
+            throw new Woops_Http_Client_Exception(
+                'The connection has already been established',
+                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+            );
+        }
+        
+        // Name must be a string
+        $name = ( string )$name;
+        
+        // Checks if the value is an array
+        if( is_array( $value ) ) {
+            
+            // Does the storage place already exists?
+            if( !isset( $this->_postData[ $name ] ) || !is_array( $this->_postData[ $name ] ) ) {
+                
+                // Creates the storage array
+                $this->_postData[ $name ] = array();
+            }
+            
+            // Adds the new data
+            $this->_postData[ $name ] = array_merge_recursive( $this->_postData[ $name ], $value );
+            
+        } else {
+            
+            // Adds the data
+            $this->_postData[ $name ] = $value;
+        }
+    }
+    
+    /**
      * Gets the HTTP response
      * 
      * @return  Woops_Http_Response         The HTTP response object
@@ -743,61 +973,29 @@ class Woops_Http_Client
         // Sets the connect flag
         $this->_connected = true;
         
-        // Starts the request
-        $request          = $this->_requestMethod
-                          . ' '
-                          . $this->_uri->getPath()
-                          . ' HTTP/'
-                          . $this->_protocolVersion
-                          . self::$_CRLF;
+        // Writes the request headers in the socket
+        fwrite( $this->_socket, $this->_buildRequestHeaders() );
         
-        // Adds the host name, if we are in HTTP 1.1
-        if( $this->_protocolVersion === 1.1 ) {
+        // Creates the request body if necessary
+        $body    = ( $this->_requestMethod === self::METHOD_POST || $this->_requestMethod === self::METHOD_PUT ) ? $this->_buildRequestBody() : '';
+        
+        // Do we have a body?
+        if( $body ) {
             
-            $request .= 'Host: ' . $this->_uri->getHost() . self::$_CRLF;
-        }
-        
-        // Adds the user agent
-        $request .= 'User-Agent: ' . $this->_userAgent . self::$_CRLF;
-        
-        // Checks for the 'Keep-Alive' parameter
-        if( $this->_keepAlive ) {
+            // Adds the content-length header
+            fwrite( $this->_socket, 'Content-Length: ' . strlen( $body ) . self::$_CRLF );
             
-            // Adds the 'Keep-Alive' header
-            $request .= 'Keep-Alive: ' . $this->_keepAlive;
-        }
-        
-        // Adds the connection type
-        $request .= 'Connection: ' . $this->_connection . self::$_CRLF;
-        
-        // Checks if we have cookies
-        if( count( $this->_cookies ) ) {
+            // End of the headers
+            fwrite( $this->_socket, self::$_CRLF );
             
-            // Adds the cookie header
-            $request .= 'Cookie: ' . implode( ';', array_keys( $this->_cookies ) );
-        }
-        
-        // Checks for an authentication type
-        if( $this->_authType && $this->_authType !== 'NONE' ) {
+            // Writes the request body in the socket
+            fwrite( $this->_socket, $body );
             
-            // Adds the authorization header
-            $request .= 'Authorization: '
-                     .  $this->_createAuthenticationHeader
-                     . self::$_CRLF;
-        }
-        
-        // Adds the headers
-        foreach( $this->_headers as $key => $value ) {
+        } else {
             
-            // Adds the header
-            $request .= $key . ': ' . $value . self::$_CRLF;
+            // End of the headers
+            fwrite( $this->_socket, self::$_CRLF );
         }
-        
-        // End of the headers
-        $request .= self::$_CRLF;
-        
-        // Writes the request in the socket
-        fwrite( $this->_socket, $request );
         
         // Connection was established
         return true;
@@ -851,6 +1049,16 @@ class Woops_Http_Client
     public function getRequestMethod()
     {
         return $this->_requestMethod;
+    }
+    
+    /**
+     * Gets the encoding type
+     * 
+     * @return  string  The encoding type
+     */
+    public function getEncodingType()
+    {
+        return $this->_encType;
     }
     
     /**
@@ -973,6 +1181,26 @@ class Woops_Http_Client
     public function getCookies()
     {
         return $this->_cookies;
+    }
+    
+    /**
+     * Gets the raw data for the request body
+     * 
+     * @return  string  The raw data for the request body
+     */
+    public function getRawData()
+    {
+        return $this->_rawData;
+    }
+    
+    /**
+     * Gets the POST data
+     * 
+     * @return  array   An array with the POST data
+     */
+    public function getPostData()
+    {
+        return $this->_postData;
     }
     
     /**
