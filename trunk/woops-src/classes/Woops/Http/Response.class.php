@@ -148,12 +148,12 @@ class Woops_Http_Response
     protected $_headers        = array();
 
     /**
-     * The HTTP response body (processed)
+     * The HTTP response body
      */
     protected $_body           = '';
 
     /**
-     * The HTTP response body (raw)
+     * The raw HTTP response body
      */
     protected $_rawBody        = '';
     
@@ -170,14 +170,18 @@ class Woops_Http_Response
     /**
      * Class constructor
      * 
+     * The constructor cannot be called from outside this class. Please use the
+     * createResponseObject() static method to get an instance.
+     * 
      * @param   int                             The HTTP response code
      * @param   array                           The HTTP response headers, as key/value pairs
+     * @param   string                          The HTTP raw response body
      * @param   string                          The HTTP response body
      * @param   number                          The HTTP protocol version
      * @return  void
      * @throws  Woops_Http_Response_Exception   If the HTTP response code is invalid
      */
-    public function __construct( $code, array $headers, $body = '', $httpVersion = 1.1 )
+    protected function __construct( $code, array $headers, $rawBody, $body, $httpVersion )
     {
         // Checks if the static variables are set
         if( !self::$_hasStatic ) {
@@ -187,8 +191,8 @@ class Woops_Http_Response
         }
         
         // Code and version should be numbers
-        $code    = ( int )$code;
-        $version = ( float )$version;
+        $code        = ( int )$code;
+        $httpVersion = ( float )$httpVersion;
         
         // Ensures the response code is valid
         if( !isset( self::$_codes[ $code ] ) ) {
@@ -204,10 +208,25 @@ class Woops_Http_Response
         $this->_code        = $code;
         $this->_headers     = $headers;
         $this->_httpVersion = $httpVersion;
-        $this->_rawBody     = $body;
+        $this->_rawBody     = $rawBody;
+        $this->_body        = $body;
         
-        // Process the body, if necessary
-        $this->_body        = $this->_processBody();
+        // Checks for the 'Set-Cookie' header
+        if( isset( $headers[ 'Set-Cookie' ] ) && trim( $headers[ 'Set-Cookie' ] ) ) {
+            
+            // Gets each cookie
+            $cookies = explode( ',', $headers[ 'Set-Cookie' ] );
+            
+            // Process each cookie
+            foreach( $cookies as $cookie ) {
+                
+                // Creates a cookie object
+                $cookie                               = Woops_Http_Cookie::createCookieObject( trim( $cookie ) );
+                
+                // Stores the cookie object
+                $this->_cookies[ $cookie->getName() ] = $cookie;
+            }
+        }
     }
     
     /**
@@ -266,48 +285,81 @@ class Woops_Http_Response
     /**
      * Creates a response object from a string
      * 
-     * @param   string                          The full HTTP response, with the status, headers and body
+     * @param   resource                        The HTTP socket from which to read
      * @return  Woops_Http_Response             The HTTP response object
      * @throws  Woops_Http_Response_Exception   If the HTTP status line is invalid
+     * @throws  Woops_Http_Response_Exception   If the transfer-encoding is set and is not recognized
      */
-    public static function createResponseObject( $str )
+    public static function createResponseObject( $socket )
     {
-        // New line character
-        $CRLF    = self::$_str->CR . self::$_str->LF;
+        // Checks if the static variables are set
+        if( !self::$_hasStatic ) {
+            
+            // Sets the static variables
+            self::_setStaticVars();
+        }
         
-        // Gets each line of the response
-        $lines   = explode( $CRLF, $str );
-        
-        // Status parts
-        $status  = explode( ' ', array_shift( $lines ) );
-        
-        // Checks the status parts
-        if( count( $status < 2 ) ) {
+        // Checks if we have a resource
+        if( !is_resource( $socket ) ) {
             
             // Invalid status line
             throw new Woops_Http_Response_Exception(
-                'Invalid HTTP status line (' . implode( ' ', $status ) . ')',
+                'Passed argument must be a valid resource',
+                Woops_Http_Response_Exception::EXCEPTION_INVALID_RESOURCE
+            );
+        }
+        
+        // New line character
+        $CRLF    = self::$_str->CR . self::$_str->LF;
+        
+        // Checks if we have data to read
+        if( feof( $socket ) ) {
+            
+            // Nothing to read
+            throw new Woops_Http_Response_Exception(
+                'No more data to read in the resource',
+                Woops_Http_Response_Exception::EXCEPTION_NO_DATA
+            );
+        }
+        
+        // Gets the status line
+        $status       = fgets( $socket );
+        
+        // Status parts
+        $statusParts  = explode( ' ', $status );
+        
+        // Checks the status parts
+        if( count( $statusParts ) < 2 ) {
+            
+            // Invalid status line
+            throw new Woops_Http_Response_Exception(
+                'Invalid HTTP status line (' . $status . ')',
                 Woops_Http_Response_Exception::EXCEPTION_INVALID_HTTP_STATUS
             );
         }
         
-        $version = str_replace( 'HTTP/', '', $status[ 0 ] );
-        $code    = $status[ 1 ];
+        // HTTP version and code
+        $version = str_replace( 'HTTP/', '', $statusParts[ 0 ] );
+        $code    = $statusParts[ 1 ];
         
         // Storage for the headers
         $headers = array();
         
-        // Process each line
-        foreach( $lines as $line ) {
+        // Reads each line of the socket to find the headers
+        while( !feof( $socket ) ) {
             
-            // If the line is empty, we are at the end of the headers
-            if( $line === '' ) {
+            // Reads a line
+            $line = fgets( $socket );
+            
+            // Checks for the end of the headers
+            if( $line === $CRLF ) {
                 
+                // Ends of the headers
                 break;
             }
             
             // Gets the header name and value
-            $header = explode( $line, ':' );
+            $header = explode( ':', $line );
             
             // Name and value of the header
             $name   = trim( $header[ 0 ] );
@@ -315,32 +367,92 @@ class Woops_Http_Response
             
             // Adds the current header
             $headers[ $name ] = $value;
+        }
+        
+        // Storage for the response body
+        $body    = '';
+        $rawBody = '';
+        
+        // Checks if the transfer encoding is set to chunked or if we have a content length
+        if( isset( $headers[ 'Transfer-Encoding' ] ) && $headers[ 'Transfer-Encoding' ] === 'chunked' ) {
             
-            // Checks for the 'Set-Cookie' header
-            if( $name === 'Set-Cookie' && $value ) {
+            // Reads until the end of the socket
+            while( !feof( $socket ) ) {
                 
-                // Gets each cookie
-                $cookies = explode( ',', $value );
+                // Gets the chunk size
+                $chunkSize = fgets( $socket );
                 
-                // Process each cookie
-                foreach( $cookies as $cookie ) {
+                // Data to read
+                $left = hexdec( trim( $chunkSize ) );
+                
+                // Reads until the end of the socket, or until the end of the chunk length
+                while( !feof( $socket ) && $left > 0 ) {
                     
-                    // Creates a cookie object
-                    $cookie                               = Woops_Http_Cookie::createCookieObject( trim( $cookie ) );
+                    // Reads from the socket
+                    $data     = fread( $socket, $left );
                     
-                    // Stores the cookie object
-                    $this->_cookies[ $cookie->getName() ] = $cookie;
+                    // Adds the data
+                    $body    .= $data;
+                    $rawBody .= $chunkSize . $data;
+                    
+                    // Decrease the number of bytes to read
+                    $left    -= strlen( $data );
                 }
+            }
+            
+        } elseif( isset( $headers[ 'Transfer-Encoding' ] ) ) {
+            
+            // Unrecognized transfer encoding
+            throw new Woops_Http_Response_Exception(
+                'Invalid transfer encoding (' . $headers[ 'Content-Encoding' ] . ')',
+                Woops_Http_Response_Exception::EXCEPTION_INVALID_TRANSFER_ENCODING
+            );
+            
+        } elseif( isset( $headers[ 'Content-Length' ] ) ) {
+            
+            // Data to read
+            $left = $headers[ 'Content-Length' ];
+            
+            // Reads until the end of the socket, or until the end of the content length
+            while( !feof( $socket ) && $left > 0 ) {
+                
+                // Reads from the socket
+                $data     = fread( $socket, $left );
+                
+                // Adds the data
+                $body    .= $data;
+                $rawBody .= $data;
+                
+                // Decrease the number of bytes to read
+                $left    -= strlen( $data );
+            }
+            
+        } else {
+            
+            // Reads until the end of the socket
+            while( !feof( $socket ) ) {
+                
+                // Reads from the socket
+                $data    .= fread( $socket, 8192 );
+                
+                // Adds the data
+                $body    .= $data;
+                $rawBody .= $data;
             }
         }
         
-        // The body does not need to be splitted
-        $body = implode( $CRLF, $lines );
+        // Checks if the body is encoded
+        if( isset( $headers[ 'Content-Encoding' ] ) ) {
+            
+            // Decodes the body
+            $body = self::_decodeBody( $body, $headers[ 'Content-Encoding' ] );
+        }
         
         // Creates the response object
         $response = new self(
             $code,
             $headers,
+            $rawBody,
             $body,
             $version
         );
@@ -350,95 +462,20 @@ class Woops_Http_Response
     }
     
     /**
-     * Process the body, if needed, accordingly to the 'transfer-encoding'
-     * and 'content-encoding' response headers.
+     * Process the body, if needed, accordingly to the 'content-encoding'
+     * response headers.
      * 
+     * @param   string                          The body
+     * @param   string                          The value of the 'Content-Encoding' header
      * @return  string                          The processed body
      * @throws  Woops_Http_Response_Exception   If the transfer-encoding is set as chunked and if the chunked content is invalid
      * @throws  Woops_Http_Response_Exception   If the content-encoding is set as deflate and if the PHP function gzuncompress() is not available
      * @throws  Woops_Http_Response_Exception   If the content-encoding is set as gzip and if the PHP function gzinflate() is not available
      */
-    protected function _processBody()
+    protected static function _decodeBody( $body, $encoding )
     {
-        // Checks if the 'transfer-encoding' header is set as 'chunked'
-        if( isset( $this->_headers[ 'transfer-encoding' ] )
-            && $this->_headers[ 'transfer-encoding' ] === 'chunked'
-        ) {
-            
-            // New line character
-            $CRLF     = self::$_str->CR . self::$_str->LF;
-            
-            // Gets each line of the chunked content
-            $lines    = explode( $CRLF, $this->_rawBody );
-            
-            // Number of lines
-            $linesNum = count( $lines );
-            
-            // Checks the number of lines
-            if( $linesNum < 1  ) {
-                
-                // Invalid chunked content
-                throw new Woops_Http_Response_Exception(
-                    'Invalid chunked content',
-                    Woops_Http_Response_Exception::EXCEPTION_INVALID_CHUNKED_CONTENT
-                );
-            }
-            
-            // Storage
-            $body = '';
-            
-            // Process each line
-            for( $i = 0; $i < $linesNum; $i++ ) {
-                
-                // Size of the chunk
-                $size = hexdec( trim( $lines[ $i ] ) );
-                
-                // If the chunk size is 0, there is no data left
-                if( $size === 0 ) {
-                    
-                    break;
-                }
-                
-                // Checks for the data
-                if( !isset( $lines[ $i + 1 ] ) ) {
-                    
-                    // Invalid chunked content
-                    throw new Woops_Http_Response_Exception(
-                        'Invalid chunked content',
-                        Woops_Http_Response_Exception::EXCEPTION_INVALID_CHUNKED_CONTENT
-                    );
-                }
-                
-                // Chunk data
-                $data = $lines[ $i + 1 ];
-                
-                // Checks the chunk size
-                if( strlen( $data ) !== $size ) {
-                    
-                    // Invalid chunked content
-                    throw new Woops_Http_Response_Exception(
-                        'Invalid chunked content',
-                        Woops_Http_Response_Exception::EXCEPTION_INVALID_CHUNKED_CONTENT
-                    );
-                }
-                
-                // Adds the data
-                $body .= $data;
-                
-                // Process the next chunk
-                $i++;
-            }
-            
-        } else {
-            
-            // Raw body
-            $body = $this->_rawBody;
-        }
-        
-        // Checks if the 'transfer-encoding' header is set
-        if( isset( $this->_headers[ 'content-encoding' ] )
-            && $this->_headers[ 'content-encoding' ] === 'deflate'
-        ) {
+        // Checks if encoding type
+        if( $encoding === 'deflate' ) {
             
             // Checks if the gzuncompress() function is available
             if( !function_exists( 'gzuncompress' ) ) {
@@ -453,9 +490,7 @@ class Woops_Http_Response
             // Uncompress the body
             $body = gzuncompress( $body );
             
-        } elseif( isset( $this->_headers[ 'content-encoding' ] )
-            && $this->_headers[ 'content-encoding' ] === 'gzip'
-        ) {
+        } elseif( $encoding === 'gzip' ) {
             
             // Checks if the gzuncompress() function is available
             if( !function_exists( 'gzinflate' ) ) {
@@ -469,7 +504,6 @@ class Woops_Http_Response
             
             // Inflates the body
             $body = gzinflate( substr( $body, 10 ) );
-            
         }
         
         // Returns the processed body
@@ -548,6 +582,17 @@ class Woops_Http_Response
     }
     
     /**
+     * Gets a cookie (from the 'Set-Cookie' header)
+     * 
+     * @param   string  The name of the cookie
+     * @return  mixed   An instance of the Woops_Http_Cookie class if the cookie exists, otherwise NULL
+     */
+    public function getCookie( $name )
+    {
+        return ( isset( $this->_cookies[ $name ] ) ) ? $this->_cookies[ $name ] : NULL;
+    }
+    
+    /**
      * Gets the cookies (from the 'Set-Cookie' header)
      * 
      * @return  array   An array with instances of the Woops_Http_Cookie class
@@ -558,14 +603,34 @@ class Woops_Http_Response
     }
     
     /**
-     * Gets a cookie (from the 'Set-Cookie' header)
+     * Sets a cookies (from the 'Set-Cookie' header)
      * 
      * @param   string  The name of the cookie
-     * @return  mixed   An instance of the Woops_Http_Cookie class if the cookie exists, otherwise NULL
+     * @return  boolean Wether the cookie has been set
      */
-    public function getCookie( $name )
+    public function setCookie( $name )
     {
-        return ( isset( $this->_cookies[ $name ] ) ) ? $this->_cookies[ $name ] : NULL;
+        // Checks if the cookie exists
+        if( isset( $this->_cookies[ $name ] ) ) {
+            
+            // Sets the cookie
+            return $this->_cookies[ $name ];
+        }
+    }
+    
+    /**
+     * Sets all the cookies (from the 'Set-Cookie' header)
+     * 
+     * @return  void
+     */
+    public function setCookies()
+    {
+        // Process all the cookies
+        foreach( $this->_cookies as $cookie ) {
+            
+            // Sets the cookie
+            $cookie->setCookie();
+        }
     }
     
     /**
