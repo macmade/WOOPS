@@ -55,17 +55,21 @@ located.
 
 The requested directories are:
     
-    - cache         : The directory for the cached items
-    - cache/classes : The cache directory for the PHP classes
-    - cache/config  : The cache directory for the configuration files
-    - modules       : The WOOPS modules directory
-    - resources     : The resources directory (templates, etc)
-    - temp          : The directory for the temporary files
-    - uploads       : The directory for the file uploads
-    - woops-src     : The directory with the WOOPS sources
+    - cache                 : The directory for the cached items
+    - cache/classes         : The cache directory for the PHP classes
+    - cache/config          : The cache directory for the configuration files
+    - modules               : The WOOPS modules directory
+    - resources             : The directory for the resources
+    - resources/templates   : The directory for the templates
+    - temp                  : The directory for the temporary files
+    - uploads               : The directory for the file uploads
+    - woops-src             : The directory with the WOOPS sources
 
 Note that the 'woops-src' directory can be a symbolic link. This would allow
 you to share the WOOPS sources across multiple websites, for instance.
+
+Also note that WOOPS does not need to be installed on the WWW root of a
+virtual host. It can be installed on a sub-folder, or in a user-home directory.
 
 Some directories also need to be writeable by the user running the HTTP server:
     
