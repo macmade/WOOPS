@@ -17,7 +17,13 @@
 define( 'WOOPS_CLASS_CACHE_MODE_OFF', true );
 
 // Includes the initialization script
-require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'init.inc.php' );
+require_once(
+    dirname( __FILE__ )
+  . DIRECTORY_SEPARATOR
+  . '..'
+  . DIRECTORY_SEPARATOR
+  . 'init.inc.php'
+);
 
 // Gets incomming GET variables
 $GETVARS = Woops_Core_Request_Getter::getInstance()->classCache;

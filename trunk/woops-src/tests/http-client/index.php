@@ -12,7 +12,15 @@
 # $Id$
 
 // Includes the initialization script
-require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'init.inc.php' );
+require_once(
+    dirname( __FILE__ )
+  . DIRECTORY_SEPARATOR
+  . '..'
+  . DIRECTORY_SEPARATOR
+  . '..'
+  . DIRECTORY_SEPARATOR
+  . 'init.inc.php'
+);
 
 // Plain text content
 header( 'Content-Type: text/plain' );
