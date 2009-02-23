@@ -1,0 +1,198 @@
+################################################################################
+#                                                                              #
+#                WOOPS - Web Object Oriented Programming System                #
+#                                                                              #
+#                               COPYRIGHT NOTICE                               #
+#                                                                              #
+# (c) 2009 eosgarden - Jean-David Gadina (macmade@eosgarden.com)               #
+# All rights reserved                                                          #
+################################################################################
+
+$Id$
+
+--------------------------------------------------------------------------------
+WOOPS INSTALLATION GUIDE
+--------------------------------------------------------------------------------
+
+TABLE OF CONTENTS
+--------------------------------------------------------------------------------
+1 - System requirements
+2 - Filesystem
+3 - Database
+4 - Install check
+5 - Install script
+6 - Basic usage
+
+1 - SYSTEM REQUIREMENTS
+--------------------------------------------------------------------------------
+
+WOOPS requires PHP 5.2 or greater. It also requires some PHP components:
+    
+    - SPL (Standard PHP Library)
+    - Reflection
+    - SimpleXML
+    - Socket connection
+
+Those components are activated by default. If you haven't explicitely disabled
+them on your PHP installation, they should be available.
+
+As WOOPS makes an intensive use of the new PHP 5 object model, it also requires
+the 'Zend Engine 1 Compatibility Mode' option to be turned off, in the php.ini
+file.
+If set, this directive changes the behavior of the PHP object model, so it
+behaves as in PHP 4, meaning the object won't be passed automatically by
+reference. For that reason, WOOPS won't run with this directive turned on.
+
+Please see the 'Install script' section of this file to learn more about the
+system requirements.
+
+2 - FILESYSTEM
+--------------------------------------------------------------------------------
+
+The WOOPS sources can be installed anywhere on the hard disk. However, a script
+using WOOPS needs some specific directories, in the same directory as it's
+located.
+
+The requested directories are:
+    
+    - cache         : The directory for the cached items
+    - cache/classes : The cache directory for the PHP classes
+    - cache/config  : The cache directory for the configuration files
+    - modules       : The WOOPS modules directory
+    - resources     : The resources directory (templates, etc)
+    - temp          : The directory for the temporary files
+    - uploads       : The directory for the file uploads
+    - woops-src     : The directory with the WOOPS sources
+
+Note that the 'woops-src' directory can be a symbolic link. This would allow
+you to share the WOOPS sources across multiple websites, for instance.
+
+Some directories also need to be writeable by the user running the HTTP server:
+    
+    - cache/classes
+    - cache/config
+    - temp
+    - uploads
+
+The main WOOPS configuration file also needs to be located at the same level.
+That file is called 'config.ini.php'.
+
+Please see the 'Install script' section of this file to learn more about the
+filesystem requirements.
+
+3 - DATABASE
+--------------------------------------------------------------------------------
+
+As a framework, WOOPS does not need a database. However, the major features
+of WOOPS, like the page engine system or the CMS module will need a database.
+
+Rather than using a particular DBAL system (Database Abstraction Layer), WOOPS
+is designed to be virtually compatible with any DBAL system.
+
+Two database engines are available in the WOOPS distribution. The first one uses
+PDO (PHP Data Objects), and the other one ADODB. We recommend using the PDO
+database engine, as it should be faster, but if PDO is not available on your
+PHP installation, or if the driver for your database is not available, you
+can use the ADODB one, which does not need anything special and which supports
+more databases.
+
+Here are the supported databases in PDO:
+    
+    - Firebird
+    - FreeTDS
+    - IBM DB2
+    - IBM Informix
+    - Interbase 6
+    - Microsoft SQL Server
+    - MySQL 3.x/4.x/5.x
+    - ODBC v3 (IBM DB2, unixODBC and win32 ODBC)
+    - Oracle Call Interface
+    - PostgreSQL
+    - SQLite 3 and SQLite 2
+    - Sybase
+
+Here are the supported databases in ADODB (may not be exhaustive):
+    
+    - Borland version of Interbase 6.5
+    - Firebird
+    - FrontBase
+    - Generic ADO
+    - Generic ODBC
+    - IBM DB2
+    - IBM Informix
+    - Interbase 6
+    - LDAP
+    - Microsoft Access/Jet
+    - Microsoft SQL Server
+    - Microsoft Visual FoxPro
+    - MySQL
+    - Netezza
+    - Oracle 8/9
+    - PostgreSQL
+    - SAP DB
+    - SQLite
+    - Sybase
+
+Please see the 'Install script' section of this file to learn more about the
+database requirements.
+
+4 - INSTALL CHECK
+--------------------------------------------------------------------------------
+
+An install check script is available in the 'scripts/install-check/' directory
+of the WOOPS sources.
+
+This script is written in PHP4, and uses no special feature, so it should run
+without problem on all boxes.
+
+It checks that the server environment is able to run WOOPS, that the necessary
+directory structure is created. It also contains some recommendations about
+the PHP configuration.
+
+Please launches this script before using WOOPS, to be sure all the requirements
+are met.
+
+When you're done with this script, you should disable it, by adding a call to
+the PHP exit() function, as it may reveal important informations about the
+server configuration.
+
+5 - INSTALL SCRIPT
+--------------------------------------------------------------------------------
+
+WOOPS comes with an install script, located in the 'scripts/install/' directory.
+
+This script will allow you to setup your WOOPS installation, and will create
+the necessary database tables, if needed.
+
+This script is disabled by default, for security reason. To enable it, simply
+opens the 'scripts/install/index.php' in your favorite text editor, and comments
+the line that says 'exit()' (just add a # at the start of the line).
+
+When you're done with the installer, you should disable it again, as an access
+to this script would mean a major security hole.
+
+6 - BASIC USAGE
+--------------------------------------------------------------------------------
+
+Once WOOPS is properly installed, the only thing you'll have to do is to include
+its initialization script, which is called 'init.inc.php', and which is located
+at the first level of the WOOPS sources directory.
+
+WOOPS uses the SPL autoload mechanism, so you won't need to include any other
+file, as classes and modules are included automatically, when requested.
+
+For instance, for a file place in the WOOPS web root:
+
+<?php
+
+// Includes the initialization script
+require_once( 
+    dirname( __FILE__ )
+  . DIRECTORY_SEPARATOR
+  . 'woops-src'
+  . DIRECTORY_SEPARATOR
+  . 'init.inc.php'
+);
+
+// Starts using WOOPS, and enjoy!
+// ...
