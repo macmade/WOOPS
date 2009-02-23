@@ -185,7 +185,7 @@ at the first level of the WOOPS sources directory.
 WOOPS uses the SPL autoload mechanism, so you won't need to include any other
 file, as classes and modules are included automatically, when requested.
 
-For instance, for a file place in the WOOPS web root:
+For instance:
 
 <?php
 
