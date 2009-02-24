@@ -29,3 +29,10 @@ License information can be found in this file:
 Installation steps can be found in this file:
 
     -   INSTALL.txt
+
+3 - CGL
+--------------------------------------------------------------------------------
+
+PHP coding guidelines can be found in this file:
+
+    -   PHP_CGL.txt
