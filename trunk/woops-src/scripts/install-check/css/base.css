@@ -152,7 +152,6 @@ TABLE {
 TD {
     border:                 solid 1px #CCCCCC;
     padding:                5px;
-    text-align:             center;
 }
 
 TH {
@@ -160,7 +159,6 @@ TH {
     padding:                5px;
     background-color:       #F1F8FF;
     color:                  inherit;
-    text-align:             center;
 }
 
 INPUT {
