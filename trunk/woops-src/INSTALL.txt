@@ -17,12 +17,12 @@ WOOPS INSTALLATION STEPS
 Table of contents
 --------------------------------------------------------------------------------
 
-    1 - System requirements
-    2 - Filesystem
-    3 - Database
-    4 - Install check
-    5 - Install script
-    6 - Basic usage
+    1   - System requirements
+    2   - Filesystem
+    3   - Database
+    4   - Install check
+    5   - Install script
+    6   - Basic usage
 
 1 - System requirements
 --------------------------------------------------------------------------------
