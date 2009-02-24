@@ -4,22 +4,28 @@
 #                                                                              #
 #                               COPYRIGHT NOTICE                               #
 #                                                                              #
-# (c) 2009 Jean-David Gadina (macmade@eosgarden.com)                           #
+# Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)                 #
 # All rights reserved                                                          #
 ################################################################################
 
 $Id$
 
---------------------------------------------------------------------------------
+================================================================================
 WELCOME TO WOOPS - Web Object Oriented Programming System
+================================================================================
+
+This is a release of WOOPS, a dual-license PHP framework.
+
+1 - License
 --------------------------------------------------------------------------------
 
-1 - INSTALL
+License information can be found in this file:
+
+    -   woops-src/LICENSE.txt
+
+2 - Installation
 --------------------------------------------------------------------------------
 
-Please see the 'woops-src/INSTALL.txt' file for the installation steps.
+Installation steps can be found in this file:
 
-2 - LICENSE
---------------------------------------------------------------------------------
-
-Please see the 'woops-src/LICENSE.txt' file for the license terms.
+    -   woops-src/INSTALL.txt
