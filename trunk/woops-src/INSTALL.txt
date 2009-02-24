@@ -14,14 +14,15 @@ $Id$
 WOOPS INSTALLATION STEPS
 ================================================================================
 
-0 - Table of contents
+Table of contents
 --------------------------------------------------------------------------------
-1 - System requirements
-2 - Filesystem
-3 - Database
-4 - Install check
-5 - Install script
-6 - Basic usage
+
+    1 - System requirements
+    2 - Filesystem
+    3 - Database
+    4 - Install check
+    5 - Install script
+    6 - Basic usage
 
 1 - System requirements
 --------------------------------------------------------------------------------
@@ -188,16 +189,16 @@ file, as classes and modules are included automatically, when requested.
 
 For instance:
 
-<?php
-
-// Includes the initialization script
-require_once( 
-    dirname( __FILE__ )
-  . DIRECTORY_SEPARATOR
-  . 'woops-src'
-  . DIRECTORY_SEPARATOR
-  . 'init.inc.php'
-);
-
-// Starts using WOOPS, and enjoy!
-// ...
+    <?php
+    
+    // Includes the initialization script
+    require_once( 
+        dirname( __FILE__ )
+      . DIRECTORY_SEPARATOR
+      . 'woops-src'
+      . DIRECTORY_SEPARATOR
+      . 'init.inc.php'
+    );
+    
+    // Starts using WOOPS, and enjoy!
+    // ...
