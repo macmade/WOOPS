@@ -28,7 +28,7 @@
 		#                                                                              #
 		#                               COPYRIGHT NOTICE                               #
 		#                                                                              #
-		# (c) 2009 Jean-David Gadina (macmade@eosgarden.com)                           #
+		# Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)                 #
 		# All rights reserved                                                          #
 		################################################################################
 		

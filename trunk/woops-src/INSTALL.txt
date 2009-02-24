@@ -4,17 +4,17 @@
 #                                                                              #
 #                               COPYRIGHT NOTICE                               #
 #                                                                              #
-# (c) 2009 Jean-David Gadina (macmade@eosgarden.com)                           #
+# Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)                 #
 # All rights reserved                                                          #
 ################################################################################
 
 $Id$
 
---------------------------------------------------------------------------------
+================================================================================
 WOOPS INSTALLATION STEPS
---------------------------------------------------------------------------------
+================================================================================
 
-TABLE OF CONTENTS
+0 - Table of contents
 --------------------------------------------------------------------------------
 1 - System requirements
 2 - Filesystem
@@ -23,7 +23,7 @@ TABLE OF CONTENTS
 5 - Install script
 6 - Basic usage
 
-1 - SYSTEM REQUIREMENTS
+1 - System requirements
 --------------------------------------------------------------------------------
 
 WOOPS requires PHP 5.2 or greater. It also requires some PHP components:
@@ -46,7 +46,7 @@ reference. For that reason, WOOPS won't run with this directive turned on.
 Please see the 'Install script' section of this file to learn more about the
 system requirements.
 
-2 - FILESYSTEM
+2 - Filesystem
 --------------------------------------------------------------------------------
 
 The WOOPS sources can be installed anywhere on the hard disk. However, a script
@@ -84,7 +84,7 @@ That file is called 'config.ini.php'.
 Please see the 'Install script' section of this file to learn more about the
 filesystem requirements.
 
-3 - DATABASE
+3 - Database
 --------------------------------------------------------------------------------
 
 As a framework, WOOPS does not need a database. However, the major features
@@ -93,12 +93,13 @@ of WOOPS, like the page engine system or the CMS module will need a database.
 Rather than using a particular DBAL system (Database Abstraction Layer), WOOPS
 is designed to be virtually compatible with any DBAL system.
 
-Two database engines are available in the WOOPS distribution. The first one uses
-PDO (PHP Data Objects), and the other one ADODB. We recommend using the PDO
-database engine, as it should be faster, but if PDO is not available on your
-PHP installation, or if the driver for your database is not available, you
-can use the ADODB one, which does not need anything special and which supports
-more databases.
+Two database engines are available by degault in the WOOPS distribution.
+The first one uses PDO (PHP Data Objects), and the other one ADODB.
+
+We recommend using the PDO database engine, as it should be faster, but if PDO
+is not available on your PHP installation, or if the driver for your database is
+not available, you can use the ADODB one, which does not need anything special
+and which supports more databases.
 
 Here are the supported databases in PDO:
     
@@ -140,7 +141,7 @@ Here are the supported databases in ADODB (may not be exhaustive):
 Please see the 'Install script' section of this file to learn more about the
 database requirements.
 
-4 - INSTALL CHECK
+4 - Install check
 --------------------------------------------------------------------------------
 
 An install check script is available in the 'scripts/install-check/' directory
@@ -160,7 +161,7 @@ When you're done with this script, you should disable it, by adding a call to
 the PHP exit() function, as it may reveal important informations about the
 server configuration.
 
-5 - INSTALL SCRIPT
+5 - Install script
 --------------------------------------------------------------------------------
 
 WOOPS comes with an install script, located in the 'scripts/install/' directory.
@@ -175,7 +176,7 @@ the line that says 'exit()' (just add a # at the start of the line).
 When you're done with the installer, you should disable it again, as an access
 to this script would mean a major security hole.
 
-6 - BASIC USAGE
+6 - Basic usage
 --------------------------------------------------------------------------------
 
 Once WOOPS is properly installed, the only thing you'll have to do is to include
