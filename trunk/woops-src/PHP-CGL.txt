@@ -18,66 +18,1066 @@ Table of contents
 --------------------------------------------------------------------------------
 
     1   - About
-    2   - PHP file formatting
-    3   - Filenames
-    4   - Strings
-    5   - Arrays
-    6   - Control statements
-    7   - Constants
-    8   - Variables
-    9   - Functions
-    10  - Classes
-    11  - Class constants
-    12  - Methods
-    13  - Exceptions
-    14  - Interfaces
-    15  - Abstract classes
-    16  - Inline documentation
+    2   - Text files formatting
+    3   - Naming rules
+    4   - Filenames
+    5   - General guidelines
+    6   - Strings
+    7   - Arrays
+    8   - Control statements
+    9   - Constants
+    10  - Variables
+    11  - Functions
+    12  - Classes
+    13  - Class constants
+    14  - Properties
+    15  - Methods
+    16  - Exceptions
+    17  - Interfaces
+    18  - Abstract classes
+    19  - Inline documentation
 
 1 - About
 --------------------------------------------------------------------------------
 
-2 - PHP file formatting
+    This file describes the PHP coding conventions used in the WOOPS project.
+Coding guidelines are essential to ensure consistency inside the project,
+between all developers, as well as to ensure a high-quality, maintanable code.
+
+    The current coding conventions are based on the "Zend Framework" coding
+guidelines, with some modifications and additions.
+
+2 - Text files formatting
 --------------------------------------------------------------------------------
 
-3 - Filenames
+    a)  Encoding
+
+        All text files inside the WOOPS project must be encoded as UTF-8,
+        without the byte-order mark (BOM).
+
+    b)  Line termination
+
+        Line breaks inside all text files must be standard UNIX line breaks.
+        This means LF (line-feed), the ASCII 10 character. Alternative line
+        breaks, like CRLF (windows), CR (macintosh), or LFCR are never allowed.
+
+    c)  Indentation
+
+        Two different indentation styles are used in the WOOPS project. For
+        XML and (x)HTML files, the tabulation character (ASCII 9) is allowed.
+        For all other text files, the indentation must consist of 4 space
+        characters (ASCII 32).
+
+    d)  Maximum line length
+
+        Except for XML and (x)HTML files, you should do your best to keep the
+        length of your code lines under 80 characters, for improved readability.
+        If this is not possible, a maximum of 120 characters is allowed.
+
+    e)  PHP files
+
+        Files that contains only PHP code must ommit the PHP close tag (?>),
+        as it is not needed and as an unwanted whitespace character could mean
+        the end of the HTTP headers.
+
+        The PHP opening tag must always be written in it's full form (<?php).
+        Short tags or ASP style tags are never allowed.
+
+    f)  End of files
+
+        All text files must end with a LF line break.
+
+3 - Naming rules
 --------------------------------------------------------------------------------
 
-4 - Strings
+    Three different naming rules are used inside WOOPS, each one used in
+different contexts.
+
+    a)  Lower camel case:
+
+        Names following this rule must only use alphanumeric characters. No
+        underscore is allowed here (except for the private and protected
+        visibility, where an unserscore is required before the name). The name
+        must start with a lowercase letter, and the first letter of each new
+        word must be written in uppercase. All other letters must be written in
+        lowercase.
+
+            Valid examples:
+
+                - doSomething
+                - convertsToPdf
+                - myGreatSoftwareThatDoesALotOfThing
+
+            Invalid examples:
+
+                - doseomething
+                - convertsToPDF
+                - MY_GREATsoftware_thatdoesalotofTHINGS
+
+    b)  Upper camel case:
+
+        Names following this rule must only use alphanumeric characters. No
+        underscore is allowed here (except for the private and protected
+        visibility, where an unserscore is required before the name), and for
+        class names, where each package name is separated by an underscore.
+        The name must start with an uppercase letter, and the first letter of
+        each new word must be written in uppercase. All other letters must be
+        written in lowercase.
+
+            Valid examples:
+
+                - DoSomething
+                - ConvertsToPdf
+                - MyGreatSoftwareThatDoesALotOfThing
+
+            Invalid examples:
+
+                - Doseomething
+                - ConvertsToPDF
+                - MY_GREATsoftware_thatdoesalotofTHINGS
+
+    c)  Upper case:
+
+        Names following this rule must only use uppercase alphanumeric
+        characters, with the underscore character (only used to separate words).
+
+            Valid examples:
+
+                - DO_SOMETHING
+                - CONVERTS_TO_PDF
+                - MY_GREAT_SOFTWARE_THAT_DOES_A_LOT_OF_THINGS
+
+            Invalid examples:
+
+                - DOSOMETHING
+                - CONVERTS_to_PDF
+                - MY_GREAT_software_thatdoes_ALOTOF_THINGS
+
+    In each case, all names must be expressed in english. Also be as verbose as
+possible, and avoid shortcuts, like using a "2" character instead of "To".
+
+For instance:
+
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    1:  /**
+    2:   * ...
+    3:   */
+    4:  class Txt2StrConv
+    5:  {}
+    6:  
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    Those is not allowed. Even if that speaks to you, remember that other
+developers may not have the same logic, or may not be as comfortable as you with
+english pronunciation. So please use complete words. For instance:
+
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    1:  /**
+    2:   * ...
+    3:   */
+    4:  class TextToStringConverter
+    5:  {}
+    6:  
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    Note that this also applies to file names (see section 4).
+
+4 - Filenames
 --------------------------------------------------------------------------------
 
-5 - Arrays
+    Except for class files and package directories, which follows the upper
+    camel case rule, all other files and directories inside the WOOPS project
+    must be named using lowercase letters.
+
+    Names must only use alphanumeric characters, dashes and underscores.
+
+    All files must also have a valid file extension.
+
+5 - General guidelines
 --------------------------------------------------------------------------------
 
-6 - Control statements
+    a)  Primitive types
+
+        PHP allows multiple notations for the primitive types. However, when
+        coding inside WOOPS, we ask you to stick to some conventions, for
+        consistency:
+
+        "NULL" must always be written in uppercase. Other notations, like "null"
+        pr "Null" are prohibitted.
+
+        Boolean values must always be written in lowercase. Other notations,
+        like "TRUE", or "False" are prohibited.
+
+        Strings must always be declared using single quotes (see section 6).
+
+        Arrays must always be declared using the lower case form: "array()".
+        Other notations, like "Array()" is prohibited (see section 7).
+
+    b)  Coding style
+
+        PHP is weakly typed programming language, and has a very tolerand
+        parser, that is able to correct some non-fatal errors for you. The
+        error reporting level is also usually configured to display only
+        critical errors, and not errors the parser is able to correct.
+
+        We think that coding with an error reporting level that is not set to
+        the maximal value is a very bad habit, as it means you won't notice
+        errors that could happend on servers that are configured differently.
+
+        For that reason, we decided to declare a PHP error handler that will
+        aborts the script when an error occurs, without checking it's level.
+        That means that notices, warnings, and even strict errors are
+        considered as fatal errors when using WOOPS. We think this is the best
+        way to ensure a high-quality code.
+
+        So if you are used to code with an error reporting level that is not
+        set at it's maximum value, you may have hard time using WOOPS.
+
+        Lets take a simple code example:
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            1:  $myArray = array(
+            2:      'foo' => 'Hello World!'
+            3:  );
+            4:  
+            5:  if( $myArray[ 'bar' ] ) {
+            6:      
+            7:      print $myArray[ 'bar' ];
+            8:  }
+            9:  
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        Most PHP programmers are used to do this. However, this generates an
+        E_NOTICE error, are we are consulting an array key that does not exists,
+        even if wrapped in an "if" constrol structure. We are just testing if
+        the index "bar" of the array "myArray" has a true value, but we are not
+        testing if that index exist in the array.
+
+        Errors like this (E_NOTICE) are rarely displayed, and may programmers
+        don't even know this is an error. But when using WOOPS, this will
+        result as a fatal error.
+
+        The correct form for doing this is:
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            1:  $myArray = array(
+            2:      'foo' => 'Hello World!'
+            3:  );
+            4:  
+            5:  if( isset( $myArray[ 'bar' ] ) && $myArray[ 'bar' ] ) {
+            6:      
+            7:      print $myArray[ 'bar' ];
+            8:  }
+            9:  
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        In other words, we first check if the index exists, the we checks for
+        a true value. At first sight, you may think this will makes you write
+        more code. This may be true, but this will in fact ensure your code
+        is a high-quality code, that it's portable, no matter the configuration
+        used, and that it will be compatible with the next versions of PHP.
+
+        If you still disagree with this, maybe you should consider using another
+        framework, which is more tolerant for your coding skills. 
+
+6 - Strings
 --------------------------------------------------------------------------------
 
-7 - Constants
+    As seen in section 5, single quotes should always be used to demarcate
+strings. Double quoted strings are never allowed. Please use concatenation
+rather than variable substitution. For instance:
+
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    1:  $str = "This is a string, with a variable: $myVar ...";
+    2:  
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    This is not allowed. Use this instead:
+
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    1:  $str = 'This is a string, with a variable:' . $myVar . ' ...';
+    2:  
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    If the line is too long (see section 2), separate each concatenation by
+a line feed, and aligns the "." operator with the "=" operator. For instance:
+
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    1:  $str = 'This is a very long string, with some variables ('
+    2:       . $myVar
+    3:       . ', '
+    4:       . $myOtherVar
+    5:       . ') ...';
+    6:  
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    When using string concatenation, always add a space character before and
+after the "." operator, for improved readability.
+
+7 - Arrays
 --------------------------------------------------------------------------------
 
-8 - Variables
+    As seen in section 5, arrays must always be declared using the lower case
+form: "array()". Other forms, like "Array()" are prohibited.
+
+    PHP arrays may have numerical indexes, or string indexes (associative
+arrays). Except for some rare cases, we encourage not to use both forms for
+a single array.
+
+    Numerical indexed arrays may contains any kind of numeric index, even
+negative ones, but you are strongly encouraged to start your array with 0, and
+follow with positive numbers. In such a case, integers are always prefered from
+flaotig point indexes.
+
+    If using associative arrays, please conform in most cases to the lower camel
+case naming rule for the array keys.
+
+    No space character is allowed between the "array" keyword and the opening
+parenthesis.
+
+    When you declares an array that contains values, the multi-line form (one
+item per line) is generally preferred to the single line form.
+
+    If you use the single line form, a single space character must be placed
+after the opening parenthesis and before the closing parenthesis. Values are
+separated by a comma followed by a single space character (not before the
+comma). No comma is allowed after the last value of the array.
+
+The array assignment operator must be preceded and followed by a single space
+character. And if you use the multi-line form, please align the array assignment
+operator.
+
+    For instance:
+
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    1:  $myArray      = array( 'Hello', 'World', 'universe' => 'And universe' );
+    2:  
+    3:  $myOtherArray = array(
+    4:      'someKey'      => 'Some value',
+    5:      'someOtherKey' => 'Some other value'
+    6:  );
+    7:  
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+8 - Control statements
 --------------------------------------------------------------------------------
 
-9 - Functions
+    
+
+9 - Constants
 --------------------------------------------------------------------------------
 
-10 - Classes
+    Defining constants in the global scope is strongly discouraged, as this can
+be a source of conflicts. Please wrap the constants you need inside classes,
+using class constants.
+
+    If you really need a constant in the global scope, please write it using
+the uppercase naming rule. Also think to prefix it  with a unique prefix to
+minimize the risk of conflict.
+
+10 - Variables
 --------------------------------------------------------------------------------
 
-11 - Class constants
+    Variables in the global scope are discouraged.
+
+    However, if you need such a variable, please write it using the uppercase
+naming rule (described in section 2). Do not forget to unset the global
+variable, when you don't need it anymore. For instance:
+
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    1:  $MY_GLOBAL_VAR = true;
+    2:  
+    3:  // ...
+    4:  
+    5:  unset( $MY_GLOBAL_VAR );
+    6:  
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    Local variables, inside a function or method, must use the lower camel case
+naming rule (described in section 2).
+
+11 - Functions
 --------------------------------------------------------------------------------
 
-12 - Methods
+    Functions in the global scope are strongly discouraged. Please wrap your
+functions in classes. However, if you need such a function, please follow the
+following rules:
+
+    a)  Naming
+
+        Functions must follow the lower camel case rule (described in
+        section 2).
+
+    b)  Declaration
+
+        No whitespace character is allowed between the function name and the
+        opening parenthesis.
+
+        If using arguments, a single space character must be added after the
+        opening parenthesis, and another after the closing parenthesis. When
+        multiple arguments are used, they must be separated by a comma, with a
+        single space character after the comma (not before).
+
+        Reference for arguments must be explicitely declared, as the
+        "allow_calltime_pass_reference" is prohibited. When using references,
+        no whitespace character is allowed between the "&" operator, and the
+        argument itself. Note that the "&" is prohibited for objects, as they
+        are always passed by reference under PHP 5.
+
+        Default arguments must always have a default value corrsponding to their
+        expected type (empty array for an array, NULL for an object, false
+        for a boolean value, etc).
+
+        For arrays, type hinting is required, as well as for object, when
+        possible.
+
+        Also try to keep the number of arguments as low as possible.
+
+        The opening curly bracket must be written on it's one line, as well as
+        the ending one. The code must start immediatly on the line after the
+        opening curly bracket.
+
+        No indentation is allowed for the declaration of functions. The
+        function's body indentation level must start at 4 space characters.
+
+        Two line break characters (LF) must be used after a function, to
+        separate them.
+
+        All functions must be documentend, using standard JavaDoc comments
+        (see section 19).
+
+        Also think to prefix it  with a unique prefix to minimize the risk of
+        conflict.
+
+        For instance:
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            1:  /**
+            2:   * ...
+            3:   */
+            4:  function doSomething( &$arg1, array $arg2 = array() )
+            5:  {
+            6:      // ...
+            7:  }
+            8:  
+            9:  /**
+            10:  * ...
+            11:  */
+            12: function doSomethingElse()
+            13: {
+            14:     // ...
+            15: }
+            16: 
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+12 - Classes
 --------------------------------------------------------------------------------
 
-13 - Exceptions
+
+
+13 - Class constants
 --------------------------------------------------------------------------------
 
-14 - Interfaces
+    a)  Naming
+
+        Class constants must follow the upper case naming rule (described in
+        section 2).
+
+    b)  Declaration
+
+        Class constants must be declared at the beginning of the class
+        (see section 12).
+
+        A class constant must always have a value.
+
+        All class constants must be documentend, using standard JavaDoc comments
+        (see section 19). Note that unlike properties, you may group multiple
+        constants with the same JavaDoc comment.
+
+        The "=" operator must also be aligned for every class constant.
+
+        When using numerical bitwise values for class constants, the hexadecimal
+        format is prefered.
+
+        The indentation for the declaration of class constants must consist of 4
+        space characters.
+
+        Two line break characters (LF) must be used after a constant, to
+        separate them, except when you are grouping constants below a single
+        JavaDoc comment, or if the class ends right after the constant.
+
+        For instance:
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            1:  /**
+            2:   * ...
+            3:   */
+            4:  class Foo
+            5:  {
+            6:      /**
+            7:       * ...
+            8:       */
+            9:      const PHP_COMPATIBLE   = '5.2';
+            10: 
+            11:     /**
+            12:      * ...
+            13:      */
+            14:     const HELLO            = 'Hello World';
+            15:     
+            16:     /**
+            17:      * ...
+            18:      */
+            19:     const SOME_CONST       = 0x01;
+            20:     const SOME_OTHER_CONST = 0x02;
+            21: }
+            22: 
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+14 - Properties
 --------------------------------------------------------------------------------
 
-15 - Abstract classes
+    a)  Naming
+
+        Class properties must follow the lower camel case rule (described in
+        section 2), with a little exception for private and protected properties
+        (static and member), which must start with an uderscore character.
+
+    b)  Declaration
+
+        Class properties must always declare their full visibility, by using one
+        of the "private", "protected" or "public" modifier. The "var" keyword
+        is never allowed.
+
+        They have to be declared after the class constants, and before the class
+        methods (see section 12).
+
+        Empty properties must always have a default value, corrsponding to their
+        type:
+
+            - Objects:      NULL
+            - Resources:    NULL
+            - Array:        array()
+            - Strings:      ''
+            - Boolean:      false
+            - Numbers:      0
+
+        Each class properties must be documentend, using standard JavaDoc
+        comments (see section 19).
+
+        The "=" operator must also be aligned for every class property.
+
+        The indentation for the declaration of class properties must consist of
+        4 space characters.
+
+        Two line break characters (LF) must be used after a property, to
+        separate them, except if the class ends right after the property.
+
+    c)  Ordering
+
+        Class properties should also been ordered in a specific way, depending
+        of their type and visibility:
+
+            - Private static properties
+            - Protected static properties
+            - Public static properties
+            - Private member properties
+            - Protected member properties
+            - Public member properties
+
+        For instance:
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            1:  /**
+            2:   * ...
+            3:   */
+            4:  class Foo
+            5:  {
+            6:      /**
+            7:       * ...
+            8:       */
+            9:      const PHP_COMPATIBLE = '5.2';
+            10:     
+            11:     /**
+            12:      * ...
+            13:      */
+            14:     private static $_bar = NULL;
+            15:     
+            16:     /**
+            17:      * ...
+            18:      */
+            19:     public $_prop        = array();
+            20: }
+            21: 
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+15 - Methods
 --------------------------------------------------------------------------------
 
-16 - Inline documentation
+    a)  Naming
+
+        Class methods must follow the lower camel case rule (described in
+        section 2), with a little exception for private and protected methods
+        (static and member), which must start with an uderscore character.
+
+    b)  Declaration
+
+        Class methods must always declare their full visibility, by using one
+        of the "private", "protected" or "public" modifier.
+
+        No whitespace character is allowed between the method name and the
+        opening parenthesis.
+
+        If using arguments, a single space character must be added after the
+        opening parenthesis, and another after the closing parenthesis. When
+        multiple arguments are used, they must be separated by a comma, with a
+        single space character after the comma (not before).
+
+        Reference for arguments must be explicitely declared, as the
+        "allow_calltime_pass_reference" is prohibited. When using references,
+        no whitespace character is allowed between the "&" operator, and the
+        argument itself. Note that the "&" is prohibited for objects, as they
+        are always passed by reference under PHP 5.
+
+        Default arguments must always have a default value corrsponding to their
+        expected type (empty array for an array, NULL for an object, false
+        for a boolean value, etc).
+
+        For arrays, type hinting is required, as well as for object, when
+        possible.
+
+        Also try to keep the number of arguments as low as possible.
+
+        The opening curly bracket must be written on it's one line, as well as
+        the ending one. The code must start immediatly on the line after the
+        opening curly bracket.
+
+        The indentation for the declaration of class methods must consist of 4
+        space characters. The method's body indentation level must start at
+        8 space characters.
+
+        Two line break characters (LF) must be used after a method, to separate
+        them, except for the last method of the class.
+
+        All class methods must be documentend, using standard JavaDoc comments
+        (see section 19).
+
+    c)  Ordering
+
+        Class methods should also been ordered in a specific way, depending of
+        their type and visibility:
+
+            - Class constructor, if any (__construct)
+            - Class destructor, if any (__destruct)
+            - Other PHP "magic" methods (__get, __set, __call, etc)
+            - Private static methods
+            - Protected static methods
+            - Public static methods
+            - Private member methods
+            - Protected member methods
+            - Public member methods
+
+        For the absract methods, please see section 18.
+
+        For instance:
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            1:  /**
+            2:   * ...
+            3:   */
+            4:  class Foo
+            5:  {
+            3:      /**
+            4:       * ...
+            5:       */
+            6:      const PHP_COMPATIBLE = '5.2';
+            7:      
+            8:      /**
+            9:       * ...
+            10:      */
+            11:     protected function _someProtectedMethod()
+            12:     {
+            13:         // ...
+            14:     }
+            15:     
+            16:     /**
+            17:      * ...
+            18:      */
+            19:     public function doSomething( &$arg1, array $arg2 = array() )
+            20:     {
+            21:         // ...
+            22:     }
+            23: }
+            24: 
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+16 - Exceptions
 --------------------------------------------------------------------------------
+
+    WOOPS uses PHP exceptions for everything related to errors (except in some
+very special cases, like the class manager or the PHP __toString() method).
+The use of the PHP trigger_error() is not allowed, neither is the use of the
+print langauge construct combined with the exit() or die() function.
+
+    Each class throwing an exception must have its own exception class, named
+exactly the same, with the suffix "_Exception" (so the exception class is in
+a sub-package).
+
+    Exception classes must be declared as final, and contains nothing more
+than the exception code constants, and of course the required "PHP_COMPATIBLE"
+constant. Exception classes must also extends the "Woops_Exception_Base" class.
+
+    Each exception thrown must have an unique exception code, defined in the
+exception class as a class constant, prefixed by "EXCEPTION_".
+
+    The exception message must be written in english, and must be as verbose
+as possible.
+
+    Exceptions are usually thrown on multiple lines, to separate the exception
+message and the exception code.
+
+    For instance:
+
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        1:  /**
+        2:   * ...
+        3:   */
+        4:  class Foo
+        5:  {
+        6:      /**
+        7:       * ...
+        8:       */
+        9:      const PHP_COMPATIBLE = '5.2';
+        10:     
+        11:     /**
+        12:      * ...
+        13:      */
+        14:     public function doSomething()
+        15:     {
+        16:         throw new Foo_Exception(
+        17:             'Exception message',
+        18:             Foo_Exception::EXCEPTION_SOME_EXCEPTION
+        19:         );
+        20:     }
+        21: }
+        22: 
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    And the exception class:
+
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        1:  /**
+        2:   * ...
+        3:   */
+        4:  final class Foo_Exception extends Woops_Exception_Base
+        5:  {
+        6:      /**
+        7:       * ...
+        8:       */
+        9:      const PHP_COMPATIBLE                 = '5.2';
+        10:     
+        11:     /**
+        12:      * ...
+        13:      */
+        14:     const EXCEPTION_SOME_EXCEPTION       = 0x01;
+        15:     const EXCEPTION_SOME_OTHER_EXCEPTION = 0x02;
+        16: }
+        17: 
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+17 - Interfaces
+--------------------------------------------------------------------------------
+
+    Interfaces must always have the suffix "_Interface" (so they are placed in
+a specific package). This improves the code readability, and this si required by
+the WOOPS class manager to differenciate interfaces from classes.
+
+    Interfaces must not contains the "PHP_COMPATIBLE" constant.
+
+    All interface methods must be explicitely declared as public, and be
+documentend, using standard JavaDoc comments (see section 19).
+
+18 - Abstract classes
+--------------------------------------------------------------------------------
+
+    Abstract classes follow the same conventions as classes. There is no naming
+conventions for that type of classes, but it's usually a good idea to suffix
+them with a word like "Abstract" or "Base".
+
+    Abstract methods must be declared right after the "PHP_COMPATIBLE" constant,
+so before any other constants and/or before the class properties and methods.
+
+    Abstract methods must follow the same rules as normal methods, and be
+documentend, using standard JavaDoc comments (see section 19).
+
+19 - Inline documentation
+--------------------------------------------------------------------------------
+
+    Inline documentation must consist of standard JavaDoc comments. This
+applies to functions, classes, interfaces, class constants, properties and
+methods.
+
+    WOOPS uses Doxygen as documentation generator, but your are required to use
+only standard JavaDoc comments, without any specific tags, as specified for
+instance by Doxygen or PHP-Documentor, in order to be compatible with any
+kind of documentation generator.
+
+    Standard JavaDoc comments are always delimited by doc-block comments,
+starting with "/**" and ending with " */". The start and the end of such a
+comment must be placed on their own lines. The lines between them muste start
+with " * ".
+
+    For instance:
+
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        1:  /**
+        2:   * ...
+        3:   */
+        4:  
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    JavaDoc comments usually consists of a short description (title), a long
+description, and specific tags. The short description is always required. The
+long description is optionnal, as well as the JavaDoc tags. An empty line must
+be placed between the short and the long description, and another one between
+the long description and the JavaDoc tags. The long description can be
+multi-line, as well as the short description, even if we encourage you to keep
+the short description as short as possible (it's it purpose).
+
+    For instance:
+
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        1:  /**
+        2:   * This is a short description
+        3:   * 
+        4:   * This is a long description, which
+        5:   * can be multi-line.
+        6:   * 
+        7:   * JavaDoc tags
+        8:   */
+        9:  
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    JavaDoc tags are specific instructions that are recognized by the
+documentation generator. These tags always starts with an "@" character,
+followed by the tag name, and, if applicable, some arguments. When arguments
+are required, they must be aligned, for an improved readability.
+
+    For instance:
+
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        1:  /**
+        2:   * This is a short description
+        3:   * 
+        4:   * This is a long description, which
+        5:   * can be multi-line.
+        6:   * 
+        7:   * @tagName         something       Some description
+        8:   * @tagName         something else  Some other decription
+        9:   * @otherTagName    onlySomething
+        10:  */
+        11: 
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    a)  Classes / Interfaces
+
+        JavaDoc comments for classes or interfaces must contains a short
+        description. The long description is optionnal, by you are strongly
+        advised to add one.
+
+        The required tags are:
+
+            -   @author
+
+                The original author of the class. That must contains the
+                author's first name, followed by the author's last name,
+                followed by the author's email, wrapped between "<" and ">"
+                characters. Multiple @author tags are allowed.
+
+            -   @version
+
+                The class version, in the following form:   major.minor
+
+            -   @package
+
+                The package path to the class, each package separated by a dot,
+                without including the class name.
+
+        Optionnal tags are:
+
+            -   @see
+
+                The reference to another class or class method. Multiple @see
+                tags are allowed.
+
+                When referencing a method from the same class, just writes the
+                method name. Oherwise, writes the class name, followed by the
+                scope resolution operator (::) and the method name
+
+            -   @link
+
+                A link to an URL. Multiple @link tags are allowed.
+
+        For instance:
+
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        1:  /**
+        2:   * Example class
+        3:   * 
+        4:   * This is just an example class, to demonstrate the use of
+        5:   * JavaDoc comments inside the WOOPS project.
+        6:   * 
+        7:   * @author  Jean-David Gadina <macmade@eosgrden.com>
+        8:   * @version 1.1
+        9:   * @package Woops.JavaDoc.Example
+        10:  * @see     someMethodName
+        10:  * @see     Some_Class_Name::someMethodName
+        11:  * @link    http://www.example.org/
+        10:  */
+        11: 
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    b)  Functions / Methods
+
+        JavaDoc comments for functions or methods must contains a short
+        description. The long description is optionnal, by you are strongly
+        advised to add one.
+
+        The required tags are:
+
+            -   @return
+
+                The return type of the method, with an optionnal description
+                about the return value.
+
+                Return types may be:
+
+                    -   boolean
+
+                        A boolean value (true or false).
+
+                    -   int
+
+                        An integer value.
+
+                    -   float
+
+                        A floating point value.
+
+                    -   number
+
+                        Either an integer value, or a floating point value.
+                        Use this only if you're not sure of the return type.
+
+                    -   array
+
+                        A PHP array, either associative or numerically indexed.
+
+                    -   string
+
+                        A string values,
+
+                    -   object
+
+                        An object. Only use this if you're not sure of the
+                        object class. Otherwise, use the class name.
+
+                    -   resource
+
+                        A PHP ressource.
+
+                    -   NULL
+
+                        The PHP NULL value. Please don't use this if the
+                        function/method does not return a value. In that case,
+                        use the "void" return type.
+
+                    -   void
+
+                        No return value.
+
+                    -   mixed
+
+                        Multiple return value types. In that case, the types
+                        must be described in the description
+
+                    -   callback
+
+                        A PHP callback.
+
+                You can also write a class or interface name as the return type.
+                This is often preferred to the "object" return type.
+
+        Optionnal tags are:
+
+            -   @param
+
+                Each parameter of the function/method, even the optionnal ones.
+                This must contains the parameter type (see the @return tag for
+                the available types) and a description of the parameter.
+
+            -   @exception
+
+                The exceptions thrown by the function/method. This must contains
+                the name of the exception class which is thrown, and a
+                description saying when the exception is thrown. Multiple
+                @exception tags are allowed.
+
+            -   @author
+
+                The original author of the function/method. That must contains
+                the author's first name, followed by the author's last name,
+                followed by the author's email, wrapped between "<" and ">"
+                characters. Multiple @author tags are allowed.
+
+                For methods, only specifies the author if it's not the same as
+                the class' author.
+
+            -   @see
+
+                The reference to another class or class method. Multiple @see
+                tags are allowed.
+
+                When referencing a method from the same class, just writes the
+                method name. Oherwise, writes the class name, followed by the
+                scope resolution operator (::) and the method name
+
+            -   @link
+
+                A link to an URL. Multiple @link tags are allowed.
+
+        For instance:
+
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        1:  /**
+        2:   * Example method
+        3:   * 
+        4:   * This is just an example method, to demonstrate the use of
+        5:   * JavaDoc comments inside the WOOPS project.
+        6:   * 
+        7:   * @param   int                         A random number
+        8:   * @param   array                       An array with random values
+        9:   * @return  string                      A random string
+        8:   * @throws  Woops_Some_Class_Exception  Sometimes
+        10:  * @see     someMethodName
+        10:  * @see     Some_Class_Name::someMethodName
+        11:  * @link    http://www.example.org/
+        10:  */
+        11: 
+        ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    c)  Class constants / Properties
+
+        JavaDoc comments for class constants and properties must contains a
+        short desciption. The long description is optionnal. No JavaDoc tags
+        are allowed here.
+
+    d)  Tag ordering
+
+        The JavaDoc tags must appear in the following order:
+
+        - @param
+        - @return
+        - @exception
+        - @author
+        - @version
+        - @see 
