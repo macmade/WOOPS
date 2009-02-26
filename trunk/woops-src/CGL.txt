@@ -213,7 +213,35 @@ english pronunciation. So please use complete words. For instance:
         Arrays must always be declared using the lower case form: "array()".
         Other notations, like "Array()" is prohibited (see section 7).
 
-    b)  Coding style
+    b)  Operators
+
+        Operators must always be wrapped by a single space character. When
+        assigning a reference, the reference operator must be placed right after
+        the assignement operator, without any whitespace character between them.
+        Operators should also be aligned, when possible.
+
+        For instance:
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            1:  $myVar      =  array();
+            2:  $myOtherVar =& $myVar;
+            3:  
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    c)  Casting
+
+        When using casting, no whitespace character is allowed between the
+        cast and the casted variable. The cast type must be wrapped by a single
+        space character.
+
+        For instance:
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            1:  $myVar = ( int )$myVar;
+            2:  
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    d)  Coding style
 
         PHP is weakly typed programming language, and has a very tolerand
         parser, that is able to correct some non-fatal errors for you. The
@@ -433,7 +461,8 @@ operator.
         When using the "switch" statement, a single space character must be
         added after the opening parenthesis, and another after the closing
         parenthesis. The opening curly bracket must be placed on the same line
-        as the "switch" statement, preceded by a single space character.
+        as the "switch" statement, preceded by a single space character. No
+        whitespace character is allowed before the opening parenthesis.
         
         Each "case" statement must be separated by to line breaks, and be
         indented with 4 space characters. No whitespace character is allowed
@@ -468,7 +497,11 @@ operator.
 
     b)  for
 
-        
+        When using the "for" statement, a single space character must be added
+        after the opening parenthesis, and another after the closing
+        parenthesis. The opening curly bracket must be placed on the same line
+        as the "for" statement, preceded by a single space character. No
+        whitespace character is allowed before the opening parenthesis.
 
     b)  foreach
 
