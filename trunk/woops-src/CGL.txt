@@ -362,7 +362,59 @@ operator.
 8 - Control statements
 --------------------------------------------------------------------------------
 
-    
+    a)  if/else/elseif
+
+        
+
+    b)  switch
+
+        When using the switch statement, a single space character must be added
+        after the opening parenthesis, and another after the closing
+        parenthesis. The opening curly bracket must be placed on the same line
+        as the switch statement.
+        
+        Each "case" statement must be separated by to line breaks, and be
+        indented with 4 space characters. No whitespace character is allowed
+        between the tested value and the double-colon character.
+        
+        The instructions for each case must be indented by 4 more space
+        characters, and be terminated by the "break" instruction, indented the
+        same way.
+        
+        For instance:
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            1:  switch( $myVar ) {
+            2:      
+            3:      case 'someValue':
+            4:          
+            5:          // ...
+            6:          break;
+            7:          
+            8:      case 'someOtherValue':
+            9           
+            10:         // ...
+            11:         break;
+            12:         
+            13:     default:
+            14:         
+            15:         // ...
+            16:         break;
+            17: }
+            19: 
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    b)  for
+
+        
+
+    b)  foreach
+
+        
+
+    b)  while
+
+        
 
 9 - Constants
 --------------------------------------------------------------------------------
