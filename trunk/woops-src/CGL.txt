@@ -364,14 +364,76 @@ operator.
 
     a)  if/else/elseif
 
+        When using the "if" statement, a single space character must be added
+        after the opening parenthesis, and another after the closing
+        parenthesis. The opening curly bracket must be placed on the same line
+        as the "if" statement, preceded by a single space character.
+        No whitespace character is allowed before the opening parenthesis.
         
+        A single space character must be added before and after the comparison
+        operator. When you are sure of the type of the value to test, please
+        use strict equality operators.
+        
+        The instuctions inside an "if" statement must be indented with 4 spaces
+        characters. An empty line must be placed after the conditionnal test and
+        the first instruction, and another one after the last instruction,
+        unless at the end of the "if" statement.
+        
+        The "elseif" and "else" statements must be placed on the same line
+        as the preceding closing curly bracket, preceded by a single space
+        character. Also note that the "else if" form is prohibited, in favor of
+        the "elseif" one.
+        
+        A single space character must be added before and after the logical
+        operators. like "&&" or "||".
+        
+        When grouping conditionnal tests, a single space character must be
+        added before and after the opening parenthesis, and another before and
+        after the closing parenthesis.
+
+        For instance:
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            1:  if( $someVar && $someVar === 'someValue' ) {
+            2:      
+            3:      // ...
+            4:  
+            5:  } elseif( $someVar && $someVar === 'someOtherValue' ) {
+            6:      
+            7:      // ...
+            8:      
+            9:  } elseif( ( $someVar || $someOtherVar ) && $anotherVar ) {
+            10:     
+            11:     // ...
+            12: }
+            13: 
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        You may break the conditionnal test into multiple lines, in order to
+        respect the maximum line length rule, seen in section 2. In such a case,
+        the break must be made before a logical operator. Conditionnal test
+        should then be aligned, for an improved readability. The closing
+        parenthesis of the statement must be placed on its own line, with the
+        opening curly bracket.
+
+        For instance:
+
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            1:  if(    $someVar
+            2:      || $someOtherVar
+            3:      || $anotherVar
+            4:  ) {
+            5:      
+            6:      // ...
+            7:  }
+            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     b)  switch
 
-        When using the switch statement, a single space character must be added
-        after the opening parenthesis, and another after the closing
+        When using the "switch" statement, a single space character must be
+        added after the opening parenthesis, and another after the closing
         parenthesis. The opening curly bracket must be placed on the same line
-        as the switch statement.
+        as the "switch" statement, preceded by a single space character.
         
         Each "case" statement must be separated by to line breaks, and be
         indented with 4 space characters. No whitespace character is allowed
@@ -384,7 +446,7 @@ operator.
         For instance:
 
             ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            1:  switch( $myVar ) {
+            1:  switch( $someVar ) {
             2:      
             3:      case 'someValue':
             4:          
