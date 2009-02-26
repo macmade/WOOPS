@@ -18,13 +18,13 @@ DUAL LICENSING MODEL
 - version 3 and a commercial license. This file explains the principle of dual
 licensing, and which obligations using the GPL version of WOOPS implies.
 
-    -   For the open-source license, see LICENSE-OPENSOURCE.txt
-    -   For the commercial license, see LICENSE-COMMERCIAL.txt
+    - For the open-source license, see LICENSE-OPENSOURCE.txt
+    - For the commercial license, see LICENSE-COMMERCIAL.txt
 
     For open source projects that are not distributed under the GNU General
 Public License (GPL) - version 3 license, FLOSS exceptions are available:
-    
-    -   For the FLOSS exceptions, see LICENSE-FLOSS-EXCEPTION.txt
+
+    - For the FLOSS exceptions, see LICENSE-FLOSS-EXCEPTION.txt
 
 1 - Quid Pro Quo
 --------------------------------------------------------------------------------

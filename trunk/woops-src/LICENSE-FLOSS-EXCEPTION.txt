@@ -37,7 +37,7 @@ TERMS AND CONDITIONS
 
     3.  "Derivative Work" means derivative works as defined by aplicable
         copyright law.
-    
+
     4.  "GPL" means the GNU General Public License (GPL) - version 3.
 
 2 - Additional grants
@@ -46,8 +46,8 @@ TERMS AND CONDITIONS
     As a special exception to the terms and conditions of the GPL:
 
     You are free to distribute a Derivative Work that is formed entirely from
-    the Library and one or more works (each, a "FLOSS Work") licensed under one
-    or more of the licenses listed below in section 5, as long as:
+the Library and one or more works (each, a "FLOSS Work") licensed under one or
+more of the licenses listed below in section 5, as long as:
 
         1.  you obey the GPL in all respects for the Library and the Derivative
             Work, except for identifiable sections of the Derivative Work which

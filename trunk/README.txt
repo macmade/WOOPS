@@ -19,20 +19,20 @@ This is a release of WOOPS, a dual-license PHP framework.
 1 - License
 --------------------------------------------------------------------------------
 
-License information can be found in this file:
+    License information can be found in this file:
 
-    -   woops-src/LICENSE.txt
+        - woops-src/LICENSE.txt
 
 2 - Installation
 --------------------------------------------------------------------------------
 
-Installation steps can be found in this file:
+    Installation steps can be found in this file:
 
-    -   woops-src/INSTALL.txt
+        - woops-src/INSTALL.txt
 
 3 - CGL
 --------------------------------------------------------------------------------
 
-PHP coding guidelines can be found in this file:
+    Coding guidelines can be found in this file:
 
-    -   woops-src/PHP_CGL.txt
+        - woops-src/PHP_CGL.txt

@@ -28,7 +28,7 @@ Table of contents
 --------------------------------------------------------------------------------
 
 WOOPS requires PHP 5.2 or greater. It also requires some PHP components:
-    
+
     - SPL (Standard PHP Library)
     - Reflection
     - SimpleXML
@@ -55,7 +55,7 @@ using WOOPS needs some specific directories, in the same directory as it's
 located.
 
 The requested directories are:
-    
+
     - cache                 : The directory for the cached items
     - cache/classes         : The cache directory for the PHP classes
     - cache/config          : The cache directory for the configuration files
@@ -73,7 +73,7 @@ Also note that WOOPS does not need to be installed on the WWW root of a
 virtual host. It can be installed on a sub-folder, or in a user-home directory.
 
 Some directories also need to be writeable by the user running the HTTP server:
-    
+
     - cache/classes
     - cache/config
     - temp
@@ -103,7 +103,7 @@ not available, you can use the ADODB one, which does not need anything special
 and which supports more databases.
 
 Here are the supported databases in PDO:
-    
+
     - Firebird
     - FreeTDS
     - IBM DB2
@@ -118,7 +118,7 @@ Here are the supported databases in PDO:
     - Sybase
 
 Here are the supported databases in ADODB (may not be exhaustive):
-    
+
     - Borland version of Interbase 6.5
     - Firebird
     - FrontBase
@@ -189,16 +189,19 @@ file, as classes and modules are included automatically, when requested.
 
 For instance:
 
-    <?php
-    
-    // Includes the initialization script
-    require_once( 
-        dirname( __FILE__ )
-      . DIRECTORY_SEPARATOR
-      . 'woops-src'
-      . DIRECTORY_SEPARATOR
-      . 'init.inc.php'
-    );
-    
-    // Starts using WOOPS, and enjoy!
-    // ...
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    1:  <?php
+    2:  
+    3:  // Includes the initialization script
+    4:  require_once( 
+    5:      dirname( __FILE__ )
+    6:    . DIRECTORY_SEPARATOR
+    7:    . 'woops-src'
+    8:    . DIRECTORY_SEPARATOR
+    9:    . 'init.inc.php'
+    10: );
+    11: 
+    12: // Starts using WOOPS, and enjoy!
+    13: // ...
+    14: 
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
