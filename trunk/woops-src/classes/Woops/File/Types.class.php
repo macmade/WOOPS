@@ -1737,7 +1737,7 @@ final class Woops_File_Types implements Woops_Core_Singleton_Interface
      * 
      * @param   string  The mime-type to validate
      * @param   boolean If set, also returns true if the mime-type is obsolete
-     * @return  boolean
+     * @return  boolean True if the mime-type is valid, otherwise false
      */
     public function isValid( $mimeType, $allowObsolete = false )
     {
