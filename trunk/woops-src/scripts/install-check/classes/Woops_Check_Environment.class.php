@@ -19,7 +19,11 @@
  */
 class Woops_Check_Environment
 {
-    var $checks = array(
+    var $hasErrors   = false;
+    
+    var $hasWarnings = false;
+    
+    var $checks      = array(
         'phpVersion' => array(
             'title'   => 'PHP version',
             'status'  => '',
@@ -90,8 +94,18 @@ class Woops_Check_Environment
     {
         foreach( $this->checks as $key => $value ) {
             
-            $checkMethod = 'check' . ucfirst( $key );
-            $this->checks[ $key ][ 'status' ] = $this->$checkMethod( $this->checks[ $key ][ 'replace' ] );
+            $checkMethod                      = 'check' . ucfirst( $key );
+            $status                           = $this->$checkMethod( $this->checks[ $key ][ 'replace' ] );
+            $this->checks[ $key ][ 'status' ] = $status;
+            
+            if( $status === 'ERROR' ) {
+                
+                $this->hasErrors = true;
+                
+            } elseif( $status === 'WARNING' ) {
+                
+                $this->hasWarnings = true;
+            }
         }
     }
     

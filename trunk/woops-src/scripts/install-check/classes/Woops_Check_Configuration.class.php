@@ -19,7 +19,11 @@
  */
 class Woops_Check_Configuration
 {
-    var $checks = array(
+    var $hasErrors   = false;
+    
+    var $hasWarnings = false;
+    
+    var $checks      = array(
         'short_open_tag'                 => array(
             'value'   => false,
             'success' => 'The {VAR} directive is turned <strong>OFF</strong>.',
@@ -77,6 +81,8 @@ class Woops_Check_Configuration
             if( ini_get( $key ) != $value[ 'value' ] ) {
                 
                 $this->checks[ $key ][ 'status' ] = 'WARNING';
+                
+                $this->hasWarnings                = true;
                 
             } else {
                 

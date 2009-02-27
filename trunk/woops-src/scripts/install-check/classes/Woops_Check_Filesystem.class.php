@@ -19,44 +19,60 @@
  */
 class Woops_Check_Filesystem
 {
-    var $dirs = array(
-        'cache'                => array( 'status' => '', 'message' => '', 'writecheck' => false ),
-        'cache/classes'        => array( 'status' => '', 'message' => '', 'writecheck' => true ),
-        'cache/config'         => array( 'status' => '', 'message' => '', 'writecheck' => true ),
-        'resources'            => array( 'status' => '', 'message' => '', 'writecheck' => false ),
-        'resources/templates'  => array( 'status' => '', 'message' => '', 'writecheck' => false ),
-        'uploads'              => array( 'status' => '', 'message' => '', 'writecheck' => true ),
-        'temp'                 => array( 'status' => '', 'message' => '', 'writecheck' => true )
+    var $hasErrors   = false;
+    
+    var $hasWarnings = false;
+    
+    var $files       = array(
+        'cache'                => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'directory' ),
+        'cache/classes'        => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
+        'cache/config'         => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
+        'config.ini.php'       => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'file' ),
+        'resources'            => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'directory' ),
+        'resources/templates'  => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'directory' ),
+        'uploads'              => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
+        'temp'                 => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' )
     );
     
     function Woops_Check_Filesystem()
     {
-        $rootDir = substr( $_SERVER[ 'SCRIPT_FILENAME' ], 0, -41 );
+        $pathInfo = explode( DIRECTORY_SEPARATOR, $_SERVER[ 'SCRIPT_FILENAME' ] );
         
-        foreach( $this->dirs as $key => $value ) {
+        array_pop( $pathInfo );
+        array_pop( $pathInfo );
+        array_pop( $pathInfo );
+        array_pop( $pathInfo );
+        
+        $rootDir = implode( DIRECTORY_SEPARATOR, $pathInfo ) . DIRECTORY_SEPARATOR;
+        
+        foreach( $this->files as $key => $value ) {
             
-            $key = str_replace( '/', DIRECTORY_SEPARATOR, $key );
+            $key    = str_replace( '/', DIRECTORY_SEPARATOR, $key );
             
-            $status = $this->checkDir( $rootDir . $key, $value[ 'writecheck' ] );
+            $status = ( $value[ 'type' ] === 'file' ) ? $this->checkFile( $rootDir . $key, $value[ 'writecheck' ] ) : $this->checkDir( $rootDir . $key, $value[ 'writecheck' ] );
             
             if( $status == 'ERROR' ) {
                 
-                $this->dirs[ $key ][ 'message' ] = 'This directory does not exist.<br /><br />Full path is: ' . $rootDir . $key;
+                $this->files[ $key ][ 'message' ] = 'This ' . $value[ 'type' ] . ' does not exist.<br /><br />Full path is: ' . $rootDir . $key;
+                
+                $this->hasErrors                 = true;
                 
             } elseif( $status == 'WARNING' ) {
                 
-                $this->dirs[ $key ][ 'message' ] = 'This directory is not writeable.<br /><br />Full path is: ' . $rootDir . $key;
+                $this->files[ $key ][ 'message' ] = 'This ' . $value[ 'type' ] . ' is not writeable.<br /><br />Full path is: ' . $rootDir . $key;
+                
+                $this->hasWarnings               = true;
                 
             } elseif( $status == 'SUCCESS' && $value[ 'writecheck' ] ) {
                 
-                $this->dirs[ $key ][ 'message' ] = 'This directory exists and is writeable.';
+                $this->files[ $key ][ 'message' ] = 'This ' . $value[ 'type' ] . ' exists and is writeable.';
                 
             } elseif( $status == 'SUCCESS' ) {
                 
-                $this->dirs[ $key ][ 'message' ] = 'This directory exists.';
+                $this->files[ $key ][ 'message' ] = 'This ' . $value[ 'type' ] . ' exists.';
             }
             
-            $this->dirs[ $key ][ 'status' ] = $status;
+            $this->files[ $key ][ 'status' ] = $status;
         }
     }
     
@@ -64,7 +80,7 @@ class Woops_Check_Filesystem
     {
         $out = array();
         
-        foreach( $this->dirs as $key => $value ) {
+        foreach( $this->files as $key => $value ) {
             
             $status  = $value[ 'status' ];
             
@@ -81,6 +97,21 @@ class Woops_Check_Filesystem
     function checkDir( $path, $writeCheck )
     {
         if( !file_exists( $path ) || !is_dir( $path ) ) {
+            
+            return 'ERROR';
+        }
+        
+        if( $writeCheck && !is_writable( $path ) ) {
+            
+            return 'WARNING';
+        }
+        
+        return 'SUCCESS';
+    }
+    
+    function checkFile( $path, $writeCheck )
+    {
+        if( !file_exists( $path ) || !is_file( $path ) ) {
             
             return 'ERROR';
         }
