@@ -11,7 +11,7 @@
 $Id$
 
 ================================================================================
-WOOPS PHP CODING GUIDELINES
+WOOPS CODING GUIDELINES
 ================================================================================
 
 Table of contents
@@ -40,7 +40,7 @@ Table of contents
 1 - About
 --------------------------------------------------------------------------------
 
-    This file describes the PHP coding conventions used in the WOOPS project.
+    This file describes the coding conventions used in the WOOPS project.
 Coding guidelines are essential to ensure consistency inside the project,
 between all developers, as well as to ensure a high-quality, maintanable code.
 
