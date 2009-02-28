@@ -85,6 +85,57 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
     }
     
     /**
+     * Returns the INI file as an array
+     * 
+     * @return  array   An array with the INI file items
+     */
+    public function toArray()
+    {
+        // Storage
+        $ini = array();
+        
+        // Process each items
+        foreach( $this->_items as $name => $object ) {
+            
+            // Gets the item name
+            $name = $object->getName();
+            
+            // Checks the kind of item
+            if( $object instanceof Woops_File_Ini_Item_Value ) {
+                
+                // Normal value
+                $ini[ $name ] = $object->getValue();
+                
+            } elseif( $object instanceof Woops_File_Ini_Item_Section ) {
+                
+                // Section
+                $ini[ $name ] = $object->toArray();
+                
+            } elseif( $object instanceof Woops_File_Ini_Item_Array ) {
+                
+                // Array
+                $ini[ $name ] = array();
+                
+                // Gets the values
+                $values       = $object->getValues();
+                
+                // Process each value
+                foreach( $values as $value ) {
+                    
+                    // Stores the value
+                    $ini[ $name ][] = $value->getValue();
+                }
+            }
+        }
+        
+        // Ensures the items pointer is untouched
+        reset( $this->_items );
+        
+        // Returns the INI array
+        return $ini;
+    }
+    
+    /**
      * Sets the needed static variables
      * 
      * @return  void
