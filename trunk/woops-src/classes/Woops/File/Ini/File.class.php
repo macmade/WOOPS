@@ -255,13 +255,14 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
      * 
      * @param   string  The name of the file to write
      * @param   string  The path of the file to write (directory name)
+     * @param   boolean Wether a call to the PHP exit() function must be added at the top of the file, in order to secures it
      * @return  void
      * @throws  Woops_File_Ini_File_Exception   If the directory does not exists
      * @throws  Woops_File_Ini_File_Exception   If the directory is not writeable
      * @throws  Woops_File_Ini_File_Exception   If the file is not writeable
      * @throws  Woops_File_Ini_File_Exception   If a write error occured
      */
-    public function toFile( $fileName, $filePath )
+    public function toFile( $fileName, $filePath, $phpExit = false )
     {
         // Checks if the path ends with a directory separator
         if( substr( $filePath, 0, -1 ) !== DIRECTORY_SEPARATOR ) {
@@ -303,8 +304,22 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
             );
         }
         
+        // Checks if the file must be secured
+        if( $phpExit ) {
+            
+            // INI file content
+            $content = '; WOOPS configuration file <?php exit(); ?>'
+                     . self::$_str->NL
+                     . ( string )$this;
+            
+        } else {
+            
+            // INI file content
+            $content = ( string )$this;
+        }
+        
         // Tries to write the file
-        if( !file_put_contents( $filePath, ( string )$this ) ) {
+        if( !file_put_contents( $filePath, $content ) ) {
             
             // Error - Cannot write the file
             throw new Woops_File_Ini_File_Exception(
