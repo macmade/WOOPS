@@ -28,22 +28,27 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
     /**
      * The unique instance of the class (singleton)
      */
-    private static $_instance = NULL;
+    private static $_instance  = NULL;
     
     /**
      * The WOOPS cpnfiguration object
      */
-    private $_conf            = NULL;
+    private $_conf             = NULL;
     
     /**
      * The registered database engines
      */
-    private $_engines         = array();
+    private $_engines          = array();
+    
+    /**
+     * The connected database engines
+     */
+    private $_connectedEngines = array();
     
     /**
      * The name of the default database engine
      */
-    private $_defaultEngine   = '';
+    private $_defaultEngine    = '';
     
     /**
      * Class constructor
@@ -171,41 +176,6 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         
         // Gets and stores the instance of the database engine class
         $this->_engines[ $name ] =  Woops_Core_Class_Manager::getInstance()->getSingleton( $class );
-        
-        // Database parameters
-        static $driver;
-        static $host;
-        static $port;
-        static $username;
-        static $password;
-        static $database;
-        static $tablePrefix;
-        
-        // Gets the configuration variables if needed
-        if( !$driver ) {
-            
-            // Sets the default connection infos
-            $driver      = $this->_conf->getVar( 'database', 'driver' );
-            $host        = $this->_conf->getVar( 'database', 'host' );
-            $port        = $this->_conf->getVar( 'database', 'port' );
-            $username    = $this->_conf->getVar( 'database', 'user' );
-            $password    = $this->_conf->getVar( 'database', 'password' );
-            $database    = $this->_conf->getVar( 'database', 'database' );
-            $tablePrefix = $this->_conf->getVar( 'database', 'tablePrefix' );
-            
-            // Security - Removes some configuration variables
-            $this->_conf->deleteVar( 'database', 'user' );
-            $this->_conf->deleteVar( 'database', 'password' );
-        }
-        
-        // Sets the WOOPS table prefix
-        $tablePrefix = ( $tablePrefix ) ? ( string )$tablePrefix : '';
-        
-        // Loads the engine
-        $this->_engines[ $name ]->load( $driver, $host, $port, $database, $tablePrefix );
-        
-        // Establish a connection with the database
-        $this->_engines[ $name ]->connect( $username, $password );
     }
     
     /**
@@ -235,6 +205,48 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
                 'The engine \'' . $name . '\' is not a registered database engine',
                 Woops_Database_Layer_Exception::EXCEPTION_NO_ENGINE
             );
+        }
+        
+        // Database parameters
+        static $driver;
+        static $host;
+        static $port;
+        static $username;
+        static $password;
+        static $database;
+        static $tablePrefix;
+        
+        // Gets the configuration variables if needed
+        if( !$driver ) {
+            
+            // Sets the default connection infos
+            $driver      = $this->_conf->getVar( 'database', 'driver' );
+            $host        = $this->_conf->getVar( 'database', 'host' );
+            $port        = $this->_conf->getVar( 'database', 'port' );
+            $username    = $this->_conf->getVar( 'database', 'user' );
+            $password    = $this->_conf->getVar( 'database', 'password' );
+            $database    = $this->_conf->getVar( 'database', 'database' );
+            $tablePrefix = $this->_conf->getVar( 'database', 'tablePrefix' );
+            
+            // Security - Removes some configuration variables
+            $this->_conf->deleteVar( 'database', 'user' );
+            $this->_conf->deleteVar( 'database', 'password' );
+            
+            // Sets the WOOPS table prefix
+            $tablePrefix = ( $tablePrefix ) ? ( string )$tablePrefix : '';
+        }
+        
+        // Checks if the engine is connected or not
+        if( !isset( $this->_connectedEngines[ $name ] ) )
+            
+            // Loads the engine
+            $this->_engines[ $name ]->load( $driver, $host, $port, $database, $tablePrefix );
+            
+            // Establish a connection with the database
+            $this->_engines[ $name ]->connect( $username, $password );
+            
+            // Engine is connected
+            $this->_connectedEngines[ $name ] = true;
         }
         
         // Returns the instance of the engine
