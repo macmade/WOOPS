@@ -156,7 +156,7 @@ final class Woops_Array_Utils implements Woops_Core_Singleton_Interface
             if( is_array( $value ) ) {
                 
                 // Gets the sub-values
-                $subValues = $this->flattenArray( $value, $curKey );
+                $subValues = $this->flatten( $value, $curKey );
                 
                 // Process each sub-values
                 foreach( $subValues as $subKey => $subValue ) {
