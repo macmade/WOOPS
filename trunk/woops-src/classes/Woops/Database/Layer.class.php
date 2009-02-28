@@ -237,7 +237,7 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         }
         
         // Checks if the engine is connected or not
-        if( !isset( $this->_connectedEngines[ $name ] ) )
+        if( !isset( $this->_connectedEngines[ $name ] ) ) {
             
             // Loads the engine
             $this->_engines[ $name ]->load( $driver, $host, $port, $database, $tablePrefix );
