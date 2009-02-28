@@ -208,7 +208,7 @@ class Woops_File_Ini_Parser
                         }
                         
                         // Adds the variable value
-                        $this->_values[ $section ][ $key ][ 0 ][] = $value;
+                        $this->_values[ $section ][ $key ][ 'value' ][] = $value;
                         $this->_ini->getItem( $section )->getItem( $key )->addValue( $value );
                         
                     } else {
@@ -251,7 +251,7 @@ class Woops_File_Ini_Parser
                         }
                         
                         // Adds the variable value
-                        $this->_values[ $key ][ 0 ][] = $value;
+                        $this->_values[ $key ][ 'value' ][] = $value;
                         $this->_ini->getItem( $key )->addValue( $value );
                         
                     } else {
@@ -282,12 +282,7 @@ class Woops_File_Ini_Parser
     protected function _processComments( array $rawComments )
     {
         // Storage array
-        $comments = array(
-            'title'       => '',
-            'description' => '',
-            'type'        => '',
-            'required'    => false
-        );
+        $comments = array();
         
         // Process each comment line
         foreach( $rawComments as $comment ) {
@@ -296,12 +291,12 @@ class Woops_File_Ini_Parser
             if( substr( $comment, 0, 1 ) !== '@' ) {
                 
                 // Checks if the comment has to be interpreted as a title, or description (which can be multiline)
-                if( !$comments[ 'title' ] ) {
+                if( !isset( $comments[ 'title' ] ) ) {
                     
                     // Adds the title
                     $comments[ 'title' ] = $comment;
                     
-                } elseif( !$comments[ 'description' ] ) {
+                } elseif( !isset( $comments[ 'description' ] ) ) {
                     
                     // Starts the description
                     $comments[ 'description' ] = $comment;
