@@ -303,8 +303,17 @@ class Woops_File_Ini_Parser
                     
                 } else {
                     
-                    // Adds the current line to the existing description
-                    $comments[ 'description' ] .= ' ' . $comment;
+                    // Checks if we must add a new line character
+                    if( substr( $comments[ 'description' ], -1 ) === '.' ) {
+                        
+                        // Adds the current line to the existing description
+                        $comments[ 'description' ] .= self::$_str->NL . $comment;
+                        
+                    } else {
+                        
+                        // Adds the current line to the existing description
+                        $comments[ 'description' ] .= ' ' . $comment;
+                    }
                 }
                 
                 // Process the nex line
