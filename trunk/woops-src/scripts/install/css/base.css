@@ -1,0 +1,295 @@
+/* <![CDATA[ */
+
+/*
+
+################################################################################
+#                                                                              #
+#                WOOPS - Web Object Oriented Programming System                #
+#                                                                              #
+#                               COPYRIGHT NOTICE                               #
+#                                                                              #
+# Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)                 #
+# All rights reserved                                                          #
+################################################################################
+
+*/
+
+/* $Id$ */
+
+BODY {
+    margin:                 0px;
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              14px;
+    line-height:            normal;
+    text-decoration:        none;
+    font-family:            Arial, Helvetica, Verdana, Geneva, Swiss, SunSans-Regular, sans-serif;
+    background-color:       #444444;
+    background-image:       url( 'background.png' );
+}
+
+TD, LI {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              14px;
+    line-height:            normal;
+    text-decoration:        none;
+    font-family:            Arial, Helvetica, Verdana, Geneva, Swiss, SunSans-Regular, sans-serif;
+    background-color:       inherit;
+}
+
+H1 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              32px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+}
+
+H2 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              26px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+    border-bottom:          solid 1px #CCCCCC;
+    padding-bottom:         5px;
+}
+
+H3 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              20px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+    border-bottom:          solid 1px #CCCCCC;
+    padding-bottom:         5px;
+}
+
+H4 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              18px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+}
+
+H5 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              16px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+}
+
+H6 {
+    color:                  #333333;
+    font-style:             normal;
+    font-weight:            normal;
+    font-size:              14px;
+    line-height:            normal;
+    margin-top:             14px;
+    margin-bottom:          14px;
+    background-color:       inherit;
+}
+
+A {
+    text-decoration:        none;
+}
+
+A:link {
+    color:                  #00559A;
+    text-decoration:        none;
+    background-color:       inherit;
+}
+
+A:visited {
+    color:                  #91A8BE;
+    background-color:       inherit;
+}
+
+A:hover {
+    color:                  #BB1D22;
+    text-decoration:        underline;
+    background-color:       inherit;
+}
+
+A:active {
+    color:                  #BB1D22;
+    text-decoration:        underline;
+    background-color:       inherit;
+}
+
+IMG {
+    border:                 none;
+}
+
+TABLE {
+    border:                 solid 1px #CCCCCC;
+    border-collapse:        collapse;
+    width:                  100%;
+    margin-top:             14px;
+    margin-bottom:          14px;
+}
+
+TD {
+    border:                 solid 1px #CCCCCC;
+    padding:                5px;
+}
+
+TH {
+    border:                 solid 1px #CCCCCC;
+    padding:                5px;
+    background-color:       #F1F8FF;
+    color:                  inherit;
+}
+
+INPUT {
+    border:                 solid 1px #CCCCCC;
+    color:                  #333333;
+    background-color:       #FFFFFF;
+    padding:                5px;
+}
+
+PRE {
+    color:                  #00559A;
+}
+
+DIV#frame {
+    width:                  800px;
+    margin-left:            auto;
+    margin-top:             50px;
+    margin-right:           auto;
+    margin-bottom:          50px;
+    padding:                10px;
+    background-color:       #FFFFFF;
+    color:                  inherit;
+}
+
+DIV#content {
+    text-align:             center;
+    padding:                20px;
+    overflow:               hidden;
+    height:                 100%;
+}
+
+DIV#footer {
+    margin-top:             10px;
+    text-align:             center;
+    font-size:              10px;
+}
+
+DIV#w3c {
+    margin-top:             10px;
+}
+
+DIV#w3c IMG {
+    margin-left:            10px;
+}
+
+.left {
+    width:                  45%;
+    float:                  left;
+}
+
+.right {
+    width:                  45%;
+    float:                  right;
+}
+
+.clearer {
+    clear:                  both;
+}
+
+#content H2 {
+    text-transform:         uppercase;
+    background-image:       url( 'cog.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+    clear:                  both;
+}
+
+.install-error {
+    text-align:             left;
+    margin-bottom:          20px;
+    background-color:       #F9E49A;
+    border:                 solid 1px #CCCCCC;
+    padding-left:           10px;
+    padding-right:          10px;
+    padding-bottom:         10px;
+    background-image:       url( 'bg-warning.png' );
+    background-repeat:      repeat-x;
+}
+
+.install-error H4 {
+    background-color:       transparent;
+    background-image:       url( 'warning.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+.box {
+    margin-bottom:          20px;
+    background-color:       #C9C9C9;
+    border:                 solid 1px #CCCCCC;
+    padding-left:           10px;
+    padding-right:          10px;
+    padding-bottom:         10px;
+    background-image:       url( 'bg-box.png' );
+    background-repeat:      repeat-x;
+}
+
+.box H4 {
+    background-color:       transparent;
+}
+
+.message {
+    font-size:              12px;
+}
+
+.description {
+    margin-top:             5px;
+    padding-left:           20px;
+    font-size:              10px;
+}
+
+.title {
+    font-size:              12px;
+    margin-top:             10px;
+    padding-top:            2px;
+}
+
+.title SPAN {
+    background-image:       url( 'help.png' );
+    background-repeat:      no-repeat;
+    background-position:    0px 0px;
+    padding-left:           20px;
+    padding-top:            2px;
+}
+
+.form-element {
+    margin-top:             20px;
+}
+
+.form-element INPUT {
+    text-align:             center;
+}
+
+/* ]]> */
