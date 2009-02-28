@@ -20,11 +20,19 @@
 
 ; The default database engine to use
 ; 
+; WOOPS comes by default with a PDO and an ADODB engine, each one in a specific
+; module.
+; Other database engine may be available, depending on the modules available in
+; your WOOPS installation.
+; 
 ; @type string
 ; @required
 engine      = pdo
 
 ; The database driver to use
+; 
+; Note that the database driver setting depends directly of the database engine
+; you are using.
 ; 
 ; @type string
 ; @required
@@ -148,6 +156,12 @@ enable = On
 [error]
 
 ; The error reporting level
+; 
+; Determines the way errors are reported.
+; If set to "development", the error
+; message will be printed with a full backtrace.
+; If set to "production", only the error message will be printed.
+; If set to "none", no error message will be printed.
 ; 
 ; @type     select
 ; @option   development
