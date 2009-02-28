@@ -200,6 +200,70 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
     }
     
     /**
+     * Writes the INI values to a file
+     * 
+     * @param   string  The name of the file to write
+     * @param   string  The path of the file to write (directory name)
+     * @return  void
+     * @throws  Woops_File_Ini_File_Exception   If the directory does not exists
+     * @throws  Woops_File_Ini_File_Exception   If the directory is not writeable
+     * @throws  Woops_File_Ini_File_Exception   If the file is not writeable
+     * @throws  Woops_File_Ini_File_Exception   If a write error occured
+     */
+    public function toFile( $fileName, $filePath )
+    {
+        // Checks if the path ends with a directory separator
+        if( substr( $filePath, 0, -1 ) !== DIRECTORY_SEPARATOR ) {
+            
+            // Adds the directory separator to the end of the path
+            $filePath .= DIRECTORY_SEPARATOR;
+        }
+        
+        // Complete path to the file
+        $fullPath = $filePath . $fileName;
+        
+        // Checks if the directory exists
+        if( !file_exists( $filePath ) || !is_dir( $filePath ) ) {
+            
+            // Error - No such directory
+            throw new Woops_File_Ini_File_Exception(
+                'The directory does not exist (path: ' . $fullPath . ')',
+                Woops_File_Ini_File_Exception::EXCEPTION_NO_DIR
+            );
+        }
+        
+        // If the file does not exist, checks if the directory is writeable
+        if( !file_exists( $filePath ) && !is_writeable( $filePath ) ) {
+            
+            // Error - Directory not writeable
+            throw new Woops_File_Ini_File_Exception(
+                'The directory is not writeable (path: ' . $filePath . ')',
+                Woops_File_Ini_File_Exception::EXCEPTION_DIR_NOT_WRITEABLE
+            );
+        }
+        
+        // If the file exists, checks if it is writeable
+        if( file_exists( $filePath ) && !is_writeable( $filePath ) ) {
+            
+            // Error - The file is not writeable
+            throw new Woops_File_Ini_File_Exception(
+                'The file is not writeable (path: ' . $fullPath . ')',
+                Woops_File_Ini_File_Exception::EXCEPTION_FILE_NOT_WRITEABLE
+            );
+        }
+        
+        // Tries to write the file
+        if( !file_put_contents( $filePath, ( string )$this ) ) {
+            
+            // Error - Cannot write the file
+            throw new Woops_File_Ini_File_Exception(
+                'Cannot write the ini file (path: ' . $fullPath . ')',
+                Woops_File_Ini_File_Exception::EXCEPTION_WRITE_ERROR
+            );
+        }
+    }
+    
+    /**
      * Creates a section item in the INI file
      * 
      * @param   string                      The name of the section item
