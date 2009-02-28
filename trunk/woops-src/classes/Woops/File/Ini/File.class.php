@@ -223,7 +223,7 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
         $fullPath = $filePath . $fileName;
         
         // Checks if the directory exists
-        if( !file_exists( $filePath ) || !is_dir( $filePath ) ) {
+        if( !file_exists( $filePath ) || !is_dir( $filePath ) ) {
             
             // Error - No such directory
             throw new Woops_File_Ini_File_Exception(
