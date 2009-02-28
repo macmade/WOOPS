@@ -153,6 +153,7 @@ enable = On
 ; @option   development
 ; @option   production
 ; @option   none
+; @required
 report = development
 
 ; ##############################################################################
@@ -163,6 +164,7 @@ report = development
 
 ; The loaded (active) modules
 loaded[] = Pdo
+loaded[] = Install
 loaded[] = Cms
 loaded[] = Admin
 loaded[] = ModManager
