@@ -33,7 +33,12 @@ class Woops_File_Ini_Parser
     /**
      * The string utilities
      */
-    private static $_str       = NULL;
+    protected static $_str     = NULL;
+    
+    /**
+     * The INI file object
+     */
+    protected $_ini            = NULL;
     
     /**
      * The path to the INI file
@@ -66,7 +71,7 @@ class Woops_File_Ini_Parser
             
             // Error - The file does not exists
             throw new Woops_File_Ini_Parser_Exception(
-                '',
+                'The INI file does not exists (path: ' . $path . ')',
                 Woops_File_Ini_Parser_Exception::EXCEPTION_NO_FILE
             );
         }
@@ -76,7 +81,7 @@ class Woops_File_Ini_Parser
             
             // Error - The file is not readable
             throw new Woops_File_Ini_Parser_Exception(
-                '',
+                'The INI file is not readable (path: ' . $path . ')',
                 Woops_File_Ini_Parser_Exception::EXCEPTION_FILE_NOT_READABLE
             );
         }
@@ -111,13 +116,16 @@ class Woops_File_Ini_Parser
     protected function _parseFile()
     {
         // Gets each line of the INI file
-        $lines    = file( $this->_filePath );
+        $lines      = file( $this->_filePath );
         
         // No active section at the moment
-        $section  = '';
+        $section    = '';
         
         // Storage for the JavaDoc-like comments
-        $comments = array();
+        $comments   = array();
+        
+        // Creates an INI file object
+        $this->_ini = new Woops_File_Ini_File();
         
         // Process each line of the file
         foreach( $lines as &$line ) {
@@ -143,10 +151,13 @@ class Woops_File_Ini_Parser
             if( preg_match( '/^\s*\[([^\]]+)\]/', $line, $matches ) ) {
                 
                 // Name of the section
-                $section = $matches[ 1 ];
+                $section                   = $matches[ 1 ];
                 
                 // Creates the storage array for the section
                 $this->_values[ $section ] = array();
+                
+                // Creates the section object
+                $this->_ini->newSectionItem( $section );
                 
                 // Process the next line
                 continue;
@@ -189,12 +200,16 @@ class Woops_File_Ini_Parser
                                 'comments' => $this->_processComments( $comments )
                             );
                             
+                            // Creates the array object
+                            $this->_ini->getItem( $section )->newArrayItem( $key );
+                            
                             // Resets the comments
                             $comments = array();
                         }
                         
                         // Adds the variable value
                         $this->_values[ $section ][ $key ][ 0 ][] = $value;
+                        $this->_ini->getItem( $section )->getItem( $key )->addValue( $value );
                         
                     } else {
                         
@@ -203,6 +218,9 @@ class Woops_File_Ini_Parser
                             'value'    => $value,
                             'comments' => $this->_processComments( $comments )
                         );
+                        
+                        // Creates the value object
+                        $this->_ini->getItem( $section )->newValueItem( $key, $value );
                         
                         // Resets the comments
                         $comments = array();
@@ -225,12 +243,16 @@ class Woops_File_Ini_Parser
                                 'comments' => $this->_processComments( $comments )
                             );
                             
+                            // Creates the array object
+                            $this->_ini->newArrayItem( $key );
+                            
                             // Resets the comments
                             $comments = array();
                         }
                         
                         // Adds the variable value
                         $this->_values[ $key ][ 0 ][] = $value;
+                        $this->_ini->getItem( $key )->addValue( $value );
                         
                     } else {
                         
@@ -239,6 +261,9 @@ class Woops_File_Ini_Parser
                             'value'    => $value,
                             'comments' => $this->_processComments( $comments )
                         );
+                        
+                        // Creates the value object
+                        $this->_ini->newValueItem( $key, $value );
                         
                         // Resets the comments
                         $comments = array();
@@ -322,5 +347,25 @@ class Woops_File_Ini_Parser
         
         // Returns the processed comments
         return $comments;
+    }
+    
+    /**
+     * Gets an array with the INI values
+     * 
+     * @return  array   An array with the INI values
+     */
+    public function getIniArray()
+    {
+        return $this->_values;
+    }
+    
+    /**
+     * Gets the INI file object
+     * 
+     * @return  Woops_File_Ini_File The INI file object
+     */
+    public function getIniObject()
+    {
+        return $this->_ini;
     }
 }
