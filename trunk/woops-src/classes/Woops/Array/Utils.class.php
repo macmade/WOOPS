@@ -87,7 +87,7 @@ final class Woops_Array_Utils implements Woops_Core_Singleton_Interface
      * @param   string              The list tag (ul or ol)
      * @return  Woops_Xhtml_Tag     The HTML list
      */
-    public function arrayToList( array $array, $listType = 'ul' )
+    public function toList( array $array, $listType = 'ul' )
     {
         // Creates the list tag
         $list = new Woops_Xhtml_Tag( $listType );
@@ -141,7 +141,7 @@ final class Woops_Array_Utils implements Woops_Core_Singleton_Interface
      * @param   string  The key prefix (used internally)
      * @return  array   An array with all the values, flattened
      */
-    public function flattenArray( array $array, $prefix = '' )
+    public function flatten( array $array, $prefix = '' )
     {
         // Storage for the items
         $items = array();

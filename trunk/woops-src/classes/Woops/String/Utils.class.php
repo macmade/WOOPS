@@ -315,7 +315,7 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
      * @param   string          The list tag (ul or ol)
      * @return  Woops_Xhtml_Tag The HTML list
      */
-    public function strToList( $str, $sep = ',', $listType = 'ul' )
+    public function toList( $str, $sep = ',', $listType = 'ul' )
     {
         // Gets all the list items
         $items = explode( $sep, $str );

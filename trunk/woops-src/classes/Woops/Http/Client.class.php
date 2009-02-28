@@ -452,7 +452,7 @@ class Woops_Http_Client
         } elseif( $this->_encType === self::ENCTYPE_MULTIPART_FORM_DATA ) {
             
             // Gets the flat list of the POST data
-            $postData = self::$_array->flattenArray( $this->_postData );
+            $postData = self::$_array->flatten( $this->_postData );
             
             // Storage
             $body = '';
