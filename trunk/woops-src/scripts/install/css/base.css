@@ -220,10 +220,61 @@ DIV#w3c IMG {
 
 #content H2 {
     text-transform:         uppercase;
-    background-image:       url( 'cog.png' );
+    clear:                  both;
+}
+
+H2.database {
+    background-image:       url( 'database.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
-    clear:                  both;
+}
+
+H2.time {
+    background-image:       url( 'time.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H2.lang {
+    background-image:       url( 'lang.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H2.xhtml {
+    background-image:       url( 'xhtml.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H2.xml {
+    background-image:       url( 'xml.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H2.classCache {
+    background-image:       url( 'classcache.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H2.aop {
+    background-image:       url( 'aop.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H2.error {
+    background-image:       url( 'error.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H2.modules {
+    background-image:       url( 'modules.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
 }
 
 .install-error {
@@ -245,7 +296,7 @@ DIV#w3c IMG {
     background-position:    right 2px;
 }
 
-.box {
+.box, .box-required {
     margin-bottom:          20px;
     background-color:       #C9C9C9;
     border:                 solid 1px #CCCCCC;
@@ -256,7 +307,7 @@ DIV#w3c IMG {
     background-repeat:      repeat-x;
 }
 
-.box H4 {
+.box H4, .box-required H4 {
     background-color:       transparent;
 }
 
@@ -285,11 +336,27 @@ DIV#w3c IMG {
 }
 
 .form-element {
+    font-size:              12px;
     margin-top:             20px;
+    overflow:               hidden;
+    height:                 100%:
 }
 
 .form-element INPUT {
     text-align:             center;
+}
+
+.form-element INPUT:focus {
+    background-color:       #FFF4BF;
+}
+
+.form-element .module, .form-element .module-loaded {
+    float:                  left;
+    width:                  135px;
+    text-align:             left;
+    border:                 solid 1px #CCCCCC;
+    padding:                5px;
+    background-color:       #FFFFFF;
 }
 
 /* ]]> */

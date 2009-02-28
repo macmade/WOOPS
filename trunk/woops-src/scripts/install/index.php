@@ -1,9 +1,5 @@
 <?php
 	
-	// Aborts the script. This is recommended on production boxes, as this
-	// script may reveal important informations on the server.
-	#exit();
-	
 	// Includes the check scripts
 	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '../' . DIRECTORY_SEPARATOR . 'install-check' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Environment.class.php' );
 	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '../' . DIRECTORY_SEPARATOR . 'install-check' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Filesystem.class.php' );
@@ -17,8 +13,19 @@
 	// Checks for errors or warnings that could prevent the installation
 	$INSTALL_ERROR = ( $CHECK_ENV->hasErrors || $CHECK_FS->hasErrors || $CHECK_FS->hasWarnings );
 	
-	// If no error, we are able to use WOOPS
-	if( !$INSTALL_ERROR ) {
+	// Checks if we can run the installer
+	if( $INSTALL_ERROR ) {
+		
+		// Errors detected
+		$CONTENT = '<div class="install-error">
+						<h4>Problems detected</h4>
+						<div class="message">
+							We detected errors or warnings that could prevent the installation of WOOPS.<br />
+							Please run the <a href="' . substr( $_SERVER[ 'SCRIPT_NAME' ], 0, -10 ) . '-check/" title="Installation check">installation check script</a> to find out more.
+						</div>
+					</div>';
+		
+	} else {
 		
 		// Disables the class cache (and AOP) for now
 		define( 'WOOPS_CLASS_CACHE_MODE_OFF', true );
@@ -26,8 +33,26 @@
 		// Includes the initialization script
 		require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'init.inc.php' );
 		
-		// Creates an instance of the install form
-		$INSTALL_FORM = new Woops_Mod_Install_Form();
+		// Checks if the Install module is loaded
+		if( !( Woops_Core_Module_Manager::getInstance()->isLoaded( 'Install' ) ) ) {
+			
+			// Install module not loaded
+			$CONTENT = '<div class="install-error">
+							<h4>Installation disabled</h4>
+							<div class="message">
+								The WOOPS installation module is currently disabled.<br />
+								In order to access the installation script, please loads the "Install" module, either from the WOOPS module manager or by editing the WOOPS configuration file.
+							</div>
+						</div>';
+			
+		} else {
+			
+			// Creates an instance of the install form
+			$INSTALL_FORM = new Woops_Mod_Install_Form();
+			
+			// Gets the install form content
+			$CONTENT      = ( string )$INSTALL_FORM;
+		}
 	}
 ?>
 <?xml version="1.0" encoding="utf-8"?>
@@ -59,11 +84,11 @@
 		<link rev="made" href="mailto:macmade@eosgarden.com" />
 		<meta http-equiv="content-language" content="en" />
 		<meta http-equiv="reply-to" content="macmade@eosgarden.com" />
-		<meta name="author" content="Jean-David Gadina, eosgarden" />
-		<meta name="copyright" content="Copyright, eosgarden, 2009" />
-		<meta name="DC.Creator" content="Jean-David Gadina, eosgarden" />
+		<meta name="author" content="Jean-David Gadina" />
+		<meta name="copyright" content="Copyright (C) 2009 Jean-David Gadina" />
+		<meta name="DC.Creator" content="Jean-David Gadina" />
 		<meta name="DC.Language" scheme="NISOZ39.50" content="en" />
-		<meta name="DC.Rights" content="Copyright, eosgarden, 2009" />
+		<meta name="DC.Rights" content="Copyright (C) 2009 Jean-David Gadina" />
 		<meta name="generator" content="BBEdit 9.1" />
 		<meta name="rating" content="General" />
 		<meta name="robots" content="all" />
@@ -72,26 +97,7 @@
 		<div id="frame">
 			<div id="content">
 				<h1>WOOPS installation</h1>
-				<?php
-					
-					if( $INSTALL_ERROR ) {
-						
-				?>
-				<div class="install-error">
-					<h4>Problems detected</h4>
-					<div class="message">
-						We detected errors or warnings that could prevent the installation of WOOPS.<br />
-						Please run the installation check script</a> to find out more.
-					</div>
-				</div>
-				<?php
-						
-					} else {
-						
-						print $INSTALL_FORM;
-					}
-					
-				?>
+				<?php print $CONTENT; ?>
 			</div>
 			<div id="footer">
 				<div id="copyright">
