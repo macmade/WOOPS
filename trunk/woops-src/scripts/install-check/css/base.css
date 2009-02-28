@@ -236,6 +236,7 @@ DIV#w3c IMG {
     background-image:       url( 'bg-infos.png' );
     background-repeat:      repeat-x;
 }
+
 .infos DIV {
     background-image:       url( 'infos.png' );
     background-repeat:      no-repeat;
