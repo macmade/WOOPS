@@ -62,7 +62,7 @@ class Woops_File_Ini_Item_Array
         }
         
         // Stores the real name
-        $this->_name = ( string )$name . '[]';
+        $this->_name = ( string )$name;
         
         // Process each passed values
         foreach( $values as $value ) {
@@ -115,7 +115,7 @@ class Woops_File_Ini_Item_Array
     public function addValue( $value )
     {
         // Creates the value object
-        $object          = new Woops_File_Ini_Item_Value( $this->_name, $value );
+        $object          = new Woops_File_Ini_Item_Value( $this->_name . '[]', $value );
         
         // Stores the value object
         $this->_values[] = $object;
