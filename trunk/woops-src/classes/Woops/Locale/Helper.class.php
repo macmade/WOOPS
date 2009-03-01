@@ -840,4 +840,14 @@ final class Woops_Locale_Helper
         // Checks the language code
         return isset( $this->_languages[ $locale ] );
     }
+    
+    /**
+     * Gets the available languages
+     * 
+     * @return  array   An array with the available languages
+     */
+    public function getLanguages()
+    {
+        return $this->_languages;
+    }
 }
