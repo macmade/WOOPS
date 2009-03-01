@@ -12,7 +12,6 @@
 	<category>Core</category>
 	<state>experimental</state>
 	<dependancies>
-		<Cms />
 		<Admin />
 	</dependancies>
-<woops-module-infos>
+</woops-module-infos>

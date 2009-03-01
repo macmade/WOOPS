@@ -12,4 +12,5 @@
 	<category>DBAL</category>
 	<state>experimental</state>
 	<dependancies />
-<woops-module-infos>
+	<priority />
+</woops-module-infos>
