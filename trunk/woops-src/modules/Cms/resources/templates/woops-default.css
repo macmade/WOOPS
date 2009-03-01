@@ -40,6 +40,10 @@ TD, LI {
     background-color:       inherit;
 }
 
+LI {
+    margin-bottom:          10px;
+}
+
 H1 {
     color:                  #333333;
     font-style:             normal;
