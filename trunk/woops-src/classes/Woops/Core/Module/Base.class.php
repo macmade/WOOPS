@@ -28,57 +28,62 @@ abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
     /**
      * Wether the static variables are set or not
      */
-    private static $_hasStatic  = false;
+    private static $_hasStatic       = false;
     
     /**
      * 
      */
-    private static $_modManager = NULL;
+    private static $_moduleVariables = array();
     
     /**
      * 
      */
-    protected static $_conf     = NULL;
+    private static $_modManager      = NULL;
     
     /**
      * 
      */
-    protected static $_request  = NULL;
+    protected static $_conf          = NULL;
     
     /**
      * 
      */
-    protected static $_env      = NULL;
+    protected static $_request       = NULL;
     
     /**
      * 
      */
-    protected static $_str      = NULL;
+    protected static $_env           = NULL;
     
     /**
      * 
      */
-    protected $_lang            = NULL;
+    protected static $_str           = NULL;
     
     /**
      * 
      */
-    protected $_modClass        = '';
+    protected $_lang                 = NULL;
     
     /**
      * 
      */
-    protected $_modName         = '';
+    protected $_modClass             = '';
     
     /**
      * 
      */
-    protected $_modPath         = '';
+    protected $_modName              = '';
     
     /**
      * 
      */
-    protected $_modRelPath      = '';
+    protected $_modPath              = '';
+    
+    /**
+     * 
+     */
+    protected $_modRelPath           = '';
     
     /**
      * Class constructor
@@ -112,7 +117,7 @@ abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
               . '.'
             );
             
-         } catch( Woops_Core_Lang_Getter_Exception $e ) {
+        } catch( Woops_Core_Lang_Getter_Exception $e ) {
             
             if( $e->getCode() === Woops_Core_Lang_Getter_Exception::EXCEPTION_NO_LANG_FILE ) {
                 
@@ -122,7 +127,7 @@ abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
                 
                 throw $e;
             }
-         }
+        }
     }
     
     /**
@@ -132,13 +137,27 @@ abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
      */
     private static function _setStaticVars()
     {
-        self::$_conf       = Woops_Core_Config_Getter::getInstance();
-        self::$_modManager = Woops_Core_Module_Manager::getInstance();
-        self::$_request    = Woops_Core_Request_Getter::getInstance();
-        self::$_env        = Woops_Core_Env_Getter::getInstance();
-        self::$_str        = Woops_String_Utils::getInstance();
+        self::$_conf            = Woops_Core_Config_Getter::getInstance();
+        self::$_modManager      = Woops_Core_Module_Manager::getInstance();
+        self::$_request         = Woops_Core_Request_Getter::getInstance();
+        self::$_env             = Woops_Core_Env_Getter::getInstance();
+        self::$_str             = Woops_String_Utils::getInstance();
+        self::$_moduleVariables = self::$_request->getWoopsVar( 'mod' );
         
         // Static variables are set
         self::$_hasStatic = true;
+    }
+    
+    /**
+     * 
+     */
+    protected function _getModuleVar( $name )
+    {
+        if( isset( self::$_moduleVariables[ $this->_modName ][ $name ] ) ) {
+            
+            return self::$_moduleVariables[ $this->_modName ][ $name ];
+        }
+        
+        return false;
     }
 }
