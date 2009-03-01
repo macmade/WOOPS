@@ -28,6 +28,5 @@ final class Woops_Core_Config_Getter_Exception extends Woops_Core_Exception_Base
     /**
      * Error codes for the exceptions
      */
-    const EXCEPTION_NO_CONFIG_FILE           = 0x01;
-    const EXCEPTION_CONFIG_FILE_NOT_READABLE = 0x02;
+    const EXCEPTION_CONFIG_FILE_NOT_READABLE = 0x01;
 }

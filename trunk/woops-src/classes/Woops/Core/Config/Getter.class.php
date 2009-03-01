@@ -31,6 +31,11 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
     private static $_instance = NULL;
     
     /**
+     * The environment object
+     */
+    private $_env             = NULL;
+    
+    /**
      * The WOOPS configuration array
      */
     private $_conf            = array();
@@ -46,33 +51,40 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
      * The class constructor is private to avoid multiple instances of the
      * class (singleton).
      * 
+     * If an error occurs, meaning the configuration file is not available,
+     * this method will simply prints the error message.
+     * No trigger_error, nor exception, as this will result in an infinite
+     * loop between the core classes.
+     * 
      * @return  void
-     * @throws  Woops_Core_Config_Getter_Exception  If the configuration file does not exist
-     * @throws  Woops_Core_Config_Getter_Exception  If the configuration file is not writeable
      */
     private function __construct()
     {
+        // Gets the instance of the environment object
+        $this->_env = Woops_Core_Env_Getter::getInstance();
+        
         // Gets the path to the WOOPS configuration file
-        $confFile = Woops_Core_Env_Getter::getInstance()->getPath( 'config.ini.php' );
+        $confFile  = $this->_env->getPath( 'config/woops.ini.php' );
+        
+        // Checks if the file exists
+        if( !$confFile ) {
+            
+            // Gets the path to the default WOOPS configuration file
+            $confFile  = $this->_env->getSourcePath( 'config.ini.php' );
+        }
         
         // Checks if the file exists
         if( !$confFile ) {
             
             // Error - No configuration file
-            throw new Woops_Core_Config_Getter_Exception(
-                'The WOOPS configuration file does not exist',
-                Woops_Core_Config_Getter_Exception::EXCEPTION_NO_CONFIG_FILE
-            );
+            self::_error( 'The WOOPS configuration file does not exist' );
         }
         
         // Checks if the file is readable
         if( !is_readable( $confFile ) ) {
             
             // Error - The configuration file is not readable
-            throw new Woops_Core_Config_Getter_Exception(
-                'The WOOPS configuration file is not readable',
-                Woops_Core_Config_Getter_Exception::EXCEPTION_CONFIG_FILE_NOT_READABLE
-            );
+            self::_error( 'The WOOPS configuration file is not readable' );
         }
         
         // Gets the configuration values from the file
@@ -105,6 +117,59 @@ final class Woops_Core_Config_Getter implements Woops_Core_Singleton_Interface
     public function __get( $name )
     {
         return ( isset( $this->_conf[ $name ] ) ) ? clone( $this->_conf[ $name ] ) : array();
+    }
+    
+    /**
+     * Creates an error message
+     * 
+     * This function will abort the current script, and writes the passed
+     * error message.
+     * As other core classes have to use the configuration class, we cannot use
+     * exceptions, nor the trigger_error function, so we have to display
+     * error by ourselves.
+     * 
+     * @param   string  The error message to display.
+     * @return  void
+     */
+    private static function _error( $message )
+    {
+        // Gets the debug backtrace
+        $backTrace = debug_backtrace();
+        
+        // Gets the last method call
+        $fault     = $backTrace[ 1 ];
+        
+        // We'll try to reproduce the look of the PHP errors
+        $error   = '<b>Fatal '
+                 . __CLASS__
+                 . ' error</b>: '
+                 . $message
+                 . ' in <b>'
+                 . __FILE__
+                 . '</b> on line <b>'
+                 . $fault[ 'line' ]
+                 . '</b>';
+        
+        // Checks if HTML error must be turned off
+        if( !@ini_get( 'html_errors' ) ) {
+            
+            // Removes all HTML tags
+            $error = chr( 10 ) . strip_tags( $error );
+            
+        } else {
+            
+            // Adds a line break before the error, as PHP does
+            $error = '<br />' . $error;
+        }
+        
+        //  Gets the prepend and append strings, if any
+        $prepend = ( ini_get( 'error_prepend_string' ) ) ? ini_get( 'error_prepend_string' ) : '';
+        $append  = ( ini_get( 'error_append_string' ) )  ? ini_get( 'error_append_string' )  : '';
+        
+        
+        // Displays the PHP style error message and aborts the script
+        print $prepend . $error . $append;
+        exit();
     }
     
     /**
