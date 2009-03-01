@@ -79,6 +79,13 @@ class Woops_File_Ini_Item_Array
      */
     public function __toString()
     {
+        // Checks for values
+        if( !count( $this->_values ) ) {
+            
+            // Noting to return
+            return '';
+        }
+        
         // Storage
         $array = '';
         
