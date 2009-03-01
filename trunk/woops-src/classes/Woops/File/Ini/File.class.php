@@ -85,54 +85,52 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
     }
     
     /**
-     * Returns the INI file as an array
+     * Gets an item
      * 
-     * @return  array   An array with the INI file items
+     * @param   string  The name of the item to get
+     * @return  object  The item object (Woops_File_Ini_Item_Section, Woops_File_Ini_Item_Value or Woops_File_Ini_Item_Array) if it exists, otherwise NULL
+     * @see     getItem
      */
-    public function toArray()
+    public function __get( $name )
     {
-        // Storage
-        $ini = array();
-        
-        // Process each items
-        foreach( $this->_items as $name => $object ) {
-            
-            // Gets the item name
-            $name = $object->getName();
-            
-            // Checks the kind of item
-            if( $object instanceof Woops_File_Ini_Item_Value ) {
-                
-                // Normal value
-                $ini[ $name ] = $object->getValue();
-                
-            } elseif( $object instanceof Woops_File_Ini_Item_Section ) {
-                
-                // Section
-                $ini[ $name ] = $object->toArray();
-                
-            } elseif( $object instanceof Woops_File_Ini_Item_Array ) {
-                
-                // Array
-                $ini[ $name ] = array();
-                
-                // Gets the values
-                $values       = $object->getValues();
-                
-                // Process each value
-                foreach( $values as $value ) {
-                    
-                    // Stores the value
-                    $ini[ $name ][] = $value->getValue();
-                }
-            }
-        }
-        
-        // Ensures the items pointer is untouched
-        reset( $this->_items );
-        
-        // Returns the INI array
-        return $ini;
+        return $this->getItem( $name );
+    }
+    
+    /**
+     * Creates a value item in the INI file
+     * 
+     * @param   string                      The name of the value item
+     * @param   string                      The value for the value item
+     * @return  Woops_File_Ini_Item_Value   The new value object
+     * @see     newValueItem
+     */
+    public function __set( $name, $value )
+    {
+        return $this->newValueItem( $name, $value );
+    }
+    
+    /**
+     * Checks if an item exists in the INI file
+     * 
+     * @param   string  The name of the item
+     * @return  boolean True if the item exists, otherwise false
+     * @see     itemExists
+     */
+    public function __isset( $name )
+    {
+        return $this->itemExists( $name );
+    }
+    
+    /**
+     * Removes an item form the INI file
+     * 
+     * @param   string  The name of the item to remove
+     * @return  void
+     * @see     removeItem
+     */
+    public function __unset( $name )
+    {
+        $this->removeItem( $name );
     }
     
     /**
@@ -251,6 +249,57 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
     }
     
     /**
+     * Returns the INI file as an array
+     * 
+     * @return  array   An array with the INI file items
+     */
+    public function toArray()
+    {
+        // Storage
+        $ini = array();
+        
+        // Process each items
+        foreach( $this->_items as $name => $object ) {
+            
+            // Gets the item name
+            $name = $object->getName();
+            
+            // Checks the kind of item
+            if( $object instanceof Woops_File_Ini_Item_Value ) {
+                
+                // Normal value
+                $ini[ $name ] = $object->getValue();
+                
+            } elseif( $object instanceof Woops_File_Ini_Item_Section ) {
+                
+                // Section
+                $ini[ $name ] = $object->toArray();
+                
+            } elseif( $object instanceof Woops_File_Ini_Item_Array ) {
+                
+                // Array
+                $ini[ $name ] = array();
+                
+                // Gets the values
+                $values       = $object->getValues();
+                
+                // Process each value
+                foreach( $values as $value ) {
+                    
+                    // Stores the value
+                    $ini[ $name ][] = $value->getValue();
+                }
+            }
+        }
+        
+        // Ensures the items pointer is untouched
+        reset( $this->_items );
+        
+        // Returns the INI array
+        return $ini;
+    }
+    
+    /**
      * Writes the INI values to a file
      * 
      * @param   string  The name of the file to write
@@ -285,7 +334,7 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
         }
         
         // If the file does not exist, checks if the directory is writeable
-        if( !file_exists( $filePath ) && !is_writeable( $filePath ) ) {
+        if( !file_exists( $fullPath ) && !is_writeable( $filePath ) ) {
             
             // Error - Directory not writeable
             throw new Woops_File_Ini_File_Exception(
@@ -295,7 +344,7 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
         }
         
         // If the file exists, checks if it is writeable
-        if( file_exists( $filePath ) && !is_writeable( $filePath ) ) {
+        if( file_exists( $fullPath ) && !is_writeable( $fullPath ) ) {
             
             // Error - The file is not writeable
             throw new Woops_File_Ini_File_Exception(
@@ -319,7 +368,7 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
         }
         
         // Tries to write the file
-        if( !file_put_contents( $filePath, $content ) ) {
+        if( !file_put_contents( $fullPath, $content ) ) {
             
             // Error - Cannot write the file
             throw new Woops_File_Ini_File_Exception(
