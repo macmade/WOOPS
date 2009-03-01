@@ -56,9 +56,7 @@ final class Woops_Page_Engine implements Woops_Core_Singleton_Interface
      * @return  void
      */
     private function __construct()
-    {
-        $this->_pageGetter = Woops_Page_Getter::getInstance();
-    }
+    {}
     
     /**
      * Clones an instance of the class
@@ -129,6 +127,11 @@ final class Woops_Page_Engine implements Woops_Core_Singleton_Interface
     public function getPageObject()
     {
         if( !is_object( $this->_pageEngine ) ) {
+            
+            if( !is_object( $this->_pageGetter ) ) {
+                
+                $this->_pageGetter = Woops_Page_Getter::getInstance();
+            }
             
             $engineClass = $this->_pageGetter->getEngine();
             
