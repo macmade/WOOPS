@@ -41,6 +41,11 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
     private $_engines          = array();
     
     /**
+     * The names of the registered database engines
+     */
+    private $_engineNames      = array();
+    
+    /**
      * The connected database engines
      */
     private $_connectedEngines = array();
@@ -80,8 +85,12 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         // Process each database engine
         foreach( $this->_engines as $key => $value ) {
             
-            // Closes the connection
-            $value->disconnect();
+            // Checks if the engine is connected
+            if( isset( $this->_connectedEngines[ $key ] ) ) {
+                
+                // Closes the connection
+                $value->disconnect();
+            }
         }
     }
     
@@ -175,7 +184,8 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         }
         
         // Gets and stores the instance of the database engine class
-        $this->_engines[ $name ] =  Woops_Core_Class_Manager::getInstance()->getSingleton( $class );
+        $this->_engines[ $name ]     = Woops_Core_Class_Manager::getInstance()->getSingleton( $class );
+        $this->_engineNames[ $name ] = true;
     }
     
     /**
@@ -262,5 +272,15 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
     public function isRegisteredEngine( $name )
     {
         return isset( $this->_engines[ $name ] );
+    }
+    
+    /**
+     * Gets the list of the registered engines
+     * 
+     * @return  array   An array with the registered engine names, as keys
+     */
+    public function getRegisteredEngines()
+    {
+        return $this->_engineNames;
     }
 }
