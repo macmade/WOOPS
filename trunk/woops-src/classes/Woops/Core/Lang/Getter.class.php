@@ -241,12 +241,12 @@ final class Woops_Core_Lang_Getter implements Woops_Core_MultiSingleton_Interfac
     {
         if( isset( $this->_labels->labels->$name ) ) {
             
-            return nl2br( ( string )$this->_labels->labels->$name );
+            return ( string )$this->_labels->labels->$name;
         }
         
         if( isset( self::$_instances[ self::$_defaultInstanceName ]->_labels->labels->$name ) ) {
             
-            return nl2br( ( string )self::$_instances[ self::$_defaultInstanceName ]->_labels->labels->$name );
+            return ( string )self::$_instances[ self::$_defaultInstanceName ]->_labels->labels->$name;
         }
         
         return '[LABEL: ' . $name . ']';
