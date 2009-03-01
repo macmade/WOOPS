@@ -109,6 +109,9 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
                 }
                 
                 $this->_loadedModules[ $moduleName ] = false;
+            }
+            
+            foreach( $this->_loadedModules as $moduleName => $void ) {
                 
                 $this->_loadModuleInfos( $moduleName );
             }
@@ -219,6 +222,14 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
                         }
                         
                         $this->_moduleDeps[ $moduleName ][ $key ] = true;
+                        
+                        if( !isset( $this->_loadedModules[ $key ] ) ) {
+                            
+                            throw new Woops_Core_Module_Manager_Exception(
+                                'The module \'' . $moduleName . '\' has a dependancy to the module \'' . $key . '\' which is not loaded',
+                                Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED
+                            );
+                        }
                     }
                 }
                 
