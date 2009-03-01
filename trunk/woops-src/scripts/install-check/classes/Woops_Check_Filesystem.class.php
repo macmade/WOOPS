@@ -24,14 +24,14 @@ class Woops_Check_Filesystem
     var $hasWarnings = false;
     
     var $files       = array(
-        'cache'               => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'directory' ),
-        'cache/classes'       => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
-        'config'              => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
-        'config.ini.php'      => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'file' ),
-        'resources'           => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'directory' ),
-        'resources/templates' => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'directory' ),
-        'uploads'             => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
-        'temp'                => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' )
+        'cache'                    => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'directory' ),
+        'cache/classes'            => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
+        'config'                   => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
+        'resources'                => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'directory' ),
+        'resources/templates'      => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'directory' ),
+        'uploads'                  => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
+        'temp'                     => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
+        'woops-src/config.ini.php' => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'file' )
     );
     
     function Woops_Check_Filesystem()
