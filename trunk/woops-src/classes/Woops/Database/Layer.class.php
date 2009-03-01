@@ -252,4 +252,15 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         // Returns the instance of the engine
         return $this->_engines[ $name ];
     }
+    
+    /**
+     * Checks if an engine is registered
+     * 
+     * @param   string  The name of the engine
+     * @return  boolean True if the engine is registered, otherwise false
+     */
+    public function isRegisteredEngine( $name )
+    {
+        return isset( $this->_engines[ $name ] );
+    }
 }
