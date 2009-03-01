@@ -23,6 +23,11 @@ interface Woops_Database_Engine_Interface extends Woops_Core_Singleton_Interface
     /**
      * 
      */
+    public function getAvailableDrivers();
+    
+    /**
+     * 
+     */
     public function load( $driver, $host, $port, $database, $tablePrefix );
     
     /**

@@ -39,6 +39,11 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
     private $_adodb           = NULL;
     
     /**
+     * The environment object
+     */
+    private $_env             = NULL;
+    
+    /**
      * 
      */
     private $_oracle          = false;
@@ -59,6 +64,16 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
     private $_tablePrefix     = '';
     
     /**
+     * 
+     */
+    private $_hasDrivers      = false;
+    
+    /**
+     * 
+     */
+    private $_drivers         = array();
+    
+    /**
      * Class constructor
      * 
      * The class constructor is private to avoid multiple instances of the
@@ -68,13 +83,38 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     private function __construct()
     {
+        // Gets the instance of the environment class
+        $this->_env = Woops_Core_Env_Getter::getInstance();
+        
         // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
-        require_once( Woops_Core_Env_Getter::getInstance()->getPath( 'woops-mod://Adodb/resources/php/adodb5/adodb.inc.php' ) );
+        require_once( $this->_env->getPath( 'woops-mod://Adodb/resources/php/adodb5/adodb.inc.php' ) );
         
         // Resets the error reporting
         Woops_Core_Error_Handler::resetErrorReporting();
+        
+        // Creates a directory iterator to find the available drivers
+        $iterator = new DirectoryIterator( $this->_env->getPath( 'woops-mod://Adodb/resources/php/adodb5/drivers/' ) );
+        
+        // Process each file
+        foreach( $iterator as $file ) {
+            
+            // Checks if the file is an ADODB driver
+            if( substr( $file->getFileName(), -8 ) === '.inc.php' ) {
+                
+                // Gets the driver name
+                $driver = substr( $file->getFileName(), 6, -8 );
+                
+                // Stores the driver
+                $this->_drivers[ $driver ] = true;
+            }
+        }
+        
+        // Stores additionnal drivers
+        $this->_drivers[ 'ifx' ]    = true;
+        $this->_drivers[ 'maxsql' ] = true;
+        $this->_drivers[ 'pgsql' ]  = true;
     }
     
     /**
@@ -150,6 +190,16 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
         
         // Returns the unique instance
         return self::$_instance;
+    }
+    
+    /**
+     * Gets the available database drivers
+     * 
+     * @return  array   An array with the available database drivers as keys
+     */
+    public function getAvailableDrivers()
+    {
+        return $this->_drivers;
     }
     
     /**

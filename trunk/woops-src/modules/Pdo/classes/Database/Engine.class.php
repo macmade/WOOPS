@@ -151,6 +151,16 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
     }
     
     /**
+     * Gets the available database drivers
+     * 
+     * @return  array   An array with the available database drivers as keys
+     */
+    public function getAvailableDrivers()
+    {
+        return $this->_drivers;
+    }
+    
+    /**
      * Loads the database engine
      * 
      * @param   string                                  The database driver to use
