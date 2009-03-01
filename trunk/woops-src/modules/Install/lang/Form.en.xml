@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- $Id$  -->
+
+<woops-lang>
+	<labels>
+		<aboutTitle>About</aboutTitle>
+		<aboutText>
+			<![CDATA[
+			Welcome to the WOOPS installation script.<br />
+			Your current system setup has all the requirements to install and run WOOPS.<br /><br />
+			If you haven't done it before, we encourage you to take a look at the installation check script, as you may find there some important recommendations about your PHP setup.
+			]]>
+		</aboutText>
+		<stepsTitle>Installation steps</stepsTitle>
+		<stepsText>
+			<![CDATA[
+			The installation process is divided into 3 steps:
+			<ol>
+				<li>
+					<strong>General configuration:</strong><br /><br />
+					In this step, you'll be able to configure the general WOOPS options, like the installed modules, the server's timezone, the default language, etc.
+				</li>
+				<li>
+					<strong>Database engine:</strong><br /><br />
+					This step will let you choose the default database engine, to use with WOOPS.<br /><br />
+					WOOPS can use virtually any kind of Database Abstraction Layer (DBAL), and comes by default with two database engines. The first one uses PDO (PHP Data Objects), and the second one ADODB. Each one supports different database drivers.<br /><br />
+					Please tale a look at the documentation to find out which database engine is suitable for your system.
+				</li>
+				<li>
+					<strong>Database configuration:</strong><br /><br />
+					Once the database engine has been configured, you'll the be able to choose the database driver to use, and to configures the database connection parameters.
+				</li>
+			</ol>
+			]]>
+		</stepsText>
+		<securityTitle>Security</securityTitle>
+		<securityText>
+			<![CDATA[
+			Once you are done with the WOOPS installer, you are strongly advised to disable to "Install" module, to prevent other people to access this page.<br /><br />
+			You are also advised to disable the installation check script, by placing a call to the PHP "exit()" function at the top of the file, as it may reveal important informations about your webserver's setup.
+			]]>
+		</securityText>
+		<step1>Step 1: general configuration</step1>
+		<step2>Step 2: database engine</step2>
+		<step3>Step 3: database configuration</step3>
+		<writeConfValues>Write configuration values</writeConfValues>
+	</labels>
+</woops-lang>
