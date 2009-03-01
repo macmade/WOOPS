@@ -95,4 +95,30 @@ class Woops_File_Ini_Item_Value
     {
         return $this->_value;
     }
+    
+    /**
+     * Sets the value of the value item
+     * 
+     * @param   string  The value of the value item
+     * @return  void
+     */
+    public function setValue( $value )
+    {
+        // Checks the value
+        if( $value === true ) {
+            
+            // Boolean
+            $this->_value = 'On';
+            
+        } elseif( $value === false ) {
+            
+            // Boolean
+            $this->_value = 'Off';
+            
+        } else {
+            
+            // Stores the value
+            $this->_value = ( string )$value;
+        }
+    }
 }
