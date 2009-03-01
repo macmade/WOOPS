@@ -24,7 +24,8 @@ final class Woops_Mod_Adodb_Database_Engine_Exception extends Woops_Core_Excepti
      * Error codes for the exceptions
      */
     const EXCEPTION_NO_ADODB_DRIVER    = 0x01;
-    const EXCEPTION_NO_CONNECTION      = 0x02
-    const EXCEPTION_BAD_METHOD         = 0x03;
-    const EXCEPTION_INVALID_RECORD_SET = 0x04;
+    const EXCEPTION_ADODB_DRIVER_ERROR = 0x02;
+    const EXCEPTION_NO_CONNECTION      = 0x03
+    const EXCEPTION_BAD_METHOD         = 0x04;
+    const EXCEPTION_INVALID_RECORD_SET = 0x05;
 }

@@ -215,6 +215,16 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
      */
     public function load( $driver, $host, $port, $database, $tablePrefix )
     {
+        // Checks if ADODB supports the database driver
+        if( !isset( $this->_drivers[ $driver ] ) ) {
+            
+            // Error - Driver not available
+            throw new Woops_Mod_Adodb_Database_Engine_Exception(
+                'Driver ' . $driver . ' is not available in ADODB',
+                Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_NO_ADODB_DRIVER
+            );
+        }
+        
         // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
@@ -229,8 +239,8 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
             
             // Error - Driver not available
             throw new Woops_Mod_Adodb_Database_Engine_Exception(
-                'Driver ' . $driver . ' is not available in ADODB',
-                Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_NO_ADODB_DRIVER
+                'Error creating the ADODB object with driver ' . $driver,
+                Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_ADODB_DRIVER_ERROR
             );
         }
         

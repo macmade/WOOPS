@@ -173,7 +173,7 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
      */
     public function load( $driver, $host, $port, $database, $tablePrefix )
     {
-        // Checks if PDO supports database driver
+        // Checks if PDO supports the database driver
         if( !isset( $this->_drivers[ $driver ] ) ) {
             
             // Error - Driver not available
