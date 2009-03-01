@@ -66,6 +66,16 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
     private $_blocks            = array();
     
     /**
+     * 
+     */
+    private $_moduleDeps        = array();
+    
+    /**
+     * 
+     */
+    private $_priorityModules   = array();
+    
+    /**
      * Class constructor
      * 
      * @return  void
@@ -98,7 +108,9 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
                     );
                 }
                 
-                $this->_loadedModules[ $moduleName ] = true;
+                $this->_loadedModules[ $moduleName ] = false;
+                
+                $this->_loadModuleInfos( $moduleName );
             }
         }
     }
@@ -187,15 +199,85 @@ final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
     /**
      * 
      */
+    private function _loadModuleInfos( $moduleName )
+    {
+        $infoFile = $this->_modules[ $moduleName ][ 0 ] . 'infos.xml';
+        
+        if( file_exists( $infoFile ) ) {
+            
+            try {
+                
+                $infos = simplexml_load_file( $infoFile );
+                
+                if( isset( $infos->dependancies ) ) {
+                    
+                    foreach( $infos->dependancies->children() as $key => $value ) {
+                        
+                        if( !isset( $this->_moduleDeps[ $moduleName ] ) ) {
+                            
+                            $this->_moduleDeps[ $moduleName ] = array();
+                        }
+                        
+                        $this->_moduleDeps[ $moduleName ][ $key ] = true;
+                    }
+                }
+                
+                if( isset( $infos->priority ) ) {
+                    
+                    $this->_priorityModules[ $moduleName ] = true;
+                }
+                
+            } catch( Exception $e ) {
+                
+                throw new Woops_Core_Module_Manager_Exception(
+                    $e->getMessage(),
+                    Woops_Core_Module_Manager_Exception::EXCEPTION_BAD_XML
+                );
+            }
+        }
+    }
+    
+    /**
+     * 
+     */
+    private function _initModule( $moduleName )
+    {
+        if( isset( $this->_moduleDeps[ $moduleName ] ) ) {
+            
+            foreach( $this->_moduleDeps[ $moduleName ] as $depsName => $void ) {
+                
+                $this->_initModule( $depsName );
+            }
+        }
+        
+        $modPath = $this->_modules[ $moduleName ][ 0 ];
+        
+        if( file_exists( $modPath . 'init.inc.php' ) ) {
+            
+            require_once( $modPath . 'init.inc.php' );
+        }
+        
+        $this->_loadedModules[ $moduleName ] = true;
+    }
+    
+    /**
+     * 
+     */
     public function initModules()
     {
-        foreach( $this->_loadedModules as $moduleName => $void ) {
+        foreach( $this->_priorityModules as $moduleName => $void ) {
             
-            $modPath = $this->_modules[ $moduleName ][ 0 ];
-            
-            if( file_exists( $modPath . 'init.inc.php' ) ) {
+            if( $this->_loadedModules[ $moduleName ] === false ) {
                 
-                require_once( $modPath . 'init.inc.php' );
+                $this->_initModule( $moduleName );
+            }
+        }
+        
+        foreach( $this->_loadedModules as $moduleName => &$inited ) {
+            
+            if( $inited === false ) {
+                
+                $this->_initModule( $moduleName );
             }
         }
     }
