@@ -51,6 +51,11 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
     private $_connectedEngines = array();
     
     /**
+     * The supported drivers for each engine
+     */
+    private $_drivers          = array();
+    
+    /**
      * The name of the default database engine
      */
     private $_defaultEngine    = '';
@@ -186,6 +191,9 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
         // Gets and stores the instance of the database engine class
         $this->_engines[ $name ]     = Woops_Core_Class_Manager::getInstance()->getSingleton( $class );
         $this->_engineNames[ $name ] = true;
+        
+        // Gets the available drivers from the engine
+        $this->_drivers[ $name ]     = $this->_engines[ $name ]->getAvailableDrivers();
     }
     
     /**
@@ -254,6 +262,16 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
                     Woops_Database_Layer_Exception::EXCEPTION_BAD_CONFIGURATION
                 );
             }
+        }
+        
+        // Checks if the requested engine supports the database driver we are using
+        if( !isset( $this->_drivers[ $name ][ $driver ] ) ) {
+            
+            // Error - The engine does not supports the database driver
+            throw new Woops_Database_Layer_Exception(
+                'The engine \'' . $name . '\' does not support the driver \'' . $driver . '\'',
+                Woops_Database_Layer_Exception::EXCEPTION_DRIVER_NOT_SUPPORTED
+            );
         }
         
         // Checks if the engine is connected or not
