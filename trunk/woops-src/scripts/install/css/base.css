@@ -40,6 +40,10 @@ TD, LI {
     background-color:       inherit;
 }
 
+LI {
+    margin-bottom:          10px;
+}
+
 H1 {
     color:                  #333333;
     font-style:             normal;
@@ -178,13 +182,18 @@ DIV#frame {
     margin-top:             50px;
     margin-right:           auto;
     margin-bottom:          50px;
-    padding:                10px;
     background-color:       #FFFFFF;
     color:                  inherit;
+    background-image:       url( 'bg-frame.png' );
+    background-repeat:      repeat-x;
+    border:                 solid 1px #404040;
+    padding-left:           10px;
+    padding-top:            20px;
+    padding-right:          10px;
+    padding-bottom:         10px;
 }
 
 DIV#content {
-    text-align:             center;
     padding:                20px;
     overflow:               hidden;
     height:                 100%;
@@ -218,69 +227,234 @@ DIV#w3c IMG {
     clear:                  both;
 }
 
-#content H2 {
-    text-transform:         uppercase;
-    clear:                  both;
+.small {
+    font-size:              12px;
 }
 
-H2.database {
-    background-image:       url( 'database.png' );
+.smaller {
+    font-size:              10px;
+}
+
+.box {
+    text-align:             left;
+    margin-bottom:          20px;
+    background-color:       #F3F3F3;
+    border:                 solid 1px #CCCCCC;
+    padding:                10px;
+    background-image:       url( 'bg-box.png' );
+    background-repeat:      repeat-x;
+}
+
+.box H4 {
+    background-color:       transparent;
+}
+
+.box-infos {
+    margin-bottom:          20px;
+    background-color:       #EDF5FA;
+    border:                 solid 1px #CCCCCC;
+    padding:                10px;
+    background-image:       url( 'bg-box-infos.png' );
+    background-repeat:      repeat-x;
+}
+
+.box-infos H4 {
+    background-color:       transparent;
+    background-image:       url( 'infos.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
-H2.time {
-    background-image:       url( 'time.png' );
-    background-repeat:      no-repeat;
-    background-position:    right 2px;
+.box-error {
+    margin-bottom:          20px;
+    background-color:       #FAEFED;
+    border:                 solid 1px #CCCCCC;
+    padding:                10px;
+    background-image:       url( 'bg-box-error.png' );
+    background-repeat:      repeat-x;
 }
 
-H2.lang {
-    background-image:       url( 'lang.png' );
-    background-repeat:      no-repeat;
-    background-position:    right 2px;
-}
-
-H2.xhtml {
-    background-image:       url( 'xhtml.png' );
-    background-repeat:      no-repeat;
-    background-position:    right 2px;
-}
-
-H2.xml {
-    background-image:       url( 'xml.png' );
-    background-repeat:      no-repeat;
-    background-position:    right 2px;
-}
-
-H2.classCache {
-    background-image:       url( 'classcache.png' );
-    background-repeat:      no-repeat;
-    background-position:    right 2px;
-}
-
-H2.aop {
-    background-image:       url( 'aop.png' );
-    background-repeat:      no-repeat;
-    background-position:    right 2px;
-}
-
-H2.error {
+.box-error H4 {
+    background-color:       transparent;
     background-image:       url( 'error.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
-H2.modules {
+.box-warning {
+    margin-bottom:          20px;
+    background-color:       #FAF9ED;
+    border:                 solid 1px #CCCCCC;
+    padding:                10px;
+    background-image:       url( 'bg-box-warning.png' );
+    background-repeat:      repeat-x;
+}
+
+.box-warning H4 {
+    background-color:       transparent;
+    background-image:       url( 'warning.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+.box-success {
+    margin-bottom:          20px;
+    background-color:       #F1FAED;
+    border:                 solid 1px #CCCCCC;
+    padding:                10px;
+    background-image:       url( 'bg-box-success.png' );
+    background-repeat:      repeat-x;
+}
+
+.box-success H4 {
+    background-color:       transparent;
+    background-image:       url( 'success.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+.box .small, .box-infos .small, .box-error .small, .box-warning .small, .box-success .small {
+    margin-bottom:          10px;
+}
+
+.box .smaller, .box-infos .smaller, .box-error .smaller, .box-warning .smaller, .box-success .smaller {
+    margin-bottom:          10px;
+}
+
+#content H1 {
+    text-align:             center;
+}
+
+H3.database {
+    text-transform:         uppercase;
+    background-image:       url( 'database.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H3.time {
+    text-transform:         uppercase;
+    background-image:       url( 'time.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H3.lang {
+    text-transform:         uppercase;
+    background-image:       url( 'lang.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H3.xhtml {
+    text-transform:         uppercase;
+    background-image:       url( 'xhtml.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H3.xml {
+    text-transform:         uppercase;
+    background-image:       url( 'xml.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H3.classCache {
+    text-transform:         uppercase;
+    background-image:       url( 'classcache.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H3.aop {
+    text-transform:         uppercase;
+    background-image:       url( 'aop.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H3.error {
+    text-transform:         uppercase;
+    background-image:       url( 'bug.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H3.modules {
+    text-transform:         uppercase;
     background-image:       url( 'modules.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
+.form-element {
+    overflow:               hidden;
+    height:                 100%;
+}
+
+.form-element .module, .form-element .module-loaded {
+    float:                  left;
+    width:                  135px;
+    margin:                 5px;
+    padding-bottom:         5px;
+    border-bottom:          solid 1px #CCCCCC;
+    font-size:              10px;
+}
+
+INPUT.submit-step {
+    background-image:       url( 'go.png' );
+    background-repeat:      no-repeat;
+    background-position:    5px 5px;
+    padding-left:           25px;
+}
+
+INPUT.submit-write {
+    background-image:       url( 'write.png' );
+    background-repeat:      no-repeat;
+    background-position:    5px 5px;
+    padding-left:           25px;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*
+#content H3 {
+    clear:                  both;
+}
+
+.about {
+    text-align:             justify;
+    margin-bottom:          20px;
+}
+
+.confirm {
+    margin-bottom:          20px;
+}
+
 .install-error {
     text-align:             left;
     margin-bottom:          20px;
-    background-color:       #F9E49A;
+    background-color:       #FFE8E7;
+    border:                 solid 1px #CCCCCC;
+    padding-left:           10px;
+    padding-right:          10px;
+    padding-bottom:         10px;
+    background-image:       url( 'bg-error.png' );
+    background-repeat:      repeat-x;
+}
+
+.install-error H4 {
+    background-color:       transparent;
+    background-image:       url( 'error.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+.install-warning {
+    text-align:             left;
+    margin-bottom:          20px;
+    background-color:       #FFFCE7;
     border:                 solid 1px #CCCCCC;
     padding-left:           10px;
     padding-right:          10px;
@@ -289,7 +463,7 @@ H2.modules {
     background-repeat:      repeat-x;
 }
 
-.install-error H4 {
+.install-warning H4 {
     background-color:       transparent;
     background-image:       url( 'warning.png' );
     background-repeat:      no-repeat;
@@ -298,7 +472,7 @@ H2.modules {
 
 .box, .box-required {
     margin-bottom:          20px;
-    background-color:       #C9C9C9;
+    background-color:       #F3F3F3;
     border:                 solid 1px #CCCCCC;
     padding-left:           10px;
     padding-right:          10px;
@@ -313,6 +487,10 @@ H2.modules {
 
 .message {
     font-size:              12px;
+}
+
+.message DIV {
+    margin-bottom:          5px;
 }
 
 .description {
@@ -335,11 +513,10 @@ H2.modules {
     padding-top:            2px;
 }
 
-.form-element {
-    font-size:              12px;
-    margin-top:             20px;
+.form-elements {
+    height:                 100%;
     overflow:               hidden;
-    height:                 100%:
+    clear:                  both;
 }
 
 .form-element INPUT {
@@ -350,13 +527,5 @@ H2.modules {
     background-color:       #FFF4BF;
 }
 
-.form-element .module, .form-element .module-loaded {
-    float:                  left;
-    width:                  135px;
-    text-align:             left;
-    border:                 solid 1px #CCCCCC;
-    padding:                5px;
-    background-color:       #FFFFFF;
-}
-
+*/
 /* ]]> */
