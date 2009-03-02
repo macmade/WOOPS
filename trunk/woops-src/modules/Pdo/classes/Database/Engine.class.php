@@ -187,7 +187,14 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
         $this->_tablePrefix = $tablePrefix;
         
         // Stores the full DSN
-        $this->_dsn         = $driver . ':host=' . $host . ';port=' .  $port. ';dbname=' . $database;
+        $this->_dsn         = $driver . ':host=' . $host . ';dbname=' . $database;
+        
+        // Checks for a database port
+        if( $port ) {
+            
+            // Adds the database port
+            $this->_dsn .= ';port=' .  $port;
+        }
     }
     
     /**

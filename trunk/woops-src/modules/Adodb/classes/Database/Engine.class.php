@@ -258,8 +258,15 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
         $this->_tablePrefix = $tablePrefix;
         
         // Stores the connection parameters
-        $this->_server      = $host . ':' . $port;
+        $this->_server      = $host;
         $this->_database    = $database;
+        
+        // Checks for a port number
+        if( $port ) {
+            
+            // Adds the database port
+            $this->_server .= ':' . $port;
+        }
     }
     
     /**
@@ -278,7 +285,7 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
             
             // The ADODB object cannot be created - Reroute the exception
             throw new Woops_Mod_Adodb_Database_Engine_Exception(
-                $e->getMessage(),
+                'Impossible to establish an ADODB connection',
                 Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_NO_CONNECTION
             );
         }
