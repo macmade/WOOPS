@@ -264,6 +264,39 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
     }
     
     /**
+     * Gets the class name of a database engine
+     * 
+     * If no engine is specified, this method will return the class name of the
+     * default database engine.
+     * 
+     * @param   string                          The name of the database engine
+     * @return  string                          The class name of the database engine
+     * @throws  Woops_Database_Layer_Exception  If the requested engine does not exist
+     */
+    public function getEngineClass( $name = '' )
+    {
+        // Checks for an engine name
+        if( !$name ) {
+            
+            // Gets the default engine
+            $name = $this->_defaultEngine;
+        }
+        
+        // Checks if the engine exists
+        if( !isset( $this->_engines[ $name ] ) ) {
+            
+            // The requested engine is not registered
+            throw new Woops_Database_Layer_Exception(
+                'The engine \'' . $name . '\' is not a registered database engine',
+                Woops_Database_Layer_Exception::EXCEPTION_NO_ENGINE
+            );
+        }
+        
+        // Returns the class name of the engine
+        return get_class( $this->_engines[ $name ] );
+    }
+    
+    /**
      * Checks if an engine is registered
      * 
      * @param   string  The name of the engine
