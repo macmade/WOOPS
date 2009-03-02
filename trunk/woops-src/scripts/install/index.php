@@ -17,7 +17,7 @@
 	if( $INSTALL_ERROR ) {
 		
 		// Errors detected
-		$CONTENT = '<div class="install-error">
+		$CONTENT = '<div class="box-warning">
 						<h4>Problems detected</h4>
 						<div class="message">
 							We detected errors or warnings that could prevent the installation of WOOPS.<br />
@@ -37,7 +37,7 @@
 		if( !( Woops_Core_Module_Manager::getInstance()->isLoaded( 'Install' ) ) ) {
 			
 			// Install module not loaded
-			$CONTENT = '<div class="install-error">
+			$CONTENT = '<div class="box-error">
 							<h4>Installation disabled</h4>
 							<div class="message">
 								The WOOPS installation module is currently disabled.<br />
@@ -101,7 +101,8 @@
 			</div>
 			<div id="footer">
 				<div id="copyright">
-					eosgarden © 2009 / lausanne - switzerland / info(at)eosgarden / www.eosgarden.com
+					WOOPS - Web Object Oriented Programming System<br />
+					Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)
 				</div>
 				<div id="w3c">
 					<a href="http://validator.w3.org/check?uri=referer" title="Valid XHTML Strict"><img src="css/w3c-xhtml.png" alt="valid xhtml strict" width="80" height="15" /></a>
