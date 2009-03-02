@@ -65,7 +65,7 @@
 				<div class="clearer"></div>
 				<div>
 					<h2>PHP configuration / recommendations</h2>
-					<div class="infos">
+					<div class="box-infos">
 						<div>
 							This section is mainly informative.<br />
 							WOOPS should run even if the settings below are incorrect, but this may cause issues in future versions of WOOPS or PHP.<br /><br />
@@ -77,7 +77,8 @@
 			</div>
 			<div id="footer">
 				<div id="copyright">
-					eosgarden © 2009 / lausanne - switzerland / info(at)eosgarden / www.eosgarden.com
+					WOOPS - Web Object Oriented Programming System<br />
+					Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)
 				</div>
 				<div id="w3c">
 					<a href="http://validator.w3.org/check?uri=referer" title="Valid XHTML Strict"><img src="css/w3c-xhtml.png" alt="valid xhtml strict" width="80" height="15" /></a>

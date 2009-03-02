@@ -101,10 +101,10 @@ class Woops_Check_Configuration
             $status  = $value[ 'status' ];
             $message = str_replace( '{VAR}', '<strong>' . $key . '</strong>', $value[ strtolower( $status ) ] );
             
-            $out[] = '<div class="check-' . strtolower( $status ) . '">';
+            $out[] = '<div class="box-' . strtolower( $status ) . '">';
             $out[] = '<h4>' . $key . '</h4>';
             $out[] = '<div class="status">Status: ' . $status . '</div>';
-            $out[] = '<div class="message">' . $message . '</div>';
+            $out[] = '<div class="small">' . $message . '</div>';
             $out[] = '<div class="about">' . $value[ 'about' ] . '</div>';
             $out[] = '</div>';
         }

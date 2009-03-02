@@ -84,10 +84,10 @@ class Woops_Check_Filesystem
             
             $status  = $value[ 'status' ];
             
-            $out[] = '<div class="check-' . strtolower( $status ) . '">';
+            $out[] = '<div class="box-' . strtolower( $status ) . '">';
             $out[] = '<h4>' . $key . '</h4>';
             $out[] = '<div class="status">Status: ' . $status . '</div>';
-            $out[] = '<div class="message">' . $value[ 'message' ] . '</div>';
+            $out[] = '<div class="small">' . $value[ 'message' ] . '</div>';
             $out[] = '</div>';
         }
         

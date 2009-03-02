@@ -123,10 +123,10 @@ class Woops_Check_Environment
                 $message = str_replace( '{' . $pattern . '}', $replace, $message );
             }
             
-            $out[] = '<div class="check-' . strtolower( $status ) . '">';
+            $out[] = '<div class="box-' . strtolower( $status ) . '">';
             $out[] = '<h4>' . $value[ 'title' ] . '</h4>';
             $out[] = '<div class="status">Status: ' . $status . '</div>';
-            $out[] = '<div class="message">' . $message . '</div>';
+            $out[] = '<div class="small">' . $message . '</div>';
             $out[] = '</div>';
         }
         
