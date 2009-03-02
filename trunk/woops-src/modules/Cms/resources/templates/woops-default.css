@@ -29,17 +29,6 @@ BODY {
     background-image:       url( 'woops-default/background.png' );
 }
 
-TD, LI {
-    color:                  #333333;
-    font-style:             normal;
-    font-weight:            normal;
-    font-size:              14px;
-    line-height:            normal;
-    text-decoration:        none;
-    font-family:            Arial, Helvetica, Verdana, Geneva, Swiss, SunSans-Regular, sans-serif;
-    background-color:       inherit;
-}
-
 LI {
     margin-bottom:          10px;
 }
