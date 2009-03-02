@@ -244,6 +244,16 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
             
             // Sets the WOOPS table prefix
             $tablePrefix = ( $tablePrefix ) ? ( string )$tablePrefix : '';
+            
+            // Checks the mandatory setting
+            if( !$driver || !$host || !$database ) {
+                
+                // Error - Invalid configuration
+                throw new Woops_Database_Layer_Exception(
+                    'The database settings are not properly configured',
+                    Woops_Database_Layer_Exception::EXCEPTION_BAD_CONFIGURATION
+                );
+            }
         }
         
         // Checks if the engine is connected or not

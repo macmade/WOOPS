@@ -27,4 +27,5 @@ final class Woops_Database_Layer_Exception extends Woops_Core_Exception_Base
     const EXCEPTION_ENGINE_EXISTS        = 0x02;
     const EXCEPTION_NO_ENGINE_CLASS      = 0x03;
     const EXCEPTION_INVALID_ENGINE_CLASS = 0x04;
+    const EXCEPTION_BAD_CONFIGURATION    = 0x05;
 }
