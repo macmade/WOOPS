@@ -29,17 +29,6 @@ BODY {
     background-image:       url( 'background.png' );
 }
 
-TD, LI {
-    color:                  #333333;
-    font-style:             normal;
-    font-weight:            normal;
-    font-size:              14px;
-    line-height:            normal;
-    text-decoration:        none;
-    font-family:            Arial, Helvetica, Verdana, Geneva, Swiss, SunSans-Regular, sans-serif;
-    background-color:       inherit;
-}
-
 LI {
     margin-bottom:          10px;
 }
@@ -243,6 +232,7 @@ DIV#w3c IMG {
     padding:                10px;
     background-image:       url( 'bg-box.png' );
     background-repeat:      repeat-x;
+    font-size:              12px;
 }
 
 .box H4 {
@@ -256,6 +246,7 @@ DIV#w3c IMG {
     padding:                10px;
     background-image:       url( 'bg-box-infos.png' );
     background-repeat:      repeat-x;
+    font-size:              12px;
 }
 
 .box-infos H4 {
@@ -272,6 +263,7 @@ DIV#w3c IMG {
     padding:                10px;
     background-image:       url( 'bg-box-error.png' );
     background-repeat:      repeat-x;
+    font-size:              12px;
 }
 
 .box-error H4 {
@@ -288,6 +280,7 @@ DIV#w3c IMG {
     padding:                10px;
     background-image:       url( 'bg-box-warning.png' );
     background-repeat:      repeat-x;
+    font-size:              12px;
 }
 
 .box-warning H4 {
@@ -304,6 +297,7 @@ DIV#w3c IMG {
     padding:                10px;
     background-image:       url( 'bg-box-success.png' );
     background-repeat:      repeat-x;
+    font-size:              12px;
 }
 
 .box-success H4 {
@@ -317,9 +311,23 @@ DIV#w3c IMG {
     text-align:             center;
 }
 
-#content H2 {
+H2.environment {
     text-align:             center;
-    background-image:       url( 'cog.png' );
+    background-image:       url( 'server.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H2.filesystem {
+    text-align:             center;
+    background-image:       url( 'drive.png' );
+    background-repeat:      no-repeat;
+    background-position:    right 2px;
+}
+
+H2.recommendations {
+    text-align:             center;
+    background-image:       url( 'page-white-php.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }

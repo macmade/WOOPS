@@ -55,16 +55,16 @@
 			<div id="content">
 				<h1>WOOPS installation check</h1>
 				<div class="left">
-					<h2>PHP environment</h2>
+					<h2 class="environment">PHP environment</h2>
 					<?php print $CHECK_ENV->getStatus(); ?>
 				</div>
 				<div class="right">
-					<h2>Filesystem</h2>
+					<h2 class="filesystem">Filesystem</h2>
 					<?php print $CHECK_FS->getStatus(); ?>
 				</div>
 				<div class="clearer"></div>
 				<div>
-					<h2>PHP configuration / recommendations</h2>
+					<h2 class="recommendations">PHP configuration / recommendations</h2>
 					<div class="box-infos">
 						<div>
 							This section is mainly informative.<br />

@@ -104,7 +104,7 @@ class Woops_Check_Configuration
             $out[] = '<div class="box-' . strtolower( $status ) . '">';
             $out[] = '<h4>' . $key . '</h4>';
             $out[] = '<div class="status">Status: ' . $status . '</div>';
-            $out[] = '<div class="small">' . $message . '</div>';
+            $out[] = '<div>' . $message . '</div>';
             $out[] = '<div class="about">' . $value[ 'about' ] . '</div>';
             $out[] = '</div>';
         }

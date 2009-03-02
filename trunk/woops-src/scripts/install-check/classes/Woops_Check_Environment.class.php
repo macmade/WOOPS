@@ -126,7 +126,7 @@ class Woops_Check_Environment
             $out[] = '<div class="box-' . strtolower( $status ) . '">';
             $out[] = '<h4>' . $value[ 'title' ] . '</h4>';
             $out[] = '<div class="status">Status: ' . $status . '</div>';
-            $out[] = '<div class="small">' . $message . '</div>';
+            $out[] = '<div>' . $message . '</div>';
             $out[] = '</div>';
         }
         
