@@ -47,19 +47,16 @@ host        = localhost
 ; The database port
 ; 
 ; @type     int
-; @required
 port        = 3306
 
 ; The database username
 ; 
 ; @type string
-; @required
 user        = woops
 
 ; The database user password
 ; 
 ; @type string
-; @required
 password    = woops
 
 ; The name of the database to use
@@ -157,11 +154,10 @@ enable = On
 
 ; The error reporting level
 ; 
-; Determines the way errors are reported.
-; If set to "development", the error
-; message will be printed with a full backtrace.
-; If set to "production", only the error message will be printed.
-; If set to "none", no error message will be printed.
+; - If set to "development", the error message will be printed with a full
+;   backtrace.
+; - If set to "production", only the error message will be printed.
+; - If set to "none", no error message will be printed.
 ; 
 ; @type     select
 ; @option   development
