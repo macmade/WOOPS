@@ -9,7 +9,7 @@
 			<![CDATA[
 			Welcome to the WOOPS installation script.<br />
 			Your current system setup has all the requirements to install and run WOOPS.<br /><br />
-			If you haven't done it before, we encourage you to take a look at the installation check script, as you may find there some important recommendations about your PHP setup.
+			If you haven't done it before, we encourage you to take a look at the %sinstallation check script%s, as you may find there some important recommendations about your PHP setup.
 			]]>
 		</aboutText>
 		<stepsTitle>Installation steps</stepsTitle>
@@ -25,7 +25,7 @@
 					<strong>Database engine:</strong><br /><br />
 					This step will let you choose the default database engine, to use with WOOPS.<br /><br />
 					WOOPS can use virtually any kind of Database Abstraction Layer (DBAL), and comes by default with two database engines. The first one uses PDO (PHP Data Objects), and the second one ADODB. Each one supports different database drivers.<br /><br />
-					Please tale a look at the documentation to find out which database engine is suitable for your system.
+					Please take a look at the documentation to find out which database engine is suitable for your system.
 				</li>
 				<li>
 					<strong>Database configuration:</strong><br /><br />
@@ -41,9 +41,46 @@
 			You are also advised to disable the installation check script, by placing a call to the PHP "exit()" function at the top of the file, as it may reveal important informations about your webserver's setup.
 			]]>
 		</securityText>
-		<step1>Step 1: general configuration</step1>
-		<step2>Step 2: database engine</step2>
-		<step3>Step 3: database configuration</step3>
+		<step1>General configuration</step1>
+		<step2>Database engine</step2>
+		<step3>Database configuration</step3>
+		<submitStep1>Step 1: general configuration</submitStep1>
+		<submitStep2>Step 2: database engine</submitStep2>
+		<submitStep3>Step 3: database configuration</submitStep3>
 		<writeConfValues>Write configuration values</writeConfValues>
+		<step1ConfirmTitle>Configuration written</step1ConfirmTitle>
+		<step1ConfirmText>
+			<![CDATA[
+			The WOOPS general configuration has been successfully written.<br /><br />
+			If you need a database connection, you will now be able to choose a database engine to use with WOOPS.
+			]]>
+		</step1ConfirmText>
+		<engineErrorTitle>No database engine</engineErrorTitle>
+		<engineErrorText>
+			<![CDATA[
+			No database engine is currently available in your WOOPS installation.<br />
+			That means you won't be able to use any feature of WOOPS that uses a database connection.<br /><br />
+			If you need database connectivity, please go back and install a module that provides a database engine, like the "Pdo" or the "Adodb" module, available by default with WOOPS.
+			]]>
+		</engineErrorText>
+		<step2ConfirmTitle>Configuration written</step2ConfirmTitle>
+		<step2ConfirmText>
+			<![CDATA[
+			The WOOPS database engine configuration has been successfully written.<br /><br />
+			You will now be able to configure the database connection parameters.
+			]]>
+		</step2ConfirmText>
+		<driverErrorTitle>No database driver</driverErrorTitle>
+		<driverErrorText>
+			<![CDATA[
+			No database driver is currently available for the database engine you just choosed.<br /><br />
+			Please go back and choose another database engine.
+			]]>
+		</driverErrorText>
+		<errors>Errors</errors>
+		<errorDatabaseHostRequired>You need to enter a database host</errorDatabaseHostRequired>
+		<errorDatabasePortNotNumeric>The database port must be numeric</errorDatabasePortNotNumeric>
+		<errorDatabaseNameRequired>You need to enter a database name</errorDatabaseNameRequired>
+		<errorDatabaseConnection>Problems connecting to the database</errorDatabaseConnection>
 	</labels>
 </woops-lang>
