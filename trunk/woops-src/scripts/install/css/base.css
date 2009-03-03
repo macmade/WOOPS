@@ -166,7 +166,7 @@ PRE {
 }
 
 DIV#frame {
-    width:                  800px;
+    width:                  900px;
     margin-left:            auto;
     margin-top:             50px;
     margin-right:           auto;
@@ -385,7 +385,7 @@ H3.modules {
 
 .form-element .module, .form-element .module-loaded {
     float:                  left;
-    width:                  135px;
+    width:                  155px;
     margin:                 5px;
     padding-bottom:         5px;
     border-bottom:          solid 1px #CCCCCC;
@@ -427,7 +427,7 @@ INPUT.submit-write {
 }
 
 .menu LI {
-    font-size:              12px;
+    font-size:              10px;
     margin-left:            5px;
     margin-top:             0px;
     margin-right:           0px;
@@ -452,6 +452,11 @@ INPUT.submit-write {
 
 .menu DIV.completed {
     background-image:       url( 'success.png' );
+}
+
+.menu DIV.process {
+    font-weight:            bold;
+    background-image:       url( 'package.png' );
 }
 
 .tableName {

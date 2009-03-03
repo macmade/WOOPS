@@ -235,6 +235,11 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         // Creates the list
         $list = $container->ul;
         
+        // Adds the menu title
+        $process            = $list->li->div;
+        $process[ 'class' ] = 'process';
+        $process->addTextData( $this->_lang->process );
+        
         // Process each step
         for( $i = 1; $i < $steps + 1; $i++ ) {
             
