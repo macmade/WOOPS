@@ -108,7 +108,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         }
         
         // Creates an INI file parser with the default configuration file
-        $this->_ini       = new Woops_File_Ini_Parser( self::$_env->getSourcePath( 'config.ini.php' ) );
+        $this->_ini       = new Woops_Ini_Parser( self::$_env->getSourcePath( 'config.ini.php' ) );
         
         // Gets the ini values
         $this->_iniValues = $this->_ini->getIniArray();
@@ -116,7 +116,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         // Creates the base form tag
         $this->_content              = new Woops_Xhtml_Tag( 'form' );
         $this->_content[ 'action' ]  = Woops_Core_Env_Getter::getInstance()->getSourceWebPath( 'scripts/install/' );
-        $this->_content[ 'method' ]  = 'POST';
+        
+        // Adds the form method
+        // GET is used on IIS, as I've got a strange bug on my test VM. I'll need to check this out...
+        $this->_content[ 'method' ]  = ( self::$_env->PHP_SAPI_NAME === 'isapi' ) ? 'GET' : 'POST';
         
         // Creates the container for the menu
         $menu                        = $this->_content->div;
@@ -484,7 +487,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
     protected function _writeEngineConfiguration()
     {
         // Gets the INI file
-        $iniParser = new Woops_File_Ini_Parser( self::$_env->getPath( 'config/woops.ini.php' ) );
+        $iniParser = new Woops_Ini_Parser( self::$_env->getPath( 'config/woops.ini.php' ) );
         $iniFile   = $iniParser->getIniObject();
         
         // Gets the incoming variables
@@ -705,7 +708,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
     protected function _writeDatabaseConfiguration()
     {
         // Gets the INI file
-        $iniParser = new Woops_File_Ini_Parser( self::$_env->getPath( 'config/woops.ini.php' ) );
+        $iniParser = new Woops_Ini_Parser( self::$_env->getPath( 'config/woops.ini.php' ) );
         $iniFile   = $iniParser->getIniObject();
         
         // Gets the incoming variables
@@ -1232,6 +1235,29 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
             $label             = $module->label;
             $label[ 'for' ]    = 'module-' . $modName;
             $label->addTextData( $modName );
+            
+            // The Adodb module is selected by default if PDO is not available
+            if( $modName === 'Adodb' && !class_exists( 'PDO' ) ) {
+                
+                // Checks the checkbox
+                $check[ 'checked' ] = 'checked';
+            }
+            
+            // The Pdo module is selected by default if PDO is available
+            if( $modName === 'Pdo' && class_exists( 'PDO' ) ) {
+                
+                // Checks the checkbox
+                $check[ 'checked' ] = 'checked';
+            }
+            
+            // The Pdo module should not be accessible if the PDO class does not exist
+            if( $modName === 'Pdo' && !class_exists( 'PDO' ) ) {
+                
+                // Disables the checkbox for the "Pdo" module
+                $check[ 'disabled' ] = 'disabled';
+            }
+            
+            
             
             // Checks if the module must be selected by default
             if( in_array( $modName, $item[ 'value' ] ) ) {
