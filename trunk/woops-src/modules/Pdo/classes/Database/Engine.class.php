@@ -252,7 +252,13 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
      */
     public function query( $sql )
     {
-        $this->_lastStatement = $this->_pdo->query( $sql );
+        // Prepares the query (we are not using PDO::query, as we could have problems with buffered queries)
+        $this->_lastStatement = $this->_pdo->prepare( $sql );
+        
+        // Executes the statement
+        $this->_lastStatement->execute();
+        
+        // Returns the statement object
         return $this->_lastStatement;
     }
     
