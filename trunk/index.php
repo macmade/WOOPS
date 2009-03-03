@@ -20,8 +20,21 @@ require_once(
   . 'init.inc.php'
 );
 
+// Gets the environment object
+$ENV = Woops_Core_Env_Getter::getInstance();
+
+// Checks if the WOOPS configuration file exists
+if( !$ENV->getPath( 'config/woops.ini.php' ) ) {
+    
+    // Redirects to the WOOPS installer
+    header( 'Location: ' . $ENV->getSourceWebPath( 'scripts/install/' ) );
+}
+
 // Gets the current page
 $PAGE = Woops_Page_Engine::getInstance()->getPageObject();
 
 // Prints the current page
 print $PAGE->writePage();
+
+// Cleanup
+unset( $ENV, $PAGE );
