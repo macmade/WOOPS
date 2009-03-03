@@ -350,7 +350,8 @@ final class Woops_Mod_Adodb_Database_Engine implements Woops_Database_Engine_Int
         // Not sure ADODB is completely error free
         Woops_Core_Error_Handler::disableErrorReporting( E_NOTICE | E_STRICT );
         
-        $res = $this->Query( $sql );
+        // Executes the query
+        $res = $this->Execute( $sql );
         
         // Resets the error reporting
         Woops_Core_Error_Handler::resetErrorReporting();
