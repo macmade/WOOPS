@@ -12,16 +12,13 @@
 # $Id$
 
 /**
- * PNG pHYs chunk (physical pixel dimensions)
- * 
- * The pHYs chunk specifies the intended pixel size or aspect ratio for
- * display of the image.
+ * PNG iCCP chunk (embedded ICC profile)
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png.Chunk
+ * @package     Woops.Png.Chunk
  */
-class Woops_File_Png_Chunk_Phys extends Woops_File_Png_Chunk
+class Woops_Png_Chunk_Iccp extends Woops_Png_Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -31,7 +28,7 @@ class Woops_File_Png_Chunk_Phys extends Woops_File_Png_Chunk
     /**
      * The chunk type
      */
-    protected $_type = 'pHYs';
+    protected $_type = 'iCCP';
     
     /**
      * Process the chunk data
@@ -46,14 +43,19 @@ class Woops_File_Png_Chunk_Phys extends Woops_File_Png_Chunk
     public function getProcessedData()
     {
         // Storage
-        $data                = new stdClass();
+        $data                     = new stdClass();
         
-        // Gets the pixel aspect ratio
-        $data->pixelPerUnitX = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 0 );
-        $data->pixelPerUnitY = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
+        // Position of the null separator
+        $null                     = strpos( $this->_data, chr( 0 ) );
         
-        // Gets the unit
-        $data->unit          = self::$_binUtils->unsignedChar( $this->_data, 8 );
+        // Gets the profile name
+        $data->profileName        = substr( $this->_data, 0, $null );
+        
+        // Gets the compression method
+        $data->compressionMethod  = self::$_binUtils->unsignedChar( $this->_data, $null + 1 );
+        
+        // Gets the compression profile
+        $data->compressionProfile = substr( $this->_data, $null + 2 );
         
         // Returns the processed data
         return $data;

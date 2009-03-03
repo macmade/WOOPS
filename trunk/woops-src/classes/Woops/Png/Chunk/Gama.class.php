@@ -12,13 +12,16 @@
 # $Id$
 
 /**
- * PNG IHDR chunk (image header)
+ * PNG gAMMA chunk (image gamma)
+ * 
+ * The gAMA chunk specifies the relationship between the image samples and the
+ * desired display output intensity.
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png.Chunk
+ * @package     Woops.Png.Chunk
  */
-class Woops_File_Png_Chunk_Ihdr extends Woops_File_Png_Chunk
+class Woops_Png_Chunk_Gama extends Woops_Png_Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -28,7 +31,7 @@ class Woops_File_Png_Chunk_Ihdr extends Woops_File_Png_Chunk
     /**
      * The chunk type
      */
-    protected $_type = 'IHDR';
+    protected $_type = 'gAMMA';
     
     /**
      * Process the chunk data
@@ -43,26 +46,10 @@ class Woops_File_Png_Chunk_Ihdr extends Woops_File_Png_Chunk
     public function getProcessedData()
     {
         // Storage
-        $data = new stdClass();
+        $data             = new stdClass();
         
-        // Gets the PNG dimensions
-        $data->width             = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 0 );
-        $data->height            = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
-        
-        // Gets the bit depth
-        $data->bitDepth          = self::$_binUtils->unsignedChar( $this->_data, 8 );
-        
-        // Gets the colour type
-        $data->colourType        = self::$_binUtils->unsignedChar( $this->_data, 9 );
-        
-        // Gets the compression method
-        $data->compressionMethod = self::$_binUtils->unsignedChar( $this->_data, 10 );
-        
-        // Gets the filter method
-        $data->filterMethod      = self::$_binUtils->unsignedChar( $this->_data, 11 );
-        
-        // Gets the interlace method
-        $data->interlaceMethod   = self::$_binUtils->unsignedChar( $this->_data, 12 );
+        // Gets the image gamma
+        $data->imageGamma = self::$_binUtils->bigEndianUnsignedLong( $this->_data ) / 100000;
         
         // Returns the processed data
         return $data;

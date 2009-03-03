@@ -12,16 +12,13 @@
 # $Id$
 
 /**
- * PNG tIMe chunk (image last-modification time)
- * 
- * The tIME chunk gives the time of the last image modification (not the time
- * of initial image creation).
+ * PNG IEND chunk (image trailer)
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png.Chunk
+ * @package     Woops.Png.Chunk
  */
-class Woops_File_Png_Chunk_Time extends Woops_File_Png_Chunk
+class Woops_Png_Chunk_Iend extends Woops_Png_Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -31,7 +28,7 @@ class Woops_File_Png_Chunk_Time extends Woops_File_Png_Chunk
     /**
      * The chunk type
      */
-    protected $_type = 'tIMe';
+    protected $_type = 'IEND';
     
     /**
      * Process the chunk data
@@ -45,28 +42,6 @@ class Woops_File_Png_Chunk_Time extends Woops_File_Png_Chunk
      */
     public function getProcessedData()
     {
-        // Storage
-        $data         = new stdClass();
-        
-        // Gets the date informations
-        $data->year   = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 0 );
-        $data->month  = self::$_binUtils->unsignedChar( $this->_data, 2 );
-        $data->day    = self::$_binUtils->unsignedChar( $this->_data, 3 );
-        $data->hour   = self::$_binUtils->unsignedChar( $this->_data, 4 );
-        $data->minute = self::$_binUtils->unsignedChar( $this->_data, 5 );
-        $data->second = self::$_binUtils->unsignedChar( $this->_data, 6 );
-        
-        // Creates a timestamp
-        $data->tstamp = mktime(
-            $data->hour,
-            $data->minute,
-            $data->second,
-            $data->month,
-            $data->day,
-            $data->year
-        );
-        
-        // Returns the processed data
-        return $data;
+        return new stdClass();
     }
 }

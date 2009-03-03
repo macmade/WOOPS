@@ -16,9 +16,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png
+ * @package     Woops.Png
  */
-class Woops_File_Png_Parser extends Woops_File_Parser_Base
+class Woops_Png_Parser extends Woops_File_Parser_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -26,7 +26,7 @@ class Woops_File_Png_Parser extends Woops_File_Parser_Base
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * An instance of the Woops_File_Png_File class
+     * An instance of the Woops_Png_File class
      */
     protected $pngFile               = NULL;
     
@@ -54,7 +54,7 @@ class Woops_File_Png_Parser extends Woops_File_Parser_Base
     public function __construct( $file, $allowInvalidStucture = false )
     {
         // Create a new instance of Png_File
-        $this->_pngFile              = new Woops_File_Png_File();
+        $this->_pngFile              = new Woops_Png_File();
         
         // Sets the options for the current instance
         $this->_allowInvalidStucture = $allowInvalidStucture;
@@ -76,9 +76,9 @@ class Woops_File_Png_Parser extends Woops_File_Parser_Base
         if( $this->_read( 8 ) !== $signature ) {
             
             // Wrong file type
-            throw new Woops_File_Png_Parser_Exception(
+            throw new Woops_Png_Parser_Exception(
                 'File ' . $this->_filePath . ' is not a PNG file.',
-                Woops_File_Png_Parser_Exception::EXCEPTION_BAD_SIGNATURE
+                Woops_Png_Parser_Exception::EXCEPTION_BAD_SIGNATURE
             );
         }
         
@@ -154,9 +154,9 @@ class Woops_File_Png_Parser extends Woops_File_Parser_Base
             if( $crc !== crc32( $chunkType . $chunkData ) ) {
                 
                 // Invalid CRC
-                throw new Woops_File_Png_Parser_Exception(
+                throw new Woops_Png_Parser_Exception(
                     'Invalid cyclic redundancy check for chunk ' . $chunkType,
-                    Woops_File_Png_Parser_Exception::EXCEPTION_BAD_CRC
+                    Woops_Png_Parser_Exception::EXCEPTION_BAD_CRC
                 );
             }
             

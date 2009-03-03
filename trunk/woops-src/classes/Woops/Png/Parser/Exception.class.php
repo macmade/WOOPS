@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * Exception class for the Woops_File_Png_File class
+ * Exception class for the Woops_Png_Parser class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png.File
+ * @package     Woops.Png.Parser
  */
-class Woops_File_Png_File_Exception extends Woops_Core_Exception_Base
+class Woops_Png_Parser_Exception extends Woops_Core_Exception_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -28,5 +28,6 @@ class Woops_File_Png_File_Exception extends Woops_Core_Exception_Base
     /**
      * Error codes for the exceptions
      */
-    const EXCEPTION_INVALID_CHUNK = 0x01;
+    const EXCEPTION_BAD_SIGNATURE = 0x01;
+    const EXCEPTION_BAD_CRC       = 0x02;
 }

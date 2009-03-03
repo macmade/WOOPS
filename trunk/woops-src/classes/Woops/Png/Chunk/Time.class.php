@@ -12,13 +12,16 @@
 # $Id$
 
 /**
- * Placeholder for the unknown PNG chunks
+ * PNG tIMe chunk (image last-modification time)
+ * 
+ * The tIME chunk gives the time of the last image modification (not the time
+ * of initial image creation).
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png
+ * @package     Woops.Png.Chunk
  */
-class Woops_File_Png_UnknownChunk extends Woops_File_Png_Chunk
+class Woops_Png_Chunk_Time extends Woops_Png_Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -28,23 +31,7 @@ class Woops_File_Png_UnknownChunk extends Woops_File_Png_Chunk
     /**
      * The chunk type
      */
-    protected $_type = '';
-    
-    /**
-     * Class constructor
-     * 
-     * @param   Png_File    The instance of the Png_File class in which the chunk is placed
-     * @param   string      The chunk type
-     * @return  NULL
-     */
-    public function __construct( Png_File $pngFile, $type )
-    {
-        // Sets the chunk type
-        $this->_type = substr( $type, 0, 4 );
-        
-        // Calls the parent constructor
-        parent::__construct( $pngFile );
-    }
+    protected $_type = 'tIMe';
     
     /**
      * Process the chunk data
@@ -58,6 +45,28 @@ class Woops_File_Png_UnknownChunk extends Woops_File_Png_Chunk
      */
     public function getProcessedData()
     {
-        return new stdClass();
+        // Storage
+        $data         = new stdClass();
+        
+        // Gets the date informations
+        $data->year   = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 0 );
+        $data->month  = self::$_binUtils->unsignedChar( $this->_data, 2 );
+        $data->day    = self::$_binUtils->unsignedChar( $this->_data, 3 );
+        $data->hour   = self::$_binUtils->unsignedChar( $this->_data, 4 );
+        $data->minute = self::$_binUtils->unsignedChar( $this->_data, 5 );
+        $data->second = self::$_binUtils->unsignedChar( $this->_data, 6 );
+        
+        // Creates a timestamp
+        $data->tstamp = mktime(
+            $data->hour,
+            $data->minute,
+            $data->second,
+            $data->month,
+            $data->day,
+            $data->year
+        );
+        
+        // Returns the processed data
+        return $data;
     }
 }

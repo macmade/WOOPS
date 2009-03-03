@@ -20,9 +20,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png.Chunk
+ * @package     Woops.Png.Chunk
  */
-class Woops_File_Png_Chunk_Bkgd extends Woops_File_Png_Chunk
+class Woops_Png_Chunk_Bkgd extends Woops_Png_Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

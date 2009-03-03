@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * PNG iCCP chunk (embedded ICC profile)
+ * PNG IDAT chunk (image data)
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png.Chunk
+ * @package     Woops.Png.Chunk
  */
-class Woops_File_Png_Chunk_Iccp extends Woops_File_Png_Chunk
+class Woops_Png_Chunk_Idat extends Woops_Png_Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -28,7 +28,7 @@ class Woops_File_Png_Chunk_Iccp extends Woops_File_Png_Chunk
     /**
      * The chunk type
      */
-    protected $_type = 'iCCP';
+    protected $_type = 'IDAT';
     
     /**
      * Process the chunk data
@@ -42,22 +42,6 @@ class Woops_File_Png_Chunk_Iccp extends Woops_File_Png_Chunk
      */
     public function getProcessedData()
     {
-        // Storage
-        $data                     = new stdClass();
-        
-        // Position of the null separator
-        $null                     = strpos( $this->_data, chr( 0 ) );
-        
-        // Gets the profile name
-        $data->profileName        = substr( $this->_data, 0, $null );
-        
-        // Gets the compression method
-        $data->compressionMethod  = self::$_binUtils->unsignedChar( $this->_data, $null + 1 );
-        
-        // Gets the compression profile
-        $data->compressionProfile = substr( $this->_data, $null + 2 );
-        
-        // Returns the processed data
-        return $data;
+        return new stdClass();
     }
 }

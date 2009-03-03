@@ -16,9 +16,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png
+ * @package     Woops.Png
  */
-abstract class Woops_File_Png_Chunk
+abstract class Woops_Png_Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -68,7 +68,7 @@ abstract class Woops_File_Png_Chunk
      * @param   Png_File    The instance of the Png_File class in which the chunk is placed
      * @return  NULL
      */
-    public function __construct( Woops_File_Png_File $pngFile )
+    public function __construct( Woops_Png_File $pngFile )
     {
         // Checks if the static variables are set
         if( !self::$_hasStatic ) {

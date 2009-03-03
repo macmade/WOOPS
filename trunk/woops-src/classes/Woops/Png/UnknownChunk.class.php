@@ -12,19 +12,13 @@
 # $Id$
 
 /**
- * PNG hIST chunk (image histogram)
- * 
- * The hIST chunk gives the approximate usage frequency of each colour in the
- * palette. A histogram chunk can appear only when a PLTE chunk appears. If a
- * viewer is unable to provide all the colours listed in the palette,
- * the histogram may help it decide how to choose a subset of the colours
- * for display.
+ * Placeholder for the unknown PNG chunks
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png.Chunk
+ * @package     Woops.Png
  */
-class Woops_File_Png_Chunk_Hist extends Woops_File_Png_Chunk
+class Woops_Png_UnknownChunk extends Woops_Png_Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -34,7 +28,23 @@ class Woops_File_Png_Chunk_Hist extends Woops_File_Png_Chunk
     /**
      * The chunk type
      */
-    protected $_type = 'hIST';
+    protected $_type = '';
+    
+    /**
+     * Class constructor
+     * 
+     * @param   Png_File    The instance of the Png_File class in which the chunk is placed
+     * @param   string      The chunk type
+     * @return  NULL
+     */
+    public function __construct( Png_File $pngFile, $type )
+    {
+        // Sets the chunk type
+        $this->_type = substr( $type, 0, 4 );
+        
+        // Calls the parent constructor
+        parent::__construct( $pngFile );
+    }
     
     /**
      * Process the chunk data
@@ -48,18 +58,6 @@ class Woops_File_Png_Chunk_Hist extends Woops_File_Png_Chunk
      */
     public function getProcessedData()
     {
-        // Storage
-        $data            = new stdClass();
-        $data->frequency = array();
-        
-        // Process each frequency
-        for( $i = 0; $i < $this->_dataLength; $i += 2 ) {
-            
-            // Adds the current frequency
-            $data->frequency[] = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $i );
-        }
-        
-        // Returns the processed data
-        return $data;
+        return new stdClass();
     }
 }

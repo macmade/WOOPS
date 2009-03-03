@@ -12,17 +12,13 @@
 # $Id$
 
 /**
- * PNG cHRM chunk (primary chromaticities and white point)
- * 
- * The cHRM chunk may be used to specify the 1931 CIE x,y chromaticities of the
- * red, green, and blue display primaries used in the image, and the referenced
- * white point.
+ * PNG IHDR chunk (image header)
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png.Chunk
+ * @package     Woops.Png.Chunk
  */
-class Woops_File_Png_Chunk_Chrm extends Woops_File_Png_Chunk
+class Woops_Png_Chunk_Ihdr extends Woops_Png_Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -32,7 +28,7 @@ class Woops_File_Png_Chunk_Chrm extends Woops_File_Png_Chunk
     /**
      * The chunk type
      */
-    protected $_type = 'cHRM';
+    protected $_type = 'IHDR';
     
     /**
      * Process the chunk data
@@ -47,23 +43,26 @@ class Woops_File_Png_Chunk_Chrm extends Woops_File_Png_Chunk
     public function getProcessedData()
     {
         // Storage
-        $data              = new stdClass();
+        $data = new stdClass();
         
-        // Gets the XY chromaticities for the white point
-        $data->whitePointX = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 0 ) / 100000;
-        $data->whitePointY = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 ) / 100000;
+        // Gets the PNG dimensions
+        $data->width             = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 0 );
+        $data->height            = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
         
-        // Gets the XY chromaticities for red
-        $data->redX        = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 8 ) / 100000;
-        $data->redY        = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 12 ) / 100000;
+        // Gets the bit depth
+        $data->bitDepth          = self::$_binUtils->unsignedChar( $this->_data, 8 );
         
-        // Gets the XY chromaticities for green
-        $data->greenX      = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 16 ) / 100000;
-        $data->greenY      = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 20 ) / 100000;
+        // Gets the colour type
+        $data->colourType        = self::$_binUtils->unsignedChar( $this->_data, 9 );
         
-        // Gets the XY chromaticities for blue
-        $data->blueX       = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 24 ) / 100000;
-        $data->blueY       = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 28 ) / 100000;
+        // Gets the compression method
+        $data->compressionMethod = self::$_binUtils->unsignedChar( $this->_data, 10 );
+        
+        // Gets the filter method
+        $data->filterMethod      = self::$_binUtils->unsignedChar( $this->_data, 11 );
+        
+        // Gets the interlace method
+        $data->interlaceMethod   = self::$_binUtils->unsignedChar( $this->_data, 12 );
         
         // Returns the processed data
         return $data;

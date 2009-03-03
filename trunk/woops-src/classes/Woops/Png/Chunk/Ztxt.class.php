@@ -12,16 +12,13 @@
 # $Id$
 
 /**
- * PNG gAMMA chunk (image gamma)
- * 
- * The gAMA chunk specifies the relationship between the image samples and the
- * desired display output intensity.
+ * PNG zTXt chunk (compressed textual data)
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png.Chunk
+ * @package     Woops.Png.Chunk
  */
-class Woops_File_Png_Chunk_Gama extends Woops_File_Png_Chunk
+class Woops_Png_Chunk_Ztxt extends Woops_Png_Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -31,7 +28,7 @@ class Woops_File_Png_Chunk_Gama extends Woops_File_Png_Chunk
     /**
      * The chunk type
      */
-    protected $_type = 'gAMMA';
+    protected $_type = 'zTXt';
     
     /**
      * Process the chunk data
@@ -46,10 +43,28 @@ class Woops_File_Png_Chunk_Gama extends Woops_File_Png_Chunk
     public function getProcessedData()
     {
         // Storage
-        $data             = new stdClass();
+        $data                           = new stdClass();
         
-        // Gets the image gamma
-        $data->imageGamma = self::$_binUtils->bigEndianUnsignedLong( $this->_data ) / 100000;
+        // Position of the null separator
+        $null                           = strpos( $this->_data, chr( 0 ) );
+        
+        // Gets the profile name
+        $data->keyword                  = substr( $this->_data, 0, $null );
+        
+        // Gets the compression method
+        $data->compressionMethod        = self::$_binUtils->unsignedChar( $this->_data, $null + 1 );
+        
+        // Checks the compression method
+        if( $data->compressionMethod === 0 ) {
+            
+            // Deflate
+            $data->compressedTextDataStream = gzuncompress( substr( $this->_data, $null + 2 ) );
+            
+        } else {
+            
+            // Unrecognized compression method - Stores the raw data
+            $data->compressedTextDataStream = substr( $this->_data, $null + 2 );
+        }
         
         // Returns the processed data
         return $data;

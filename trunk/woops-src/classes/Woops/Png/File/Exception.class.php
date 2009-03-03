@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * PNG IEND chunk (image trailer)
+ * Exception class for the Woops_Png_File class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Png.Chunk
+ * @package     Woops.Png.File
  */
-class Woops_File_Png_Chunk_Iend extends Woops_File_Png_Chunk
+class Woops_Png_File_Exception extends Woops_Core_Exception_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -26,22 +26,7 @@ class Woops_File_Png_Chunk_Iend extends Woops_File_Png_Chunk
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * The chunk type
+     * Error codes for the exceptions
      */
-    protected $_type = 'IEND';
-    
-    /**
-     * Process the chunk data
-     * 
-     * This method will process the chunk raw data and returns human readable
-     * values, stored as properties of an stdClass object. Please take a look
-     * at the PNG specification for this specific chunk to see which data will
-     * be extracted.
-     * 
-     * @return  stdClass    The human readable chunk data
-     */
-    public function getProcessedData()
-    {
-        return new stdClass();
-    }
+    const EXCEPTION_INVALID_CHUNK = 0x01;
 }
