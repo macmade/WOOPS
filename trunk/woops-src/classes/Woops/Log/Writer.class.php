@@ -58,13 +58,13 @@ final class Woops_Log_Writer implements Woops_Core_Singleton_Interface
      */
     private $_logTypes        = array(
         0x0001 => 'LOG_TYPE_INFO',
-        0x0001 => 'LOG_TYPE_NOTICE',
-        0x0001 => 'LOG_TYPE_WARNING',
-        0x0001 => 'LOG_TYPE_ERROR',
-        0x0001 => 'LOG_TYPE_CRITICAL',
-        0x0001 => 'LOG_TYPE_BLOCKER',
-        0x0001 => 'LOG_TYPE_SECURITY',
-        0x0001 => 'LOG_TYPE_DEBUG'
+        0x0002 => 'LOG_TYPE_NOTICE',
+        0x0004 => 'LOG_TYPE_WARNING',
+        0x0008 => 'LOG_TYPE_ERROR',
+        0x0010 => 'LOG_TYPE_CRITICAL',
+        0x0020 => 'LOG_TYPE_BLOCKER',
+        0x0040 => 'LOG_TYPE_SECURITY',
+        0x0080 => 'LOG_TYPE_DEBUG'
     );
     
     /**
