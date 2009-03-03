@@ -16,9 +16,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Gif
+ * @package     Woops.Gif
  */
-class Woops_File_Gif_Parser extends Woops_File_Parser_Base
+class Woops_Gif_Parser extends Woops_File_Parser_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -355,9 +355,9 @@ class Woops_File_Gif_Parser extends Woops_File_Parser_Base
         if( $this->_read( 3 ) !== 'GIF' ) {
             
             // Wrong file type
-            throw new Woops_File_Gif_Parser_Exception(
+            throw new Woops_Gif_Parser_Exception(
                 'File ' . $this->_filePath . ' is not a GIF file.',
-                Woops_File_Gif_Parser_Exception::EXCEPTION_NOT_GIF
+                Woops_Gif_Parser_Exception::EXCEPTION_NOT_GIF
             );
         }
         
@@ -439,9 +439,9 @@ class Woops_File_Gif_Parser extends Woops_File_Parser_Base
             default:
                 
                 // Invalid block identifier
-                throw new Woops_File_Gif_Parser_Exception(
+                throw new Woops_Gif_Parser_Exception(
                     'Invalid GIF block identifier: \'0x' . dechex( $id ) . '\'.',
-                    Woops_File_Gif_Parser_Exception::EXCEPTION_BAD_ID
+                    Woops_Gif_Parser_Exception::EXCEPTION_BAD_ID
                 );
                 break;
         }
@@ -515,9 +515,9 @@ class Woops_File_Gif_Parser extends Woops_File_Parser_Base
             default:
                 
                 // Invalid sub block identifier
-                throw new Woops_File_Gif_Parser_Exception(
+                throw new Woops_Gif_Parser_Exception(
                     'Invalid GIF extension block identifier: \'0x' . dechex( $id ) . '\'.',
-                    Woops_File_Gif_Parser_Exception::EXCEPTION_BAD_EXT_ID
+                    Woops_Gif_Parser_Exception::EXCEPTION_BAD_EXT_ID
                 );
                 break;
         }
