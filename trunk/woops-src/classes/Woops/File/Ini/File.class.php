@@ -68,13 +68,24 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
     public function __toString()
     {
         // Storage
-        $file = '';
+        $file    = '';
+        $counter = 0;
         
         // Process each items
         foreach( $this->_items as $name => $object ) {
             
+            // Checks if the current object is a section
+            if( $object instanceof Woops_File_Ini_Item_Section && $counter > 0 ) {
+                
+                // Adds a blank line
+                $file .= self::$_str->NL;
+            }
+            
             // Writes the object
             $file .= ( string )$object . self::$_str->NL;
+            
+            // Increases the counter
+            $counter++;
         }
         
         // Ensures the items pointer is untouched
@@ -358,6 +369,7 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
             
             // INI file content
             $content = '; WOOPS configuration file <?php exit(); ?>'
+                     . self::$_str->NL
                      . self::$_str->NL
                      . ( string )$this;
             
