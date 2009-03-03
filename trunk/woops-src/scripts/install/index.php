@@ -27,9 +27,6 @@
 		
 	} else {
 		
-		// Disables the class cache (and AOP) for now
-		define( 'WOOPS_CLASS_CACHE_MODE_OFF', true );
-		
 		// Includes the initialization script
 		require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'init.inc.php' );
 		
