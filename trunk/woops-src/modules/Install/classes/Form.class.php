@@ -943,19 +943,22 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         );
         
         // Gets the table names as keys
-        $tableNames = array_flip( $tableNames );
+        $tableNames  = array_flip( $tableNames );
         
         // Gets the file lines
-        $lines = file( $filePath );
+        $lines       = file( $filePath );
         
         // Replaces the tags
-        $lines = preg_replace( $tags, $replace, $lines );
+        $lines       = preg_replace( $tags, $replace, $lines );
         
-        // Storage for the query
-        $query   = '';
+        // Storage for the queries to perform
+        $queries     = array();
         
         // Flag to know if we are in a multiline SQL statement
         $inStatement = false;
+        
+        // Number of queries
+        $queryCount  = 0;
         
         // Process each line
         foreach( $lines as $line ) {
@@ -967,7 +970,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
             if( $inStatement ) {
                 
                 // Yes, adds the current line to the query
-                $query .= $line . self::$_str->NL;
+                $queries[ $queryCount - 1 ] .= $line . self::$_str->NL;
                 
                 // Does the current line end the multiline SQL statement?
                 if( substr( $line, -1 ) === ';' ) {
@@ -988,7 +991,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
                 if( isset( $matches[ 1 ] ) && !is_array( $matches[ 1 ] ) && isset( $tableNames[ $matches[ 1 ] ] ) ) {
                     
                     // Yes, adds the current line to the query
-                    $query .= $line . self::$_str->NL;
+                    $queries[] = $line . self::$_str->NL;
                     
                     // Checks if the statement is ended
                     if( substr( $line, -1 ) !== ';' ) {
@@ -996,6 +999,9 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
                         // No, we are now in a multiline SQL statement
                         $inStatement = true;
                     }
+                    
+                    // Increases the query counter
+                    $queryCount++;
                 }
             }
         }
@@ -1013,14 +1019,18 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
                 $engine = Woops_Database_Layer::getInstance()->getEngine();
             }
             
-            // Executes the query
-            $res = $engine->query( $query );
-            
-            // Checks the query result
-            if( !$res ) {
+            // Process each query
+            foreach( $queries as $query ) {
                 
-                // No result, returns the error message
-                return $engine->errorMessage();
+                // Executes the query
+                $res = $engine->query( $query );
+                
+                // Checks the query result
+                if( !$res ) {
+                    
+                    // No result, returns the error message
+                    return $engine->errorMessage();
+                }
             }
             
         } catch( Exception $e ) {
