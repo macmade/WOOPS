@@ -233,7 +233,7 @@ abstract class Woops_Core_Reflection_Base
      * 
      * @return void
      */
-    final private function __construct( Reflector $reflector )
+    final protected function __construct( Reflector $reflector )
     {
         $this->_reflector = $reflector;
     }
@@ -258,7 +258,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final private function __get( $name )
+    final final protected function __get( $name )
     {
         return $this->_reflector->$name;
     }
@@ -266,7 +266,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final private function __set( $name, $value )
+    final final protected function __set( $name, $value )
     {
         $this->_reflector->$name = $value;
     }
@@ -274,7 +274,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final private function __isset( $name )
+    final final protected function __isset( $name )
     {
         return isset( $this->_reflector->$name );
     }
@@ -282,7 +282,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final private function __unset( $name )
+    final final protected function __unset( $name )
     {
         unset( $this->_reflector->$name );
     }
@@ -290,7 +290,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final private function __call( $name, array $args = array() )
+    final final protected function __call( $name, array $args = array() )
     {
         if( ( $name === 'getParameters' || $name === 'getExtension' )
             && ( $this->_reflectorClass === 'ReflectionFunction' )
@@ -340,7 +340,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final private function __toString()
+    final final protected function __toString()
     {
         return ( string )$this->_reflector;
     }
