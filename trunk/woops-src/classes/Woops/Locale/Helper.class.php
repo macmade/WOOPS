@@ -34,7 +34,9 @@ final class Woops_Locale_Helper
     const TYPE_MONETARY = LC_MONETARY;
     const TYPE_NUMERIC  = LC_NUMERIC;
     const TYPE_TIME     = LC_TIME;
-    const TYPE_MESSAGES = LC_MESSAGES;
+    
+    // Disabled for the moment as it seems this is not defined on some PHP setups
+    #const TYPE_MESSAGES = LC_MESSAGES;
     
     /**
      * The unique instance of the class (singleton)
