@@ -47,9 +47,9 @@ class Woops_Check_Filesystem
         
         foreach( $this->files as $key => $value ) {
             
-            $key    = str_replace( '/', DIRECTORY_SEPARATOR, $key );
+            $realPath = str_replace( '/', DIRECTORY_SEPARATOR, $key );
             
-            $status = ( $value[ 'type' ] === 'file' ) ? $this->checkFile( $rootDir . $key, $value[ 'writecheck' ] ) : $this->checkDir( $rootDir . $key, $value[ 'writecheck' ] );
+            $status   = ( $value[ 'type' ] === 'file' ) ? $this->checkFile( $rootDir . $realPath, $value[ 'writecheck' ] ) : $this->checkDir( $rootDir . $realPath, $value[ 'writecheck' ] );
             
             if( $status == 'ERROR' ) {
                 
