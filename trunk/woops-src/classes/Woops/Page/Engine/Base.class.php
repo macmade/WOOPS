@@ -36,7 +36,7 @@ abstract class Woops_Page_Engine_Base extends Woops_Core_Aop_Advisor
     abstract public function loadEngine( stdClass $options );
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic    = false;
     

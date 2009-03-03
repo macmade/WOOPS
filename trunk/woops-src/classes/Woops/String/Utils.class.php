@@ -36,7 +36,7 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
     private $_asciiTable      = array();
     
     /**
-     * Wheter the random number generator device exists
+     * Whether the random number generator device exists
      */
     private $_hasRandomDevice = false;
     

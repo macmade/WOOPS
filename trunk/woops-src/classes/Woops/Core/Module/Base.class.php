@@ -26,7 +26,7 @@ abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic       = false;
     

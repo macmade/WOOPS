@@ -36,7 +36,7 @@ final class Woops_Core_Session_Helper implements Woops_Core_Singleton_Interface
     private static $_instance = NULL;
     
     /**
-     * Wheter the WOOPS session is started
+     * Whether the WOOPS session is started
      */
     protected $_started     = '';
     

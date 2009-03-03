@@ -36,12 +36,12 @@ class Woops_Xml_Tag implements ArrayAccess, Iterator
     const TYPE_DATA = 0x02;
     
     /**
-     * Wether the output is formatted or not
+     * Whether the output is formatted or not
      */
     protected static $_formattedOutput = true;
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic         = false;
     

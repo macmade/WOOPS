@@ -26,7 +26,7 @@ class Woops_Color_Utils
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic   = false;
     

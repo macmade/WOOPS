@@ -48,7 +48,7 @@ class Woops_Xhtml_Comment extends Woops_Xhtml_Tag
     /**
      * Returns the HTML comment
      * 
-     * @param   boolean Wheter the output must be XML compliant
+     * @param   boolean Whether the output must be XML compliant
      * @param   int     The indentation level
      * @return  string  The HTML comment, if $xmlCompliant is false, otherwise a blank string
      */

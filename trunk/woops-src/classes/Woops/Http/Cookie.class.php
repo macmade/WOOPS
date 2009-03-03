@@ -68,8 +68,8 @@ class Woops_Http_Cookie
      * @param   int     The cookie's expiration date, as a timestamp
      * @param   string  The cookie's path
      * @param   string  The cookie's domain
-     * @param   boolean Wether the cookie is secured
-     * @param   boolean Wether the cookie is accessible only through the HTTP protocol
+     * @param   boolean Whether the cookie is secured
+     * @param   boolean Whether the cookie is accessible only through the HTTP protocol
      * @return  void
      */
     public function __construct( $name, $value = '', $expires = 0, $path = '/', $domain = '', $secure = false, $httpOnly = false )
@@ -244,7 +244,7 @@ class Woops_Http_Cookie
      * This method will call the PHP setcookie() function, with all the
      * parameters set on the current instance.
      * 
-     * @return  boolean Wether the cookie has been set
+     * @return  boolean Whether the cookie has been set
      */
     public function setCookie()
     {
@@ -282,7 +282,7 @@ class Woops_Http_Cookie
     /**
      * Gets the cookie's expiration date
      * 
-     * @param   boolean Wether to return a timestamp (false - by default), or a RFC-2822 date (true)
+     * @param   boolean Whether to return a timestamp (false - by default), or a RFC-2822 date (true)
      * @return  mixed   The cookie's expiration date
      */
     public function getExpires( $asDate = false )
@@ -345,7 +345,7 @@ class Woops_Http_Cookie
      * Sets the cookie's expiration date
      * 
      * @param   mixed   The cookie's expiration date
-     * @param   boolean Wether the date is a timestamp (false - by default), or a RFC-2822 date (true)
+     * @param   boolean Whether the date is a timestamp (false - by default), or a RFC-2822 date (true)
      * @return  void
      */
     public function setExpires( $value, $asDate = false )
@@ -378,7 +378,7 @@ class Woops_Http_Cookie
     /**
      * Sets the cookie's secure option
      * 
-     * @param   boolean Wether the cookie is secure
+     * @param   boolean Whether the cookie is secure
      * @return  void
      */
     public function setSecure( $value )
@@ -389,7 +389,7 @@ class Woops_Http_Cookie
     /**
      * Sets the cookie's HTTP only option
      * 
-     * @param   boolean Wether the cookie is available only through the HTTP protocol
+     * @param   boolean Whether the cookie is available only through the HTTP protocol
      * @return  void
      */
     public function setHttpOnly( $value )

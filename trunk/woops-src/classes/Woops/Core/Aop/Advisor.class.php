@@ -118,7 +118,7 @@ abstract class Woops_Core_Aop_Advisor
     private static $_conf             = NULL;
     
     /**
-     * Wheter the AOP features must be turned on
+     * Whether the AOP features must be turned on
      */
     private static $_enableAop        = true;
     

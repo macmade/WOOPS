@@ -38,7 +38,7 @@ abstract class Woops_File_Parser_Base
     protected static $_binUtils  = NULL;
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     protected static $_hasStatic = false;
     

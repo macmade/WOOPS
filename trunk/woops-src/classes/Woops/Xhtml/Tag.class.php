@@ -26,12 +26,12 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * Wether the output is formatted or not
+     * Whether the output is formatted or not
      */
     protected static $_formattedOutput = true;
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic         = false;
     
@@ -338,7 +338,7 @@ class Woops_Xhtml_Tag implements ArrayAccess, Iterator
     /**
      * Returns the output of the current tag
      * 
-     * @param   boolean Wheter the output must be XML compliant
+     * @param   boolean Whether the output must be XML compliant
      * @param   int     The indentation level
      * @return  string  The output of the current tag (tag name and content)
      */

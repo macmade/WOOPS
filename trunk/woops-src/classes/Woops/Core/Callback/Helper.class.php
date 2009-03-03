@@ -31,7 +31,7 @@ class Woops_Core_Callback_Helper
     protected $_callback         = false;
     
     /**
-     * Wheter the callback returns a reference
+     * Whether the callback returns a reference
      */
     protected $_returnsReference = false;
     

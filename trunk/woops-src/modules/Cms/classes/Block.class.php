@@ -31,7 +31,7 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
     abstract public function getBlockContent( Woops_Xhtml_Tag $content, stdClass $options );
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic               = false;
     

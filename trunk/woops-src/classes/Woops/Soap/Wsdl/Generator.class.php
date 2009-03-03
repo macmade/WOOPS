@@ -51,7 +51,7 @@ class Woops_Soap_Wsdl_Generator
     const NAMESPACE_XSD           =  'http://www.w3.org/2001/XMLSchema';
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic    = false;
     

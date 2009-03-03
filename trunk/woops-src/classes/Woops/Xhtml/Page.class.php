@@ -26,7 +26,7 @@ class Woops_Xhtml_Page
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic = false;
     
@@ -81,12 +81,12 @@ class Woops_Xhtml_Page
     );
     
     /**
-     * Wheter to insert the document types
+     * Whether to insert the document types
      */
     protected $_docType        = true;
     
     /**
-     * Wheter to insert the XML declaration
+     * Whether to insert the XML declaration
      */
     protected $_xmlDeclaration = true;
     

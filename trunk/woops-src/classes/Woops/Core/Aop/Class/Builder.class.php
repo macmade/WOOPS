@@ -39,7 +39,7 @@ class Woops_Core_Aop_Class_Builder
     const PUBLIC_METHODS_REGEXP = '/([\s\t]*public\s+function\s+)([^_(]+)/';
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic  = false;
     

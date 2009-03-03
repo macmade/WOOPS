@@ -71,7 +71,7 @@ class Woops_Http_Response
     const CODE_BANDWIDTH_LIMIT_EXCEEDED        = 509;
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic = false;
     
@@ -619,7 +619,7 @@ class Woops_Http_Response
      * Sets a cookies (from the 'Set-Cookie' header)
      * 
      * @param   string  The name of the cookie
-     * @return  boolean Wether the cookie has been set
+     * @return  boolean Whether the cookie has been set
      */
     public function setCookie( $name )
     {
@@ -649,7 +649,7 @@ class Woops_Http_Response
     /**
      * Checks if the HTTP response is informational
      * 
-     * @return  boolean Wether the HTTP response is informational
+     * @return  boolean Whether the HTTP response is informational
      */
     public function isInformational()
     {
@@ -659,7 +659,7 @@ class Woops_Http_Response
     /**
      * Checks if the HTTP response is successful
      * 
-     * @return  boolean Wether the HTTP response is successful
+     * @return  boolean Whether the HTTP response is successful
      */
     public function isSuccess()
     {
@@ -669,7 +669,7 @@ class Woops_Http_Response
     /**
      * Checks if the HTTP response is a redirection
      * 
-     * @return  boolean Wether the HTTP response is a redirection
+     * @return  boolean Whether the HTTP response is a redirection
      */
     public function isRedirection()
     {
@@ -679,7 +679,7 @@ class Woops_Http_Response
     /**
      * Checks if the HTTP response is a client error
      * 
-     * @return  boolean Wether the HTTP response is a client error
+     * @return  boolean Whether the HTTP response is a client error
      */
     public function isClientError()
     {
@@ -689,7 +689,7 @@ class Woops_Http_Response
     /**
      * Checks if the HTTP response is a server error
      * 
-     * @return  boolean Wether the HTTP response is a server error
+     * @return  boolean Whether the HTTP response is a server error
      */
     public function isServerError()
     {

@@ -28,7 +28,7 @@ class Woops_Vcard_Generator
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic = false;
     

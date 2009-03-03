@@ -55,12 +55,12 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     private $_modManager      = NULL;
     
     /**
-     * Wheter to enable the class cache
+     * Whether to enable the class cache
      */
     private $_classCache      = false;
     
     /**
-     * Wheter to use AOP classes (if true, the class cache will be automatically enabled)
+     * Whether to use AOP classes (if true, the class cache will be automatically enabled)
      */
     private $_enableAop       = false;
     
@@ -361,7 +361,7 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
      * already in the cache, it will load it directly from there).
      * 
      * @param   string  The name of the class to load
-     * @param   boolean Wheter the requested class belongs to a WOOPS module
+     * @param   boolean Whether the requested class belongs to a WOOPS module
      * @return  boolean
      * @see     _createCachedClass
      */

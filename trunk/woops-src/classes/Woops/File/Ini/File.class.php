@@ -26,7 +26,7 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic = false;
     
@@ -315,7 +315,7 @@ class Woops_File_Ini_File implements Iterator, ArrayAccess
      * 
      * @param   string  The name of the file to write
      * @param   string  The path of the file to write (directory name)
-     * @param   boolean Wether a call to the PHP exit() function must be added at the top of the file, in order to secures it
+     * @param   boolean Whether a call to the PHP exit() function must be added at the top of the file, in order to secures it
      * @return  void
      * @throws  Woops_File_Ini_File_Exception   If the directory does not exists
      * @throws  Woops_File_Ini_File_Exception   If the directory is not writeable

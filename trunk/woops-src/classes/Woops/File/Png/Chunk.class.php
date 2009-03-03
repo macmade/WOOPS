@@ -43,7 +43,7 @@ abstract class Woops_File_Png_Chunk
     protected $_pngFile          = NULL;
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     protected static $_hasStatic = false;
     

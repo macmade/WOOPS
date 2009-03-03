@@ -56,7 +56,7 @@ class Woops_Http_Client
     const ENCTYPE_MULTIPART_FORM_DATA   = 'multipart/form-data';
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic          = false;
     
@@ -206,7 +206,7 @@ class Woops_Http_Client
     protected $_errStr                  = '';
     
     /**
-     * Wether the connection is established
+     * Whether the connection is established
      */
     protected $_connected               = false;
     
@@ -1111,7 +1111,7 @@ class Woops_Http_Client
     /**
      * Establish a socket connection with the current settings
      * 
-     * @return  boolean                     Wether the connection was successfully established
+     * @return  boolean                     Whether the connection was successfully established
      * @throws  Woops_Http_Client_Exception If the fsockopen() function is not available
      */
     public function connect()

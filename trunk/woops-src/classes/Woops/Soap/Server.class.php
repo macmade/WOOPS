@@ -92,7 +92,7 @@ class Woops_Soap_Server
     /**
      * Sets the WSDL cache property (PHP configuration value)
      * 
-     * @param   boolean Wether to cache the WSDL files
+     * @param   boolean Whether to cache the WSDL files
      * @return  boolean The old configuration value
      */
     public static function setWsdlCache( $value )

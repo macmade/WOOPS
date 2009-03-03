@@ -60,7 +60,7 @@ abstract class Woops_File_Mpeg4_Atom
     protected static $_binUtils = NULL;
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     protected static $_hasStatic = false;
     
@@ -70,7 +70,7 @@ abstract class Woops_File_Mpeg4_Atom
     protected $_type             = '';
     
     /**
-     * Wether the atom has an extended length
+     * Whether the atom has an extended length
      */
     protected $_extended         = false;
     

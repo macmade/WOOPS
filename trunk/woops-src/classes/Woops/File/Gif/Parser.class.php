@@ -59,13 +59,13 @@ class Woops_File_Gif_Parser extends Woops_File_Parser_Base
         // Gets the packed fields
         $packedFields                = self::$_binUtils->unsignedChar( $lsdData, 4 );
         
-        // Wether to global color table will follow 
+        // Whether to global color table will follow 
         $lsd->globalColorTableFlag   = ( $packedFields & 0x80 ) >> 7;  // Mask is 1000 0000
         
         // The color resolution
         $lsd->colorResolution        = ( $packedFields & 0x70 ) >> 4;  // Mask is 0111 0000
         
-        // Wether the global color table is sorted
+        // Whether the global color table is sorted
         $lsd->sortFlag               = ( $packedFields & 0x08 ) >> 3;  // Mask is 0000 1000
         
         // The size of the global color table
@@ -149,13 +149,13 @@ class Woops_File_Gif_Parser extends Woops_File_Parser_Base
         // Gets the packed fields
         $packedFields                 = self::$_binUtils->unsignedChar( $blockData, 8 );
         
-        // Wether to local color table will follow 
+        // Whether to local color table will follow 
         $block->localColorTableFlag   = ( $packedFields & 0x80 ) >> 7;  // Mask is 1000 0000
         
-        // Wheter the image is interlaced
+        // Whether the image is interlaced
         $block->interlaceFlag         = ( $packedFields & 0x40 ) >> 6;  // Mask is 0100 0000
         
-        // Wether the local color table is sorted
+        // Whether the local color table is sorted
         $block->sortFlag              = ( $packedFields & 0x20 ) >> 5;  // Mask is 0010 0000
         
         // The size of the local color table

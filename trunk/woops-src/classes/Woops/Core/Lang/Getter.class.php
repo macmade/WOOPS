@@ -41,7 +41,7 @@ final class Woops_Core_Lang_Getter implements Woops_Core_MultiSingleton_Interfac
     private static $_defaultInstanceName = '';
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic           = false;
     

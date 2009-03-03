@@ -26,12 +26,12 @@ abstract class Woops_Core_Exception_Base extends Exception
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * Wether the static variables are set or not
+     * Whether the static variables are set or not
      */
     private static $_hasStatic      = false;
     
     /**
-     * Wheter to print the backtrace or not, when an exception is not caught
+     * Whether to print the backtrace or not, when an exception is not caught
      */
     protected static $_debug        = true;
     
@@ -96,7 +96,7 @@ abstract class Woops_Core_Exception_Base extends Exception
     }
     
     /**
-     * Decides wether to display the backtrace or not when an exception is
+     * Decides whether to display the backtrace or not when an exception is
      * not caught.
      * 
      * @param   boolean True if the backtrace must be displayed, otherwise false
