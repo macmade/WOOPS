@@ -57,12 +57,12 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     /**
      * Wheter to enable the class cache
      */
-    private $_classCache      = '';
+    private $_classCache      = false;
     
     /**
      * Wheter to use AOP classes (if true, the class cache will be automatically enabled)
      */
-    private $_enableAop       = '';
+    private $_enableAop       = false;
     
     /**
      * The cache directory for the AOP classes
@@ -275,18 +275,19 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
                 // Gets the class cache directory
                 self::$_instance->_cacheDirectory = self::$_instance->_env->getPath( 'cache/classes/' );
                 
-                // Checks if the cache directory exist
-                if( !self::$_instance->_cacheDirectory || !is_dir( self::$_instance->_cacheDirectory ) ) {
+                // Checks if the cache directory exist, and is writeable
+                if( !self::$_instance->_cacheDirectory
+                    || !is_dir( self::$_instance->_cacheDirectory )
+                    || !is_writeable( self::$_instance->_cacheDirectory )
+                ) {
                     
-                    // The cache directory does not exist
-                    self::_error( 'The cache directory for the WOOPS classes does not exist' );
-                }
-                
-                // Checks if the cache directory is writeable
-                if( !is_writeable( self::$_instance->_cacheDirectory ) ) {
-                    
-                    // The cache directory does not exist
-                    self::_error( 'The cache directory for the WOOPS classes is not writeable' );
+                    // Disables the AOP and the class cache
+                    // Maybe this should generate a fatal error, but in that
+                    // case, and if we are installing WOOPS, this could
+                    // generate a bad first impression...
+                    self::$_instance->_classCache = false;
+                    self::$_instance->_enableAop  = false;
+                    define( 'WOOPS_CLASS_CACHE_MODE_OFF', true );
                 }
             }
             
