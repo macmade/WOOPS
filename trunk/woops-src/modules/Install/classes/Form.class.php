@@ -31,6 +31,11 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
     private static $_hasStatic   = false;
     
     /**
+     * The configuration object
+     */
+    protected static $_conf      = NULL;
+    
+    /**
      * The available modules
      */
     protected static $_modules   = array();
@@ -163,6 +168,20 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
                 // Creates the menu
                 $this->_createMenu( $menu );
                 break;
+            
+            // Database parameters
+            case 4:
+                
+                // Steps before are completed
+                $this->_step1 = true;
+                $this->_step2 = true;
+                $this->_step3 = true;
+                
+                $this->_installStep4();
+                
+                // Creates the menu
+                $this->_createMenu( $menu );
+                break;
         }
     }
     
@@ -194,6 +213,9 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         
         // Gets the available database engines
         self::$_engines   = Woops_Database_Layer::getInstance()->getRegisteredEngines();
+        
+        // Gets the configuration object
+        self::$_conf      = Woops_Core_Config_Getter::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -718,6 +740,119 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
     }
     
     /**
+     * Creates the fourth install step
+     * 
+     * @return  void
+     */
+    protected function _installStep4()
+    {
+        // Has the form been submitted?
+        if( $this->_getModuleVar( 'submit-import' ) ) {
+            
+            // ...
+        }
+        
+        // Creates the containers
+        $drop              = $this->_content->div;
+        $create            = $this->_content->div;
+        $import            = $this->_content->div;
+        $drop[ 'class' ]   = 'box';
+        $create[ 'class' ] = 'box';
+        $import[ 'class' ] = 'box';
+        $drop->h4          = $this->_lang->dropTables;
+        $create->h4        = $this->_lang->createTables;
+        $import->h4        = $this->_lang->importTables;
+        
+        // Creates the table lists
+        $this->_tableList(
+            self::$_env->getSourcePath( 'database/drop-tables.sql' ),
+            'DROP TABLE IF EXISTS ',
+            $drop->div
+        );
+        $this->_tableList(
+            self::$_env->getSourcePath( 'database/structure.sql' ),
+            'CREATE TABLE IF NOT EXISTS ',
+            $create->div
+        );
+        $this->_tableList(
+            self::$_env->getSourcePath( 'database/data.sql' ),
+            'INSERT INTO ',
+            $import->div
+        );
+        
+        // Adds an hidden input for the current install step
+        $hidden               = $this->_content->input;
+        $hidden[ 'type' ]     = 'hidden';
+        $hidden[ 'name' ]     = 'woops[mod][Install][install-step]';
+        $hidden[ 'value' ]    = 4;
+        
+        // Adds the submit button
+        $submitDiv            = $this->_content->div;
+        $submitDiv[ 'class' ] = 'submit';
+        $submit               = $submitDiv->input;
+        $submit[ 'type' ]     = 'submit';
+        $submit[ 'class' ]    = 'submit-write';
+        $submit[ 'value' ]    = $this->_lang->importDatabase;
+        $submit[ 'name'  ]    = 'woops[mod][Install][submit-import]';
+    }
+    
+    /**
+     * Creates a list of tables
+     * 
+     * @param   string          The path to the SQL file
+     * @param   string          The prefix to detect the table names
+     * @param   Woops_Xhtml_Tag The container in which to place the table list
+     * return   void
+     */
+    protected function _tableList( $filePath, $detectPrefix, Woops_Xhtml_Tag $container )
+    {
+        // Gets the file content
+        $file    = file_get_contents( $filePath );
+        
+        // Storage for the matches
+        $matches = array();
+        
+        // Finds all table names
+        $tables  = preg_match_all(
+            '/' . $detectPrefix . '`([^`]+)`/',
+            $file,
+            $matches
+        );
+        
+        // Checks for matches
+        if( isset( $matches[ 1 ] ) && is_array( $matches[ 1 ] ) && count( $matches[ 1 ] ) ) {
+            
+            // Process each table name
+            foreach( $matches[ 1 ] as $database ) {
+                
+                // ID for the checkbox
+                $id = uniqid();
+                
+                // Creates the container
+                $div                = $container->div;
+                
+                // Creates the checkbox
+                $check              = $div->input;
+                $check[ 'type' ]    = 'checkbox';
+                $check[ 'checked' ] = 'checked';
+                $check[ 'id' ]      = $id;
+                
+                // Creates the label
+                $label            = $div->label;
+                $label[ 'class' ] = 'tableName';
+                $label[ 'for' ]   = $id;
+                $label->addTextData(
+                    str_replace(
+                        '{$PREFIX}',
+                        self::$_conf->getVar( 'database', 'tablePrefix' ),
+                        $database
+                    )
+                );
+            }
+        }
+    }
+    
+    /**
      * Creates form elements from an INI file
      * 
      * @param   array   An multi-dimmensionnal array with the INI sections and values
@@ -742,19 +877,19 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         }
         
         // Adds an hidden input for the current install step
-        $hidden             = $this->_content->input;
-        $hidden[ 'type' ]   = 'hidden';
-        $hidden[ 'name' ]   = 'woops[mod][Install][install-step]';
-        $hidden[ 'value' ]  = $this->_getModuleVar( 'install-step' );
+        $hidden               = $this->_content->input;
+        $hidden[ 'type' ]     = 'hidden';
+        $hidden[ 'name' ]     = 'woops[mod][Install][install-step]';
+        $hidden[ 'value' ]    = $this->_getModuleVar( 'install-step' );
         
         // Adds the submit button
         $submitDiv            = $this->_content->div;
         $submitDiv[ 'class' ] = 'submit';
         $submit               = $submitDiv->input;
-        $submit[ 'type' ]  = 'submit';
-        $submit[ 'class' ] = 'submit-write';
-        $submit[ 'value' ] = $this->_lang->writeConfValues;
-        $submit[ 'name'  ] = 'woops[mod][Install][submit-write]';
+        $submit[ 'type' ]     = 'submit';
+        $submit[ 'class' ]    = 'submit-write';
+        $submit[ 'value' ]    = $this->_lang->writeConfValues;
+        $submit[ 'name'  ]    = 'woops[mod][Install][submit-write]';
     }
     
     /**

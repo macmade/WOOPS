@@ -454,4 +454,8 @@ INPUT.submit-write {
     background-image:       url( 'success.png' );
 }
 
+.tableName {
+    font-size:              10px;
+}
+
 /* ]]> */

@@ -121,5 +121,9 @@
 		<database-password>Database password</database-password>
 		<database-database>Database name</database-database>
 		<database-tablePrefix>Table prefix</database-tablePrefix>
+		<dropTables>Drop existing database tables</dropTables>
+		<createTables>Create database tables</createTables>
+		<importTables>Import data into database tables</importTables>
+		<importDatabase>Perform the selected actions</importDatabase>
 	</labels>
 </woops-lang>

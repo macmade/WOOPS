@@ -11,9 +11,9 @@
 # $Id$
 
 #
-# Table structure for table `WOOPS_CONTRIBUTORS`
+# Table structure for table `CONTRIBUTORS`
 #
-CREATE TABLE IF NOT EXISTS `WOOPS_CONTRIBUTORS` (
+CREATE TABLE IF NOT EXISTS `{$PREFIX}CONTRIBUTORS` (
     `id_contributors` int(32) unsigned NOT NULL auto_increment,
     `deleted` int(1) unsigned NOT NULL default '0',
     `mtime` int(32) unsigned NOT NULL default '0',
@@ -28,12 +28,12 @@ CREATE TABLE IF NOT EXISTS `WOOPS_CONTRIBUTORS` (
     `lastip` varchar(15) NOT NULL,
     `session` varchar(40) NOT NULL,
     PRIMARY KEY  (`id_contributors`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+);
 
 #
-# Table structure for table `WOOPS_CONTRIBUTORS_LOGS`
+# Table structure for table `CONTRIBUTORS_LOGS`
 #
-CREATE TABLE IF NOT EXISTS `WOOPS_CONTRIBUTORS_LOGS` (
+CREATE TABLE IF NOT EXISTS `{$PREFIX}CONTRIBUTORS_LOGS` (
     `id_contributors_logs` int(32) unsigned NOT NULL auto_increment,
     `deleted` int(2) unsigned NOT NULL default '0',
     `ctime` int(32) unsigned NOT NULL default '0',
@@ -43,12 +43,12 @@ CREATE TABLE IF NOT EXISTS `WOOPS_CONTRIBUTORS_LOGS` (
     `message` longtext NOT NULL,
     PRIMARY KEY  (`id_contributors_logs`),
     KEY `id_contributors` (`id_contributors`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+);
 
 #
-# Table structure for table `WOOPS_PAGEHEADERS`
+# Table structure for table `PAGEHEADERS`
 #
-CREATE TABLE IF NOT EXISTS `WOOPS_PAGEHEADERS` (
+CREATE TABLE IF NOT EXISTS `{$PREFIX}PAGEHEADERS` (
     `id_pageheaders` int(32) NOT NULL auto_increment,
     `id_pageinfos` int(32) NOT NULL default '0',
     `id_templates` int(32) NOT NULL default '0',
@@ -63,12 +63,12 @@ CREATE TABLE IF NOT EXISTS `WOOPS_PAGEHEADERS` (
     PRIMARY KEY  (`id_pageheaders`),
     UNIQUE KEY `id_pageinfos` (`id_pageinfos`,`lang`),
     KEY `id_templates` (`id_templates`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+);
 
 #
-# Table structure for table `WOOPS_PAGEINFOS`
+# Table structure for table `PAGEINFOS`
 #
-CREATE TABLE IF NOT EXISTS `WOOPS_PAGEINFOS` (
+CREATE TABLE IF NOT EXISTS `{$PREFIX}PAGEINFOS` (
     `id_pageinfos` int(32) unsigned NOT NULL auto_increment,
     `id_parent` int(32) unsigned NOT NULL default '0',
     `deleted` int(1) unsigned NOT NULL default '0',
@@ -77,12 +77,12 @@ CREATE TABLE IF NOT EXISTS `WOOPS_PAGEINFOS` (
     `home` int(1) default '0',
     PRIMARY KEY  (`id_pageinfos`),
     KEY `id_parent` (`id_parent`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+);
 
 #
-# Table structure for table `WOOPS_TEMPLATES`
+# Table structure for table `TEMPLATES`
 #
-CREATE TABLE IF NOT EXISTS `WOOPS_TEMPLATES` (
+CREATE TABLE IF NOT EXISTS `{$PREFIX}TEMPLATES` (
     `id_templates` int(32) NOT NULL auto_increment,
     `id_parent` int(32) NOT NULL default '0',
     `deleted` int(1) NOT NULL default '0',
@@ -94,4 +94,4 @@ CREATE TABLE IF NOT EXISTS `WOOPS_TEMPLATES` (
     `engine_options` longtext NOT NULL,
     PRIMARY KEY  (`id_templates`),
     KEY `id_parent` (`id_parent`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+);
