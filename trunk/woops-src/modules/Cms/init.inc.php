@@ -21,6 +21,6 @@ Woops_Xhtml_Parser::registerProcessingInstructionHandler(
     'Woops_Mod_Cms_Block_ProcessingInstruction_Handler'
 );
 
-Woops_Page_Engine::getInstance()->registerPageEngineClass(
+Woops_Page_Engine::getInstance()->registerPageEngine(
     'Woops_Mod_Cms_Page_Engine'
 );

@@ -100,7 +100,7 @@ final class Woops_Page_Engine implements Woops_Core_Singleton_Interface
     /**
      * 
      */
-    public function registerPageEngineClass( $className )
+    public function registerPageEngine( $className )
     {
         if( !class_exists( $className ) ) {
             

@@ -175,7 +175,7 @@ final class Woops_Log_Writer implements Woops_Core_Singleton_Interface
      * throws   Woops_Log_Writer_Exception  If the log writer class does not exists
      * throws   Woops_Log_Writer_Exception  If the log writer class does not implements the Woops_Log_Writer_Interface interface
      */
-    public function registerLogWriterClass( $class, $types = 0x00FF )
+    public function registerLogWriter( $class, $types = 0x00FF )
     {
         // Type correction
         $types = $types & self::LOG_TYPE_ALL;

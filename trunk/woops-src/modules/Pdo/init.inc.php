@@ -11,7 +11,7 @@
 
 # $Id$
 
-Woops_Database_Layer::getInstance()->registerDatabaseEngineClass(
+Woops_Database_Layer::getInstance()->registerDatabaseEngine(
     'pdo',
     'Woops_Mod_Pdo_Database_Engine'
 );

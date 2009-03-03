@@ -153,7 +153,7 @@ final class Woops_Database_Layer implements Woops_Core_Singleton_Interface
      * @see     Woops_Core_Singleton_Interface::load
      * @see     Woops_Core_Singleton_Interface::connect
      */
-    public function registerDatabaseEngineClass( $name, $class )
+    public function registerDatabaseEngine( $name, $class )
     {
         // Checks for an engine with the same name
         if( isset( $this->_engines[ $name ] ) ) {
