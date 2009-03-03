@@ -273,10 +273,6 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
                     $scriptFileName = NULL;
                 }
                 
-                // Check slashes
-                $scriptFileName = str_replace( '\\', '/', $scriptFileName );
-                $scriptFileName = str_replace( '//', '/', $scriptFileName );
-                
                 // Store variable
                 $this->_serverVars[ $var ] = $scriptFileName;
                 $result                    = true;
@@ -325,11 +321,11 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
                     
                     $secondSlashPos            = strpos( $scriptName, '/', 1 );
                     $webPart                   = substr( $scriptName, $secondSlashPos );
-                    $this->_serverVars[ $var ] = str_replace( $webPart, '', $scriptFileName );
+                    $this->_serverVars[ $var ] = str_replace( str_replace( '/', DIRECTORY_SEPARATOR, $webPart ), '', $scriptFileName );
                     
                 } else {
                     
-                    $this->_serverVars[ $var ] = str_replace( $scriptName, '', $scriptFileName );
+                    $this->_serverVars[ $var ] = str_replace( str_replace( '/', DIRECTORY_SEPARATOR, $scriptName ), '', $scriptFileName );
                 }
                 $result = true;
                 break;
