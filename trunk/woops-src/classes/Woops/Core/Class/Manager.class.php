@@ -42,17 +42,17 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     /**
      * The unique instance of the class (singleton)
      */
-    private static $_instance  = NULL;
+    private static $_instance = NULL;
     
     /**
      * The WOOPS environment object
      */
-    private $_env              = NULL;
+    private $_env             = NULL;
     
     /**
      * The WOOPS module manager
      */
-    private $_modManager       = NULL;
+    private $_modManager      = NULL;
     
     /**
      * Wheter to enable the class cache
@@ -67,22 +67,22 @@ final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
     /**
      * The cache directory for the AOP classes
      */
-    private $_cacheDirectory   = '';
+    private $_cacheDirectory  = '';
     
     /**
      * The loaded classes from the WOOPS project
      */
-    private $_loadedClasses    = array();
+    private $_loadedClasses   = array();
     
     /**
      * The available top WOOPS packages
      */
-    private $_packages         = array();
+    private $_packages        = array();
     
     /**
      * The directory which contains the WOOPS classes
      */
-    private $_classDir         = '';
+    private $_classDir        = '';
     
     /**
      * Class constructor
