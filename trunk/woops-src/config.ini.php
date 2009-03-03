@@ -191,7 +191,6 @@ report = development
 ; 
 ; Note that the load order is not important, as it's managed by the WOOPS
 ; module manager.
-loaded[] = Pdo
 loaded[] = Install
 loaded[] = Cms
 loaded[] = Admin
