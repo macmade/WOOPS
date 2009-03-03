@@ -428,7 +428,7 @@ INPUT.submit-write {
 
 .menu LI {
     font-size:              12px;
-    margin-left:            10px;
+    margin-left:            5px;
     margin-top:             0px;
     margin-right:           0px;
     margin-bottom:          0px;
@@ -441,8 +441,8 @@ INPUT.submit-write {
 
 .menu DIV {
     padding-left:           20px;
-    padding-top:            5px;
-    padding-right:          20px;
+    padding-top:            6px;
+    padding-right:          18px;
     padding-bottom:         0px;
     background-image:       url( 'step-uncomplete.png' );
     background-repeat:      no-repeat;
