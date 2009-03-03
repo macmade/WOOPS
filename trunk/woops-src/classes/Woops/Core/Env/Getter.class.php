@@ -121,7 +121,7 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
         $this->_woopsVars[ 'sys' ][ 'src' ]  = $this->_woopsVars[ 'sys' ][ 'root' ] . self::WOOPS_SOURCE_DIRNAME . DIRECTORY_SEPARATOR;
         
         // Adds a trailing slash to the relative path of the WOOPS root (this may be needed if we are using user home dirs)
-        if( substr( $this->_woopsVars[ 'web' ][ 'root' ], -1 !== '/' ) ) {
+        if( substr( $this->_woopsVars[ 'web' ][ 'root' ], -1 ) !== '/' ) {
             
             // Adds the trailing slash
             $this->_woopsVars[ 'web' ][ 'root' ] .= '/';
