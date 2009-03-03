@@ -15,7 +15,7 @@
 		<stepsTitle>Installation steps</stepsTitle>
 		<stepsText>
 			<![CDATA[
-			The installation process is divided into 3 steps:
+			The installation process is divided into 4 steps:
 			<ol>
 				<li>
 					<strong>General configuration:</strong><br /><br />
@@ -31,6 +31,10 @@
 					<strong>Database configuration:</strong><br /><br />
 					Once the database engine has been configured, you'll the be able to choose the database driver to use, and to configures the database connection parameters.
 				</li>
+				<li>
+					<strong>Database import:</strong><br /><br />
+					Once all the database settings have been configured, you'll the be able to import the necessary database structure and data.
+				</li>
 			</ol>
 			]]>
 		</stepsText>
@@ -44,9 +48,11 @@
 		<step1>General configuration</step1>
 		<step2>Database engine</step2>
 		<step3>Database configuration</step3>
+		<step4>Database import</step4>
 		<submitStep1>Step 1: general configuration</submitStep1>
 		<submitStep2>Step 2: database engine</submitStep2>
 		<submitStep3>Step 3: database configuration</submitStep3>
+		<submitStep4>Step 4: database import</submitStep4>
 		<writeConfValues>Write configuration values</writeConfValues>
 		<step1ConfirmTitle>Configuration written</step1ConfirmTitle>
 		<step1ConfirmText>
@@ -70,6 +76,13 @@
 			You will now be able to configure the database connection parameters.
 			]]>
 		</step2ConfirmText>
+		<step3ConfirmTitle>Configuration written</step3ConfirmTitle>
+		<step3ConfirmText>
+			<![CDATA[
+			The WOOPS database configuration has been successfully written.<br /><br />
+			You will now be able to import the necessary database structure and data.
+			]]>
+		</step3ConfirmText>
 		<driverErrorTitle>No database driver</driverErrorTitle>
 		<driverErrorText>
 			<![CDATA[

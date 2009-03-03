@@ -211,7 +211,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         $container[ 'class' ] = 'menu';
         
         // Number of steps
-        $steps = 3;
+        $steps = 4;
         
         // Creates the list
         $list = $container->ul;
@@ -527,11 +527,36 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
                         
                     } else {
                         
-                        // Step is complete
-                        $this->_step3 = true;
                         
                         // Writes the INI file
-                        // ...
+                        $this->_writeDatabaseConfiguration();
+                        
+                        // Step is complete
+                        $this->_step3         = true;
+                        
+                        // Adds the infos text
+                        $confirm              = $this->_content->div;
+                        $confirm[ 'class' ]   = 'box-success';
+                        $confirm->h4          = $this->_lang->step3ConfirmTitle;
+                        $confirm->div         = $this->_lang->step3ConfirmText;
+                        
+                        // Adds an hidden input
+                        $hidden               = $this->_content->input;
+                        $hidden[ 'type' ]     = 'hidden';
+                        $hidden[ 'name' ]     = 'woops[mod][Install][install-step]';
+                        $hidden[ 'value' ]    = 4;
+                        
+                        // Adds the submit button
+                        $submitDiv            = $this->_content->div;
+                        $submitDiv[ 'class' ] = 'submit';
+                        $submit               = $submitDiv->input;
+                        $submit[ 'type' ]     = 'submit';
+                        $submit[ 'class' ]    = 'submit-step';
+                        $submit[ 'name' ]     = 'woops[mod][Install][submit]';
+                        $submit[ 'value' ]    = $this->_lang->submitStep4;
+                        
+                        // Nothing else to display
+                        return;
                     }
                 }
             }
@@ -647,6 +672,49 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         
         // Database connection is OK
         return false;
+    }
+    
+    /**
+     * Writes the INI file for the third install step
+     * 
+     * @return  void
+     */
+    protected function _writeDatabaseConfiguration()
+    {
+        // Gets the INI file
+        $iniParser = new Woops_File_Ini_Parser( self::$_env->getPath( 'config/woops.ini.php' ) );
+        $iniFile   = $iniParser->getIniObject();
+        
+        // Gets the incoming variables
+        $vars      = $this->_getModuleVar( 'database' );
+        
+        // Gets the database section
+        $dbSection = $iniFile->getItem( 'database' );
+        
+        // Gets the configured values
+        $driver      = $vars[ 'driver' ];
+        $host        = $vars[ 'host' ];
+        $database    = $vars[ 'database' ];
+        $port        = ( $vars[ 'port' ] )        ? $vars[ 'port' ]        : '';
+        $user        = ( $vars[ 'user' ] )        ? $vars[ 'user' ]        : '';
+        $password    = ( $vars[ 'password' ] )    ? $vars[ 'password' ]    : '';
+        $tablePrefix = ( $vars[ 'tablePrefix' ] ) ? $vars[ 'tablePrefix' ] : '';
+        
+        // Writes the configured values
+        $dbSection->newValueItem( 'driver',      $driver );
+        $dbSection->newValueItem( 'host',        $host );
+        $dbSection->newValueItem( 'database',    $database );
+        $dbSection->newValueItem( 'port',        $port );
+        $dbSection->newValueItem( 'user',        $user );
+        $dbSection->newValueItem( 'password',    $password );
+        $dbSection->newValueItem( 'tablePrefix', $tablePrefix );
+        
+        // Writes the INI file to the config directory
+        $iniFile->toFile(
+            'woops.ini.php',
+            self::$_env->getPath( 'config' ),
+            true
+        );
     }
     
     /**
