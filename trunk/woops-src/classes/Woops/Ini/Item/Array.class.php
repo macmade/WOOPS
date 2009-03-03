@@ -16,9 +16,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Ini.Item
+ * @package     Woops.Ini.Item
  */
-class Woops_File_Ini_Item_Array
+class Woops_Ini_Item_Array
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -122,7 +122,7 @@ class Woops_File_Ini_Item_Array
     public function addValue( $value )
     {
         // Creates the value object
-        $object          = new Woops_File_Ini_Item_Value( $this->_name . '[]', $value );
+        $object          = new Woops_Ini_Item_Value( $this->_name . '[]', $value );
         
         // Stores the value object
         $this->_values[] = $object;
@@ -144,7 +144,7 @@ class Woops_File_Ini_Item_Array
     /**
      * Gets the values of the array item
      * 
-     * @return  array   An array with instances of the Woops_File_Ini_Item_Value class
+     * @return  array   An array with instances of the Woops_Ini_Item_Value class
      */
     public function getValues()
     {

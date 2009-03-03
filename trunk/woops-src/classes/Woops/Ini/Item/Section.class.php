@@ -16,9 +16,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Ini.Item
+ * @package     Woops.Ini.Item
  */
-class Woops_File_Ini_Item_Section extends Woops_File_Ini_File
+class Woops_Ini_Item_Section extends Woops_Ini_File
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -69,30 +69,30 @@ class Woops_File_Ini_Item_Section extends Woops_File_Ini_File
     /**
      * Creates a section item in the INI file
      * 
-     * @param   string                                  The name of the section item
-     * @return  Woops_File_Ini_Item_Section             The new section object
-     * @throws  Woops_File_Ini_Item_Section_Exception   Always as an INI section cannot contains another section
+     * @param   string                              The name of the section item
+     * @return  Woops_Ini_Item_Section              The new section object
+     * @throws  Woops_Ini_Item_Section_Exception    Always as an INI section cannot contains another section
      */
     public function newSectionItem( $name )
     {
-        throw new Woops_File_Ini_Item_Section_Exception(
+        throw new Woops_Ini_Item_Section_Exception(
             'An INI section cannot contains another section',
-            Woops_File_Ini_Item_Section_Exception::EXCEPTION_NESTED_SECTION
+            Woops_Ini_Item_Section_Exception::EXCEPTION_NESTED_SECTION
         );
     }
     
     /**
      * Adds a section item in the INI file
      * 
-     * @param   Woops_File_Ini_Item_Section             The section object to add
+     * @param   Woops_Ini_Item_Section              The section object to add
      * @return  void
-     * @throws  Woops_File_Ini_Item_Section_Exception   Always as an INI section cannot contains another section
+     * @throws  Woops_Ini_Item_Section_Exception    Always as an INI section cannot contains another section
      */
-    public function addSectionItem( Woops_File_Ini_Item_Section $section )
+    public function addSectionItem( Woops_Ini_Item_Section $section )
     {
-        throw new Woops_File_Ini_Item_Section_Exception(
+        throw new Woops_Ini_Item_Section_Exception(
             'An INI section cannot contains another section',
-            Woops_File_Ini_Item_Section_Exception::EXCEPTION_NESTED_SECTION
+            Woops_Ini_Item_Section_Exception::EXCEPTION_NESTED_SECTION
         );
     }
     

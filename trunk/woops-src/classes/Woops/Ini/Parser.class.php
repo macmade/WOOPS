@@ -16,9 +16,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Ini
+ * @package     Woops.Ini
  */
-class Woops_File_Ini_Parser
+class Woops_Ini_Parser
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -70,9 +70,9 @@ class Woops_File_Ini_Parser
         if( !file_exists( $path ) ) {
             
             // Error - The file does not exists
-            throw new Woops_File_Ini_Parser_Exception(
+            throw new Woops_Ini_Parser_Exception(
                 'The INI file does not exists (path: ' . $path . ')',
-                Woops_File_Ini_Parser_Exception::EXCEPTION_NO_FILE
+                Woops_Ini_Parser_Exception::EXCEPTION_NO_FILE
             );
         }
         
@@ -80,9 +80,9 @@ class Woops_File_Ini_Parser
         if( !is_readable( $path ) ) {
             
             // Error - The file is not readable
-            throw new Woops_File_Ini_Parser_Exception(
+            throw new Woops_Ini_Parser_Exception(
                 'The INI file is not readable (path: ' . $path . ')',
-                Woops_File_Ini_Parser_Exception::EXCEPTION_FILE_NOT_READABLE
+                Woops_Ini_Parser_Exception::EXCEPTION_FILE_NOT_READABLE
             );
         }
         
@@ -125,7 +125,7 @@ class Woops_File_Ini_Parser
         $comments   = array();
         
         // Creates an INI file object
-        $this->_ini = new Woops_File_Ini_File();
+        $this->_ini = new Woops_Ini_File();
         
         // Process each line of the file
         foreach( $lines as &$line ) {
@@ -366,7 +366,7 @@ class Woops_File_Ini_Parser
     /**
      * Gets the INI file object
      * 
-     * @return  Woops_File_Ini_File The INI file object
+     * @return  Woops_Ini_File The INI file object
      */
     public function getIniObject()
     {

@@ -16,9 +16,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.File.Ini.Item
+ * @package     Woops.Ini.Item
  */
-class Woops_File_Ini_Item_Value
+class Woops_Ini_Item_Value
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
