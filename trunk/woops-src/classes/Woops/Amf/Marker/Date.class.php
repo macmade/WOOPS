@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Amf.Marker
  */
-class Woops_Amf_Marker_Date
+class Woops_Amf_Marker_Date extends Woops_Amf_Marker
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

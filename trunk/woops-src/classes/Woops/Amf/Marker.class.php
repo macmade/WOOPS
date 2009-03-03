@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * AMF object marker (0x0A)
+ * Abstract class for the AMF markers
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Amf.Marker
+ * @package     Woops.Amf
  */
-class Woops_Amf_Marker_Object extends Woops_Amf_Marker
+abstract class Woops_Amf_Marker
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -28,5 +28,15 @@ class Woops_Amf_Marker_Object extends Woops_Amf_Marker
     /**
      * The AMF marker type
      */
-    protected $_type = 0x0A;
+    protected $_type = 0x00;
+    
+    /**
+     * Gets the AMF marker type
+     * 
+     * @return  int The AMF marker type
+     */
+    public function getType()
+    {
+        return $this->_type;
+    }
 }
