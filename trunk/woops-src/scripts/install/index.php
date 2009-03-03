@@ -21,7 +21,7 @@
 						<h4>Problems detected</h4>
 						<div class="message">
 							We detected errors or warnings that could prevent the installation of WOOPS.<br />
-							Please run the <a href="' . substr( $_SERVER[ 'SCRIPT_NAME' ], 0, -10 ) . '-check/" title="Installation check">installation check script</a> to find out more.
+							Please run the <a href="' . substr( str_replace( '//', '/', $_SERVER[ 'SCRIPT_NAME' ] ), 0, -10 ) . '-check/" title="Installation check">installation check script</a> to find out more.
 						</div>
 					</div>';
 		

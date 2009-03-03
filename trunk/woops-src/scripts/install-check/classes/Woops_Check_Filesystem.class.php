@@ -36,7 +36,17 @@ class Woops_Check_Filesystem
     
     function Woops_Check_Filesystem()
     {
-        $pathInfo = explode( DIRECTORY_SEPARATOR, $_SERVER[ 'SCRIPT_FILENAME' ] );
+        // Checks if we have a Windows path, separated by slashes (PHP CGI with Apache under Windows)
+        if( substr( $_SERVER[ 'SCRIPT_FILENAME' ], 1, 2 ) === ':/' ) {
+            
+            // Gets the path parts
+            $pathInfo = explode( '/', $_SERVER[ 'SCRIPT_FILENAME' ] );
+            
+        } else {
+            
+            // Gets the path parts
+            $pathInfo = explode( DIRECTORY_SEPARATOR, $_SERVER[ 'SCRIPT_FILENAME' ] );
+        }
         
         array_pop( $pathInfo );
         array_pop( $pathInfo );

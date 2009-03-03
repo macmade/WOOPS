@@ -237,6 +237,9 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
                     $scriptName = NULL;
                 }
                 
+                // Removes double slashes (could happen with PHP CGI under Apache on Windows)
+                $scriptName = str_replace( '//', '/', $scriptName );
+                
                 // Store variable
                 $this->_serverVars[ $var ] = $scriptName;
                 $result                    = true;
@@ -272,6 +275,9 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
                     
                     $scriptFileName = NULL;
                 }
+                
+                // Removes double slashes (could happen with PHP CGI under Apache on Windows)
+                $scriptFileName = str_replace( '//', '/', $scriptFileName );
                 
                 // Store variable
                 $this->_serverVars[ $var ] = $scriptFileName;
@@ -328,6 +334,19 @@ final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
                     $this->_serverVars[ $var ] = str_replace( str_replace( '/', DIRECTORY_SEPARATOR, $scriptName ), '', $scriptFileName );
                 }
                 $result = true;
+                break;
+            
+            case 'PHP_SELF':
+                
+                // Check for PHP_SELF variable in ${ $lookup }
+                if( isset( $this->_envVars[ $lookup ][ $var ] ) ) {
+                    
+                    // Removes double slashes (could happen with PHP CGI under Apache on Windows)
+                    $phpSelf = str_replace( '//', '/', $this->_envVars[ $lookup ][ $var ] );
+                    
+                    $this->_serverVars[ $var ] = $phpSelf;
+                    $result                    = true;
+                }
                 break;
                 
             // Default processing
