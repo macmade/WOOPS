@@ -321,63 +321,54 @@ DIV#w3c IMG {
 }
 
 H3.database {
-    text-transform:         uppercase;
     background-image:       url( 'database.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
 H3.time {
-    text-transform:         uppercase;
     background-image:       url( 'time.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
 H3.lang {
-    text-transform:         uppercase;
     background-image:       url( 'lang.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
 H3.xhtml {
-    text-transform:         uppercase;
     background-image:       url( 'xhtml.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
 H3.xml {
-    text-transform:         uppercase;
     background-image:       url( 'xml.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
 H3.classCache {
-    text-transform:         uppercase;
     background-image:       url( 'classcache.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
 H3.aop {
-    text-transform:         uppercase;
     background-image:       url( 'aop.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
 H3.error {
-    text-transform:         uppercase;
     background-image:       url( 'bug.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;
 }
 
 H3.modules {
-    text-transform:         uppercase;
     background-image:       url( 'modules.png' );
     background-repeat:      no-repeat;
     background-position:    right 2px;

@@ -95,5 +95,31 @@
 		<errorDatabasePortNotNumeric>The database port must be numeric</errorDatabasePortNotNumeric>
 		<errorDatabaseNameRequired>You need to enter a database name</errorDatabaseNameRequired>
 		<errorDatabaseConnection>Problems connecting to the database</errorDatabaseConnection>
+		<time>Time settings</time>
+		<lang>Language settings</lang>
+		<xhtml>XHTML settings</xhtml>
+		<xml>XML settings</xml>
+		<classCache>Class cache settings</classCache>
+		<aop>AOP settings (Aspect Oriented Programming)</aop>
+		<error>Error settings</error>
+		<modules>Modules settings</modules>
+		<database>Database settings</database>
+		<time-timezone>Default timezone</time-timezone>
+		<lang-defaultLanguage>Default language</lang-defaultLanguage>
+		<xhtml-format>Formatting</xhtml-format>
+		<xml-format>Formatting</xml-format>
+		<classCache-enable>Enable</classCache-enable>
+		<classCache-optimize>Optimize</classCache-optimize>
+		<aop-enable>Enable</aop-enable>
+		<error-report>Reporting level</error-report>
+		<modules-loaded>Loaded modules</modules-loaded>
+		<database-engine>Database engine</database-engine>
+		<database-driver>Database driver</database-driver>
+		<database-host>Database host</database-host>
+		<database-port>Database port</database-port>
+		<database-user>Database username</database-user>
+		<database-password>Database password</database-password>
+		<database-database>Database name</database-database>
+		<database-tablePrefix>Table prefix</database-tablePrefix>
 	</labels>
 </woops-lang>

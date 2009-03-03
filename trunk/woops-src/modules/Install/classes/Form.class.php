@@ -735,7 +735,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
             // Section title
             $sectionTitle            = $container->h3;
             $sectionTitle[ 'class' ] = $section;
-            $sectionTitle->addTextData( $section );
+            $sectionTitle->addTextData( $this->_lang->$section );
             
             // Creates the section items form elements
             $this->_createSectionItems( $section, $items, $container );
@@ -790,7 +790,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
             // Creates the box
             $box                      = $itemContainer->div;
             $box[ 'class' ]           = 'box';
-            $box->h4                  = $name;
+            $box->h4                  = $this->_lang->getLabel( $section . '-' . $name );
             
             // Do we have a title comment in the INI file?
             if( isset( $item[ 'comments' ][ 'title' ] ) ) {
