@@ -125,5 +125,12 @@
 		<createTables>Create database tables</createTables>
 		<importTables>Import data into database tables</importTables>
 		<importDatabase>Perform the selected actions</importDatabase>
+		<successTitle>WOOPS has been sucessfully installed</successTitle>
+		<successText>
+			<![CDATA[
+				The WOOPS installation process has been sucessfully completed.<br /><br />
+				Thank you for using WOOPS.
+			]]>
+		</successText>
 	</labels>
 </woops-lang>

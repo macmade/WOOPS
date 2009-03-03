@@ -31,11 +31,6 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
     private static $_hasStatic   = false;
     
     /**
-     * The configuration object
-     */
-    protected static $_conf      = NULL;
-    
-    /**
      * The available modules
      */
     protected static $_modules   = array();
@@ -89,6 +84,11 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
      * Whether the third step has been completed
      */
     protected $_step3            = false;
+    
+    /**
+     * Whether the fourth step has been completed
+     */
+    protected $_step4            = false;
     
     /**
      * Class constructor
@@ -213,9 +213,6 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         
         // Gets the available database engines
         self::$_engines   = Woops_Database_Layer::getInstance()->getRegisteredEngines();
-        
-        // Gets the configuration object
-        self::$_conf      = Woops_Core_Config_Getter::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -549,7 +546,6 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
                         
                     } else {
                         
-                        
                         // Writes the INI file
                         $this->_writeDatabaseConfiguration();
                         
@@ -746,10 +742,82 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
      */
     protected function _installStep4()
     {
+        // Paths to the SQL files
+        $dropFile   = self::$_env->getSourcePath( 'database/drop-tables.sql' );
+        $createFile = self::$_env->getSourcePath( 'database/structure.sql' );
+        $importFile = self::$_env->getSourcePath( 'database/data.sql' );
+        
+        // Storage for the error messages
+        $errors = array();
+        
         // Has the form been submitted?
         if( $this->_getModuleVar( 'submit-import' ) ) {
             
-            // ...
+            // Gets the incoming data
+            $dropTables   = $this->_getModuleVar( 'drop' );
+            $createTables = $this->_getModuleVar( 'create' );
+            $importTables = $this->_getModuleVar( 'import' );
+            
+            // Checks if we have tables to drop
+            if( is_array( $dropTables ) && count( $dropTables ) ) {
+                
+                // Tries to drop the selected tables
+                if( $error = $this->_databaseQuery( $dropTables, $dropFile, 'DROP TABLE IF EXISTS ' ) ) {
+                    
+                    // We've got an error message - Stores it
+                    $errors[] = $error;
+                }
+            }
+            
+            // Checks if we have tables to create
+            if( is_array( $createTables ) && count( $createTables ) ) {
+                
+                // Tries to create the selected tables
+                if( $error = $this->_databaseQuery( $createTables, $createFile, 'CREATE TABLE IF NOT EXISTS ' ) ) {
+                    
+                    // We've got an error message - Stores it
+                    $errors[] = $error;
+                }
+            }
+            
+            // Checks if we have tables to import
+            if( is_array( $importTables ) && count( $importTables ) ) {
+                
+                // Tries to import the selected tables
+                if( $error = $this->_databaseQuery( $importTables, $importFile, 'INSERT INTO ' ) ) {
+                    
+                    // We've got an error message - Stores it
+                    $errors[] = $error;
+                }
+            }
+            
+            // Checks if we have error messages to display
+            if( count( $errors ) ) {
+                
+                // Creates the error box
+                $errorBox            = $this->_content->div;
+                $errorBox[ 'class' ] = 'box-error';
+                $errorBox->h4        = $this->_lang->errors;
+                $errorList           = $errorBox->ul;
+                
+                // Process each error message
+                foreach( $errors as $message ) {
+                    
+                    // Adds the error message
+                    $errorList->li = $message;
+                }
+                
+            } else {
+                
+                // Step is complete
+                $this->_step4 = true;
+                
+                // Installation is complete
+                $this->_installComplete();
+                
+                // Nothing else to display
+                return;
+            }
         }
         
         // Creates the containers
@@ -764,21 +832,9 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         $import->h4        = $this->_lang->importTables;
         
         // Creates the table lists
-        $this->_tableList(
-            self::$_env->getSourcePath( 'database/drop-tables.sql' ),
-            'DROP TABLE IF EXISTS ',
-            $drop->div
-        );
-        $this->_tableList(
-            self::$_env->getSourcePath( 'database/structure.sql' ),
-            'CREATE TABLE IF NOT EXISTS ',
-            $create->div
-        );
-        $this->_tableList(
-            self::$_env->getSourcePath( 'database/data.sql' ),
-            'INSERT INTO ',
-            $import->div
-        );
+        $this->_tableList( 'drop',   $dropFile,   'DROP TABLE IF EXISTS ',       $drop->div );
+        $this->_tableList( 'create', $createFile, 'CREATE TABLE IF NOT EXISTS ', $create->div );
+        $this->_tableList( 'import', $importFile, 'INSERT INTO ',                $import->div );
         
         // Adds an hidden input for the current install step
         $hidden               = $this->_content->input;
@@ -799,12 +855,13 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
     /**
      * Creates a list of tables
      * 
+     * @param   string          The action to perform (drop, create or import)
      * @param   string          The path to the SQL file
      * @param   string          The prefix to detect the table names
      * @param   Woops_Xhtml_Tag The container in which to place the table list
      * return   void
      */
-    protected function _tableList( $filePath, $detectPrefix, Woops_Xhtml_Tag $container )
+    protected function _tableList( $action, $filePath, $detectPrefix, Woops_Xhtml_Tag $container )
     {
         // Gets the file content
         $file    = file_get_contents( $filePath );
@@ -814,7 +871,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         
         // Finds all table names
         $tables  = preg_match_all(
-            '/' . $detectPrefix . '`([^`]+)`/',
+            '/^\s*' . $detectPrefix . '`([^`]+)`/m',
             $file,
             $matches
         );
@@ -822,11 +879,21 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         // Checks for matches
         if( isset( $matches[ 1 ] ) && is_array( $matches[ 1 ] ) && count( $matches[ 1 ] ) ) {
             
+            // Removes duplicates
+            $matches[ 1 ] = array_flip( $matches[ 1 ] );
+            
             // Process each table name
-            foreach( $matches[ 1 ] as $database ) {
+            foreach( $matches[ 1 ] as $tableName => $void ) {
+                
+                // Real name of the table
+                $tableName = str_replace(
+                    '{$PREFIX}',
+                    self::$_conf->getVar( 'database', 'tablePrefix' ),
+                    $tableName
+                );
                 
                 // ID for the checkbox
-                $id = uniqid();
+                $id                 = $action . '-' . $tableName;
                 
                 // Creates the container
                 $div                = $container->div;
@@ -836,20 +903,139 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
                 $check[ 'type' ]    = 'checkbox';
                 $check[ 'checked' ] = 'checked';
                 $check[ 'id' ]      = $id;
+                $check[ 'name' ]    = 'woops[mod][Install][' . $action . '][]';
+                $check[ 'value' ]   = $tableName;
                 
                 // Creates the label
                 $label            = $div->label;
                 $label[ 'class' ] = 'tableName';
                 $label[ 'for' ]   = $id;
-                $label->addTextData(
-                    str_replace(
-                        '{$PREFIX}',
-                        self::$_conf->getVar( 'database', 'tablePrefix' ),
-                        $database
-                    )
-                );
+                $label->addTextData( $tableName );
             }
         }
+    }
+    
+    /**
+     * Executes the needed database queries
+     * 
+     * @param   array           The selected tables
+     * @param   string          The path to the SQL file
+     * @param   string          The prefix to detect the table names
+     * return   void
+     */
+    protected function _databaseQuery( array $tableNames, $filePath, $detectPrefix )
+    {
+        // Tags to replace
+        $tags = array(
+            '/{\$PREFIX}/',
+            '/{\$DEFAULT_LANGUAGE}/'
+        );
+        
+        // Replacement values
+        $replace = array(
+            self::$_conf->getVar( 'database', 'tablePrefix' ),
+            self::$_conf->getVar( 'lang', 'defaultLanguage' )
+        );
+        
+        // Gets the table names as keys
+        $tableNames = array_flip( $tableNames );
+        
+        // Gets the file lines
+        $lines = file( $filePath );
+        
+        // Replaces the tags
+        $lines = preg_replace( $tags, $replace, $lines );
+        
+        // Storage for the query
+        $query   = '';
+        
+        // Flag to know if we are in a multiline SQL statement
+        $inStatement = false;
+        
+        // Process each line
+        foreach( $lines as $line ) {
+            
+            // Removes unneeded whitespace
+            $line = trim( $line );
+            
+            // Are we in a multiline SQL statement?
+            if( $inStatement ) {
+                
+                // Yes, adds the current line to the query
+                $query .= $line . self::$_str->NL;
+                
+                // Does the current line end the multiline SQL statement?
+                if( substr( $line, -1 ) === ';' ) {
+                    
+                    // Yes, resets the flag
+                    $inStatement = false;
+                }
+                
+            } else {
+                
+                // Storage
+                $matches = array();
+                
+                // Finds the table instructions
+                preg_match( '/^' . $detectPrefix . '`([^`]+)`/', $line, $matches );
+                
+                // Checks if we have an instruction
+                if( isset( $matches[ 1 ] ) && !is_array( $matches[ 1 ] ) && isset( $tableNames[ $matches[ 1 ] ] ) ) {
+                    
+                    // Yes, adds the current line to the query
+                    $query .= $line . self::$_str->NL;
+                    
+                    // Checks if the statement is ended
+                    if( substr( $line, -1 ) !== ';' ) {
+                        
+                        // No, we are now in a multiline SQL statement
+                        $inStatement = true;
+                    }
+                }
+            }
+        }
+        
+        // We don't want any errors here
+        try {
+            
+            // Database engine object
+            static $engine;
+            
+            // Have we already the instance of the database engine
+            if( !is_object( $engine ) ) {
+                
+                // Gets the database engine
+                $engine = Woops_Database_Layer::getInstance()->getEngine();
+            }
+            
+            // Executes the query
+            $res = $engine->query( $query );
+            
+            // Checks the query result
+            if( !$res ) {
+                
+                // No result, returns the error message
+                return $engine->errorMessage();
+            }
+            
+        } catch( Exception $e ) {
+            
+            // Returns the exception message
+            return $e->getMessage();
+        }
+    }
+    
+    /**
+     * Writes the installation success message
+     * 
+     * @return  void
+     */
+    protected function _installComplete()
+    {
+        $box            = $this->_content->div;
+        $box[ 'class' ] = 'box-success';
+        $box->h4        = $this->_lang->successTitle;
+        $box->div       = $this->_lang->successText;
     }
     
     /**
