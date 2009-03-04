@@ -246,7 +246,7 @@ class Woops_Http_Cookie
      * 
      * @return  boolean Whether the cookie has been set
      */
-    public function setCookie()
+    public function set()
     {
         return setcookie(
             $this->_name,

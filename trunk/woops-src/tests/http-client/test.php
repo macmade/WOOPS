@@ -30,8 +30,8 @@ $FOO = new Woops_Http_Cookie( 'foo', 'WOOPS-test-cookie-1' );
 $BAR = new Woops_Http_Cookie( 'bar', 'WOOPS-test-cookie-2' );
 
 // Sets the cookies
-$FOO->setCookie();
-$BAR->setCookie();
+$FOO->set();
+$BAR->set();
 
 // Prints the POST data
 print 'POST data ($_POST): ';
