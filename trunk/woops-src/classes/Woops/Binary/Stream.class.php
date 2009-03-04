@@ -93,21 +93,23 @@ class Woops_Binary_Stream
         if( $format === 'c' || $format === 'C' ) {
             
             // Number of bytes to read from the data
-            $readByte = 1;
+            $readBytes = 1;
             
         } else if( $format === 's' || $format === 'S' || $format === 'n' || $format === 'v' ) {
             
             // Number of bytes to read from the data
-            $readByte = 2;
+            $readBytes = 2;
             
         } else if( $format === 'l' || $format === 'L' || $format === 'N' || $format === 'V' ) {
             
             // Number of bytes to read from the data
-            $readByte = 4;
+            $readBytes = 4;
         }
         
-        if( $this->_offset + $readByte > $this->_dataLength ) {
+        // Checks if the stream end has been reached
+        if( $this->_offset + $readBytes > $this->_dataLength ) {
             
+            // Error - No more data
             throw new Woops_Binary_Stream_Exception(
                 '',
                 Woops_Binary_Stream_Exception::EXCEPTION_END_OF_STREAM
@@ -115,10 +117,10 @@ class Woops_Binary_Stream
         }
         
         // Unpacks the data
-        $unpackData = unpack( $format, substr( $this->_data, $this->_offset, $readByte ) );
+        $unpackData = unpack( $format, substr( $this->_data, $this->_offset, $readBytes ) );
         
         // Increases the offset
-        $this->_offset += $readByte;
+        $this->_offset += $readBytes;
         
         // Returns the processed data
         return array_shift( $unpackData );
@@ -199,8 +201,10 @@ class Woops_Binary_Stream
      */
     public function read( $readBytes = 1 )
     {
+        // Checks if the stream end has been reached
         if( $this->_offset + $readBytes > $this->_dataLength ) {
             
+            // Error - No more data
             throw new Woops_Binary_Stream_Exception(
                 '',
                 Woops_Binary_Stream_Exception::EXCEPTION_END_OF_STREAM
@@ -218,6 +222,28 @@ class Woops_Binary_Stream
         
         // Returns the data
         return $data;
+    }
+    
+    /**
+     * Gets the remaining stream data
+     * 
+     * @return  string  The remaining stream data
+     * @throws  Woops_Binary_Stream_Exception   If the end of the stream has been reached
+     */
+    public function getRemainingData()
+    {
+        // Checks if the stream end has been reached
+        if( $this->_offset === $this->_dataLength ) {
+            
+            // Error - No more data
+            throw new Woops_Binary_Stream_Exception(
+                '',
+                Woops_Binary_Stream_Exception::EXCEPTION_END_OF_STREAM
+            );
+        }
+        
+        // Returns the remaining data
+        return substr( $this->_data, $this->_offset );
     }
     
     /**
@@ -392,6 +418,64 @@ class Woops_Binary_Stream
         // Returns the language code as a string
         // 0x60 - 96 is added to each letter, as the language codes are lowercase letters
         return chr( $letter1 + 0x60 ) . chr( $letter2 + 0x60 ) . chr( $letter3 + 0x60 );
+    }
+    
+    /**
+     * Gets a string that ends with an ASCII NULL character
+     * 
+     * @return  string  The string
+     */
+    public function nullTerminatedString()
+    {
+        // Gets the position of the next NULL character
+        $null   = strpos( $this->_data, chr( 0 ), $this->_offset );
+        
+        // Gets the string
+        $string = substr( $this->_data, $this->_offset, $null );
+        
+        // Checks if a NULL character was found
+        if( !$null ) {
+            
+            // No NULL character, reads untils the end of the stream
+            $this->_offset = $this->_dataLength;
+            
+        } else {
+            
+            // Increases the offset
+            $this->_offset += $null + 1;
+        }
+        
+        // Returns the string
+        return $string;
+        
+    }
+    
+    /**
+     * Gets an UTF-8 string (16bits length)
+     * 
+     * @return  string  The UTF-8 string
+     */
+    public function utf8String()
+    {
+        // Gets the string length
+        $length = $this->bigEndianUnsignedShort();
+        
+        // Returns the string
+        return $this->read( $length );
+    }
+    
+    /**
+     * Gets an UTF-8 string (32bits length)
+     * 
+     * @return  string  The UTF-8 string
+     */
+    public function longUtf8String()
+    {
+        // Gets the string length
+        $length = $this->bigEndianUnsignedLong();
+        
+        // Returns the string
+        return $this->read( $length );
     }
     
     /**
