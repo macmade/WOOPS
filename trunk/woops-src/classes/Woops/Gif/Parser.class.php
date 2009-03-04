@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Gif
  */
-class Woops_Gif_Parser extends Woops_File_Parser_Base
+class Woops_Gif_Parser
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -42,6 +42,35 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
     protected $_gifInfos            = NULL;
     
     /**
+     * The binary stream
+     */
+    protected $_stream              = NULL;
+    
+    /**
+     * The file path
+     */
+    protected $_filePath            = '';
+    
+    /**
+     * Class constructor
+     * 
+     * @param   string  The location of the file to parse
+     * @return  void
+     * @see     _parseFile
+     */
+    public function __construct( $file )
+    {
+        // Stores the file path
+        $this->_filePath = $file;
+        
+        // Creates the binary stream
+        $this->_stream   = new Woops_Binary_File_Stream( $file );
+        
+        // Parses the file
+        $this->_parseFile();
+    }
+    
+    /**
      * 
      */
     protected function _getLogicalScreenDescriptor()
@@ -49,15 +78,12 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         // Storage
         $lsd                         = new stdClass();
         
-        // Gets the logical screen descriptor data
-        $lsdData                     = $this->_read( 7 );
-        
         // Gets the image dimensions
-        $lsd->width                  = self::$_binUtils->littleEndianUnsignedShort( $lsdData, 0 );
-        $lsd->height                 = self::$_binUtils->littleEndianUnsignedShort( $lsdData, 2 );
+        $lsd->width                  = $this->_stream->littleEndianUnsignedShort();
+        $lsd->height                 = $this->_stream->littleEndianUnsignedShort();
         
         // Gets the packed fields
-        $packedFields                = self::$_binUtils->unsignedChar( $lsdData, 4 );
+        $packedFields                = $this->_stream->unsignedChar();
         
         // Whether to global color table will follow 
         $lsd->globalColorTableFlag   = ( $packedFields & 0x80 ) >> 7;  // Mask is 1000 0000
@@ -72,10 +98,10 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         $lsd->sizeOfGlobalColorTable = ( $packedFields & 0x07 );       // Mask is 0000 0111
         
         // Gets the background color index
-        $lsd->bgColorIndex           = self::$_binUtils->unsignedChar( $lsdData, 5 );
+        $lsd->bgColorIndex           = $this->_stream->unsignedChar();
         
         // Gets the pixel aspect ratio
-        $lsd->pixelAspectRatio       = self::$_binUtils->unsignedChar( $lsdData, 6 );
+        $lsd->pixelAspectRatio       = $this->_stream->unsignedChar();
         
         // Returns the logical screen descriptor
         return $lsd;
@@ -95,16 +121,13 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         // Process the global color table
         for( $i = 0; $i < $length; $i++ ) {
             
-            // Gets the current color data
-            $colorData          = $this->_read( 3 );
-            
             // Storage
             $table[ $i ]        = new stdClass();
             
             // Gets the color values
-            $red                = self::$_binUtils->unsignedChar( $colorData, 0 );
-            $green              = self::$_binUtils->unsignedChar( $colorData, 1 );
-            $blue               = self::$_binUtils->unsignedChar( $colorData, 2 );
+            $red                = $this->_stream->unsignedChar();
+            $green              = $this->_stream->unsignedChar();
+            $blue               = $this->_stream->unsignedChar();
             
             // Gets the hexadecimal values
             $redHex             = dechex( $red );
@@ -135,19 +158,16 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         // Storage
         $block = new stdClass();
         
-        // Gets the block data
-        $blockData                    = $this->_read( 10 );
-        
         // Gets the position
-        $block->left                  = self::$_binUtils->littleEndianUnsignedShort( $blockData, 0 );
-        $block->top                   = self::$_binUtils->littleEndianUnsignedShort( $blockData, 2 );
+        $block->left                  = $this->_stream->littleEndianUnsignedShort();
+        $block->top                   = $this->_stream->littleEndianUnsignedShort();
         
         // Gets the dimensions
-        $block->width                 = self::$_binUtils->littleEndianUnsignedShort( $blockData, 4 );
-        $block->height                = self::$_binUtils->littleEndianUnsignedShort( $blockData, 6 );
+        $block->width                 = $this->_stream->littleEndianUnsignedShort();
+        $block->height                = $this->_stream->littleEndianUnsignedShort();
         
         // Gets the packed fields
-        $packedFields                 = self::$_binUtils->unsignedChar( $blockData, 8 );
+        $packedFields                 = $this->_stream->unsignedChar();
         
         // Whether to local color table will follow 
         $block->localColorTableFlag   = ( $packedFields & 0x80 ) >> 7;  // Mask is 1000 0000
@@ -169,7 +189,7 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         }
         
         // Gets the LZW minimum code size
-        $block->lzwMinimumCodeSize    = self::$_binUtils->unsignedChar( $blockData, 9 );
+        $block->lzwMinimumCodeSize    = $this->_stream->unsignedChar();
         
         // Gets the image data
         $block->imageData             = $this->_getDataSubBlocks();
@@ -187,8 +207,7 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         $data = array();
         
         // Gets the next block size
-        $blockSizeData = $this->_read( 1 );
-        $blockSize     = self::$_binUtils->unsignedChar( $blockSizeData );
+        $blockSize     = $this->_stream->unsignedChar();
         
         // Process the data blocks until the end of the parent block
         while( $blockSize !== 0x00 ) {
@@ -200,14 +219,13 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
             $block->size = $blockSize;
             
             // For now, do not process or store the block data
-            fseek( $this->_fileHandle, $blockSize, SEEK_CUR );
+            $this->_stream->seek( $blockSize, Woops_Binary_File_Stream::SEEK_CUR );
             
             // Adds the data block
             $data[]      = $block;
             
             // Gets the next block size
-            $blockSizeData = $this->_read( 1 );
-            $blockSize     = self::$_binUtils->unsignedChar( $blockSizeData );
+            $blockSize = $this->_stream->unsignedChar();
         }
         
         // Returns the data of the sub blocks
@@ -222,14 +240,11 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         // Storage
         $block = new stdClass();
         
-        // Gets the block data
-        $blockData                    = $this->_read( 5 );
-        
         // Gets the block size
-        $block->size                  = self::$_binUtils->unsignedChar( $blockData, 0 );
+        $block->size                  = $this->_stream->unsignedChar();
         
         // Gets the packed fields
-        $packedFields                 = self::$_binUtils->unsignedChar( $blockData, 1 );
+        $packedFields                 = $this->_stream->unsignedChar();
         
         // The way in which the graphic is to be treated after being displayed
         $block->disposalMethod        = ( $packedFields & 0x1c ) >> 2;  // Mask is 0001 1100
@@ -241,13 +256,13 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         $block->transparentColorFlag  = ( $packedFields & 0x01 );       // Mask is 0000 0001
         
         // Gets the delay time
-        $block->delayTime             = self::$_binUtils->littleEndianUnsignedShort( $blockData, 2 );
+        $block->delayTime             = $this->_stream->littleEndianUnsignedShort();
         
         // Gets the transparent color index
-        $block->transparentColorIndex = self::$_binUtils->unsignedChar( $blockData, 4 );
+        $block->transparentColorIndex = $this->_stream->unsignedChar();
         
         // Block terminator
-        $this->_read( 1 );
+        $this->_stream->read( 1 );
         
         // Return the block informations
         return $block;
@@ -261,11 +276,8 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         // Storage
         $block              = new stdClass();
         
-        // Gets the block data
-        $blockData          = $this->_read( 1 );
-        
         // Gets the block size
-        $block->size        = self::$_binUtils->unsignedChar( $blockData );
+        $block->size        = $this->_stream->unsignedChar();
         
         // Gets the comment data blocks
         $block->commentData = $this->_getDataSubBlocks();
@@ -282,35 +294,32 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         // Storage
         $block                           = new stdClass();
         
-        // Gets the block data
-        $blockData                       = $this->_read( 13 );
-        
         // Gets the block size
-        $block->size                     = self::$_binUtils->unsignedChar( $blockData, 0 );
+        $block->size                     = $this->_stream->unsignedChar();
         
         // Gets the left position of the text grid
-        $block->textGridLeftPosition     = self::$_binUtils->littleEndianUnsignedShort( $blockData, 1 );
+        $block->textGridLeftPosition     = $this->_stream->littleEndianUnsignedShort();
         
         // Gets the top position of the text grid
-        $block->textGridTopPosition      = self::$_binUtils->littleEndianUnsignedShort( $blockData, 3 );
+        $block->textGridTopPosition      = $this->_stream->littleEndianUnsignedShort();
         
         // Gets the width of the text grid
-        $block->textGridWidth            = self::$_binUtils->littleEndianUnsignedShort( $blockData, 5 );
+        $block->textGridWidth            = $this->_stream->littleEndianUnsignedShort();
         
         // Gets the height of the text grid
-        $block->textGridHeight           = self::$_binUtils->littleEndianUnsignedShort( $blockData, 7 );
+        $block->textGridHeight           = $this->_stream->littleEndianUnsignedShort();
         
         // Gets the width of the character cell
-        $block->characterCellWidth       = self::$_binUtils->unsignedChar( $blockData, 9 );
+        $block->characterCellWidth       = $this->_stream->unsignedChar();
         
         // Gets the height of the character cell
-        $block->characterCellHeight      = self::$_binUtils->unsignedChar( $blockData, 10 );
+        $block->characterCellHeight      = $this->_stream->unsignedChar();
         
         // Gets the color index for the foreground color
-        $block->textForegroundColorIndex = self::$_binUtils->unsignedChar( $blockData, 11 );
+        $block->textForegroundColorIndex = $this->_stream->unsignedChar();
         
         // Gets the color index for the background color
-        $block->textBackgroundColorIndex = self::$_binUtils->unsignedChar( $blockData, 12 );
+        $block->textBackgroundColorIndex = $this->_stream->unsignedChar();
         
         // Gets the plain text data blocks
         $block->plainTextData            = $this->_getDataSubBlocks();
@@ -327,17 +336,14 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         // Storage
         $block = new stdClass();
         
-        // Gets the block data
-        $blockData                        = $this->_read( 12 );
-        
         // Gets the block size
-        $block->size                      = self::$_binUtils->unsignedChar( $blockData );
+        $block->size                      = $this->_stream->unsignedChar();
         
         // Gets the application identifier
-        $block->applicationIdentifier     = substr( $blockData, 1, 8 );
+        $block->applicationIdentifier     = $this->_stream->read( 8 );
         
         // Gets the application identifier code
-        $block->applicationIdentifierCode = substr( $blockData, 9, 3 );
+        $block->applicationIdentifierCode = $this->_stream->read( 3 );
         
         // Gets the application data blocks
         $block->applicationData           = $this->_getDataSubBlocks();
@@ -352,7 +358,7 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
     protected function _parseFile()
     {
         // Checks the GIF signature
-        if( $this->_read( 3 ) !== 'GIF' ) {
+        if( $this->_stream->read( 3 ) !== 'GIF' ) {
             
             // Wrong file type
             throw new Woops_Gif_Parser_Exception(
@@ -365,7 +371,7 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         $infos                          = new stdClass();
         
         // Gets the GIF version
-        $infos->version                 = $this->_read( 3 );
+        $infos->version                 = $this->_stream->read( 3 );
         
         // Gets the logical screen descriptor
         $infos->logicalScreenDescriptor = $this->_getLogicalScreenDescriptor();
@@ -378,8 +384,7 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
         }
         
         // Gets the identifier of the next block
-        $blockidData                    = $this->_read( 1 );
-        $blockId                        = self::$_binUtils->unsignedChar( $blockidData );
+        $blockId = $this->_stream->unsignedChar();
         
         // Process the blocks until the trailer (0x3b) is reached
         while( $blockId !== self::TRAILER ) {
@@ -388,8 +393,7 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
             $this->_parseBlock( $blockId, $infos );
             
             // Gets the identifier of the next block
-            $blockidData = $this->_read( 1 );
-            $blockId     = self::$_binUtils->unsignedChar( $blockidData );
+            $blockId = $this->_stream->unsignedChar();
         }
         
         // Stores the informations
@@ -428,8 +432,7 @@ class Woops_Gif_Parser extends Woops_File_Parser_Base
             case self::EXTENSION :
                 
                 // Gets the extension block identifier
-                $extBlockIdData = $this->_read( 1 );
-                $extBlockId     = self::$_binUtils->unsignedChar( $extBlockIdData );
+                $extBlockId = $this->_stream->unsignedChar();
                 
                 // Parses the extension block
                 $this->_parseExtensionBlock( $extBlockId, $infos );
