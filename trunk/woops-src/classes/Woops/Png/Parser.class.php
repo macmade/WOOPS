@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Png
  */
-class Woops_Png_Parser extends Woops_File_Parser_Base
+class Woops_Png_Parser
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -29,6 +29,16 @@ class Woops_Png_Parser extends Woops_File_Parser_Base
      * An instance of the Woops_Png_File class
      */
     protected $pngFile               = NULL;
+    
+    /**
+     * The binary stream
+     */
+    protected $_stream               = NULL;
+    
+    /**
+     * The file path
+     */
+    protected $_filePath             = '';
     
     /**
      * Allows invalid chunk structure (not as in the PNG specification)
@@ -50,6 +60,7 @@ class Woops_Png_Parser extends Woops_File_Parser_Base
      * 
      * @param   string  The location of the PNG file
      * @return  NULL
+     * @see     _parseFile
      */
     public function __construct( $file, $allowInvalidStucture = false )
     {
@@ -59,8 +70,14 @@ class Woops_Png_Parser extends Woops_File_Parser_Base
         // Sets the options for the current instance
         $this->_allowInvalidStucture = $allowInvalidStucture;
         
-        // Calls the parent constructor
-        parent::__construct( $file );
+        // Stores the file path
+        $this->_filePath             = $file;
+        
+        // Creates the binary stream
+        $this->_stream               = new Woops_Binary_File_Stream( $file );
+        
+        // Parses the file
+        $this->_parseFile();
     }
     
     /**
@@ -73,7 +90,7 @@ class Woops_Png_Parser extends Woops_File_Parser_Base
                    . chr( 13 )  . chr( 10 ) . chr( 26 ) . chr( 10 );
         
         // Checks the GIF signature
-        if( $this->_read( 8 ) !== $signature ) {
+        if( $this->_stream->read( 8 ) !== $signature ) {
             
             // Wrong file type
             throw new Woops_Png_Parser_Exception(
@@ -83,16 +100,13 @@ class Woops_Png_Parser extends Woops_File_Parser_Base
         }
         
         // Process the file till the end
-        while( !feof( $this->_fileHandle ) ) {
-            
-            // Chunk header data
-            $chunkHeaderData = $this->_read( 8 );
+        while( !$this->_stream->endOfStream() ) {
             
             // Gets the chunk size
-            $chunkSize       = self::$_binUtils->bigEndianUnsignedLong( $chunkHeaderData );
+            $chunkSize       = $this->_stream->bigEndianUnsignedLong();
             
             // Gets the chunk type
-            $chunkType       = substr( $chunkHeaderData, 4 );
+            $chunkType       = $this->_stream->read( 4 );
             
             // Checks if the chunk is valid or not
             $invalid = $this->_pngFile->isInvalidChunk( $chunkType );
@@ -104,7 +118,7 @@ class Woops_Png_Parser extends Woops_File_Parser_Base
                 $this->_warnings[] = array(
                     'chunkType'   => $chunkType,
                     'chunkLength' => $chunkSize,
-                    'fileOffset'  => ftell( $this->_fileHandle ) - 8,
+                    'fileOffset'  => $this->_stream->getOffset() - 8,
                     'message'     => $invalid
                 );
                 
@@ -136,7 +150,7 @@ class Woops_Png_Parser extends Woops_File_Parser_Base
             if( $chunkSize > 0 ) {
                 
                 // Gets the chunk data
-                $chunkData = $this->_read( $chunkSize );
+                $chunkData = $this->_stream->read( $chunkSize );
                 
                 // Checks if the chunk object exists
                 if( $chunk ) {
@@ -147,8 +161,7 @@ class Woops_Png_Parser extends Woops_File_Parser_Base
             }
             
             // Gets the cyclic redundancy check
-            $crcData = $this->_read( 4 );
-            $crc     = self::$_binUtils->bigEndianUnsignedLong( $crcData );
+            $crc     = $this->_stream->bigEndianUnsignedLong();
             
             // Checks the CRC
             if( $crc !== crc32( $chunkType . $chunkData ) ) {

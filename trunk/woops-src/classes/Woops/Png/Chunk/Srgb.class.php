@@ -54,11 +54,14 @@ class Woops_Png_Chunk_Srgb extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data                  = new stdClass();
         
         // Gets the rendering intent
-        $data->renderingIntent = self::$_binUtils->unsignedChar( $this->_data );
+        $data->renderingIntent = $this->_stream->unsignedChar();
         
         // Stores the human readable rendering intent
         $data->perceptual           = ( $data->renderingIntent === self::RGB_PERCEPTUAL )            ? true : false;

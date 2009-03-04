@@ -50,6 +50,9 @@ class Woops_Png_Chunk_Sbit extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data     = new stdClass();
         
@@ -66,43 +69,43 @@ class Woops_Png_Chunk_Sbit extends Woops_Png_Chunk
             case 0:
                 
                 // Gets the significant bits
-                $data->significantGreyscaleBits = self::$_binUtils->unsignedChar( $this->_data, 0 );
+                $data->significantGreyscaleBits = $this->_stream->unsignedChar();
                 break;
             
             // RGB
             case 2:
                 
                 // Gets the significant bits
-                $data->significantRedBits   = self::$_binUtils->unsignedChar( $this->_data, 0 );
-                $data->significantGreenBits = self::$_binUtils->unsignedChar( $this->_data, 1 );
-                $data->significantBlueBits  = self::$_binUtils->unsignedChar( $this->_data, 2 );
+                $data->significantRedBits   = $this->_stream->unsignedChar();
+                $data->significantGreenBits = $this->_stream->unsignedChar();
+                $data->significantBlueBits  = $this->_stream->unsignedChar();
                 break;
             
             // Indexed color
             case 3:
                 
                 // Gets the significant bits
-                $data->significantRedBits   = self::$_binUtils->unsignedChar( $this->_data, 0 );
-                $data->significantGreenBits = self::$_binUtils->unsignedChar( $this->_data, 1 );
-                $data->significantBlueBits  = self::$_binUtils->unsignedChar( $this->_data, 2 );
+                $data->significantRedBits   = $this->_stream->unsignedChar();
+                $data->significantGreenBits = $this->_stream->unsignedChar();
+                $data->significantBlueBits  = $this->_stream->unsignedChar();
                 break;
             
             // Greyscale with alpha
             case 4:
                 
                 // Gets the significant bits
-                $data->significantGreyscaleBits = self::$_binUtils->unsignedChar( $this->_data, 0 );
-                $data->significantAlphaBits     = self::$_binUtils->unsignedChar( $this->_data, 1 );
+                $data->significantGreyscaleBits = $this->_stream->unsignedChar();
+                $data->significantAlphaBits     = $this->_stream->unsignedChar();
                 break;
             
             // RGB with alpha
             case 6:
                 
                 // Gets the significant bits
-                $data->significantRedBits   = self::$_binUtils->unsignedChar( $this->_data, 0 );
-                $data->significantGreenBits = self::$_binUtils->unsignedChar( $this->_data, 1 );
-                $data->significantBlueBits  = self::$_binUtils->unsignedChar( $this->_data, 2 );
-                $data->significantAlphaBits = self::$_binUtils->unsignedChar( $this->_data, 3 );
+                $data->significantRedBits   = $this->_stream->unsignedChar();
+                $data->significantGreenBits = $this->_stream->unsignedChar();
+                $data->significantBlueBits  = $this->_stream->unsignedChar();
+                $data->significantAlphaBits = $this->_stream->unsignedChar();
                 break;
         }
         

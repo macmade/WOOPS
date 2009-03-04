@@ -42,17 +42,17 @@ class Woops_Png_Chunk_Splt extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data              = new stdClass();
         
-        // Position of the null separator
-        $null              = strpos( $this->_data, chr( 0 ) );
-        
         // Gets the palette name
-        $data->paletteName = substr( $this->_data, 0, $null );
+        $data->paletteName = $this->_stream->nullTerminatedString();
         
         // Gets the sample depth
-        $data->sampleDepth = self::$_binUtils->unsignedChar( $this->_data, $null + 1 );
+        $data->sampleDepth = $this->_stream->unsignedChar();
         
         // Storage for the palette entries
         $data->entries     = array();
@@ -88,19 +88,19 @@ class Woops_Png_Chunk_Splt extends Woops_Png_Chunk
         }
         
         // Process each palette entry
-        for( $i = $null + 2; $i < $this->_dataLength; $i += $entryLength ) {
+        while( !$this->_stream->endOfStream() ) {
             
             // Storage for the current entry
             $entry = new stdClass();
             
             // Gets the values for the current palette entry (depending of the sample depth)
-            $red              = self::$_binUtils->$entryValueMethod( $this->_data, $i );
-            $green            = self::$_binUtils->$entryValueMethod( $this->_data, $i + $entryValueSize );
-            $blue             = self::$_binUtils->$entryValueMethod( $this->_data, $i + ( $entryValue * 2 ) );
-            $alpha            = self::$_binUtils->$entryValueMethod( $this->_data, $i + ( $entryValue * 3 ) );
+            $red              = $this->_stream->$entryValueMethod();
+            $green            = $this->_stream->$entryValueMethod();
+            $blue             = $this->_stream->$entryValueMethod();
+            $alpha            = $this->_stream->$entryValueMethod();
             
             // Gets the frequency - Always 2 bytes
-            $frequency        = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $i + ( $entryValue * 4 ) );
+            $frequency        = $this->_stream->bigEndianUnsignedShort();
             
             // Gets the hexadecimal values
             $redHex           = dechex( $red );

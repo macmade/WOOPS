@@ -42,17 +42,17 @@ class Woops_Png_Chunk_Text extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data             = new stdClass();
         
-        // Position of the null separator
-        $null             = strpos( $this->_data, chr( 0 ) );
-        
         // Gets the keyword
-        $data->keyword    = substr( $this->_data, 0, $null );
+        $data->keyword    = $this->_stream->nullTerminatedString();
         
         // Gets the text string
-        $data->textString = substr( $this->_data, $null + 1 );
+        $data->textString = $this->_stream->getRemainingData();
         
         // Returns the processed data
         return $data;

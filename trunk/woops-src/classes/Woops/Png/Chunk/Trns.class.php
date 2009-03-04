@@ -46,6 +46,9 @@ class Woops_Png_Chunk_Trns extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data     = new stdClass();
         
@@ -62,16 +65,16 @@ class Woops_Png_Chunk_Trns extends Woops_Png_Chunk
             case 0:
                 
                 // Gets the sample value
-                $data->greySampleValue = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 0 );
+                $data->greySampleValue = $this->_stream->bigEndianUnsignedShort();
                 break;
             
             // RGB
             case 2:
                 
                 // Gets the sample values
-                $data->redSampleValue   = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 0 );
-                $data->greenSampleValue = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 2 );
-                $data->blueSampleValue  = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 4 );
+                $data->redSampleValue   = $this->_stream->bigEndianUnsignedShort();
+                $data->greenSampleValue = $this->_stream->bigEndianUnsignedShort();
+                $data->blueSampleValue  = $this->_stream->bigEndianUnsignedShort();
                 break;
             
             // Indexed color
@@ -81,10 +84,10 @@ class Woops_Png_Chunk_Trns extends Woops_Png_Chunk
                 $data->alphasForPaletteIndexes = array();
                 
                 // Process the chunk data till the end
-                for( $i = 0; $i < $this->_dataLength; $i++ ) {
+                while( !$this->_stream->endOfStream() ) {
                     
                     // Gets the alpha for the current palette index
-                    $data->alphasForPaletteIndexes[] = self::$_binUtils->unsignedChar( $this->_data, $i );
+                    $data->alphasForPaletteIndexes[] = $this->_stream->unsignedChar();
                 }
                 
                 break;

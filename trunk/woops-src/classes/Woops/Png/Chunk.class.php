@@ -33,34 +33,29 @@ abstract class Woops_Png_Chunk
     abstract public function getProcessedData();
     
     /**
-     * The instance of the binary utilities class
+     * The binary stream
      */
-    protected static $_binUtils  = NULL;
+    protected $_stream     = NULL;
     
     /**
      * The instance of the PNG file class in which the chunk is placed
      */
-    protected $_pngFile          = NULL;
-    
-    /**
-     * Whether the static variables are set or not
-     */
-    protected static $_hasStatic = false;
+    protected $_pngFile    = NULL;
     
     /**
      * The chunk type
      */
-    protected $_type             = '';
+    protected $_type       = '';
     
     /**
      * The chunk data
      */
-    protected $_data             = '';
+    protected $_data       = '';
     
     /**
      * The chunk data length
      */
-    protected $_dataLength       = 0;
+    protected $_dataLength = 0;
     
     /**
      * Class constructor
@@ -70,29 +65,8 @@ abstract class Woops_Png_Chunk
      */
     public function __construct( Woops_Png_File $pngFile )
     {
-        // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
-            // Sets the static variables
-            self::_setStaticVars();
-        }
-        
         // Stores a reference to the PNG file
         $this->_pngFile = $pngFile;
-    }
-    
-    /**
-     * Sets the needed static variables
-     * 
-     * @return  NULL
-     */
-    protected static function _setStaticVars()
-    {
-        // Gets the instance of the binary utilities class
-        self::$_binUtils  = Woops_Binary_Utils::getInstance();
-        
-        // Static variables are set
-        self::$_hasStatic = true;
     }
     
     /**
@@ -133,6 +107,7 @@ abstract class Woops_Png_Chunk
     {
         $this->_data       = $data;
         $this->_dataLength = strlen( $data );
+        $this->_stream     = new Woops_Binary_Stream( $data );
     }
     
     /**

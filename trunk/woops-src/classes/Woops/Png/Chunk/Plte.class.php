@@ -42,20 +42,23 @@ class Woops_Png_Chunk_Plte extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data          = new stdClass();
         $data->palette = array();
         
         // Process each color
-        for( $i = 0; $i < $this->_dataLength; $i += 3 ) {
+        while( !$this->_stream->endOfStream() )
             
             // Storage
             $color        = new StdClass();
             
             // Gets the colors values
-            $red          = self::$_binUtils->unsignedChar( $this->_data, $i );
-            $green        = self::$_binUtils->unsignedChar( $this->_data, $i + 1 );
-            $blue         = self::$_binUtils->unsignedChar( $this->_data, $i + 2 );
+            $red          = $this->_stream->unsignedChar();
+            $green        = $this->_stream->unsignedChar();
+            $blue         = $this->_stream->unsignedChar();
             
             // Gets the hexadecimal values
             $redHex       = dechex( $red );

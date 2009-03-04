@@ -45,16 +45,19 @@ class Woops_Png_Chunk_Time extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data         = new stdClass();
         
         // Gets the date informations
-        $data->year   = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 0 );
-        $data->month  = self::$_binUtils->unsignedChar( $this->_data, 2 );
-        $data->day    = self::$_binUtils->unsignedChar( $this->_data, 3 );
-        $data->hour   = self::$_binUtils->unsignedChar( $this->_data, 4 );
-        $data->minute = self::$_binUtils->unsignedChar( $this->_data, 5 );
-        $data->second = self::$_binUtils->unsignedChar( $this->_data, 6 );
+        $data->year   = $this->_stream->bigEndianUnsignedShort();
+        $data->month  = $this->_stream->unsignedChar();
+        $data->day    = $this->_stream->unsignedChar();
+        $data->hour   = $this->_stream->unsignedChar();
+        $data->minute = $this->_stream->unsignedChar();
+        $data->second = $this->_stream->unsignedChar();
         
         // Creates a timestamp
         $data->tstamp = mktime(

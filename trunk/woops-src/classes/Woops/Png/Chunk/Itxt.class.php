@@ -42,39 +42,37 @@ class Woops_Png_Chunk_Itxt extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data                    = new stdClass();
         
-        // Position of the null separators
-        $null1                   = strpos( $this->_data, chr( 0 ) );
-        $null2                   = strpos( $this->_data, chr( 0 ), $null1 + 1 );
-        $null3                   = strpos( $this->_data, chr( 0 ), $null2 + 1 );
-        
         // Gets the profile name
-        $data->keyword           = substr( $this->_data, 0, $null );
+        $data->keyword           = $this->_stream->nullTerminatedString();
         
         // Gets the compression flag
-        $data->compressionFlag   = self::$_binUtils->unsignedChar( $this->_data, $null1 + 1 );
+        $data->compressionFlag   = $this->_stream->unsignedChar();
         
         // Gets the compression method
-        $data->compressionMethod = self::$_binUtils->unsignedChar( $this->_data, $null1 + 2 );
+        $data->compressionMethod = $this->_stream->unsignedChar();
         
         // Gets the language tag
-        $data->languageTag       = substr( $this->_data, $null1 + 3, $null2 - ( $null1 + 3 ) );
+        $data->languageTag       = $this->_stream->nullTerminatedString();
         
         // Gets the translated keyword
-        $data->translatedKeyword = substr( $this->_data, $null2 + 1, $null3 - ( $null2 + 1 ) );
+        $data->translatedKeyword = $this->_stream->nullTerminatedString();
         
         // Checks the compression method
         if( $data->compressionFlag && $data->compressionMethod === 0 ) {
             
             // Deflate
-            $data->text = gzuncompress( substr( $this->_data, $null3 ) );
+            $data->text = gzuncompress( $this->_stream->getRemainingData() );
             
         } else {
             
             // No compression, or unrecognized compression method - Stores the raw data
-            $data->text = substr( $this->_data, $null3 );
+            $data->text = $this->_stream->getRemainingData();
         }
         
         // Returns the processed data

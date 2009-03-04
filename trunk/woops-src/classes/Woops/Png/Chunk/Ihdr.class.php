@@ -42,27 +42,33 @@ class Woops_Png_Chunk_Ihdr extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data = new stdClass();
         
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the PNG dimensions
-        $data->width             = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 0 );
-        $data->height            = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
+        $data->width             = $this->_stream->bigEndianUnsignedLong();
+        $data->height            = $this->_stream->bigEndianUnsignedLong();
         
         // Gets the bit depth
-        $data->bitDepth          = self::$_binUtils->unsignedChar( $this->_data, 8 );
+        $data->bitDepth          = $this->_stream->unsignedChar();
         
         // Gets the colour type
-        $data->colourType        = self::$_binUtils->unsignedChar( $this->_data, 9 );
+        $data->colourType        = $this->_stream->unsignedChar();
         
         // Gets the compression method
-        $data->compressionMethod = self::$_binUtils->unsignedChar( $this->_data, 10 );
+        $data->compressionMethod = $this->_stream->unsignedChar();
         
         // Gets the filter method
-        $data->filterMethod      = self::$_binUtils->unsignedChar( $this->_data, 11 );
+        $data->filterMethod      = $this->_stream->unsignedChar();
         
         // Gets the interlace method
-        $data->interlaceMethod   = self::$_binUtils->unsignedChar( $this->_data, 12 );
+        $data->interlaceMethod   = $this->_stream->unsignedChar();
         
         // Returns the processed data
         return $data;

@@ -45,15 +45,18 @@ class Woops_Png_Chunk_Phys extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data                = new stdClass();
         
         // Gets the pixel aspect ratio
-        $data->pixelPerUnitX = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 0 );
-        $data->pixelPerUnitY = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
+        $data->pixelPerUnitX = $this->_stream->bigEndianUnsignedLong();
+        $data->pixelPerUnitY = $this->_stream->bigEndianUnsignedLong();
         
         // Gets the unit
-        $data->unit          = self::$_binUtils->unsignedChar( $this->_data, 8 );
+        $data->unit          = $this->_stream->unsignedChar();
         
         // Returns the processed data
         return $data;

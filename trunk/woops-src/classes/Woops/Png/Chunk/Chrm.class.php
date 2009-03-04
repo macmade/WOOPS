@@ -46,24 +46,27 @@ class Woops_Png_Chunk_Chrm extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data              = new stdClass();
         
         // Gets the XY chromaticities for the white point
-        $data->whitePointX = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 0 ) / 100000;
-        $data->whitePointY = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 ) / 100000;
+        $data->whitePointX = $this->_stream->bigEndianUnsignedLong() / 100000;
+        $data->whitePointY = $this->_stream->bigEndianUnsignedLong() / 100000;
         
         // Gets the XY chromaticities for red
-        $data->redX        = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 8 ) / 100000;
-        $data->redY        = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 12 ) / 100000;
+        $data->redX        = $this->_stream->bigEndianUnsignedLong() / 100000;
+        $data->redY        = $this->_stream->bigEndianUnsignedLong() / 100000;
         
         // Gets the XY chromaticities for green
-        $data->greenX      = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 16 ) / 100000;
-        $data->greenY      = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 20 ) / 100000;
+        $data->greenX      = $this->_stream->bigEndianUnsignedLong() / 100000;
+        $data->greenY      = $this->_stream->bigEndianUnsignedLong() / 100000;
         
         // Gets the XY chromaticities for blue
-        $data->blueX       = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 24 ) / 100000;
-        $data->blueY       = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 28 ) / 100000;
+        $data->blueX       = $this->_stream->bigEndianUnsignedLong() / 100000;
+        $data->blueY       = $this->_stream->bigEndianUnsignedLong() / 100000;
         
         // Returns the processed data
         return $data;

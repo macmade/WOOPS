@@ -46,6 +46,9 @@ class Woops_Png_Chunk_Bkgd extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data     = new stdClass();
         
@@ -62,16 +65,16 @@ class Woops_Png_Chunk_Bkgd extends Woops_Png_Chunk
             case 0:
                 
                 // Gets the greyscale value
-                $data->greyscale = self::$_binUtils->unsignedChar( $this->_data, 1 );
+                $data->greyscale = $this->_stream->unsignedChar();
                 break;
             
             // RGB
             case 2:
                 
                 // Gets the color values
-                $data->red   = self::$_binUtils->unsignedChar( $this->_data, 1 );
-                $data->green = self::$_binUtils->unsignedChar( $this->_data, 3 );
-                $data->blue  = self::$_binUtils->unsignedChar( $this->_data, 5 );
+                $data->red   = $this->_stream->unsignedChar();
+                $data->green = $this->_stream->unsignedChar();
+                $data->blue  = $this->_stream->unsignedChar();
                 
                 // Gets the hexadecimal values
                 $redHex      = dechex( $data->red );
@@ -91,27 +94,27 @@ class Woops_Png_Chunk_Bkgd extends Woops_Png_Chunk
             case 3:
                 
                 // Gets the palette index
-                $data->paletteIndex = self::$_binUtils->unsignedChar( $this->_data, 0 );
+                $data->paletteIndex = $this->_stream->unsignedChar();
                 break;
             
             // Greyscale with alpha
             case 4:
                 
                 // Gets the greyscale and the alpha value
-                $data->greyscale      = self::$_binUtils->unsignedChar( $this->_data, 0 );
-                $data->greyscaleAlpha = self::$_binUtils->unsignedChar( $this->_data, 1 );
+                $data->greyscale      = $this->_stream->unsignedChar();
+                $data->greyscaleAlpha = $this->_stream->unsignedChar();
                 break;
             
             // RGB with alpha
             case 6:
                 
                 // Gets the color and the alpha values
-                $data->red        = self::$_binUtils->unsignedChar( $this->_data, 0 );
-                $data->redAlpha   = self::$_binUtils->unsignedChar( $this->_data, 1 );
-                $data->green      = self::$_binUtils->unsignedChar( $this->_data, 2 );
-                $data->greenAlpha = self::$_binUtils->unsignedChar( $this->_data, 3 );
-                $data->blue       = self::$_binUtils->unsignedChar( $this->_data, 4 );
-                $data->blueAlpha  = self::$_binUtils->unsignedChar( $this->_data, 5 );
+                $data->red        = $this->_stream->unsignedChar();
+                $data->redAlpha   = $this->_stream->unsignedChar();
+                $data->green      = $this->_stream->unsignedChar();
+                $data->greenAlpha = $this->_stream->unsignedChar();
+                $data->blue       = $this->_stream->unsignedChar();
+                $data->blueAlpha  = $this->_stream->unsignedChar();
                 
                 // Gets the hexadecimal values
                 $redHex           = dechex( $data->red );

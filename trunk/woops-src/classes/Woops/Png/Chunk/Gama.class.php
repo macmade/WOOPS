@@ -45,11 +45,14 @@ class Woops_Png_Chunk_Gama extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data             = new stdClass();
         
         // Gets the image gamma
-        $data->imageGamma = self::$_binUtils->bigEndianUnsignedLong( $this->_data ) / 100000;
+        $data->imageGamma = $this->_stream->bigEndianUnsignedLong() / 100000;
         
         // Returns the processed data
         return $data;

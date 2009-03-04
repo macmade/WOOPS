@@ -42,20 +42,20 @@ class Woops_Png_Chunk_Iccp extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data                     = new stdClass();
         
-        // Position of the null separator
-        $null                     = strpos( $this->_data, chr( 0 ) );
-        
         // Gets the profile name
-        $data->profileName        = substr( $this->_data, 0, $null );
+        $data->profileName        = $this->_stream->nullTerminatedStream();
         
         // Gets the compression method
-        $data->compressionMethod  = self::$_binUtils->unsignedChar( $this->_data, $null + 1 );
+        $data->compressionMethod  = $this->_stream->unsignedChar();
         
         // Gets the compression profile
-        $data->compressionProfile = substr( $this->_data, $null + 2 );
+        $data->compressionProfile = $this->_stream->getRemainingData();
         
         // Returns the processed data
         return $data;

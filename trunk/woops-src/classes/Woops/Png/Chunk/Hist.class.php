@@ -48,15 +48,18 @@ class Woops_Png_Chunk_Hist extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage
         $data            = new stdClass();
         $data->frequency = array();
         
         // Process each frequency
-        for( $i = 0; $i < $this->_dataLength; $i += 2 ) {
+        while( !$this->_stream->endOfStream() ) {
             
             // Adds the current frequency
-            $data->frequency[] = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $i );
+            $data->frequency[] = $this->_stream->bigEndianUnsignedShort();
         }
         
         // Returns the processed data
