@@ -34,18 +34,18 @@ class Woops_Amf_Packet_Amf3 extends Woops_Amf_Packet
      * The allowed AMF markers
      */
     protected $_packets = array(
-        0x00 => 'Undefined',
-        0x01 => 'Null',
-        0x02 => 'False',
-        0x03 => 'True',
-        0x04 => 'Integer',
-        0x05 => 'Double',
-        0x06 => 'String',
-        0x07 => 'XmlDoc',
-        0x08 => 'Date',
-        0x09 => 'Array',
-        0x0A => 'Object',
-        0x0B => 'Xml',
-        0x0C => 'ByteArray'
+        0x00 => 'Woops_Amf_Marker_Amf3_Undefined',
+        0x01 => 'Woops_Amf_Marker_Amf3_Null',
+        0x02 => 'Woops_Amf_Marker_Amf3_False',
+        0x03 => 'Woops_Amf_Marker_Amf3_True',
+        0x04 => 'Woops_Amf_Marker_Amf3_Integer',
+        0x05 => 'Woops_Amf_Marker_Amf3_Double',
+        0x06 => 'Woops_Amf_Marker_Amf3_String',
+        0x07 => 'Woops_Amf_Marker_Amf3_XmlDoc',
+        0x08 => 'Woops_Amf_Marker_Amf3_Date',
+        0x09 => 'Woops_Amf_Marker_Amf3_Array',
+        0x0A => 'Woops_Amf_Marker_Amf3_Object',
+        0x0B => 'Woops_Amf_Marker_Amf3_Xml',
+        0x0C => 'Woops_Amf_Marker_Amf3_ByteArray'
     );
 }
