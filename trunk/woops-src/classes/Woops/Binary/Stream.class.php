@@ -170,6 +170,18 @@ class Woops_Binary_Stream
                 Woops_Binary_Stream_Exception::EXCEPTION_INVALID_SEEK_TYPE
             );
         }
+        
+        // Checks the offset
+        if( $this->_offset < 0 ) {
+            
+            // Sets the offset to the data start
+            $this->_offset = 0;
+            
+        } elseif( $this->_offset > $this->_dataLength ) {
+            
+            // Sets the offset to the data length
+            $this->_offset = $this->_dataLength;
+        }
     }
     
     /**
