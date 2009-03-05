@@ -61,6 +61,9 @@ final class Woops_Mpeg4_Atom_Pdin extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data          = parent::getProcessedData();
         
@@ -68,14 +71,14 @@ final class Woops_Mpeg4_Atom_Pdin extends Woops_Mpeg4_FullBox
         $data->entries = array();
         
         // Process each entry
-        for( $i = 4; $i < $this->_dataLength; $i += 8 ) {
+        while( !$this->_stream->endOfStream() ) {
             
             // Storage for the current entry
             $entry                = new stdClass();
             
             // Process the current entry
-            $entry->rate          = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i );
-            $entry->initial_delay = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i + 4 );
+            $entry->rate          = $this->_stream->bigEndianUnsignedLong();
+            $entry->initial_delay = $this->_stream->bigEndianUnsignedLong();
             
             // Stores the current entry
             $data->entries[]      = $entry;

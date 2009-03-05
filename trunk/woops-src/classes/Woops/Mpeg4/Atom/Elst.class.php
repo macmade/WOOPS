@@ -37,29 +37,32 @@ final class Woops_Mpeg4_Atom_Elst extends Woops_Mpeg4_FullBox
     
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         $data              = parent::getProcessedData();
-        $data->entry_count = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
+        $data->entry_count = $this->_stream->bigEndianUnsignedLong();
         $data->entries     = array();
         
         if( $data->version === 1 ) {
             
-            for( $i = 8; $i < $this->_dataLength; $i += 20 ) {
+            while( !$this->_stream->endOfStream() ) {
                 
                 $entry                   =  new stdClass();
-                $entry->segment_duration = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i );
-                $entry->media_time       = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i + 8 );
-                $entry->media_rate       = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, $i + 16 );
+                $entry->segment_duration = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
+                $entry->media_time       = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
+                $entry->media_rate       = $this->_stream->bigEndianFixedPoint( 16, 16 );
                 $data->entries[]         = $entry;
             }
             
         } else {
             
-            for( $i = 8; $i < $this->_dataLength; $i += 12 ) {
+            while( !$this->_stream->endOfStream() ) {
                 
                 $entry                   =  new stdClass();
-                $entry->segment_duration = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i );
-                $entry->media_time       = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i + 4 );
-                $entry->media_rate       = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, $i + 8 );
+                $entry->segment_duration = $this->_stream->bigEndianUnsignedLong();
+                $entry->media_time       = $this->_stream->bigEndianUnsignedLong();
+                $entry->media_rate       = $this->_stream->bigEndianFixedPoint( 16, 16 );
                 $data->entries[]         = $entry;
             }
         }

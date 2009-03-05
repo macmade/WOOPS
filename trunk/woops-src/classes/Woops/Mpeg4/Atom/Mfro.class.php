@@ -57,11 +57,14 @@ final class Woops_Mpeg4_Atom_Mfro extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data       = parent::getProcessedData();
         
         // Process the atom data
-        $data->size = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
+        $data->size = $this->_stream->bigEndianUnsignedLong();
         
         // Returns the processed data
         return $data;

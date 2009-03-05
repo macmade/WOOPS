@@ -58,11 +58,14 @@ abstract class Woops_Mpeg4_FullBox extends Woops_Mpeg4_DataAtom
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Storage for the atom data
         $data          = new stdClass();
         
         // Gets the first 32 bits from the atom data
-        $unpackData    = self::$_binUtils->bigEndianUnsignedLong( $this->_data );
+        $unpackData    = $this->_stream->bigEndianUnsignedLong();
         
         // Atom version - 8 first bits - Used to know how to handle the data
         $data->version = $unpackData & 0xFF000000;

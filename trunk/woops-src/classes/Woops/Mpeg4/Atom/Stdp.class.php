@@ -63,6 +63,9 @@ final class Woops_Mpeg4_Atom_Stdp extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data = parent::getProcessedData();
             
@@ -80,10 +83,10 @@ final class Woops_Mpeg4_Atom_Stdp extends Woops_Mpeg4_FullBox
         $stsz = $this->_parent->stsz->getProcessedData();
         
         // Process each priority
-        for( $i = 4; $i < $stsz->entry_count; $i += 2 ) {
+        for( $i = 0; $i < $stsz->sample_count; $i++ ) {
             
             // Stores the current priority
-            $data->priorities[] = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $i );
+            $data->priorities[] = $this->_stream->bigEndianUnsignedShort();
         }
         
         // Return the processed data

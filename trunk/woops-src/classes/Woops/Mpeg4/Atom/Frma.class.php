@@ -46,11 +46,14 @@ final class Woops_Mpeg4_Atom_Frma extends Woops_Mpeg4_DataAtom
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Data storage
         $data = new stdClass();
         
         // Data format
-        $data->data_format = substr( $this->_data, 0, 4 );
+        $data->data_format = $this->_stream->read( 4 );
         
         // Returns the processed data
         return $data;

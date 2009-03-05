@@ -60,25 +60,29 @@ final class Woops_Mpeg4_Atom_Cprt extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data           = parent::getProcessedData();
         
         // Process the atom data
-        $data->language = self::$_binUtils->bigEndianIso639Code( $this->_data, 4 );
+        $data->language = $this->_stream->bigEndianIso639Code();
         
         // Tries the get the byte order mark
-        $noticeBom      = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 6 );
+        $noticeBom      = $this->_stream->bigEndianUnsignedShort();
         
         // Checks for the byte order mark
         if( ( $noticeBom & 0xFEFF ) === $noticeBom ) {
             
             // UTF-16 string
-            $data->notice = substr( $this->_data, 8, -1 );
+            $data->notice = substr( $this->_stream->getRemainingData(), 0, -1 );
             
         } else {
             
             // UTF-8 string
-            $data->notice = substr( $this->_data, 6, -1 );
+            $this->_stream->seek( -2, Woops_Binary_Stream::SEEK_CUR );
+            $data->notice = substr( $this->_stream->getRemainingData(), 0, -1 );
         }
         
         // Return the processed data

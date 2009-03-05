@@ -30,6 +30,7 @@ abstract class Woops_Mpeg4_DataAtom extends Woops_Mpeg4_Atom
     protected $_data       = '';
     protected $_dataLength = 0;
     protected $_final      = false;
+    protected $_stream     = NULL;
     
     /**
      * 
@@ -79,24 +80,23 @@ abstract class Woops_Mpeg4_DataAtom extends Woops_Mpeg4_Atom
      * 
      * template int( 32 )[ 9 ] matrix = { 0x00010000, 0, 0, 0, 0x00010000, 0, 0, 0, 0x40000000 };
      * 
-     * @param   int     The beginning of the matrix field in the atom data
      * @return  object  The matrix object
      */
-    protected function _decodeMatrix( $dataOffset )
+    protected function _decodeMatrix()
     {
         // Storage for the matrix
         $matrix    = new stdClass();
         
         // Process the matrix field from the atom data
-        $matrix->a = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, $dataOffset );
-        $matrix->b = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, $dataOffset + 4 );
-        $matrix->u = self::$_binUtils->bigEndianFixedPoint( $this->_data,  2, 30, $dataOffset + 8 );
-        $matrix->c = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, $dataOffset + 12 );
-        $matrix->d = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, $dataOffset + 16 );
-        $matrix->v = self::$_binUtils->bigEndianFixedPoint( $this->_data,  2, 30, $dataOffset + 20 );
-        $matrix->x = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, $dataOffset + 24 );
-        $matrix->y = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, $dataOffset + 28 );
-        $matrix->w = self::$_binUtils->bigEndianFixedPoint( $this->_data,  2, 30, $dataOffset + 32 );
+        $matrix->a = $this->_stream->bigEndianFixedPoint( 16, 16 );
+        $matrix->b = $this->_stream->bigEndianFixedPoint( 16, 16 );
+        $matrix->u = $this->_stream->bigEndianFixedPoint(  2, 30 );
+        $matrix->c = $this->_stream->bigEndianFixedPoint( 16, 16 );
+        $matrix->d = $this->_stream->bigEndianFixedPoint( 16, 16 );
+        $matrix->v = $this->_stream->bigEndianFixedPoint(  2, 30 );
+        $matrix->x = $this->_stream->bigEndianFixedPoint( 16, 16 );
+        $matrix->y = $this->_stream->bigEndianFixedPoint( 16, 16 );
+        $matrix->w = $this->_stream->bigEndianFixedPoint(  2, 30 );
         
         // Returns the matrix
         return $matrix;
@@ -159,6 +159,7 @@ abstract class Woops_Mpeg4_DataAtom extends Woops_Mpeg4_Atom
     {
         $this->_data       = $data;
         $this->_dataLength = strlen( $data );
+        $this->_stream     = new Woops_Binary_Stream( $data );
         
         return true;
     }

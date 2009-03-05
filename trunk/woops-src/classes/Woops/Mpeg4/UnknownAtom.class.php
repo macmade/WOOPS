@@ -40,9 +40,6 @@ final class Woops_Mpeg4_UnknownAtom extends Woops_Mpeg4_DataAtom
      */
     public function __construct( $type )
     {
-        // Calls the parent constructor
-        parent::__construct();
-        
         // Sets the atom type
         $this->_type =substr( $type, 0, 4 );
     }

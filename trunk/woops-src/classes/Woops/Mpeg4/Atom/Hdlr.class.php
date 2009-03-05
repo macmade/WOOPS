@@ -37,9 +37,14 @@ final class Woops_Mpeg4_Atom_Hdlr extends Woops_Mpeg4_FullBox
     
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         $data               = parent::getProcessedData();
-        $data->handler_type = substr( $this->_data, 8, 4 );
-        $data->name         = substr( $this->_data, 24, -1 );
+        $this->_stream->seek( 4, Woops_Binary_Stream::SEEK_CUR );
+        $data->handler_type = $this->_stream->read( 4 );
+        $this->_stream->seek( 12, Woops_Binary_Stream::SEEK_CUR );
+        $data->name         = substr( $this->_stream->getRemainingData(), 0, -1 );
         
         return $data;
     }

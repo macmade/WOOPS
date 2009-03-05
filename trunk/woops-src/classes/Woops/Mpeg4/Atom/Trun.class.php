@@ -81,36 +81,30 @@ final class Woops_Mpeg4_Atom_Trun extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data               = parent::getProcessedData();
         
         // Sample count
-        $data->sample_count = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
+        $data->sample_count = $this->_stream->bigEndianUnsignedLong();
         
         // Storage for the samples
         $data->samples      = array();
-        
-        // Offset for the remaining data
-        $dataOffset         = 8;
         
         // Checks for the data offset
         if( $data->flags->data_offset_present ) {
             
             // Data offset
-            $data->data_offset = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $dataOffset );
-            
-            // Updates the data offset
-            $dataOffset       += 4;
+            $data->data_offset = $this->_stream->bigEndianUnsignedLong();
         }
         
         // Checks for the first sample flags
         if( $data->flags->first_sample_flags_present ) {
             
             // First sample flags
-            $data->first_sample_flags = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $dataOffset );
-            
-            // Updates the data offset
-            $dataOffset              += 4;
+            $data->first_sample_flags = $this->_stream->bigEndianUnsignedLong();
         }
         
         // Process each sample
@@ -123,40 +117,28 @@ final class Woops_Mpeg4_Atom_Trun extends Woops_Mpeg4_FullBox
             if( $data->flags->sample_duration_present ) {
                 
                 // Sample duration
-                $sample->sample_duration = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $dataOffset );
-                
-                // Updates the data offset
-                $dataOffset             += 4;
+                $sample->sample_duration = $this->_stream->bigEndianUnsignedLong();
             }
             
             // Checks for the sample size
             if( $data->flags->sample_size_present ) {
                 
                 // Sample size
-                $sample->sample_size = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $dataOffset );
-                
-                // Updates the data offset
-                $dataOffset         += 4;
+                $sample->sample_size = $this->_stream->bigEndianUnsignedLong();
             }
             
             // Checks for the sample flags
             if( $data->flags->sample_flags_present ) {
                 
                 // Sample flags
-                $sample->sample_flags = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $dataOffset );
-                
-                // Updates the data offset
-                $dataOffset          += 4;
+                $sample->sample_flags = $this->_stream->bigEndianUnsignedLong();
             }
             
             // Checks for the sample composition tome offset
             if( $data->flags->sample_composition_time_offsets_present ) {
                 
                 // Sample composition tome offset
-                $sample->sample_composition_time_offsets = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $dataOffset );
-                
-                // Updates the data offset
-                $dataOffset                             += 4;
+                $sample->sample_composition_time_offsets = $this->_stream->bigEndianUnsignedLong();
             }
             
             // Stores the current sample

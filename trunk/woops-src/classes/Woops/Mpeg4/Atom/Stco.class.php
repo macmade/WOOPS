@@ -62,23 +62,26 @@ final class Woops_Mpeg4_Atom_Stco extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data              = parent::getProcessedData();
         
         // Number of entries
-        $data->entry_count = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
+        $data->entry_count = $this->_stream->bigEndianUnsignedLong();
         
         // Storage for the entries
         $data->entries     = array();
         
         // Process each entry
-        for( $i = 8; $i < $this->_dataLength; $i += 4 ) {
+        while( !$this->_stream->endOfStream() ) {
             
             // Storage for the current entry
             $entry               = new stdClass();
             
             // Process the entry data
-            $entry->chunk_offset = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i );
+            $entry->chunk_offset = $this->_stream->bigEndianUnsignedLong();
             
             // Stores the current entry
             $data->entries[]     = $entry;

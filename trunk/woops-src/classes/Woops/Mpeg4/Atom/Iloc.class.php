@@ -75,23 +75,23 @@ final class Woops_Mpeg4_Atom_Iloc extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data                   = parent::getProcessedData();
         
         // Offset related data
-        $offset                 = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 4 );
+        $offset                 = $this->_stream->bigEndianUnsignedShort();
         
         // Process the atom data
         $data->offset_size      = $offset & 0xF000; // Mask is 1111 0000 0000 0000
         $data->length_size      = $offset & 0x0F00; // Mask is 0000 1111 0000 0000
         $data->base_offset_size = $offset & 0x00F0; // Mask is 0000 0000 1111 0000
-        $data->item_count       = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 6 );
+        $data->item_count       = $this->_stream->bigEndianUnsignedShort();
         
         // Storage for items
         $data->items            = array();
-        
-        // Data offset for the items
-        $itemOffset             = 8;
         
         // Process each item
         for( $i = 0; $i < $data->item_count; $i++ ) {
@@ -100,11 +100,21 @@ final class Woops_Mpeg4_Atom_Iloc extends Woops_Mpeg4_FullBox
             $item = new stdClass();
             
             // Process the current item data
-            $item->item_ID              = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $itemOffset );
-            $item->data_reference_index = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $itemOffset + 2 );
+            $item->item_ID              = $this->_stream->bigEndianUnsignedShort();
+            $item->data_reference_index = $this->_stream->bigEndianUnsignedShort();
+            
+            // Do not process the base_offset for now
+            $this->_stream->seek( $data->base_offset_size );
+            
+            // Gets the extent count
+            $item->extent_count = $this->_stream->bigEndianUnsignedShort();
+            
+            // Do not process the extent data for now
+            $this->_stream->seek( $data->offset_size );
+            $this->_stream->seek( $data->length_size );
             
             // Stores the current item
-            $data->items[]              = $item;
+            $data->items[] = $item;
         }
         
         // Returns the processed data

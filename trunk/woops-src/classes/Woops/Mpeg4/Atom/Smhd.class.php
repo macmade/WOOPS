@@ -37,8 +37,11 @@ final class Woops_Mpeg4_Atom_Smhd extends Woops_Mpeg4_FullBox
     
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         $data          = parent::getProcessedData();
-        $data->balance = self::$_binUtils->bigEndianFixedPoint( $this->_data, 8, 8, 4 );
+        $data->balance = $this->_stream->bigEndianFixedPoint( 8, 8 );
         
         return $data;
     }

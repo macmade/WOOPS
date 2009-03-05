@@ -32,17 +32,17 @@ final class Woops_Mpeg4_Atom_Ftyp extends Woops_Mpeg4_DataAtom
     
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         $data                    = new stdClass();
-        $data->major_brand       = substr( $this->_data, 0, 4 );
-        $data->minor_version     = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
+        $data->major_brand       = $this->_stream->read( 4 );
+        $data->minor_version     = $this->_stream->bigEndianUnsignedLong();
         $data->compatible_brands = array();
         
-        if( $this->_dataLength > 8 ) {
+        while( !$this->_stream->endOfStream() ) {
             
-            for( $i = 8; $i < $this->_dataLength; $i += 4 ) {
-                
-                $data->compatible_brands[] = substr( $this->_data, $i, 4 );
-            }
+            $data->compatible_brands[] = $this->_stream->read( 4 );
         }
         
         return $data;

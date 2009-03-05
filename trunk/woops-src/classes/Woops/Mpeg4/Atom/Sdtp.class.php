@@ -64,6 +64,9 @@ final class Woops_Mpeg4_Atom_Sdtp extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data = parent::getProcessedData();
             
@@ -83,17 +86,8 @@ final class Woops_Mpeg4_Atom_Sdtp extends Woops_Mpeg4_FullBox
         // Process each sample
         for( $i = 0; $i < $stsz->entry_count; $i++ ) {
             
-            // Checks if we are reading the first entry
-            if( $i === 0 ) {
-                
-                // Gets the raw data for the current entry
-                $entryData = ( self::$_binUtils->bigEndianUnsignedShort( $this->_data, $i ) & 0xFF00 ) >> 8;
-                
-            } else {
-                
-                // Gets the raw data for the current entry
-                $entryData = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $i - 1 ) & 0x00FF;
-            }
+            // Gets the raw data for the current entry
+            $entryData = $this->_stream->unsignedChar();
             
             // Storage for the current sample
             $entry = new stdClass();

@@ -76,60 +76,44 @@ final class Woops_Mpeg4_Atom_Tfhd extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data           = parent::getProcessedData();
         
         // Track ID
-        $data->track_ID = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
-        
-        // Data offset for the remaining data
-        $dataOffset     = 8;
+        $data->track_ID = $this->_stream->bigEndianUnsignedLong();
         
         // Checks for the base data offset
         if( $data->flags->base_data_offset_present ) {
             
             // Base data offset
-            $data->base_data_offset = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $dataOffset ); // Value is 64bits!!!
-            
-            // Updates the data offset
-            $dataOffset            += 8;
+            $data->base_data_offset = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
         }
         
         // Checks for the sample description index
         if( $data->flags->sample_description_index_present ) {
             
-            // Base data offset
-            $data->sample_description_index = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $dataOffset );
-            
-            // Updates the data offset
-            $dataOffset                    += 4;
+            // Sample description index
+            $data->sample_description_index = $this->_stream->bigEndianUnsignedLong();
         }
         
         // Checks for the default sample duration
         if( $data->flags->default_sample_duration_present ) {
             
-            // Base data offset
-            $data->default_sample_duration = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $dataOffset );
-            
-            // Updates the data offset
-            $dataOffset                   += 4;
+            // Default sample duration
+            $data->default_sample_duration = $this->_stream->bigEndianUnsignedLong();
         }
         
-        // Checks for the base data offset
         if( $data->flags->default_sample_size_present ) {
             
-            // Base data offset
-            $data->default_sample_size = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $dataOffset );
-            
-            // Updates the data offset
-            $dataOffset               += 4;
+            $data->default_sample_size = $this->_stream->bigEndianUnsignedLong();
         }
         
-        // Checks for the base data offset
         if( $data->flags->default_sample_flags_present ) {
             
-            // Base data offset
-            $data->default_sample_flags = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $dataOffset );
+            $data->default_sample_flags = $this->_stream->bigEndianUnsignedLong();
         }
         
         // Return the processed data

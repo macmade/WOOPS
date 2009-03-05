@@ -120,11 +120,14 @@ final class Woops_Mpeg4_Atom_Stsd extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data = parent::getProcessedData();
         
         // Number of entries
-        $data->entry_count = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
+        $data->entry_count = $this->_stream->bigEndianUnsignedLong();
         
         // Checks for the HDLR atom
         if( !isset( $this->_parent->_parent->_parent->hdlr ) ) {
@@ -136,31 +139,26 @@ final class Woops_Mpeg4_Atom_Stsd extends Woops_Mpeg4_FullBox
         // Gets data from HDLR
         $hdlr = $this->_parent->_parent->_parent->hdlr->getProcessedData();
         
-        // Checks if the track is a hint track
-        if( $hdlr->handler_type === 'hint' ) {
+        // Storage for the entries            
+        $data->entries     = array();
+        
+        // Process each entry
+        for( $i = 0; $i < $data->entry_count; $i++ ) {
             
-            $data->entries = $this->_hintSampleEntries();
-            
-        } else {
-            
-            // Storage for the entries            
-            $data->entries     = array();
-            
-            // Process each entry
-            for( $i = 0; $i < $data->entry_count; $i++ ) {
+            // Checks the handler type
+            if( $hdlr->handler_type === 'soun' ) {
                 
-                // Checks the handler type
-                if( $hdlr->handler_type === 'soun' ) {
-                    
-                    // Returns the atom processed data (audio entry)
-                    $data->entries[] = $this->_audioSampleEntry( $i );
-                    
-                } elseif( $hdlr->handler_type === 'vide' ) {
-                    
-                    // Returns the atom processed data (visual entry)
-                    $data->entries[] = $this->_visualSampleEntry( $i );
-                    
-                }
+                // Returns the atom processed data (audio entry)
+                $data->entries[] = $this->_audioSampleEntry();
+                
+            } elseif( $hdlr->handler_type === 'vide' ) {
+                
+                // Returns the atom processed data (visual entry)
+                $data->entries[] = $this->_visualSampleEntry();
+                
+            } elseif( $hdlr->handler_type === 'hint' ) {
+                
+                $data->entries = $this->_hintSampleEntries();
             }
         }
         
@@ -171,67 +169,79 @@ final class Woops_Mpeg4_Atom_Stsd extends Woops_Mpeg4_FullBox
     /**
      * Process the atom data (audio entry)
      * 
-     * @param   int     The current entry number
      * @return  object  The processed atom data
      */
-    protected function _audioSampleEntry( $entryNumber )
+    protected function _audioSampleEntry()
     {
-        // Data storage
-        $data                       = new stdClass();
+        $data = new stdClass();
         
-        // Gets the start offset for the current entry
-        // Each entry is 288 bits
-        $startOffset                = 8 + ( $entryNumber * 36 );
+        $this->_stream->seek( 4, Woops_Binary_Stream::SEEK_CUR );
         
-        // Gets the start offset for the entry data
-        // Each entry data is 160 bits
-        $dataStartOffset            = $startOffset + 16;
+        $data->format = $this->_stream->read( 4 );
         
-        // Process the atom data
-        $data->format               = substr( $this->_data, $startOffset + 4 , 4 );
-        $data->data_reference_index = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $startOffset + 14 );
-        $data->channelcount         = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $dataStartOffset + 8 );
-        $data->samplesize           = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $dataStartOffset + 10 );
-        $data->samplerate           = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, $dataStartOffset + 16 );
+        $this->_stream->seek( 6, Woops_Binary_Stream::SEEK_CUR );
         
-        // Returns the processed data
+        $data->data_reference_index = $this->_stream->bigEndianUnsignedShort();
+        
+        $this->_stream->seek( 8, Woops_Binary_Stream::SEEK_CUR );
+        
+        $data->channelcount = $this->_stream->bigEndianUnsignedShort();
+        $data->samplesize   = $this->_stream->bigEndianUnsignedShort();
+        
+        $this->_stream->seek( 4, Woops_Binary_Stream::SEEK_CUR );
+        
+        $data->samplerate = $this->_stream->bigEndianFixedPoint( 16, 16 );
+        
+        // ES descriptor here...
+        
         return $data;
     }
     
     /**
      * Process the atom data (visual entry)
      * 
-     * @param   int     The current entry number
      * @return  object  The processed atom data
      */
-    protected function _visualSampleEntry( $entryNumber  )
+    protected function _visualSampleEntry()
     {
-        // Data storage
-        $data                       = new stdClass();
+        $data = new stdClass();
         
-        // Gets the start offset for the current entry
-        // Each entry is 464 bits
-        $startOffset                = 8 + ( $entryNumber * 58 );
+        $this->_stream->seek( 4, Woops_Binary_Stream::SEEK_CUR );
         
-        // Gets the start offset for the entry data
-        // Each entry data is 336 bits
-        $dataStartOffset            = $startOffset + 16;
+        $data->codingname = $this->_stream->read( 4 );
         
-        // Length of the compressor string
-        $compressorNameLength       = ( self::$_binUtils->bigEndianUnsignedShort( $this->_data, $dataStartOffset + 36, 2 ) && 0xFF00 ) >> 8;
+        $this->_stream->seek( 6, Woops_Binary_Stream::SEEK_CUR );
         
-        // Process the atom data
-        $data->format               = substr( $this->_data, $startOffset + 4 , 4 );
-        $data->data_reference_index = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $startOffset + 14 );
-        $data->width                = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $dataStartOffset + 16 );
-        $data->height               = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $dataStartOffset + 18 );
-        $data->horizresolution      = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, $dataStartOffset + 20 );
-        $data->vertresolution       = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, $dataStartOffset + 24 );
-        $data->frame_count          = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $dataStartOffset + 32);
-        $data->compressorname       = ( $compressorNameLength > 0 ) ? substr( $this->_data, 37, $compressorNameLength ) : '';
-        $data->depth                = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $dataStartOffset, 40 );
+        $data->data_reference_index = $this->_stream->bigEndianUnsignedShort();
         
-        // Returns the processed data
+        $this->_stream->seek( 16, Woops_Binary_Stream::SEEK_CUR );
+        
+        $data->width           = $this->_stream->bigEndianUnsignedShort();
+        $data->height          = $this->_stream->bigEndianUnsignedShort();
+        $data->horizresolution = $this->_stream->bigEndianFixedPoint( 16, 16 );
+        $data->vertresolution  = $this->_stream->bigEndianFixedPoint( 16, 16 );
+        
+        $this->_stream->seek( 4, Woops_Binary_Stream::SEEK_CUR );
+        
+        $data->frame_count    = $this->_stream->bigEndianUnsignedShort();
+        
+        $compressorNameLength = $this->_stream->bigEndianUnsignedLong();
+        
+        if( $compressorNameLength > 0 ) {
+            
+            $data->compressorname = $this->_stream->read( $compressorNameLength );
+            
+            $this->_stream->seek( 31 - strlen( $data->compressorname ), Woops_Binary_Stream::SEEK_CUR );
+            
+        } else {
+            
+            $data->compressorname = '';
+        }
+        
+        $data->depth = $this->_stream->bigEndianUnsignedShort();
+        
+        // ES descriptor here...
+        
         return $data;
     }
     
@@ -242,42 +252,23 @@ final class Woops_Mpeg4_Atom_Stsd extends Woops_Mpeg4_FullBox
      */
     protected function _hintSampleEntries()
     {
-        // Entries storage
-        $entries     = array();
+        $data = new stdClass();
         
-        // Offset for the entries
-        $entryOffset = 8;
+        $this->_stream->seek( 4, Woops_Binary_Stream::SEEK_CUR );
         
-        while( $entryOffset < $this->_dataLength ) {
+        $data->protocol = $this->_stream->read( 4 );
+        
+        $this->_stream->seek( 6, Woops_Binary_Stream::SEEK_CUR );
+        
+        $data->data_reference_index = $this->_stream->bigEndianUnsignedShort();
+        
+        $data->data = array();
+        
+        while( !$this->_stream->endOfStream() ) {
             
-            // Current entry length
-            $entryLength                 = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $entryOffset );
-            
-            // Storage for the current entry
-            $entry                       = new stdClass();
-            
-            // Process the current entry
-            $entry->protocol             = substr( $this->_data, $entryOffset + 4, 4 );
-            $entry->data_reference_index = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $entryOffset + 14 );
-            
-            // Storage for the data of the current entry
-            $entry->data                 = array();
-            
-            // Process each data inside the current entry
-            for( $i = 16; $i < $entryLength; $i++ ) {
-                
-                // Adds the current data
-                $entry->data[] = ( self::$_binUtils->bigEndianUnsignedShort( $this->_data, $i - 2, 2 ) && 0x00FF );
-            }
-            
-            // Updates the entry offset
-            $entryOffset += $entryLength;
-            
-            // Stores the current entry
-            $entries[]    = $entry;
+            $data->data[] = $this->_stream->unsignedChar();
         }
         
-        // Returns the processed data
-        return $entries;
+        return $data;
     }
 }

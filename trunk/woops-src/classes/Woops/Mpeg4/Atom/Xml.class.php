@@ -58,22 +58,26 @@ final class Woops_Mpeg4_Atom_Xml extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data = parent::getProcessedData();
         
         // Tries the get the byte order mark
-        $bom  = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 4 );
+        $bom  = $this->_stream->bigEndianUnsignedShort();
         
         // Checks for the byte order mark
         if( ( $bom & 0xFEFF ) === $bom ) {
             
             // UTF-16 XML
-            $data->xml = new SimpleXMLElement( substr( $this->_data, 6, -1 ) );
+            $data->xml = substr( $this->_stream->getRemainingData(), 0, -1 );
             
         } else {
             
             // UTF-8 XML
-            $data->xml = new SimpleXMLElement( substr( $this->_data, 4, -1 ) );
+            $this->_stream->seek( -2, Woops_Binary_Stream::SEEK_CUR );
+            $data->xml = substr( $this->_stream->getRemainingData(), 0, -1 );
         }
         
         // Return the processed data

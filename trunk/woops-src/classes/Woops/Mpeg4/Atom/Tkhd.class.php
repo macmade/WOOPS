@@ -90,6 +90,9 @@ final class Woops_Mpeg4_Atom_Tkhd extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data = parent::getProcessedData();
         
@@ -97,30 +100,36 @@ final class Woops_Mpeg4_Atom_Tkhd extends Woops_Mpeg4_FullBox
         if( $data->version === 1 ) {
             
             // Process data
-            #$data->creation_time     = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 ); // Value is 64bits!!!
-            #$data->modification_time = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 12 ); // Value is 64bits!!!
-            $data->track_ID          = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 20 );
-            #$data->duration          = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 28 ); // Value is 64bits!!!
-            $data->layer             = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 44 );
-            $data->alternate_group   = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 46 );
-            $data->volume            = self::$_binUtils->bigEndianFixedPoint( $this->_data, 8, 8, 48 );
-            $data->matrix            = $this->_decodeMatrix( 52 );
-            $data->width             = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, 88 );
-            $data->height            = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, 92 );
+            $data->creation_time     = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
+            $data->modification_time = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
+            $data->track_ID          = $this->_stream->bigEndianUnsignedLong();
+            $this->_stream->seek( 4, Woops_Binary_Stream::SEEK_CUR );
+            $data->duration          = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
+            $this->_stream->seek( 8, Woops_Binary_Stream::SEEK_CUR );
+            $data->layer             = $this->_stream->bigEndianUnsignedShort();
+            $data->alternate_group   = $this->_stream->bigEndianUnsignedShort();
+            $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
+            $this->_stream->seek( 2, Woops_Binary_Stream::SEEK_CUR );
+            $data->matrix            = $this->_decodeMatrix();
+            $data->width             = $this->_stream->bigEndianFixedPoint( 16, 16 );
+            $data->height            = $this->_stream->bigEndianFixedPoint( 16, 16 );
             
         } else {
             
             // Process data
-            $data->creation_time     = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
-            $data->modification_time = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 8 );
-            $data->track_ID          = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 12 );
-            $data->duration          = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 20 );
-            $data->layer             = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 32 );
-            $data->alternate_group   = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 34 );
-            $data->volume            = self::$_binUtils->bigEndianFixedPoint( $this->_data, 8, 8, 36 );
-            $data->matrix            = $this->_decodeMatrix( 40 );
-            $data->width             = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, 76 );
-            $data->height            = self::$_binUtils->bigEndianFixedPoint( $this->_data, 16, 16, 80 );
+            $data->creation_time     = $this->_stream->bigEndianUnsignedLong();
+            $data->modification_time = $this->_stream->bigEndianUnsignedLong();
+            $data->track_ID          = $this->_stream->bigEndianUnsignedLong();
+            $this->_stream->seek( 4, Woops_Binary_Stream::SEEK_CUR );
+            $data->duration          = $this->_stream->bigEndianUnsignedLong();
+            $this->_stream->seek( 8, Woops_Binary_Stream::SEEK_CUR );
+            $data->layer             = $this->_stream->bigEndianUnsignedShort();
+            $data->alternate_group   = $this->_stream->bigEndianUnsignedShort();
+            $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
+            $this->_stream->seek( 2, Woops_Binary_Stream::SEEK_CUR );
+            $data->matrix            = $this->_decodeMatrix();
+            $data->width             = $this->_stream->bigEndianFixedPoint( 16, 16 );
+            $data->height            = $this->_stream->bigEndianFixedPoint( 16, 16 );
         }
         
         // Return the processed data

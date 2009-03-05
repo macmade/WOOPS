@@ -37,16 +37,19 @@ final class Woops_Mpeg4_Atom_Stsc extends Woops_Mpeg4_FullBox
     
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         $data              = parent::getProcessedData();
-        $data->entry_count = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
+        $data->entry_count = $this->_stream->bigEndianUnsignedLong();
         $data->entries     = array();
         
-        for( $i = 8; $i < $this->_dataLength; $i += 12 ) {
+        while( !$this->_stream->endOfStream() ) {
             
             $entry                           = new stdClass();
-            $entry->first_chunk              = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i );
-            $entry->samples_per_chunk        = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i + 4 );
-            $entry->sample_description_index = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i + 8 );
+            $entry->first_chunk              = $this->_stream->bigEndianUnsignedLong();
+            $entry->samples_per_chunk        = $this->_stream->bigEndianUnsignedLong();
+            $entry->sample_description_index = $this->_stream->bigEndianUnsignedLong();
             $data->entries[]                 = $entry;
         }
         

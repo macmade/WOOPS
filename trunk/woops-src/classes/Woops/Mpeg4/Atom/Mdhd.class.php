@@ -37,23 +37,26 @@ final class Woops_Mpeg4_Atom_Mdhd extends Woops_Mpeg4_FullBox
     
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         $data = parent::getProcessedData();
         
         if( $data->version === 1 ) {
             
-            $data->creation_time     = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
-            $data->modification_time = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 12 );
-            $data->timescale         = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 20 );
-            $data->duration          = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 24 );
-            $data->language          = self::$_binUtils->bigEndianIso639Code( $this->_data, 32 );
+            $data->creation_time     = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
+            $data->modification_time = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
+            $data->timescale         = $this->_stream->bigEndianUnsignedLong();
+            $data->duration          = $this->_stream->bigEndianUnsignedLong();
+            $data->language          = $this->_stream->bigEndianIso639Code();
             
         } else {
             
-            $data->creation_time     = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
-            $data->modification_time = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 8 );
-            $data->timescale         = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 12 );
-            $data->duration          = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 16 );
-            $data->language          = self::$_binUtils->bigEndianIso639Code( $this->_data, 20 );
+            $data->creation_time     = $this->_stream->bigEndianUnsignedLong();
+            $data->modification_time = $this->_stream->bigEndianUnsignedLong();
+            $data->timescale         = $this->_stream->bigEndianUnsignedLong();
+            $data->duration          = $this->_stream->bigEndianUnsignedLong();
+            $data->language          = $this->_stream->bigEndianIso639Code();
         }
         
         return $data;

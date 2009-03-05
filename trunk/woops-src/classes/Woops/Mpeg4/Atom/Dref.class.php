@@ -37,22 +37,25 @@ final class Woops_Mpeg4_Atom_Dref extends Woops_Mpeg4_FullBox
     
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         $data              = parent::getProcessedData();
-        $data->entry_count = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
+        $data->entry_count = $this->_stream->bigEndianUnsignedLong();
         $data->entries     = array();
         
-        for( $i = 8; $i < $this->_dataLength; $i++ ) {
+        while( !$this->_stream->endOfStream() ) {
             
-            $entryLength = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i );
-            $entryType   = substr( $this->_data, $i + 4, 4 );
+            $entryLength = $this->_stream->bigEndianUnsignedLong();
+            $entryType   = $this->_stream->read( 4 );
             
             if( $entryType === 'urn ' ) {
                 
-                $entry = $this->_dataEntryUrnBox( substr( $this->_data, $i + 8, $entryLength - 8 ) );
+                $entry = $this->_dataEntryUrnBox( $this->_stream->read( $entryLength - 8 ) );
                 
             } elseif( $entryType === 'url ' ) {
                 
-                $entry = $this->_dataEntryUrlBox( substr( $this->_data, $i + 8, $entryLength - 8 ) );
+                $entry = $this->_dataEntryUrlBox( $this->_stream->read( $entryLength - 8 ) );
                 
             } else {
                 
@@ -60,7 +63,6 @@ final class Woops_Mpeg4_Atom_Dref extends Woops_Mpeg4_FullBox
             }
             
             $data->entries[] = $entry;
-            $i              += $entryLength;
         }
         
         return $data;

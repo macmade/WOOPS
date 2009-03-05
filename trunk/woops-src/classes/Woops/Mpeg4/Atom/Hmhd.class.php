@@ -37,11 +37,14 @@ final class Woops_Mpeg4_Atom_Hmhd extends Woops_Mpeg4_FullBox
     
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         $data             = parent::getProcessedData();
-        $data->maxPDUsize = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 4 );
-        $data->avgPDUsize = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 6 );
-        $data->maxbitrate = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 8 );
-        $data->avgbitrate = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 12 );
+        $data->maxPDUsize = $this->_stream->bigEndianUnsignedShort();
+        $data->avgPDUsize = $this->_stream->bigEndianUnsignedShort();
+        $data->maxbitrate = $this->_stream->bigEndianUnsignedLong();
+        $data->avgbitrate = $this->_stream->bigEndianUnsignedLong();
         
         return $data;
     }

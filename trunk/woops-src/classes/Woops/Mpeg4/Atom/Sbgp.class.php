@@ -64,25 +64,28 @@ final class Woops_Mpeg4_Atom_Sbgp extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data                = parent::getProcessedData();
         
         // Process the atom data
-        $data->grouping_type = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 4 );
-        $data->entry_count   = self::$_binUtils->bigEndianUnsignedLong( $this->_data, 8 );
+        $data->grouping_type = $this->_stream->bigEndianUnsignedLong();
+        $data->entry_count   = $this->_stream->bigEndianUnsignedLong();
         
         // Storage for the entries
         $data->entries       = array();
         
         // Process each entry
-        for( $i = 12; $i < $this->_dataLength; $i += 8 ) {
+        while( !$this->_stream->endOfStream() ) {
             
             // Storage for the current entry
             $entry                          = new stdClass();
             
             // Process the entry data
-            $entry->sample_count            = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i );
-            $entry->group_description_index = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $i + 4 );
+            $entry->sample_count            = $this->_stream->bigEndianUnsignedLong();
+            $entry->group_description_index = $this->_stream->bigEndianUnsignedLong();
             
             // Stores the current entry
             $data->entries[]                = $entry;

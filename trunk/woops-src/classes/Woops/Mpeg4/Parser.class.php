@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Mpeg4
  */
-class Woops_Mpeg4_Parser extends Woops_File_Parser_Base
+class Woops_Mpeg4_Parser
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -29,6 +29,16 @@ class Woops_Mpeg4_Parser extends Woops_File_Parser_Base
      * An instance of the Woops_Mpeg4_File class
      */
     protected $_mpeg4File            = NULL;
+    
+    /**
+     * The binary stream
+     */
+    protected $_stream               = NULL;
+    
+    /**
+     * The file path
+     */
+    protected $_filePath             = '';
     
     /**
      * The parsing warnings/errors
@@ -55,8 +65,17 @@ class Woops_Mpeg4_Parser extends Woops_File_Parser_Base
         // Create a new instance of Mpeg4_File
         $this->_mpeg4File            = new Woops_Mpeg4_File();
         
-        // Calls the parent constructor
-        parent::__construct( $file );
+        // Stores the file path
+        $this->_filePath             = $file;
+        
+        // Creates the binary stream
+        $this->_stream               = new Woops_Binary_File_Stream( $file );
+        
+        // Parses the file
+        $this->_parseFile();
+        
+        // Deletes the stream object
+        unset( $this->_stream );
     }
     
     protected function _parseFile( $bytes = 0, $level = 0, $parent = NULL )
@@ -66,13 +85,13 @@ class Woops_Mpeg4_Parser extends Woops_File_Parser_Base
         
         // Reads 8 bytes of the MPEG-4 files till the end of the file
         // 8 bytes is the atom length and the atom type
-        while( $chunk = $this->_read( 8 ) ) {
+        while( !$this->_stream->endOfStream() ) {
             
             // Gets the atom length
-            $atomLength     = self::$_binUtils->bigEndianUnsignedLong( $chunk );
+            $atomLength     = $this->_stream->bigEndianUnsignedLong();
             
             // Gets the atom type
-            $atomType       = substr( $chunk, 4 );
+            $atomType       = $this->_stream->read( 4 );
             
             // Gets the atom data length
             $atomDataLength = $atomLength - 8;
@@ -98,7 +117,7 @@ class Woops_Mpeg4_Parser extends Woops_File_Parser_Base
                 $this->_warnings[] = array(
                     'atomType'   => $atomType,
                     'atomLength' => $atomLength,
-                    'fileOffset' => ftell( $this->_fileHandle ) - 8,
+                    'fileOffset' => $this->_stream->getOffset() - 8,
                     'parseLevel'      => $level,
                     'hierarchy'  => ( $level === 0 ) ? '' : implode( ' / ', $parent->getHierarchy() ),
                     'message'    => $errorMsg
@@ -122,9 +141,8 @@ class Woops_Mpeg4_Parser extends Woops_File_Parser_Base
                 
             } elseif( $atomLength === 1 ) {
                 
-                $lengthData       = $this->_read( 8 );
-                $length1          = self::$_binUtils->bigEndianUnsignedLong( $lengthData, 0 );
-                $length2          = self::$_binUtils->bigEndianUnsignedLong( $lengthData, 4 );
+                $length1          = $this->_stream->bigEndianUnsignedLong();
+                $length2          = $this->_stream->bigEndianUnsignedLong();
                 $atomSize         = ( double )( ( $length1 << 32 ) + $length2 );
                 $atomDataLength   = $atomDataLength + 8;
                 
@@ -146,7 +164,7 @@ class Woops_Mpeg4_Parser extends Woops_File_Parser_Base
                     $dataBytesCount = 0;
                     $letters        = array();
                     $binData        = '';
-                    $data           = $this->_read( $atomDataLength );
+                    $data           = $this->_stream->read( $atomDataLength );
                     
                     if( $atomObject ) {
                         

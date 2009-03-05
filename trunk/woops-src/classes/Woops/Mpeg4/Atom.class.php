@@ -55,11 +55,6 @@ abstract class Woops_Mpeg4_Atom
     abstract public function getLength();
     
     /**
-     * The instance of the binary utilities class
-     */
-    protected static $_binUtils = NULL;
-    
-    /**
      * Whether the static variables are set or not
      */
     protected static $_hasStatic = false;
@@ -78,35 +73,6 @@ abstract class Woops_Mpeg4_Atom
      * The parent atom, if any
      */
     protected $_parent           = NULL;
-    
-    /**
-     * Class constructor
-     * 
-     * @return  NULL
-     */
-    public function __construct()
-    {
-        // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
-            // Sets the static variables
-            self::_setStaticVars();
-        }
-    }
-    
-    /**
-     * Sets the needed static variables
-     * 
-     * @return  NULL
-     */
-    protected static function _setStaticVars()
-    {
-        // Gets the instance of the binary utilities class
-        self::$_binUtils  = Woops_Binary_Utils::getInstance();
-        
-        // Static variables are set
-        self::$_hasStatic = true;
-    }
     
     /**
      * Marks the atom as extended (length on 64 bits), or not

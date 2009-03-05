@@ -59,14 +59,17 @@ final class Woops_Mpeg4_Atom_Vmhd extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
         $data = parent::getProcessedData();
         
-        $data->graphicsmode   = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 4 );
+        $data->graphicsmode   = $this->_stream->bigEndianUnsignedShort();
         $data->opcolor        = new stdClass();
-        $data->opcolor->red   = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 6 );
-        $data->opcolor->green = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 8 );
-        $data->opcolor->blue  = self::$_binUtils->bigEndianUnsignedShort( $this->_data, 10 );
+        $data->opcolor->red   = $this->_stream->bigEndianUnsignedShort();
+        $data->opcolor->green = $this->_stream->bigEndianUnsignedShort();
+        $data->opcolor->blue  = $this->_stream->bigEndianUnsignedShort();
         
         // Return the processed data
         return $data;

@@ -49,24 +49,24 @@ final class Woops_Mpeg4_Atom_Tref extends Woops_Mpeg4_DataAtom
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Data storage
         $data          = new stdClass();
         $data->entries = array();
         
-        // Offset for the entries
-        $entriesOffset = 0;
-        
         // Process each entry
-        while( $entriesOffset < $this->_dataLength ) {
+        while( !$this->_stream->endOfStream() ) {
             
             // Length of the current entry
-            $entryLength           = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $entriesOffset );
+            $entryLength           = $this->_stream->bigEndianUnsignedLong();
             
             // Storage for the current entry
             $entry                 = new stdClass();
             
             // Reference type
-            $entry->reference_type = substr( $this->_data, $entriesOffset + 4, 4 );
+            $entry->reference_type = $this->_stream->read( 4 );
             
             // Storage for the track IDs
             $entry->track_IDs      = array();
@@ -75,14 +75,11 @@ final class Woops_Mpeg4_Atom_Tref extends Woops_Mpeg4_DataAtom
             for( $i = 8; $i < $entryLength; $i +=4 ) {
                 
                 // Gets the track ID
-                $entry->track_IDs[] = self::$_binUtils->bigEndianUnsignedLong( $this->_data, $entriesOffset + $i );
+                $entry->track_IDs[] = $this->_stream->bigEndianUnsignedLong();
             }
             
             // Stores the current entry
             $data->entries[] = $entry;
-            
-            // Updates the entries offset
-            $entriesOffset  += $entryLength;
         }
         
         // Returns the processed data

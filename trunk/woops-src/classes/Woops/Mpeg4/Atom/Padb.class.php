@@ -67,37 +67,33 @@ final class Woops_Mpeg4_Atom_Padb extends Woops_Mpeg4_FullBox
      */
     public function getProcessedData()
     {
+        // Resets the stream pointer
+        $this->_stream->rewind();
+        
         // Gets the processed data from the parent (fullbox)
-        $data          = parent::getProcessedData();
-            
-        // Storage for the entries
-        $data->entries = array();
+        $data               = parent::getProcessedData();
         
-        // Checks for the STSZ atom
-        if( !isset( $this->_parent->stsz ) ) {
-                    
-            // Return the processed data
-            return $data;
-        }
+        // Gets the number of samples
+        $data->sample_count = $this->_stream->bigEndianUnsignedLong();
         
-        // Gets data from STSZ
-        $stsz = $this->_parent->stsz->getProcessedData();
+        // Storage for the samples
+        $data->samples = array();
         
         // Process each priority
-        for( $i = 4; $i < ( $stsz->entry_count + 1 ) / 2; $i += 2 ) {
+        for( $i = 0; $i < ( ( $data->sample_count + 1 ) / 2; $i++ ) {
             
             // Storage for the current entry
             $entry           = new stdClass();
             
             // Gets the raw data for the entry
-            $entryData       = self::$_binUtils->bigEndianUnsignedShort( $this->_data, $i - 1 );
+            $entryData       = $this->_stream->unsignedChar();
             
             // Process the entry data
-            $entry->pad1     = $entryData & 0x0070; // Mask is 0000 0000 0111 0000 
-            $entry->pad2     = $entryData & 0x0007; // Mask is 0000 0000 0000 0111
+            $entry->pad1     = $entryData & 0x70; // Mask is 0111 0000 
+            $entry->pad2     = $entryData & 0x07; // Mask is 0000 0111
             
             // Stores the current entry
-            $data->entries[] = $entry;
+            $data->samples[] = $entry;
         }
         
         // Return the processed data
