@@ -26,14 +26,22 @@ class Woops_Amf_UnSerializer
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * The allowed AMF versions
+     */
+    protected static $_versions = array(
+        0 => 'Woops_Amf_Packet_Amf0',
+        3 => 'Woops_Amf_Packet_Amf3'
+    );
+    
+    /**
      * The binary stream
      */
-    protected $_stream = NULL;
+    protected $_stream          = NULL;
     
     /**
      * The AMF packet object
      */
-    protected $_packet = NULL;
+    protected $_packet          = NULL;
     
     /**
      * Class constructor
@@ -49,11 +57,49 @@ class Woops_Amf_UnSerializer
         // Gets the packet version
         $version        = $this->_stream->bigEndianUnsignedShort();
         
+        // Checks the version
+        if( !isset( self::$_versions[ $version ] ) ) {
+            
+            // Unsupported version
+            throw new Woops_Amf_UnSerializer_Exception(
+                'Invalid AMF version (' . $version . ')',
+                Woops_Amf_UnSerializer_Exception::EXCEPTION_INVALID_VERSION
+            );
+        }
+        
+        // Class name for the AMF packet object
+        $packetClass    = self::$_versions[ $version ];
+        
         // Creates a new AMF packet object
-        $this->_packet  = new Woops_Amf_Packet( $version );
+        $this->_packet  = new $packetClass();
         
         // Gets the number of headers
         $headerCount    = $this->_stream->bigEndianUnsignedShort();
+        
+        // Process the headers
+        for( $i = 0; $i < $headerCount; $i++ ) {
+            
+            $headerName     = $this->_stream->utf8String();
+            $mustUnderstand = ( $this->_stream->unsignedChar() ) ? true : false;
+            $headerLength   = $this->_stream->bigEndianUnsignedLong();
+            $type           = $this->_stream->unsignedChar();
+            
+            // Process value here...
+        }
+        
+        // Gets the number of messages
+        $messageCount = $this->_stream->bigEndianUnsignedShort();
+        
+        // Process the headers
+        for( $i = 0; $i < $headerCount; $i++ ) {
+            
+            $targetUri     = $this->_stream->utf8String();
+            $responseUri   = $this->_stream->utf8String();
+            $messageLength = $this->_stream->bigEndianUnsignedLong();
+            $type          = $this->_stream->unsignedChar();
+            
+            // Process value here...
+        }
     }
     
     /**
