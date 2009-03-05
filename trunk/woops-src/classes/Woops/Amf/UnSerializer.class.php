@@ -47,10 +47,13 @@ class Woops_Amf_UnSerializer
         $this->_stream  = new Woops_Amf_Binary_Stream( $rawData );
         
         // Gets the packet version
-        $version        = $this->_stream->unsignedShort();
+        $version        = $this->_stream->bigEndianUnsignedShort();
         
         // Creates a new AMF packet object
         $this->_packet  = new Woops_Amf_Packet( $version );
+        
+        // Gets the number of headers
+        $headerCount    = $this->_stream->bigEndianUnsignedShort();
     }
     
     /**
