@@ -30,7 +30,7 @@ abstract class Woops_Amf_Marker
      * 
      * @return  int The AMF version
      */
-    public function getVersion();
+    abstract public function getVersion();
     
     /**
      * The AMF marker type

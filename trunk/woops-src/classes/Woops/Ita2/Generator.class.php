@@ -27,6 +27,11 @@
 class Woops_Ita2_Generator
 {
     /**
+     * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
+     */
+    const PHP_COMPATIBLE = '5.2.0';
+    
+    /**
      * 
      */
     protected static $_chars = array(

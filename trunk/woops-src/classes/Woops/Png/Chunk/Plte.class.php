@@ -50,7 +50,7 @@ class Woops_Png_Chunk_Plte extends Woops_Png_Chunk
         $data->palette = array();
         
         // Process each color
-        while( !$this->_stream->endOfStream() )
+        while( !$this->_stream->endOfStream() ) {
             
             // Storage
             $color        = new StdClass();
