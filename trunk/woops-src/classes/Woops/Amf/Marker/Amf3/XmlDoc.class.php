@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * AMF XML doc marker (0x07)
+ * AMF3 XML doc marker (0x07)
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Amf.Marker
+ * @package     Woops.Amf.Marker.Amf3
  */
-class Woops_Amf_Marker_XmlDoc extends Woops_Amf_Marker
+class Woops_Amf_Marker_Amf3_XmlDoc extends Woops_Amf_Marker
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

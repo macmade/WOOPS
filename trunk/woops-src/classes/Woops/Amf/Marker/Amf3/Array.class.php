@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * AMF array marker (0x09)
+ * AMF3 array marker (0x09)
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Amf.Marker
+ * @package     Woops.Amf.Marker.Amf3
  */
-class Woops_Amf_Marker_Array extends Woops_Amf_Marker
+class Woops_Amf_Marker_Amf3_Array extends Woops_Amf_Marker
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

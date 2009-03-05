@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * AMF byte array marker (0x0C)
+ * AMF3 byte array marker (0x0C)
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Amf.Marker
+ * @package     Woops.Amf.Marker.Amf3
  */
-class Woops_Amf_Marker_ByteArray extends Woops_Amf_Marker
+class Woops_Amf_Marker_Amf3_ByteArray extends Woops_Amf_Marker
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
