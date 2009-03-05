@@ -78,6 +78,9 @@ class Woops_Png_Parser
         
         // Parses the file
         $this->_parseFile();
+        
+        // Deletes the stream object
+        unset( $this->_stream );
     }
     
     /**

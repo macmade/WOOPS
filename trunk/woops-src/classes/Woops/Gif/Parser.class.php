@@ -68,6 +68,9 @@ class Woops_Gif_Parser
         
         // Parses the file
         $this->_parseFile();
+        
+        // Deletes the stream object
+        unset( $this->_stream );
     }
     
     /**
