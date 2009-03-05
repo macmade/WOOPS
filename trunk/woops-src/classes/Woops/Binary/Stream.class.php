@@ -111,7 +111,7 @@ class Woops_Binary_Stream
             
             // Error - No more data
             throw new Woops_Binary_Stream_Exception(
-                '',
+                'Reached the end of the binary stream',
                 Woops_Binary_Stream_Exception::EXCEPTION_END_OF_STREAM
             );
         }
@@ -166,7 +166,7 @@ class Woops_Binary_Stream
             
             // Error - Invalid seek type
             throw new Woops_Binary_Stream_Exception(
-                '',
+                'Invalid seek type (' . $whence . ')',
                 Woops_Binary_Stream_Exception::EXCEPTION_INVALID_SEEK_TYPE
             );
         }
@@ -218,7 +218,7 @@ class Woops_Binary_Stream
             
             // Error - No more data
             throw new Woops_Binary_Stream_Exception(
-                '',
+                'Reached the end of the binary stream',
                 Woops_Binary_Stream_Exception::EXCEPTION_END_OF_STREAM
             );
         }
