@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Amf.Marker.Amf3
  */
-class Woops_Amf_Marker_Amf3_Undefined extends Woops_Amf_Marker
+class Woops_Amf_Marker_Amf3_Undefined extends Woops_Amf_Marker_Amf3
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

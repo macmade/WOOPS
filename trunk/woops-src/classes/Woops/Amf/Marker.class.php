@@ -26,6 +26,13 @@ abstract class Woops_Amf_Marker
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * Gets the AMF version
+     * 
+     * @return  int The AMF version
+     */
+    public function getVersion();
+    
+    /**
      * The AMF marker type
      */
     protected $_type = 0x00;

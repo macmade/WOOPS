@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Amf.Marker.Amf0
  */
-class Woops_Amf_Marker_Amf0_MovieClip extends Woops_Amf_Marker
+class Woops_Amf_Marker_Amf0_MovieClip extends Woops_Amf_Marker_Amf0
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

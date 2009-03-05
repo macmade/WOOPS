@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * AMF0 reference marker (0x07)
+ * Abstract class for the AMF3 markers
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Amf.Marker.Amf0
+ * @package     Woops.Amf.Marker
  */
-class Woops_Amf_Marker_Amf0_Reference extends Woops_Amf_Marker_Amf0
+abstract class Woops_Amf_Marker_Amf3 extends Woops_Amf_Marker
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -26,7 +26,17 @@ class Woops_Amf_Marker_Amf0_Reference extends Woops_Amf_Marker_Amf0
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * The AMF marker type
+     * The AMF version
      */
-    protected $_type = 0x07;
+    protected $_version = 3;
+    
+    /**
+     * Gets the AMF version
+     * 
+     * @return  int The AMF version
+     */
+    public function getVersion()
+    {
+        return $this->_version;
+    }
 }
