@@ -69,39 +69,6 @@ abstract class Woops_Mpeg4_DataAtom extends Woops_Mpeg4_Atom
         }
     }
     
-    /**
-     * Decodes a matrix field in the atom data
-     * 
-     * A matrix field, used for instance in mvhd or tkhd, is 288 bits (9 * 32 bits).
-     * All values are expressed as 16.16 big endian fixed point, except for u,
-     * v and w which are 2.30 big endian fixed point.
-     * 
-     * SDL from ISO-14496-12:
-     * 
-     * template int( 32 )[ 9 ] matrix = { 0x00010000, 0, 0, 0, 0x00010000, 0, 0, 0, 0x40000000 };
-     * 
-     * @return  object  The matrix object
-     */
-    protected function _decodeMatrix()
-    {
-        // Storage for the matrix
-        $matrix    = new stdClass();
-        
-        // Process the matrix field from the atom data
-        $matrix->a = $this->_stream->bigEndianFixedPoint( 16, 16 );
-        $matrix->b = $this->_stream->bigEndianFixedPoint( 16, 16 );
-        $matrix->u = $this->_stream->bigEndianFixedPoint(  2, 30 );
-        $matrix->c = $this->_stream->bigEndianFixedPoint( 16, 16 );
-        $matrix->d = $this->_stream->bigEndianFixedPoint( 16, 16 );
-        $matrix->v = $this->_stream->bigEndianFixedPoint(  2, 30 );
-        $matrix->x = $this->_stream->bigEndianFixedPoint( 16, 16 );
-        $matrix->y = $this->_stream->bigEndianFixedPoint( 16, 16 );
-        $matrix->w = $this->_stream->bigEndianFixedPoint(  2, 30 );
-        
-        // Returns the matrix
-        return $matrix;
-    }
-    
     public function getRawData()
     {
         return $this->_data;
@@ -159,7 +126,7 @@ abstract class Woops_Mpeg4_DataAtom extends Woops_Mpeg4_Atom
     {
         $this->_data       = $data;
         $this->_dataLength = strlen( $data );
-        $this->_stream     = new Woops_Binary_Stream( $data );
+        $this->_stream     = new Woops_Mpeg4_Binary_Stream( $data );
         
         return true;
     }

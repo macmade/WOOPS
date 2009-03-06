@@ -69,7 +69,7 @@ class Woops_Mpeg4_Parser
         $this->_filePath             = $file;
         
         // Creates the binary stream
-        $this->_stream               = new Woops_Binary_File_Stream( $file );
+        $this->_stream               = new Woops_Mpeg4_Binary_File_Stream( $file );
         
         // Parses the file
         $this->_parseFile();
