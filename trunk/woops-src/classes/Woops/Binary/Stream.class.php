@@ -498,8 +498,9 @@ class Woops_Binary_Stream
      * standard can be found at the folowing address:
      * {@link http://ieeexplore.ieee.org/servlet/opac?punumber=4610933}
      * 
-     * Single precsion floating point numbers are usually called 'float', or 'real'.
-     * They are 4 bytes long, and are packed the following way, from left to right:
+     * Single precsion floating point numbers are usually called 'float', or
+     * 'real'. They are 4 bytes long, and are packed the following way, from
+     * left to right:
      * 
      * - Sign:     1 bit
      * - Exponent: 8 bits
@@ -514,17 +515,17 @@ class Woops_Binary_Stream
      * ====================================================
      * </code>
      * 
-     * The sign indicates if the number is positive or negative (zero for positive,
-     * one for negative).
+     * The sign indicates if the number is positive or negative (zero for
+     * positive, one for negative).
      * 
      * The real exponent is computed by substracting 127 to the value of the
      * exponent field. It's the exponent of the number as it is expressed in the
      * scientific notation.
      * 
      * The full mantissa, which is also sometimes called significand, should be
-     * considered as a 24 bits value. As we are using scientific notation, there is
-     * an implicit leading bit (sometimes called the hidden bit), always set to 1,
-     * as there is never a leading 0 in the scientific notation.
+     * considered as a 24 bits value. As we are using scientific notation, there
+     * is an implicit leading bit (sometimes called the hidden bit), always set
+     * to 1, as there is never a leading 0 in the scientific notation.
      * For instance, you won't say 0.123 * 10 ^ 5 but 1.23 * 10 ^ 4.
      * 
      * The conversion is performed the following way:
@@ -535,8 +536,8 @@ class Woops_Binary_Stream
      * 
      * Where S is the sign, M the mantissa, and E the exponent.
      * 
-     * For instance, '0100 0000 1011 1000 0000 0000 0000 0000', which is 0x40B80000
-     * in hexadecimal.
+     * For instance, '0100 0000 1011 1000 0000 0000 0000 0000', which is
+     * 0x40B80000 in hexadecimal.
      * 
      * <code>
      * ===============================================================
@@ -555,9 +556,10 @@ class Woops_Binary_Stream
      * - The sign is '0', so the number is positive.
      * - The exponent field is '1000 0001', which is 129 in decimal. The real
      *   exponent value is then 129 - 127, which is 2.
-     * - The mantissa with the leading 1 bit, is '1011 1000 0000 0000 0000 0000'.
+     * - The mantissa with the leading 1 bit is '1011 1000 0000 0000 0000 0000'.
      * 
-     * The final representation of the number in the binary scientific notation is:
+     * The final representation of the number in the binary scientific notation
+     * is:
      * 
      * <code>
      * 1.0111 * ( 2 ^ 2 )
@@ -575,8 +577,8 @@ class Woops_Binary_Stream
      * The floating point value is then 5.75.
      * 
      * Special numbers:
-     * Depending on the value of the exponent field, some numbers can have special
-     * values. They can be:
+     * Depending on the value of the exponent field, some numbers can have
+     * special values. They can be:
      * 
      * - Denormalized numbers
      * - Zero
@@ -584,11 +586,11 @@ class Woops_Binary_Stream
      * - NaN (not a number)
      * 
      * Denormalized numbers:
-     * If the value of the exponent field is 0 and the value of the mantissa field
-     * is greater than 0, then the number has to be treated as a denormalized
-     * number.
-     * In such a case, the exponent is not -127, but -126, and the implicit leading
-     * bit is not 1 but 0.
+     * If the value of the exponent field is 0 and the value of the mantissa
+     * field is greater than 0, then the number has to be treated as a
+     * denormalized number.
+     * In such a case, the exponent is not -127, but -126, and the implicit
+     * leading bit is not 1 but 0.
      * That allows smaller numbers to be represented.
      * 
      * The scientific notation for a denormalized number is:
@@ -598,16 +600,16 @@ class Woops_Binary_Stream
      * </code>
      * 
      * Zero:
-     * If the exponent and the mantissa fields are both 0, then the final number is
-     * zero. The sign bit is permitted, even if it does not have much sense
+     * If the exponent and the mantissa fields are both 0, then the final number
+     * is zero. The sign bit is permitted, even if it does not have much sense
      * mathematically, allowing a positive or a negative zero.
      * Note that zero can be considered as a denormalized number. In that case,
      * it would be 0 * 2 ^ -126, which is zero.
      * 
      * Infinity:
      * If the value of the exponent field is 255 (all 8 bits are set) and if the
-     * value of the mantissa field is 0, the number is an infinity, either positive
-     * or negative, depending on the sign bit.
+     * value of the mantissa field is 0, the number is an infinity, either
+     * positive or negative, depending on the sign bit.
      * 
      * NaN:
      * If the value of the exponent field is 255 (all 8 bits are set) and if the
@@ -624,7 +626,6 @@ class Woops_Binary_Stream
      *      -#  Min:    ±1.4012984643248E-45 / ±0.00000000000000000000001 ^ -126
      *      -#  Max:    ±1.1754942106924E-38 / ±0.11111111111111111111111 ^ -126
      * 
-     * @param   int     The integer to convert to a floating point value
      * @return  float   The floating point number
      */
     public function float()
@@ -684,6 +685,98 @@ class Woops_Binary_Stream
             
             // Checks if the current bit is set
             if( $mantissa & ( 1 << $i + 23 ) ) {
+                
+                // Adds the value for the current bit
+                // This is done by computing two raised to the power of the
+                // exponent plus the bit position (negative if it's after the
+                // implicit bit, as we are using scientific notation)
+                $float += pow( 2, $i + $exp );
+            }
+        }
+        
+        // Returns the final float value
+        return ( $sign === 0 ) ? $float : -$float;
+    }
+    
+    /**
+     * Gets a double number from the binary stream
+     * 
+     * This function gets a double precision floating point number, as specified
+     * by the IEEE Standard for Floating-Point Arithmetic (IEEE 754). This
+     * standard can be found at the folowing address:
+     * {@link http://ieeexplore.ieee.org/servlet/opac?punumber=4610933}
+     * 
+     * Double precsion floating point numbers are usually called 'double'.
+     * They are 8 bytes long, and are packed the same way as single precision
+     * floating point numbers, except the fact that the fields are bigger:
+     * 
+     * - Sign:     1 bit
+     * - Exponent: 11 bits
+     * - Mantissa: 52 bits
+     * 
+     * Please see the documentation about the 'float()' method if you want to
+     * know more about floating point arithmetic.
+     * 
+     * @see 
+     * @return  double  The floating point number
+     */
+    public function double()
+    {
+        // Gets the data as a 64bit integer
+        $binary = ( $this->unsignedLong() << 32 ) | $this->unsignedLong();
+        
+        // Gets the sign field
+        // Bit 0, left to right
+        $sign     = $binary >> 63;
+        
+        // Gets the exponent field
+        // Bits 1 to 8, left to right
+        $exp      = ( ( $binary >> 52 ) & 0x7FF );
+        
+        // Gets the mantissa field
+        // Bits 9 to 32, left to right
+        $mantissa = ( $binary & 0xFFFFFFFFFFFF );
+        
+        // Checks the values of the exponent and the mantissa fields to handle
+        // special numbers
+        if( $exp === 0 && $mantissa === 0 ) {
+            
+            // Zero - No need for a computation even if it can be considered
+            // as a denormalized number
+            return 0;
+            
+        } elseif( $exp === 2047 && $mantissa === 0 ) {
+            
+            // Infinity
+            return ( $sign === 0 ) ? INF : '-' . INF;
+            
+        } elseif( $exp === 2047 && $mantissa !== 0 ) {
+            
+            // Not a number
+            return NAN;
+            
+        } elseif( $exp === 0 && $mantissa !== 0 ) {
+            
+            // Donormalized number - Exponent is fixed to -1022
+            $exp = -1022;
+            
+        } else {
+            
+            // Computes the real exponent
+            $exp      = $exp - 1023;
+            
+            // Adds the implicit bit to the mantissa
+            $mantissa = $mantissa | 0x10000000000000;
+        }
+        
+        // Initial value for the float
+        $float = 0;
+        
+        // Process the 24 bits of the mantissa
+        for( $i = 0; $i > -53; $i-- ) {
+            
+            // Checks if the current bit is set
+            if( $mantissa & ( 1 << $i + 53 ) ) {
                 
                 // Adds the value for the current bit
                 // This is done by computing two raised to the power of the
