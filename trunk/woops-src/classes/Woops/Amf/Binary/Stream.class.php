@@ -50,7 +50,7 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         if( !( $byte2 & 0x80 ) ) {
             
             // Returns the integer
-            return ( $byte1 | ( $byte2 << 8 ) ) & 0x7FFF;
+            return ( $byte1 & 0x7F ) | ( ( $byte2 & 0x7F ) << 7 );
         }
         
         // Gets the third byte
@@ -60,7 +60,7 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         if( !( $byte3 & 0x80 ) ) {
             
             // Returns the integer
-            return ( $byte1 | ( $byte2 << 8 ) | ( $byte3 << 16 ) ) & 0x7FFFFF;
+            return ( $byte1 & 0x7F ) | ( ( $byte2 & 0x7F ) << 7 ) | ( ( $byte3 & 0x7F ) << 14 );
         }
         
         // Gets the fourth byte
@@ -70,7 +70,7 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         if( !( $byte4 & 0x80 ) ) {
             
             // Returns the integer
-            return ( $byte1 | ( $byte2 << 8 ) | ( $byte3 << 16 ) | ( $byte4 << 24 ) ) & 0x7FFFFFFF;
+            return ( $byte1 & 0x7F ) | ( ( $byte2 & 0x7F ) << 7 ) | ( ( $byte3 & 0x7F ) << 14 ) | ( ( $byte4 & 0x7F ) << 21 );
         }
         
         // Invalid integer range
