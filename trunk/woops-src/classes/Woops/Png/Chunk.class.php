@@ -107,7 +107,7 @@ abstract class Woops_Png_Chunk
     {
         $this->_data       = $data;
         $this->_dataLength = strlen( $data );
-        $this->_stream     = new Woops_Binary_Stream( $data );
+        $this->_stream     = new Woops_Png_Binary_Stream( $data );
     }
     
     /**
