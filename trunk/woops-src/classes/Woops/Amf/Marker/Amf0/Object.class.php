@@ -29,4 +29,13 @@ class Woops_Amf_Marker_Amf0_Object extends Woops_Amf_Marker_Amf0
      * The AMF marker type
      */
     protected $_type = 0x03;
+    
+    /**
+     * Processes the raw data for the marker
+     * 
+     * @param   Woops_Amf_Binary_Stream The AMF binary stream object
+     * @return  void
+     */
+    public function processData( Woops_Amf_Binary_Stream $stream )
+    {}
 }
