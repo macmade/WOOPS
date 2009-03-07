@@ -29,14 +29,4 @@ abstract class Woops_Amf_Marker_Amf3 extends Woops_Amf_Marker
      * The AMF version
      */
     protected $_version = 3;
-    
-    /**
-     * Gets the AMF version
-     * 
-     * @return  int The AMF version
-     */
-    public function getVersion()
-    {
-        return $this->_version;
-    }
 }
