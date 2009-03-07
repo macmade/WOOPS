@@ -99,13 +99,14 @@ class Woops_Amf_UnSerializer
             $lastHeaderType = $type;
             
             // Creates the AMF header
-            $this->_packet->newHeader(
+            $header = $this->_packet->newHeader(
                 $headerName,
                 $type,
                 $mustUnderstand
             );
             
-            // Process value here...
+            // Process the marker's data
+            $header->getMarker()->processData( $this->_stream );
         }
         
         // Gets the number of messages
@@ -134,13 +135,14 @@ class Woops_Amf_UnSerializer
             $lastMessageType = $type;
             
             // Creates the AMF message
-            $this->_packet->newMessage(
+            $message = $this->_packet->newMessage(
                 $targetUri,
                 $responseUri,
                 $type
             );
             
-            // Process value here...
+            // Process the marker's data
+            $message->getMarker()->processData( $this->_stream );
         }
     }
     
