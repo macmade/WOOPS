@@ -81,7 +81,7 @@ final class Woops_Mpeg4_Atom_Mvhd extends Woops_Mpeg4_FullBox
             $data->rate              = $this->_stream->bigEndianFixedPoint( 16, 16 );
             $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
             $this->_stream->seek( 10, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
-            $data->matrix            = $this->stream->matrix();
+            $data->matrix            = $this->_stream->matrix();
             $this->_stream->seek( 24, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
             $data->next_track_ID     = $this->_stream->bigEndianUnsignedLong();
             
@@ -94,7 +94,7 @@ final class Woops_Mpeg4_Atom_Mvhd extends Woops_Mpeg4_FullBox
             $data->rate              = $this->_stream->bigEndianFixedPoint( 16, 16 );
             $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
             $this->_stream->seek( 10, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
-            $data->matrix            = $this->stream->matrix();
+            $data->matrix            = $this->_stream->matrix();
             $this->_stream->seek( 24, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
             $data->next_track_ID     = $this->_stream->bigEndianUnsignedLong();
         }

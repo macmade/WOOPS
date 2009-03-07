@@ -110,7 +110,7 @@ final class Woops_Mpeg4_Atom_Tkhd extends Woops_Mpeg4_FullBox
             $data->alternate_group   = $this->_stream->bigEndianUnsignedShort();
             $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
             $this->_stream->seek( 2, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
-            $data->matrix            = $this->stream->matrix();
+            $data->matrix            = $this->_stream->matrix();
             $data->width             = $this->_stream->bigEndianFixedPoint( 16, 16 );
             $data->height            = $this->_stream->bigEndianFixedPoint( 16, 16 );
             
@@ -127,7 +127,7 @@ final class Woops_Mpeg4_Atom_Tkhd extends Woops_Mpeg4_FullBox
             $data->alternate_group   = $this->_stream->bigEndianUnsignedShort();
             $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
             $this->_stream->seek( 2, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
-            $data->matrix            = $this->stream->matrix();
+            $data->matrix            = $this->_stream->matrix();
             $data->width             = $this->_stream->bigEndianFixedPoint( 16, 16 );
             $data->height            = $this->_stream->bigEndianFixedPoint( 16, 16 );
         }
