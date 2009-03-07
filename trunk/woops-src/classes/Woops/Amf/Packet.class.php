@@ -118,26 +118,14 @@ abstract class Woops_Amf_Packet
     /**
      * Creates a new AMF message
      * 
-     * @param   string                      The message's name
      * @param   string                      The target URI
      * @param   string                      The request URI
      * @param   int                         The marker's type (one of the MARKER_XXX constant)
      * @return  Woops_Amf_Message           The AMF message object
-     * @throws  Woops_Amf_Packet_Exception  If a message with the same name already exists
      * @throws  Woops_Amf_Packet_Exception  If the marker type is not a valid AMF marker type
      */
-    public function newMessage( $name, $targetUri, $requestUri, $markerType )
+    public function newMessage( $targetUri, $requestUri, $markerType )
     {
-        // Checks if the message already exists
-        if( isset( $this->_messages[ $name ] ) ) {
-            
-            // Error - The message already exist
-            throw new Woops_Amf_Packet_Exception(
-                'A message with the same name (' . $name . ') already exists',
-                Woops_Amf_Packet_Exception::EXCEPTION_MESSAGE_EXISTS
-            );
-        }
-        
         // Checks if the marker type is valid
         if( !isset( $this->_markers[ $markerType ] ) ) {
             
@@ -152,19 +140,21 @@ abstract class Woops_Amf_Packet
         $markerClass = $this->_markers[ $markerType ];
         $marker      = new $markerClass();
         
-        // Creates and stores the new message
-        $this->_messages[ $name ] = new Woops_Amf_Message(
-            $name,
+        // Creates the new message
+        $message = new Woops_Amf_Message(
             $targetUri,
             $requestUri,
             $marker
         );
         
+        // Stores the AMF message
+        $this->_messages[] = $message;
+        
         // Updates the number of messages
         $this->_messageCount++;
         
         // Returns the new message
-        return $this->_messages[ $name ];
+        return $message;
     }
     
     /**
@@ -209,21 +199,10 @@ abstract class Woops_Amf_Packet
      * 
      * @param   Woops_Amf_Message           The AMF message object
      * @return  void
-     * @throws  Woops_Amf_Packet_Exception  If a message with the same name already exists
      * @throws  Woops_Amf_Packet_Exception  If the AMF marker contained in the AMF message cannot be placed in the current AMF packet (depending on the AMF version)
      */
     public function addMessage( Woops_Amf_Message $message )
     {
-        // Checks if the message already exists
-        if( isset( $this->_messages[ $message->getName() ] ) ) {
-            
-            // Error - The message already exist
-            throw new Woops_Amf_Packet_Exception(
-                'A message with the same name (' . $message->getName() . ') already exists',
-                Woops_Amf_Packet_Exception::EXCEPTION_MESSAGE_EXISTS
-            );
-        }
-        
         // Checks the version of the AMF marker in the message
         if( $message->getMarker()->getVersion() !== $this->_version ) {
             
@@ -238,12 +217,13 @@ abstract class Woops_Amf_Packet
         $this->_messageCount++;
         
         // Stores the message object
-        $this->_headers[ $message->getName() ] = $message;
+        $this->_messages[] = $message;
     }
     
     /**
      * Gets an AMF header
      * 
+     * @param   string  The name of the header
      * @return  mixed   An instance of Woops_Amf_Header if the message exists, otherwise NULL
      */
     public function getHeader( $name )
@@ -254,11 +234,12 @@ abstract class Woops_Amf_Packet
     /**
      * Gets an AMF message
      * 
+     * @param   int     The message's index
      * @return  mixed   An instance of Woops_Amf_Message if the message exists, otherwise NULL
      */
-    public function getMessage( $name )
+    public function getMessage( $index )
     {
-        return ( isset( $this->_messages[ $name ] ) ) ? $this->_messages[ $name ] : NULL;
+        return ( isset( $this->_messages[ $index ] ) ) ? $this->_messages[ $index ] : NULL;
     }
     
     /**
@@ -303,16 +284,16 @@ abstract class Woops_Amf_Packet
     /**
      * Removes an AMF message
      * 
-     * @param   string  The name of the AMF message
+     * @param   int The index of the AMF message
      * @return  void
      */
-    public function removeMessage( $name )
+    public function removeMessage( $index )
     {
         // Checks if the header exists
-        if( isset( $this->_messages[ $name ] ) ) {
+        if( isset( $this->_messages[ $index ] ) ) {
             
             // Removes the header
-            unset( $this->_messages[ $name ] );
+            unset( $this->_messages[ $index ] );
             
             // Updates the number of headers
             $this->_messages--;

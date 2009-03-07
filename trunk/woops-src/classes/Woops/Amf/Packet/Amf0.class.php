@@ -172,7 +172,11 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
             $marker      = new $markerClass();
             
             // Creates and stores the now AMF header
-            $this->_headers[ $name ] = new Woops_Amf_Header( $name, $marker, $mustUnderstand );
+            $this->_headers[ $name ] = new Woops_Amf_Header(
+                $name,
+                $marker,
+                $mustUnderstand
+            );
             
             // Updates the number of headers
             $this->_headerCount++;
@@ -190,29 +194,17 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
     /**
      * Creates a new AMF message
      * 
-     * @param   string                      The message's name
      * @param   string                      The target URI
      * @param   string                      The request URI
      * @param   int                         The marker's type (one of the MARKER_XXX constant)
      * @return  Woops_Amf_Message           The AMF message object
-     * @throws  Woops_Amf_Packet_Exception  If a message with the same name already exists
      * @throws  Woops_Amf_Packet_Exception  If the marker type is not a valid AMF marker type
      * @throws  Woops_Amf_Packet_Exception  If the previous AMF marker is not an AVM+ marker, when adding an AMF3 marker
      */
-    public function newMessage( $name, $targetUri, $requestUri, $markerType )
+    public function newMessage( $targetUri, $requestUri, $markerType )
     {
         // Checks if we are using an AMF3 marker
         if( $markerType & 0x1000 ) {
-            
-            // Checks if the message already exists
-            if( isset( $this->_messages[ $name ] ) ) {
-                
-                // Error - The message already exist
-                throw new Woops_Amf_Packet_Exception(
-                    'A message with the same name (' . $name . ') already exists',
-                    Woops_Amf_Packet_Exception::EXCEPTION_MESSAGE_EXISTS
-                );
-            }
             
             // Checks if the marker type is valid
             if( !isset( $this->_amf3Markers[ $markerType ] ) ) {
@@ -241,19 +233,26 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
             $markerClass = $this->_amf3Markers[ $markerType ];
             $marker      = new $markerClass();
             
-            // Creates and stores the now AMF message
-            $this->_messages[ $name ] = new Woops_Amf_Header( $name, $marker, $mustUnderstand );
+            // Creates the new AMF message
+            $message = new Woops_Amf_Message(
+                $targetUri,
+                $requestUri,
+                $marker
+            );
+            
+            // Stores the AMF message
+            $this->_messages[] = $message;
             
             // Updates the number of messages
             $this->_messageCount++;
             
             // Returns the new AMF message
-            return $this->_messages[ $name ];
+            return $message;
             
         } else {
             
             // Calls the parent method
-            return parent::newMessage( $name, $targetUri, $requestUri, $markerType );
+            return parent::newMessage( $targetUri, $requestUri, $markerType );
         }
     }
     
@@ -303,7 +302,6 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
      * 
      * @param   Woops_Amf_Message           The AMF message object
      * @return  void
-     * @throws  Woops_Amf_Packet_Exception  If a message with the same name already exists
      * @throws  Woops_Amf_Packet_Exception  If the AMF marker contained in the AMF message cannot be placed in the current AMF packet (depending on the AMF version)
      * @throws  Woops_Amf_Packet_Exception  If the previous AMF marker is not an AVM+ marker, when adding an AMF3 marker
      */
@@ -311,14 +309,6 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
     {
         // Checks if we are using an AMF3 marker
         if( $message->getMarker()->getVersion() === 3 ) {
-            
-            if( isset( $this->_messages[ $message->getName() ] ) ) {
-                
-                throw new Woops_Amf_Packet_Exception(
-                    '',
-                    Woops_Amf_Packet_Exception::EXCEPTION_MESSAGE_EXISTS
-                );
-            }
             
             if( !$this->_messageCount || !( $this->_messages[ $this->_messageCount - 1 ] instanceof Woops_Amf_Marker_Amf0_AvmPlus ) ) {
                 
@@ -330,7 +320,7 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
             
             $this->_messageCount++;
             
-            $this->_messages[ $message->getName() ] = $message;
+            $this->_messages[] = $message;
             
         } else {
             

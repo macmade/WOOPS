@@ -41,11 +41,6 @@ class Woops_Amf_Message
     protected $_marker     = NULL;
     
     /**
-     * The message's name
-     */
-    protected $_name       = '';
-    
-    /**
      * Class constructor
      * 
      * @param   string              The message's name
@@ -54,22 +49,11 @@ class Woops_Amf_Message
      * @param   Woops_Amf_Marker    The AMF marker object
      * @return  void
      */
-    public function __construct( $name, $targetUri, $requestUri, Woops_Amf_Marker $marker )
+    public function __construct( $targetUri, $requestUri, Woops_Amf_Marker $marker )
     {
-        $this->_name           = ( string )$name;
         $this->_marker         = $marker;
         $this->_targetUri      = new Woops_Uniform_Resource_Identifier( $targetUri );
         $this->_requestUri     = new Woops_Uniform_Resource_Identifier( $requestUri );
-    }
-    
-    /**
-     * Gets the message's name
-     * 
-     * @return  string  The message's name
-     */
-    public function getName()
-    {
-        return $this->_name;
     }
     
     /**
