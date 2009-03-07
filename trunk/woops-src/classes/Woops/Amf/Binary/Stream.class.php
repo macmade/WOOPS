@@ -39,7 +39,7 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         // Checks the MSB
         if( !( $byte1 & 0x80 ) ) {
             
-            // Returns the integer
+            // Returns the integer (7 bits)
             return $byte1 & 0x7F;
         }
         
@@ -49,8 +49,8 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         // Checks the MSB
         if( !( $byte2 & 0x80 ) ) {
             
-            // Returns the integer
-            return ( $byte1 & 0x7F ) | ( ( $byte2 & 0x7F ) << 7 );
+            // Returns the integer (14 bits)
+            return ( ( $byte1 & 0x7F ) << 7 ) | ( $byte2 & 0x7F );
         }
         
         // Gets the third byte
@@ -59,8 +59,8 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         // Checks the MSB
         if( !( $byte3 & 0x80 ) ) {
             
-            // Returns the integer
-            return ( $byte1 & 0x7F ) | ( ( $byte2 & 0x7F ) << 7 ) | ( ( $byte3 & 0x7F ) << 14 );
+            // Returns the integer (21 bits)
+            return ( ( $byte1 & 0x7F ) << 14 ) | ( ( $byte2 & 0x7F ) << 7 ) | ( $byte3 & 0x7F );
         }
         
         // Gets the fourth byte
@@ -69,8 +69,8 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         // Checks the MSB
         if( !( $byte4 & 0x80 ) ) {
             
-            // Returns the integer
-            return ( $byte1 & 0x7F ) | ( ( $byte2 & 0x7F ) << 7 ) | ( ( $byte3 & 0x7F ) << 14 ) | ( ( $byte4 & 0x7F ) << 21 );
+            // Returns the integer (27 bits)
+            return ( ( $byte1 & 0x7F ) << 22 ) | ( ( $byte2 & 0x7F ) << 15 ) | ( ( $byte3 & 0x7F ) << 8 ) | $byte4;
         }
         
         // Invalid integer range
