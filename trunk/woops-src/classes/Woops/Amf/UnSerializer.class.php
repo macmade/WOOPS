@@ -153,4 +153,46 @@ class Woops_Amf_UnSerializer
     {
         return $this->_packet;
     }
+    
+    /**
+     * Gets an AMF header
+     * 
+     * @param   string  The name of the header
+     * @return  mixed   An instance of Woops_Amf_Header if the message exists, otherwise NULL
+     */
+    public function getHeader( $name )
+    {
+        return $this->_packet->getHeader( $name );
+    }
+    
+    /**
+     * Gets an AMF message
+     * 
+     * @param   int     The message's index
+     * @return  mixed   An instance of Woops_Amf_Message if the message exists, otherwise NULL
+     */
+    public function getMessage( $index )
+    {
+        return $this->_packet->getMessage( $index );
+    }
+    
+    /**
+     * Gets the AMF headers
+     * 
+     * @return  array   An array with instances of the Woops_Amf_Header class
+     */
+    public function getHeaders()
+    {
+        return $this->_packet->getHeaders();
+    }
+    
+    /**
+     * Gets the AMF messages
+     * 
+     * @return  array   An array with instances of the Woops_Amf_Message class
+     */
+    public function getMessages()
+    {
+        return $this->_packet->getMessages();
+    }
 }
