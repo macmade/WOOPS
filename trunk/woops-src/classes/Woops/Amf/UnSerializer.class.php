@@ -76,27 +76,69 @@ class Woops_Amf_UnSerializer
         // Gets the number of headers
         $headerCount    = $this->_stream->bigEndianUnsignedShort();
         
+        // The type of the last header
+        $lastHeaderType = 0;
+        
         // Process the headers
         for( $i = 0; $i < $headerCount; $i++ ) {
             
+            // Gets the header's informations
             $headerName     = $this->_stream->utf8String();
             $mustUnderstand = ( $this->_stream->unsignedChar() ) ? true : false;
             $headerLength   = $this->_stream->bigEndianUnsignedLong();
             $type           = $this->_stream->unsignedChar();
             
+            // For AMF0, checks if the last marker was an AVM+ marker
+            if( $version === 0 && $lastHeaderType === Woops_Amf_Packet_Amf0::MARKER_AVM_PLUS ) {
+                
+                // AMF3 marker for an AMF0 packet
+                $type = $type | 0x1000;
+            }
+            
+            // Stores the header's type
+            $lastHeaderType = $type;
+            
+            // Creates the AMF header
+            $this->_packet->newHeader(
+                $headerName,
+                $type,
+                $mustUnderstand
+            );
+            
             // Process value here...
         }
         
         // Gets the number of messages
-        $messageCount = $this->_stream->bigEndianUnsignedShort();
+        $messageCount    = $this->_stream->bigEndianUnsignedShort();
         
-        // Process the headers
+        // The type of the last header
+        $lastMessageType = 0;
+        
+        // Process the messages
         for( $i = 0; $i < $headerCount; $i++ ) {
             
-            $targetUri     = $this->_stream->utf8String();
-            $responseUri   = $this->_stream->utf8String();
-            $messageLength = $this->_stream->bigEndianUnsignedLong();
-            $type          = $this->_stream->unsignedChar();
+            // Gets the message's informations
+            $targetUri       = $this->_stream->utf8String();
+            $responseUri     = $this->_stream->utf8String();
+            $messageLength   = $this->_stream->bigEndianUnsignedLong();
+            $type            = $this->_stream->unsignedChar();
+            
+            // For AMF0, checks if the last marker was an AVM+ marker
+            if( $version === 0 && $lastHeaderType === Woops_Amf_Packet_Amf0::MARKER_AVM_PLUS ) {
+                
+                // AMF3 marker for an AMF0 packet
+                $type = $type | 0x1000;
+            }
+            
+            // Stores the message's type
+            $lastMessageType = $type;
+            
+            // Creates the AMF message
+            $this->_packet->newMessage(
+                $targetUri,
+                $responseUri,
+                $type
+            );
             
             // Process value here...
         }
