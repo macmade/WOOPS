@@ -56,6 +56,16 @@ class Woops_Amf_Header
     }
     
     /**
+     * Gets the header's name
+     * 
+     * @return  string  The header's name
+     */
+    public function getName()
+    {
+        return $this->_name;
+    }
+    
+    /**
      * Gets the AMF marker
      * 
      * @return  Woops_Amf_Marker The AMF marker
