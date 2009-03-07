@@ -66,17 +66,7 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         // Gets the fourth byte
         $byte4 = $this->unsignedChar();
         
-        // Checks the MSB
-        if( !( $byte4 & 0x80 ) ) {
-            
-            // Returns the integer (27 bits)
-            return ( ( $byte1 & 0x7F ) << 22 ) | ( ( $byte2 & 0x7F ) << 15 ) | ( ( $byte3 & 0x7F ) << 8 ) | $byte4;
-        }
-        
-        // Invalid integer range
-        throw new Woops_Amf_Binary_Stream_Exception(
-            'Invalid AMF integer range',
-            Woops_Amf_Binary_Stream_Exception::EXCEPTION_INVALID_INTEGER
-        );
+        // Returns the integer (27 bits)
+        return ( ( $byte1 & 0x7F ) << 22 ) | ( ( $byte2 & 0x7F ) << 15 ) | ( ( $byte3 & 0x7F ) << 8 ) | $byte4;
     }
 }
