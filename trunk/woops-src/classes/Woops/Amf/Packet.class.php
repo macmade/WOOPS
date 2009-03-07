@@ -262,6 +262,26 @@ abstract class Woops_Amf_Packet
     }
     
     /**
+     * Gets the AMF headers
+     * 
+     * @return  array   An array with instances of the Woops_Amf_Header class
+     */
+    public function getHeaders()
+    {
+        return $this->_headers;
+    }
+    
+    /**
+     * Gets the AMF messages
+     * 
+     * @return  array   An array with instances of the Woops_Amf_Message class
+     */
+    public function getMessages()
+    {
+        return $this->_messages;
+    }
+    
+    /**
      * Removes an AMF header
      * 
      * @param   string  The name of the AMF header
