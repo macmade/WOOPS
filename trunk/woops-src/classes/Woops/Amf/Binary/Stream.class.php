@@ -47,7 +47,7 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         $byte2 = $this->unsignedChar();
         
         // Checks the MSB
-        if( !( $byte2 & 0x8000 ) ) {
+        if( !( $byte2 & 0x80 ) ) {
             
             // Returns the integer
             return ( $byte1 | ( $byte2 << 8 ) ) & 0x7FFF;
@@ -57,7 +57,7 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         $byte3 = $this->unsignedChar();
         
         // Checks the MSB
-        if( !( $byte3 & 0x800000 ) ) {
+        if( !( $byte3 & 0x80 ) ) {
             
             // Returns the integer
             return ( $byte1 | ( $byte2 << 8 ) | ( $byte3 << 16 ) ) & 0x7FFFFF;
@@ -67,7 +67,7 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         $byte4 = $this->unsignedChar();
         
         // Checks the MSB
-        if( !( $byte4 & 0x80000000 ) ) {
+        if( !( $byte4 & 0x80 ) ) {
             
             // Returns the integer
             return ( $byte1 | ( $byte2 << 8 ) | ( $byte3 << 16 ) | ( $byte4 << 24 ) ) & 0x7FFFFFFF;
