@@ -41,9 +41,9 @@ final class Woops_Mpeg4_Atom_Hdlr extends Woops_Mpeg4_FullBox
         $this->_stream->rewind();
         
         $data               = parent::getProcessedData();
-        $this->_stream->seek( 4, Woops_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 4, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
         $data->handler_type = $this->_stream->read( 4 );
-        $this->_stream->seek( 12, Woops_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 12, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
         $data->name         = substr( $this->_stream->getRemainingData(), 0, -1 );
         
         return $data;

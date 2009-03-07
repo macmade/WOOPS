@@ -76,7 +76,7 @@ final class Woops_Mpeg4_Atom_Xml extends Woops_Mpeg4_FullBox
         } else {
             
             // UTF-8 XML
-            $this->_stream->seek( -2, Woops_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( -2, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
             $data->xml = substr( $this->_stream->getRemainingData(), 0, -1 );
         }
         

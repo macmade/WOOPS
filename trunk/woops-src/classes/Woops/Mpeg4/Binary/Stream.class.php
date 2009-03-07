@@ -12,13 +12,13 @@
 # $Id$
 
 /**
- * MPEG-4 binary file stream
+ * MPEG-4 binary stream
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Mpeg4.Binary.File
+ * @package     Woops.Mpeg4.Binary
  */
-class Woops_Mpeg4_Binary_File_Stream extends Woops_Binary_File_Stream
+class Woops_Mpeg4_Binary_Stream extends Woops_Binary_Stream
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

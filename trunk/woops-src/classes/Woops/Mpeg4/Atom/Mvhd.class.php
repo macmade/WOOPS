@@ -80,9 +80,9 @@ final class Woops_Mpeg4_Atom_Mvhd extends Woops_Mpeg4_FullBox
             $data->duration          = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
             $data->rate              = $this->_stream->bigEndianFixedPoint( 16, 16 );
             $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
-            $this->_stream->seek( 10, Woops_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 10, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
             $data->matrix            = $this->stream->matrix();
-            $this->_stream->seek( 24, Woops_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 24, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
             $data->next_track_ID     = $this->_stream->bigEndianUnsignedLong();
             
         } else {
@@ -93,9 +93,9 @@ final class Woops_Mpeg4_Atom_Mvhd extends Woops_Mpeg4_FullBox
             $data->duration          = $this->_stream->bigEndianUnsignedLong();
             $data->rate              = $this->_stream->bigEndianFixedPoint( 16, 16 );
             $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
-            $this->_stream->seek( 10, Woops_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 10, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
             $data->matrix            = $this->stream->matrix();
-            $this->_stream->seek( 24, Woops_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 24, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
             $data->next_track_ID     = $this->_stream->bigEndianUnsignedLong();
         }
         
