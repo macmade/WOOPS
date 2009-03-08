@@ -71,7 +71,7 @@ class Woops_Binary_Stream
      * @param   string  The binary data for which to create a stream
      * @return  void
      */
-    public function __construct( $data )
+    public function __construct( $data = '' )
     {
         // Stores the binary data
         $this->_data       = $data;
