@@ -205,7 +205,7 @@ class Woops_Binary_Stream
     }
     
     /**
-     * Read bytes from the binary stream
+     * Reads bytes from the binary stream
      * 
      * @param   int                             The number of bytes to read
      * @return  string                          The number of requested bytes from the binary stream
@@ -234,6 +234,19 @@ class Woops_Binary_Stream
         
         // Returns the data
         return $data;
+    }
+    
+    /**
+     * Writes bytes to the binary stream
+     * 
+     * @param   string  The data to write
+     * @return  void
+     */
+    public function write( $data )
+    {
+        $this->_data       .= $data;
+        $this->_dataLength += strlen( $data );
+        $this->_offset     += $this->_dataLength;
     }
     
     /**
@@ -270,6 +283,20 @@ class Woops_Binary_Stream
     }
     
     /**
+     * Writes a signed char to the binary stream
+     * 
+     * @param   int     The signed char
+     * @return  void
+     * @see     _unpackData
+     */
+    public function writeSignedChar( $data )
+    {
+        $this->_data       .= pack( 'c', $data );
+        $this->_dataLength += 1;
+        $this->_offset     += 1;
+    }
+    
+    /**
      * Gets an unsigned char from the binary stream
      * 
      * @return  int The unsigned char
@@ -278,6 +305,19 @@ class Woops_Binary_Stream
     public function unsignedChar()
     {
         return $this->_unpackData( 'C' );
+    }
+    
+    /**
+     * Writes an unsigned char to the binary stream
+     * 
+     * @param   int     The unsigned char
+     * @return  void
+     */
+    public function writeUnsignedChar( $data )
+    {
+        $this->_data       .= pack( 'C', $data );
+        $this->_dataLength += 1;
+        $this->_offset     += 1;
     }
     
     /**
@@ -292,6 +332,19 @@ class Woops_Binary_Stream
     }
     
     /**
+     * Writes a signed short to the binary stream
+     * 
+     * @param   int     The signed short
+     * @return  void
+     */
+    public function writeSignedShort( $data )
+    {
+        $this->_data       .= pack( 's', $data );
+        $this->_dataLength += 2;
+        $this->_offset     += 2;
+    }
+    
+    /**
      * Gets an unsigned short from the binary stream
      * 
      * @return  int The unsigned short
@@ -300,6 +353,19 @@ class Woops_Binary_Stream
     public function unsignedShort()
     {
         return $this->_unpackData( 'S' );
+    }
+    
+    /**
+     * Writes an unsigned short to the binary stream
+     * 
+     * @param   int     The unsigned short
+     * @return  void
+     */
+    public function writeUnsignedShort( $data )
+    {
+        $this->_data       .= pack( 'S', $data );
+        $this->_dataLength += 2;
+        $this->_offset     += 2;
     }
     
     /**
@@ -314,6 +380,19 @@ class Woops_Binary_Stream
     }
     
     /**
+     * Writes a big endian unsigned short to the binary stream
+     * 
+     * @param   int     The big endian unsigned short
+     * @return  void
+     */
+    public function writeBigEndianUnsignedShort( $data )
+    {
+        $this->_data       .= pack( 'n', $data );
+        $this->_dataLength += 2;
+        $this->_offset     += 2;
+    }
+    
+    /**
      * Gets a little endian unsigned short from the binary stream
      * 
      * @return  int The little endian unsigned short
@@ -322,6 +401,19 @@ class Woops_Binary_Stream
     public function littleEndianUnsignedShort()
     {
         return $this->_unpackData( 'v' );
+    }
+    
+    /**
+     * Writes a little endian unsigned short to the binary stream
+     * 
+     * @param   int     The little endian unsigned short
+     * @return  void
+     */
+    public function writeLittleEndianUnsignedShort( $data )
+    {
+        $this->_data       .= pack( 'v', $data );
+        $this->_dataLength += 2;
+        $this->_offset     += 2;
     }
     
     /**
@@ -336,6 +428,19 @@ class Woops_Binary_Stream
     }
     
     /**
+     * Writes a signed long to the binary stream
+     * 
+     * @param   int     The signed long
+     * @return  void
+     */
+    public function writeSignedLong( $data )
+    {
+        $this->_data       .= pack( 'l', $data );
+        $this->_dataLength += 4;
+        $this->_offset     += 4;
+    }
+    
+    /**
      * Gets an unsigned long from the binary stream
      * 
      * @return  int The unsigned long
@@ -344,6 +449,19 @@ class Woops_Binary_Stream
     public function unsignedLong()
     {
         return $this->_unpackData( 'L' );
+    }
+    
+    /**
+     * Writes an unsigned long to the binary stream
+     * 
+     * @param   int     The unsigned long
+     * @return  void
+     */
+    public function writeUnsignedLong( $data )
+    {
+        $this->_data       .= pack( 'L', $data );
+        $this->_dataLength += 4;
+        $this->_offset     += 4;
     }
     
     /**
@@ -358,6 +476,19 @@ class Woops_Binary_Stream
     }
     
     /**
+     * Writes a big endian unsigned long to the binary stream
+     * 
+     * @param   int     The big endian unsigned long
+     * @return  void
+     */
+    public function writeBigEndianUnsignedLong( $data )
+    {
+        $this->_data       .= pack( 'N', $data );
+        $this->_dataLength += 4;
+        $this->_offset     += 4;
+    }
+    
+    /**
      * Gets a little endian unsigned long from the binary stream
      * 
      * @return  int The little endian unsigned long
@@ -366,6 +497,19 @@ class Woops_Binary_Stream
     public function littleEndianUnsignedLong()
     {
         return $this->_unpackData( 'V' );
+    }
+    
+    /**
+     * Writes a little endian unsigned long to the binary stream
+     * 
+     * @param   int     The little endian unsigned long
+     * @return  void
+     */
+    public function writeLittleEndianUnsignedLong( $data )
+    {
+        $this->_data       .= pack( 'V', $data );
+        $this->_dataLength += 4;
+        $this->_offset     += 4;
     }
     
     /**
