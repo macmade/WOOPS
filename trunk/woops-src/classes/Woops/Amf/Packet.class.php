@@ -56,6 +56,40 @@ abstract class Woops_Amf_Packet
     protected $_messageCount = 0;
     
     /**
+     * Gets the AMF packet as binary
+     * 
+     * @return  string  The AMF packet
+     */
+    public function __toString()
+    {
+        // Creates a new binary stream
+        $stream = new Woops_Binary_Stream();
+        
+        // Writes the AMF version
+        $stream->writeUnsignedShort( $this->_version );
+        
+        // Writes the number of headers
+        $stream->writeUnsignedShort( $this->_headerCount );
+        
+        // Process each header
+        foreach( $this->_headers as $header ) {
+            
+            // Writes the header
+            $stream->write( ( string )$header );
+        }
+        
+        // Writes the number of messages
+        $stream->writeUnsignedShort( $this->_messageCount );
+        
+        // Process each message
+        foreach( $this->_messages as $message ) {
+            
+            // Writes the message
+            $stream->write( ( string )$message );
+        }
+    }
+    
+    /**
      * Gets the AMF version
      * 
      * @return  int The AMF version
