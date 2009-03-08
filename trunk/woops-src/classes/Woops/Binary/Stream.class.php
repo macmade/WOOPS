@@ -83,8 +83,8 @@ class Woops_Binary_Stream
     /**
      * Unpacks data to the specified format
      * 
-     * @param   string  The unpack format (see function unpack())
-     * @return  int     The unpacked data in the specified format
+     * @param   string                          The unpack format (see function unpack())
+     * @return  int                             The unpacked data in the specified format
      * @throws  Woops_Binary_Stream_Exception   If the end of the stream has been reached
      */
     protected function _unpackData( $format )
@@ -262,7 +262,7 @@ class Woops_Binary_Stream
             
             // Error - No more data
             throw new Woops_Binary_Stream_Exception(
-                '',
+                'Reached the end of the binary stream',
                 Woops_Binary_Stream_Exception::EXCEPTION_END_OF_STREAM
             );
         }
@@ -574,6 +574,38 @@ class Woops_Binary_Stream
         // Returns the language code as a string
         // 0x60 - 96 is added to each letter, as the language codes are lowercase letters
         return chr( $letter1 + 0x60 ) . chr( $letter2 + 0x60 ) . chr( $letter3 + 0x60 );
+    }
+    
+    /**
+     * Writes an ISO-639-2 language code to the binary stream
+     * 
+     * @param   string  The ISO-639-2 language code
+     * @return  void
+     */
+    public function writeBigEndianIso639Code( $data )
+    {
+        // Checks the length of the string
+        if( strlen( $data ) !== 3 ) {
+            
+            // Error - Language code must be 3 characters
+            throw new Woops_Binary_Stream_Exception(
+                'Passed argument is not a valid IS0-639-2 language code',
+                Woops_Binary_Stream_Exception::EXCEPTION_BAD_ISO_639_CODE
+            );
+        }
+        
+        // Gets the packed format for each letter
+        $letter1 = ord( $data[ 0 ] );
+        $letter2 = ord( $data[ 1 ] );
+        $letter3 = ord( $data[ 2 ] );
+        
+        // Creates the binary version of the language code
+        $code = ( ( $letter1 & 0x1F ) << 10 )
+              | ( ( $letter2 & 0x1F ) << 5 )
+              |   ( $letter3 & 0x1F );
+        
+        // Writes the language code as a big endian unsigned short
+        $this->writeBigEndianUnsignedShort( $code );
     }
     
     /**

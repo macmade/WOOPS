@@ -25,4 +25,5 @@ final class Woops_Binary_Stream_Exception extends Woops_Core_Exception_Base
      */
     const EXCEPTION_END_OF_STREAM     = 0x01;
     const EXCEPTION_INVALID_SEEK_TYPE = 0x02;
+    const EXCEPTION_BAD_ISO_639_CODE  = 0x03;
 }
