@@ -49,11 +49,6 @@ abstract class Woops_Amf_Marker
     protected $_packet  = NULL;
     
     /**
-     * The allowed AMF packets
-     */
-    protected $_markers = array();
-    
-    /**
      * The processed marker data
      */
     protected $_data    = NULL;
