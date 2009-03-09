@@ -179,9 +179,9 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
             if( !isset( $this->_amf3Markers[ $markerType ] ) ) {
                 
                 // Error - Invalid marker type
-                throw new Woops_Amf_Packet_Exception(
+                throw new Woops_Amf_Packet_Amf0_Exception(
                     'Invalid AMF marker type (' . $markerType . ')',
-                    Woops_Amf_Packet_Exception::EXCEPTION_INVALID_MARKER_TYPE
+                    Woops_Amf_Packet_Amf0_Exception::EXCEPTION_INVALID_MARKER_TYPE
                 );
             }
             
@@ -244,9 +244,9 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
             if( !isset( $this->_amf3Markers[ $markerType ] ) ) {
                 
                 // Error - Invalid marker type
-                throw new Woops_Amf_Packet_Exception(
+                throw new Woops_Amf_Packet_Amf0_Exception(
                     'Invalid AMF marker type (' . $markerType . ')',
-                    Woops_Amf_Packet_Exception::EXCEPTION_INVALID_MARKER_TYPE
+                    Woops_Amf_Packet_Amf0_Exception::EXCEPTION_INVALID_MARKER_TYPE
                 );
             }
             
@@ -321,9 +321,9 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
             if( !isset( $this->_amf3Markers[ $markerType ] ) ) {
                 
                 // Error - Invalid marker type
-                throw new Woops_Amf_Packet_Exception(
+                throw new Woops_Amf_Packet_Amf0_Exception(
                     'Invalid AMF marker type (' . $markerType . ')',
-                    Woops_Amf_Packet_Exception::EXCEPTION_INVALID_MARKER_TYPE
+                    Woops_Amf_Packet_Amf0_Exception::EXCEPTION_INVALID_MARKER_TYPE
                 );
             }
             
