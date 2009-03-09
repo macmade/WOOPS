@@ -557,7 +557,7 @@ class Woops_Http_Client
      * Sets the HTTP request URI
      * 
      * @param   string                              The URI
-     * @return  Woops_Uniform_Ressource_Identifier  The URI object
+     * @return  Woops_Uniform_Resource_Identifier   The URI object
      * @throws  Woops_Http_Client_Exception         If the connection has already been established
      */
     public function setUri( $uri )
@@ -573,7 +573,7 @@ class Woops_Http_Client
         }
         
         // Creates and stores the URI object
-        $this->_uri = new Woops_Uniform_Ressource_Identifier( $uri );
+        $this->_uri = new Woops_Uniform_Resource_Identifier( $uri );
         
         // Returns the URI object
         return $this->_uri;
@@ -1213,7 +1213,7 @@ class Woops_Http_Client
     /**
      * Gets the request URI
      * 
-     * @return  Woops_Uniform_Ressource_Identifier  The URI object
+     * @return  Woops_Uniform_Resource_Identifier  The URI object
      */
     public function getUri()
     {

@@ -86,7 +86,7 @@ class Woops_Vcard_Generator
         'TITLE'       => array(),   // Title
         'TZ'          => array(),   // Time zone
         'UID'         => array(),   // Unique identifier
-        'URL'         => array()    // Uniform ressource locator
+        'URL'         => array()    // Uniform resource locator
     );
     
     ############################################################################

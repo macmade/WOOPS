@@ -53,9 +53,9 @@
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Uniform.Ressource
+ * @package     Woops.Uniform.Resource
  */
-class Woops_Uniform_Ressource_Identifier
+class Woops_Uniform_Resource_Identifier
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -294,10 +294,10 @@ class Woops_Uniform_Ressource_Identifier
     /**
      * Class constructor
      * 
-     * @param   string                                          The URI
+     * @param   string                                      The URI
      * @return  void
-     * @throws  Woops_Uniform_Ressource_Identifier_Exception    If the URI is invalid
-     * @throws  Woops_Uniform_Ressource_Identifier_Exception    If the URI scheme is invalid
+     * @throws  Woops_Uniform_Resource_Identifier_Exception If the URI is invalid
+     * @throws  Woops_Uniform_Resource_Identifier_Exception If the URI scheme is invalid
      * @see     _setQueryParts
      */
     public function __construct( $uri = '' )
@@ -312,9 +312,9 @@ class Woops_Uniform_Ressource_Identifier
             if( !isset( $infos[ 'scheme' ] ) ) {
                 
                 // Invalid URI
-                throw new Woops_Uniform_Ressource_Identifier_Exception(
+                throw new Woops_Uniform_Resource_Identifier_Exception(
                     'Invalid URI (' . $uri . ')',
-                    Woops_Uniform_Ressource_Identifier_Exception::EXCEPTION_INVALID_URI
+                    Woops_Uniform_Resource_Identifier_Exception::EXCEPTION_INVALID_URI
                 );
             }
             
@@ -322,9 +322,9 @@ class Woops_Uniform_Ressource_Identifier
             if( !isset( self::$_schemes[ $infos[ 'scheme' ] ] ) ) {
                 
                 // Invalid scheme
-                throw new Woops_Uniform_Ressource_Identifier_Exception(
+                throw new Woops_Uniform_Resource_Identifier_Exception(
                     'Invalid URI scheme (' . $infos[ 'scheme' ] . ')',
-                    Woops_Uniform_Ressource_Identifier_Exception::EXCEPTION_INVALID_SCHEME
+                    Woops_Uniform_Resource_Identifier_Exception::EXCEPTION_INVALID_SCHEME
                 );
             }
             
@@ -423,9 +423,9 @@ class Woops_Uniform_Ressource_Identifier
     /**
      * Sets the URI scheme
      * 
-     * @param   string                                          The URI scheme
+     * @param   string                                      The URI scheme
      * @return  void
-     * @throws  Woops_Uniform_Ressource_Identifier_Exception    If the URI scheme is invalid
+     * @throws  Woops_Uniform_Resource_Identifier_Exception If the URI scheme is invalid
      */
     public function setScheme( $value )
     {
@@ -433,9 +433,9 @@ class Woops_Uniform_Ressource_Identifier
         if( !isset( self::$_schemes[ $value ] ) ) {
             
             // Invalid scheme
-            throw new Woops_Uniform_Ressource_Identifier_Exception(
+            throw new Woops_Uniform_Resource_Identifier_Exception(
                 'Invalid URI scheme (' . $value . ')',
-                Woops_Uniform_Ressource_Identifier_Exception::EXCEPTION_INVALID_SCHEME
+                Woops_Uniform_Resource_Identifier_Exception::EXCEPTION_INVALID_SCHEME
             );
         }
         

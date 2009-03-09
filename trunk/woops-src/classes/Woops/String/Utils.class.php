@@ -41,7 +41,7 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
     private $_hasRandomDevice = false;
     
     /**
-     * A file ressource to the random generator device, if available
+     * A file resource to the random generator device, if available
      */
     private $_randomDevice    = NULL;
     
@@ -250,7 +250,7 @@ final class Woops_String_Utils implements Woops_Core_Singleton_Interface
     }
     
     /**
-     * Gets an unique identifier URN ressource
+     * Gets an unique identifier URN resource
      * 
      * @return  string  The UUID URN
      * @see     uniqueId

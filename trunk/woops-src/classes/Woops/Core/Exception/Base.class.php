@@ -256,7 +256,7 @@ abstract class Woops_Core_Exception_Base extends Exception
             } elseif( is_resource( $argValue ) ) {
                 
                 // Resource - Shows the resource type
-                $argType = 'Ressource: ' . get_resource_type( $argValue );
+                $argType = 'Resource: ' . get_resource_type( $argValue );
                 
             } elseif( is_null( $argValue ) ) {
                 

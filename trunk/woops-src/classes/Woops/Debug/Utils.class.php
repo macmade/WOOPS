@@ -40,7 +40,7 @@ class Woops_Debug_Utils
      * Gets the type of a PHP variable
      * 
      * @param   mixed   The variable
-     * @return  string  The type of the passed variable (object, ressource, array, string, int, link, float, null, boolean or unknown)
+     * @return  string  The type of the passed variable (object, resource, array, string, int, link, float, null, boolean or unknown)
      */
     private static function _getVarType( &$var )
     {
@@ -54,7 +54,7 @@ class Woops_Debug_Utils
             
         } elseif( is_resource( $var ) ) {
             
-            $type = 'ressource';
+            $type = 'resource';
             
         } elseif( is_array( $var ) ) {
             
