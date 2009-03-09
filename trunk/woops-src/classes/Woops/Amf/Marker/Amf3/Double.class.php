@@ -37,7 +37,9 @@ class Woops_Amf_Marker_Amf3_Double extends Woops_Amf_Marker_Amf3
      * @return  void
      */
     public function processData( Woops_Amf_Binary_Stream $stream )
-    {}
+    {
+        $this->_data->value = $stream->double();
+    }
     
     /**
      * Gets the AMF marker as binary
@@ -45,5 +47,17 @@ class Woops_Amf_Marker_Amf3_Double extends Woops_Amf_Marker_Amf3
      * @return  string  The AMF marker
      */
     public function __toString()
-    {}
+    {
+        // Creates a new stream
+        $stream = new Woops_Amf_Binary_Stream( parent::__toString() );
+        
+        // Writes the value
+        $stream->writeDouble( $this->_data->value );
+        
+        // Resets the stream pointer
+        $stream->rewind();
+        
+        // Returns the stream data
+        return ( string )$stream;
+    }
 }
