@@ -129,6 +129,11 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
     protected $_referencesByHash = array();
     
     /**
+     * The last AMF marker (used to check for the AVM+ marker)
+     */
+    protected $_lastMarker       = NULL;
+    
+    /**
      * Gets the reference to an AMF marker
      * 
      * @param   int     The reference's index
@@ -186,7 +191,7 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
             }
             
             // Checks if an AVM+ marker was added
-            if( !end( $this->_references ) || !( prev( $this->_references ) instanceof Woops_Amf_Marker_Amf0_AvmPlus ) ) {
+            if( !( $this->_lastMarker instanceof Woops_Amf_Marker_Amf0_AvmPlus ) ) {
                 
                 // Error - No AVM+ marker
                 throw new Woops_Amf_Packet_Amf0_Exception(
@@ -195,33 +200,33 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
                 );
             }
             
-            // Resets the headers' array pointer
-            rewind( $this->_references );
-            
             // Creates a new marker
             $markerClass = $this->_amf3Markers[ $markerType ];
             $marker      = new $markerClass( $this );
             
-            // Checks if the marker can be referenced
-            if(    $markerType === self::MARKER_OBJECT
-                || $markerType === self::MARKER_ECMA_ARRAY
-                || $markerType === self::MARKER_STRICT_ARRAY
-                || $markerType === self::MARKER_TYPED_OBJECT
-            ) {
-                
-                // Adds the marker to the reference table
-                $this->_references[]                                   = $marker;
-                $this->_referencesByHash[ spl_object_hash( $marker ) ] = count( $this->_references - 1 );
-            }
-            
-            // Returns the new marker
-            return $marker;
-            
         } else {
             
             // Calls the parent method
-            return parent::newHeader( $markerType );
+            $marker = parent::newMarker( $markerType );
         }
+        
+        // Stores the marker
+        $this->_lastMarker = $marker;
+        
+        // Checks if the marker can be referenced
+        if(    $markerType === self::MARKER_OBJECT
+            || $markerType === self::MARKER_ECMA_ARRAY
+            || $markerType === self::MARKER_STRICT_ARRAY
+            || $markerType === self::MARKER_TYPED_OBJECT
+        ) {
+            
+            // Adds the marker to the reference table
+            $this->_references[]                                   = $marker;
+            $this->_referencesByHash[ spl_object_hash( $marker ) ] = count( $this->_references ) - 1;
+        }
+        
+        // Returns the new marker
+        return $marker;
     }
     
     /**
@@ -240,49 +245,10 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
         // Checks if we are using an AMF3 marker
         if( $markerType & 0x1000 ) {
             
-            // Checks if the marker type is valid
-            if( !isset( $this->_amf3Markers[ $markerType ] ) ) {
-                
-                // Error - Invalid marker type
-                throw new Woops_Amf_Packet_Amf0_Exception(
-                    'Invalid AMF marker type (' . $markerType . ')',
-                    Woops_Amf_Packet_Amf0_Exception::EXCEPTION_INVALID_MARKER_TYPE
-                );
-            }
-            
-            // Checks if an AVM+ marker was added
-            if( !end( $this->_headers ) || !( prev( $this->_headers->getMarker() ) instanceof Woops_Amf_Marker_Amf0_AvmPlus ) ) {
-                
-                // Error - No AVM+ marker
-                throw new Woops_Amf_Packet_Amf0_Exception(
-                    'An AVM+ marker must be added before an AMF3 marker in an AMF0 packet',
-                    Woops_Amf_Packet_Amf0_Exception::EXCEPTION_NO_AVM_PLUS
-                );
-            }
-            
-            // Resets the headers' array pointer
-            rewind( $this->_headers );
-            
-            // Creates a new marker
-            $markerClass = $this->_amf3Markers[ $markerType ];
-            $marker      = new $markerClass( $this );
-            
-            // Checks if the marker can be referenced
-            if(    $markerType === self::MARKER_OBJECT
-                || $markerType === self::MARKER_ECMA_ARRAY
-                || $markerType === self::MARKER_STRICT_ARRAY
-                || $markerType === self::MARKER_TYPED_OBJECT
-            ) {
-                
-                // Adds the marker to the reference table
-                $this->_references[]                                   = $marker;
-                $this->_referencesByHash[ spl_object_hash( $marker ) ] = count( $this->_references - 1 );
-            }
-            
             // Creates the new AMF header
             $header = new Woops_Amf_Header(
                 $name,
-                $markerType,
+                $this->newMarker( $markerType ),
                 $mustUnderstand
             );
             
@@ -292,14 +258,14 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
             // Updates the number of messages
             $this->_headerCount++;
             
-            // Returns the new AMF message
-            return $header;
-            
         } else {
             
             // Calls the parent method
-            return parent::newHeader( $name, $markerType, $mustUnderstand );
+            $header = parent::newHeader( $name, $markerType, $mustUnderstand );
         }
+        
+        // Returns the new AMF message
+        return $header;
     }
     
     /**
@@ -317,50 +283,11 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
         // Checks if we are using an AMF3 marker
         if( $markerType & 0x1000 ) {
             
-            // Checks if the marker type is valid
-            if( !isset( $this->_amf3Markers[ $markerType ] ) ) {
-                
-                // Error - Invalid marker type
-                throw new Woops_Amf_Packet_Amf0_Exception(
-                    'Invalid AMF marker type (' . $markerType . ')',
-                    Woops_Amf_Packet_Amf0_Exception::EXCEPTION_INVALID_MARKER_TYPE
-                );
-            }
-            
-            // Checks if an AVM+ marker was added
-            if( !end( $this->_messages ) || !( prev( $this->_messages->getMarker() ) instanceof Woops_Amf_Marker_Amf0_AvmPlus ) ) {
-                
-                // Error - No AVM+ marker
-                throw new Woops_Amf_Packet_Amf0_Exception(
-                    'An AVM+ marker must be added before an AMF3 marker in an AMF0 packet',
-                    Woops_Amf_Packet_Amf0_Exception::EXCEPTION_NO_AVM_PLUS
-                );
-            }
-            
-            // Resets the messages' array pointer
-            rewind( $this->_messages );
-            
-            // Creates a new marker
-            $markerClass = $this->_amf3Markers[ $markerType ];
-            $marker      = new $markerClass( $this );
-            
-            // Checks if the marker can be referenced
-            if(    $markerType === self::MARKER_OBJECT
-                || $markerType === self::MARKER_ECMA_ARRAY
-                || $markerType === self::MARKER_STRICT_ARRAY
-                || $markerType === self::MARKER_TYPED_OBJECT
-            ) {
-                
-                // Adds the marker to the reference table
-                $this->_references[]                                   = $marker;
-                $this->_referencesByHash[ spl_object_hash( $marker ) ] = count( $this->_references - 1 );
-            }
-            
             // Creates the new AMF message
             $message = new Woops_Amf_Message(
                 $targetUri,
                 $responseUri,
-                $marker
+                $this->newMarker( $markerType )
             );
             
             // Stores the AMF message
@@ -369,13 +296,13 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
             // Updates the number of messages
             $this->_messageCount++;
             
-            // Returns the new AMF message
-            return $message;
-            
         } else {
             
             // Calls the parent method
-            return parent::newMessage( $targetUri, $responseUri, $markerType );
+            $message = parent::newMessage( $targetUri, $responseUri, $markerType );
         }
+        
+        // Returns the new AMF message
+        return $message;
     }
 }
