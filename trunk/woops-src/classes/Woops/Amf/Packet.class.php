@@ -128,21 +128,24 @@ abstract class Woops_Amf_Packet
         }
         
         // Creates a new marker
-        $markerClass = $this->_markers[ $markerType ];
+        $markerClass = $this->_amf3Markers[ $markerType ];
         $marker      = new $markerClass();
         
-        // Creates and stores the new header
-        $this->_headers[ $name ] = new Woops_Amf_Header(
+        // Creates the new AMF header
+        $header = new Woops_Amf_Header(
             $name,
-            $marker,
+            $markerType,
             $mustUnderstand
         );
         
-        // Updates the number of headers
+        // Stores the AMF message
+        $this->_headers[] = $header;
+        
+        // Updates the number of messages
         $this->_headerCount++;
         
-        // Returns the new header
-        return $this->_headers[ $name ];
+        // Returns the new AMF message
+        return $header;
     }
     
     /**
@@ -243,12 +246,12 @@ abstract class Woops_Amf_Packet
     /**
      * Gets an AMF header
      * 
-     * @param   string  The name of the header
-     * @return  mixed   An instance of Woops_Amf_Header if the message exists, otherwise NULL
+     * @param   int     The header's index
+     * @return  mixed   An instance of Woops_Amf_Header if the header exists, otherwise NULL
      */
-    public function getHeader( $name )
+    public function getHeader( $index )
     {
-        return ( isset( $this->_headers[ $name ] ) ) ? $this->_headers[ $name ] : NULL;
+        return ( isset( $this->_headers[ $index ] ) ) ? $this->_headers[ $index ] : NULL;
     }
     
     /**
@@ -285,19 +288,19 @@ abstract class Woops_Amf_Packet
     /**
      * Removes an AMF header
      * 
-     * @param   string  The name of the AMF header
+     * @param   int The index of the AMF header
      * @return  void
      */
-    public function removeHeader( $name )
+    public function removeHeader( $index )
     {
         // Checks if the header exists
-        if( isset( $this->_headers[ $name ] ) ) {
+        if( isset( $this->_headers[ $index ] ) ) {
             
             // Removes the header
-            unset( $this->_headers[ $name ] );
+            unset( $this->_headers[ $index ] );
             
             // Updates the number of headers
-            $this->_headerCount--;
+            $this->_messageCount--;
         }
     }
     

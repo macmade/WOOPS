@@ -26,6 +26,13 @@ abstract class Woops_Amf_Marker
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * Gets the AMF marker as binary
+     * 
+     * @return  string  The AMF marker
+     */
+    abstract public function __toString();
+    
+    /**
      * Processes the raw data for the marker
      * 
      * @param   Woops_Amf_Binary_Stream The AMF binary stream object

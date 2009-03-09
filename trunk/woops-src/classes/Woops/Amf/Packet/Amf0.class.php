@@ -161,18 +161,21 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
             $markerClass = $this->_amf3Markers[ $markerType ];
             $marker      = new $markerClass();
             
-            // Creates and stores the now AMF header
-            $this->_headers[ $name ] = new Woops_Amf_Header(
+            // Creates the new AMF header
+            $header = new Woops_Amf_Header(
                 $name,
-                $marker,
+                $markerType,
                 $mustUnderstand
             );
             
-            // Updates the number of headers
+            // Stores the AMF message
+            $this->_headers[] = $header;
+            
+            // Updates the number of messages
             $this->_headerCount++;
             
-            // Returns the new AMF header
-            return $this->_headers[ $name ];
+            // Returns the new AMF message
+            return $header;
             
         } else {
             
@@ -260,17 +263,31 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
         // Checks if we are using an AMF3 marker
         if( $header->getMarker()->getVersion() === 3 ) {
             
-            if( !$this->_headerCount || !( $this->_headers[ $this->_headerCount - 1 ] instanceof Woops_Amf_Marker_Amf0_AvmPlus ) ) {
+            // Checks if the marker type is valid
+            if( !isset( $this->_amf3Markers[ $header->getMarker()->getType() ] ) ) {
                 
+                // Error - Invalid marker type
+                throw new Woops_Amf_Packet_Exception(
+                    'Invalid AMF marker type (' . $header->getMarker()->getType() . ')',
+                    Woops_Amf_Packet_Exception::EXCEPTION_INVALID_MARKER_TYPE
+                );
+            }
+            
+            // Checks if an AVM+ marker was added
+            if( !end( $this->_headers ) || !( prev( $this->_headers ) instanceof Woops_Amf_Marker_Amf0_AvmPlus ) ) {
+                
+                // Error - No AVM+ marker
                 throw new Woops_Amf_Packet_Amf0_Exception(
-                    '',
+                    'An AVM+ marker must be added before an AMF3 marker in an AMF0 packet',
                     Woops_Amf_Packet_Amf0_Exception::EXCEPTION_NO_AVM_PLUS
                 );
             }
             
+            // Updates the number of headers
             $this->_headerCount++;
             
-            $this->_headers[ $header->getName() ] = $header;
+            // Stores the AMF heaeder
+            $this->_headers[] = $header;
             
         } else {
             
@@ -292,22 +309,36 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
         // Checks if we are using an AMF3 marker
         if( $message->getMarker()->getVersion() === 3 ) {
             
-            if( !$this->_messageCount || !( $this->_messages[ $this->_messageCount - 1 ] instanceof Woops_Amf_Marker_Amf0_AvmPlus ) ) {
+            // Checks if the marker type is valid
+            if( !isset( $this->_amf3Markers[ $message->getMarker()->getType() ] ) ) {
                 
+                // Error - Invalid marker type
+                throw new Woops_Amf_Packet_Exception(
+                    'Invalid AMF marker type (' . $message->getMarker()->getType() . ')',
+                    Woops_Amf_Packet_Exception::EXCEPTION_INVALID_MARKER_TYPE
+                );
+            }
+            
+            // Checks if an AVM+ marker was added
+            if( !end( $this->_messages ) || !( prev( $this->_messages ) instanceof Woops_Amf_Marker_Amf0_AvmPlus ) ) {
+                
+                // Error - No AVM+ marker
                 throw new Woops_Amf_Packet_Amf0_Exception(
-                    '',
+                    'An AVM+ marker must be added before an AMF3 marker in an AMF0 packet',
                     Woops_Amf_Packet_Amf0_Exception::EXCEPTION_NO_AVM_PLUS
                 );
             }
             
+            // Updates the number of headers
             $this->_messageCount++;
             
+            // Stores the AMF heaeder
             $this->_messages[] = $message;
             
         } else {
             
             // Calls the parent method
-            parent::addMessage( $message );
+            parent::addHeader( $message );
         }
     }
 }
