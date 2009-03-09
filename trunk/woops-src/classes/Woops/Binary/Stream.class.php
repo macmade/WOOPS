@@ -41,6 +41,16 @@ class Woops_Binary_Stream
     const SEEK_END = SEEK_END;
     
     /**
+     * Whether the static variables are set or not
+     */
+    private static $_hasStatic  = false;
+    
+    /**
+     * The instance of the string utilities class
+     */
+    protected static $_str      = NULL;
+    
+    /**
      * The dividers values for the fixed point methods
      */
     protected static $_dividers = array(
@@ -73,11 +83,32 @@ class Woops_Binary_Stream
      */
     public function __construct( $data = '' )
     {
+        // Checks if the static variables are set
+        if( !self::$_hasStatic ) {
+            
+            // Sets the static variables
+            self::_setStaticVars();
+        }
+        
         // Stores the binary data
         $this->_data       = $data;
         
         // Stores the data length
         $this->_dataLength = strlen( $data );
+    }
+    
+    /**
+     * Sets the needed static variables
+     * 
+     * @return  void
+     */
+    private static function _setStaticVars()
+    {
+        // Gets the instance of the string utilities
+        self::$_str       = Woops_String_Utils::getInstance();
+        
+        // Static variables are set
+        self::$_hasStatic = true;
     }
     
     /**
@@ -636,6 +667,18 @@ class Woops_Binary_Stream
         // Returns the string
         return $string;
         
+    }
+    
+    /**
+     * Writes a null-terminated string to the binary stream
+     * 
+     * @param   string  The string
+     * @return  void
+     */
+    public function writeNullTerminatedString( $data )
+    {
+        // Writes the string with a NULL character
+        $this->write( $data . self::$_str->NULL );
     }
     
     /**
