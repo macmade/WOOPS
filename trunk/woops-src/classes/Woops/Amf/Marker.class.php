@@ -26,13 +26,6 @@ abstract class Woops_Amf_Marker
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * Gets the AMF marker as binary
-     * 
-     * @return  string  The AMF marker
-     */
-    abstract public function __toString();
-    
-    /**
      * Processes the raw data for the marker
      * 
      * @param   Woops_Amf_Binary_Stream The AMF binary stream object
@@ -49,6 +42,59 @@ abstract class Woops_Amf_Marker
      * The AMF marker type
      */
     protected $_type    = 0x00;
+    
+    /**
+     * The AMF packet object in which the AMF marker belongs
+     */
+    protected $_packet  = NULL;
+    
+    /**
+     * The allowed AMF packets
+     */
+    protected $_markers = array();
+    
+    /**
+     * The processed marker data
+     */
+    protected $_data    = NULL;
+    
+    /**
+     * Class constructor
+     * 
+     * @param   Woops_Amf_Packet    The AMF packet object in which the AMF marker belongs
+     * @return  void
+     */
+    public function __construct( Woops_Amf_Packet $packet )
+    {
+        $this->_packet = $packet;
+        $this->_data   = new stdClass();
+    }
+    
+    /**
+     * Gets the AMF marker as binary
+     * 
+     * @return  string  The AMF marker
+     */
+    public function __toString()
+    {
+        $stream = new Woops_Amf_Binary_Stream();
+        
+        $stream->writeChar( $this->_type );
+        
+        $stream->rewind();
+        
+        return ( string )$stream;
+    }
+    
+    /**
+     * Gets the AMF data
+     * 
+     * @return  stdClass    The AMF data
+     */
+    public function getData()
+    {
+        return $this->_data;
+    }
     
     /**
      * Gets the AMF version
