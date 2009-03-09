@@ -948,6 +948,19 @@ class Woops_Binary_Stream
     }
     
     /**
+     * Writes an float number to the binary stream
+     * 
+     * @param   float   The floating point number
+     * @return  void
+     */
+    public function writeFloat( $data )
+    {
+        $this->_data       .= pack( 'f', ( float )$data );
+        $this->_dataLength += 4;
+        $this->_offset     += 4;
+    }
+    
+    /**
      * Gets a double number from the binary stream
      * 
      * This function gets a double precision floating point number, as specified
@@ -1037,5 +1050,18 @@ class Woops_Binary_Stream
         
         // Returns the final float value
         return ( $sign === 0 ) ? $float : -$float;
+    }
+    
+    /**
+     * Writes an double number to the binary stream
+     * 
+     * @param   double  The floating point number
+     * @return  void
+     */
+    public function writeDouble( $data )
+    {
+        $this->_data       .= pack( 'd', ( double )$data );
+        $this->_dataLength += 8;
+        $this->_offset     += (;
     }
 }
