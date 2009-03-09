@@ -1062,6 +1062,6 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'd', ( double )$data );
         $this->_dataLength += 8;
-        $this->_offset     += (;
+        $this->_offset     += 8;
     }
 }
