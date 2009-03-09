@@ -52,8 +52,8 @@ class Woops_Amf_Message
     public function __construct( $targetUri, $responseUri, Woops_Amf_Marker $marker )
     {
         $this->_marker         = $marker;
-        $this->_targetUri      = new Woops_Uniform_Resource_Identifier( $targetUri );
-        $this->_responseUri    = new Woops_Uniform_Resource_Identifier( $responseUri );
+        $this->_targetUri      = $targetUri;
+        $this->_responseUri    = $responseUri;
     }
     
     /**
@@ -98,7 +98,7 @@ class Woops_Amf_Message
     /**
      * Gets the target URI
      * 
-     * @return  Woops_Uniform_Resource_Identifier   The target URI object
+     * @return  string  The target URI
      */
     public function getTargetUri()
     {
@@ -108,10 +108,30 @@ class Woops_Amf_Message
     /**
      * Gets the response URI
      * 
-     * @return  Woops_Uniform_Resource_Identifier   The response URI object
+     * @return  string  The response URI
      */
     public function getResponseUri()
     {
         return $this->_responseUri;
+    }
+    
+    /**
+     * Sets the target URI
+     * 
+     * @param   string  The target URI
+     */
+    public function setTargetUri( $uri )
+    {
+        $this->_targetUri = ( string )$uri;
+    }
+    
+    /**
+     * Sets the response URI
+     * 
+     * @param   string  The response URI
+     */
+    public function setResponseUri( $uri )
+    {
+        $this->_responseUri = ( string )$uri;
     }
 }
