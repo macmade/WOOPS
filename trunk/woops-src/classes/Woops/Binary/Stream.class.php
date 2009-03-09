@@ -682,7 +682,7 @@ class Woops_Binary_Stream
     }
     
     /**
-     * Gets an UTF-8 string (16bits length)
+     * Gets an UTF-8 string (16bits length) from the binary stream
      * 
      * @return  string  The UTF-8 string
      */
@@ -696,7 +696,22 @@ class Woops_Binary_Stream
     }
     
     /**
-     * Gets an UTF-8 string (32bits length)
+     * Writes an UTF-8 string (16bits length) to the binary stream
+     * 
+     * @param   string  The UTF-8 string
+     * @return  void
+     */
+    public function writeUtf8String( $data )
+    {
+        // Writes the string length
+        $this->writeBigEndianUnsignedShort( strlen( $data ) );
+        
+        // Writes the string
+        $this->write( $data );
+    }
+    
+    /**
+     * Gets an UTF-8 string (32bits length) from the binary stream
      * 
      * @return  string  The UTF-8 string
      */
@@ -707,6 +722,21 @@ class Woops_Binary_Stream
         
         // Returns the string
         return $this->read( $length );
+    }
+    
+    /**
+     * Writes an UTF-8 string (32bits length) to the binary stream
+     * 
+     * @param   string  The UTF-8 string
+     * @return  void
+     */
+    public function writeLongUtf8String( $data )
+    {
+        // Writes the string length
+        $this->writeBigEndianUnsignedLong( strlen( $data ) );
+        
+        // Writes the string
+        $this->write( $data );
     }
     
     /**
