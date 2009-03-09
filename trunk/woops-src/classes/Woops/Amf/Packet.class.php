@@ -87,6 +87,12 @@ abstract class Woops_Amf_Packet
             // Writes the message
             $stream->write( ( string )$message );
         }
+        
+        // Resets the stream pointer
+        $stream->rewind();
+        
+        // Returns the stream data
+        return ( string )$stream;
     }
     
     /**
@@ -111,16 +117,6 @@ abstract class Woops_Amf_Packet
      */
     public function newHeader( $name, $markerType, $mustUnderstand = false )
     {
-        // Checks if the header already exists
-        if( isset( $this->_headers[ $name ] ) ) {
-            
-            // Error - The header already exist
-            throw new Woops_Amf_Packet_Exception(
-                'A header with the same name (' . $name . ') already exists',
-                Woops_Amf_Packet_Exception::EXCEPTION_HEADER_EXISTS
-            );
-        }
-        
         // Checks if the marker type is valid
         if( !isset( $this->_markers[ $markerType ] ) ) {
             
@@ -153,12 +149,12 @@ abstract class Woops_Amf_Packet
      * Creates a new AMF message
      * 
      * @param   string                      The target URI
-     * @param   string                      The request URI
+     * @param   string                      The response URI
      * @param   int                         The marker's type (one of the MARKER_XXX constant)
      * @return  Woops_Amf_Message           The AMF message object
      * @throws  Woops_Amf_Packet_Exception  If the marker type is not a valid AMF marker type
      */
-    public function newMessage( $targetUri, $requestUri, $markerType )
+    public function newMessage( $targetUri, $responseUri, $markerType )
     {
         // Checks if the marker type is valid
         if( !isset( $this->_markers[ $markerType ] ) ) {
@@ -177,7 +173,7 @@ abstract class Woops_Amf_Packet
         // Creates the new message
         $message = new Woops_Amf_Message(
             $targetUri,
-            $requestUri,
+            $responseUri,
             $marker
         );
         
@@ -201,16 +197,6 @@ abstract class Woops_Amf_Packet
      */
     public function addHeader( Woops_Amf_Header $header )
     {
-        // Checks if the header already exists
-        if( isset( $this->_headers[ $header->getName() ] ) ) {
-            
-            // Error - The header already exist
-            throw new Woops_Amf_Packet_Exception(
-                'A header with the same name (' . $header->getName() . ') already exists',
-                Woops_Amf_Packet_Exception::EXCEPTION_HEADER_EXISTS
-            );
-        }
-        
         // Checks the version of the AMF marker in the header
         if( $header->getMarker()->getVersion() !== $this->_version ) {
             
