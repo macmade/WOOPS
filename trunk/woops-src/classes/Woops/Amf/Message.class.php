@@ -28,32 +28,61 @@ class Woops_Amf_Message
     /**
      * The target URI
      */
-    protected $_targetUri  = NULL;
+    protected $_targetUri   = NULL;
     
     /**
      * The response URI
      */
-    protected $_requestUri = NULL;
+    protected $_responseUri = NULL;
     
     /**
      * The AMF marker
      */
-    protected $_marker     = NULL;
+    protected $_marker      = NULL;
     
     /**
      * Class constructor
      * 
      * @param   string              The message's name
      * @param   string              The target URI
-     * @param   string              The request URI
+     * @param   string              The response URI
      * @param   Woops_Amf_Marker    The AMF marker object
      * @return  void
      */
-    public function __construct( $targetUri, $requestUri, Woops_Amf_Marker $marker )
+    public function __construct( $targetUri, $responseUri, Woops_Amf_Marker $marker )
     {
         $this->_marker         = $marker;
         $this->_targetUri      = new Woops_Uniform_Resource_Identifier( $targetUri );
-        $this->_requestUri     = new Woops_Uniform_Resource_Identifier( $requestUri );
+        $this->_responseUri    = new Woops_Uniform_Resource_Identifier( $responseUri );
+    }
+    
+    /**
+     * Gets the AMF message as binary
+     * 
+     * @return  string  The AMF message
+     */
+    public function __toString()
+    {
+        // Creates a new binary stream
+        $stream = new Woops_Binary_Stream();
+        
+        // Writes the target URI
+        $stream->writeUtf8String( $this->_targetUri );
+        
+        // Writes the response URI
+        $stream->writeUtf8String( $this->_responseUri );
+        
+        // Writes the message's length (U32-1 - unknown length)
+        $stream->writeBigEndianUnsignedLong( 0xFFFFFFFF );
+        
+        // Writes the marker
+        $stream->write( ( string )$this->_marker );
+        
+        // Resets the stream pointer
+        $stream->rewind();
+        
+        // Returns the stream data
+        return ( string )$stream;
     }
     
     /**
@@ -77,12 +106,12 @@ class Woops_Amf_Message
     }
     
     /**
-     * Gets the request URI
+     * Gets the response URI
      * 
-     * @return  Woops_Uniform_Resource_Identifier   The request URI object
+     * @return  Woops_Uniform_Resource_Identifier   The response URI object
      */
-    public function getRequestUri()
+    public function getResponseUri()
     {
-        return $this->_requestUri;
+        return $this->_responseUri;
     }
 }
