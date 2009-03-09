@@ -572,6 +572,37 @@ class Woops_Binary_Stream
     }
     
     /**
+     * Writes a fixed point number to the binary stream
+     * 
+     * @param   float   The fixed point number
+     * @param   int     The number of bits for the integer part
+     * @param   int     The number of bits for the fractional part
+     * @return  void
+     */
+    public function writeBigEndianFixedPoint( $data, $integerLength, $fractionalLength )
+    {
+        // Computes the integer part
+        $integerPart     = ( int )$data;
+        $integerData     = $integer << $fractionalLength;
+        
+        // Computes the fractionnal part
+        $fractionnalPart = $data - $integerPart;
+        $fractionalData  = $fractionnalPart * pow( 10, strlen( $fractionnalPart ) - 2 );
+        
+        // Checks if the fixed point number is expressed on 16 or 32 bits
+        if( $integerLength + $fractionalLength === 16 ) {
+            
+            // Unsigned short - big endian
+            $this->writeBigEndianUnsignedShort( $integerData | $fractionalData );
+            
+        } else {
+            
+            // Unsigned long - big endian
+            $this->writeBigEndianUnsignedLong( $integerData | $fractionalData );
+        }
+    }
+    
+    /**
      * Gets an ISO-639-2 language code from the binary stream
      * 
      * @return  string  The ISO-639-2 language code
