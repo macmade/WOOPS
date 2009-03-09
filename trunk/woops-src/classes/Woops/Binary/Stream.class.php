@@ -51,16 +51,6 @@ class Woops_Binary_Stream
     protected static $_str      = NULL;
     
     /**
-     * The dividers values for the fixed point methods
-     */
-    protected static $_dividers = array(
-        2  => 4,            // 1 << 2  - (2 ** 2)  - For the 30.2 fixed point numbers
-        8  => 256,          // 1 << 8  - (2 ** 8)  - For the 8.8 fixed point numbers
-        16 => 65536,        // 1 << 16 - (2 ** 16) - For the 16.16 fixed point numbers
-        30 => 1073741824    // 1 << 30 - (2 ** 30) - For the 2.30 fixed point numbers
-    );
-    
-    /**
      * The binary data
      */
     protected $_data            = '';
@@ -546,10 +536,8 @@ class Woops_Binary_Stream
     /**
      * Gets a fixed point number from the binary stream
      * 
-     * Actually, only 8.8, 16.16, 30.2 and 2.30 fixed point formats are supported.
-     * 
-     * @param   int     The number of bits for the integer part (2, 8, 16 or 30)
-     * @param   int     The number of bits for the fractional part (2, 8, 16 or 30)
+     * @param   int     The number of bits for the integer part
+     * @param   int     The number of bits for the fractional part
      * @return  float   The fixed point number
      * @see     _unpackData
      */
@@ -561,26 +549,23 @@ class Woops_Binary_Stream
             // Unsigned short - big endian
             $unpackFormat   = 'n';
             
-            // Mask for the fractional part
-            $fractionalMask = 0x00FF;
-            
         } else {
             
             // Unsigned long - big endian
             $unpackFormat   = 'N';
-            
-            // Mask for the fractional part
-            $fractionalMask = 0x0000FFFF;
         }
         
         // Gets the decimal value for the fixed point number from the data
-        $unpackData = $this->_unpackData( $unpackFormat );
+        $unpackData     = $this->_unpackData( $unpackFormat );
         
         // Computes the integer part
-        $integer    = $unpackData >> $fractionalLength;
+        $integer        = $unpackData >> $fractionalLength;
+        
+        // Computes the bitwise mask for the fractionnal part
+        $fractionalMask = pow( 2, $fractionalLength ) - 1;
         
         // Computes the fractional part
-        $fractional = ( $unpackData & $fractionalMask ) / self::$_dividers[ $fractionalLength ];
+        $fractional     = ( $unpackData & $fractionalMask ) / ( 1 << $fractionalLength );
         
         // Returns the fixed point number
         return $integer + $fractional;
