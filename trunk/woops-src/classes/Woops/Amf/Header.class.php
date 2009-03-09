@@ -56,6 +56,35 @@ class Woops_Amf_Header
     }
     
     /**
+     * Gets the AMF header as binary
+     * 
+     * @return  string  The AMF header
+     */
+    public function __toString()
+    {
+        // Creates a new binary stream
+        $stream = new Woops_Binary_Stream();
+        
+        // Writes the header's name
+        $stream->writeUtf8String( $this->_name );
+        
+        // Writes the must-understand flag
+        $stream->writeChar( $this->_mustUnderstand );
+        
+        // Writes the header's length (U32-1 - unknown length)
+        $stream->writeBigEndianUnsignedLong( 0xFFFFFFFF );
+        
+        // Writes the marker
+        $stream->write( ( string )$this->_marker );
+        
+        // Resets the stream pointer
+        $stream->rewind();
+        
+        // Returns the stream data
+        return ( string )$stream;
+    }
+    
+    /**
      * Gets the header's name
      * 
      * @return  string  The header's name
