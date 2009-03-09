@@ -65,4 +65,74 @@ class Woops_Amf_Packet_Amf3 extends Woops_Amf_Packet
         0x000B => 'Woops_Amf_Marker_Amf3_Xml',
         0x000C => 'Woops_Amf_Marker_Amf3_ByteArray'
     );
+    
+    /**
+     * The reference table for the strings, by index
+     */
+    protected $_stringReferences       = array();
+    
+    /**
+     * The reference table for the strings, by object hash
+     */
+    protected $_stringReferencesByHash = array();
+    
+    /**
+     * The reference table for the objects, by index
+     */
+    protected $_objectReferences       = array();
+    
+    /**
+     * The reference table for the objects, by object hash
+     */
+    protected $_objectReferencesByHash = array();
+    
+    /**
+     * The reference table for the traits, by index
+     */
+    protected $_traitReferences        = array();
+    
+    /**
+     * The reference table for the traits, by object hash
+     */
+    protected $_traitReferencesByHash  = array();
+    
+    /**
+     * Creates a new marker
+     * 
+     * @param   int                         The AMF marker type
+     * @return  Woops_Amf_Marker            The AMF marker object
+     * @throws  Woops_Amf_Marker_Exception  If the marker type is invalid
+     */
+    public function newMarker( $markerType )
+    {
+        // Calls the parent method
+        $marker = parent::newMarker( $markerType );
+        
+        // Checks if the marker can be referenced
+        if( $markerType === self::MARKER_STRING ) {
+            
+            // Adds the marker to the string reference table
+            $this->_stringReferences[]                                   = $marker;
+            $this->_stringReferencesByHash[ spl_object_hash( $marker ) ] = count( $this->_stringReferences ) - 1;
+            
+        } elseif( $markerType === self::MARKER_OBJECT
+                  $markerType === self::MARKER_ARRAY
+                  $markerType === self::MARKER_XML
+                  $markerType === self::MARKER_XML_DOC
+                  $markerType === self::MARKER_BYTE_ARRAY
+                  $markerType === self::MARKER_DATE
+        ) {
+            
+            // Adds the marker to the object reference table
+            $this->_objectReferences[]                                   = $marker;
+            $this->_objectReferencesByHash[ spl_object_hash( $marker ) ] = count( $this->_objectReferences ) - 1;
+            
+        } elseif( false ) {
+            
+            // Object traits... What's an object trait anyway?!?
+        }
+        
+        // Returns the new marker
+        return $marker;
+    }
 }
