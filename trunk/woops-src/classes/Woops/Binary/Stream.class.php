@@ -93,7 +93,7 @@ class Woops_Binary_Stream
      * @return  string  The remaining stream data
      * @see     getRemainingData
      */
-    public function getRemainingData()
+    public function __toString()
     {
         return $this->getRemainingData();
     }
