@@ -134,16 +134,6 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
         // Checks if we are using an AMF3 marker
         if( $markerType & 0x1000 ) {
             
-            // Checks if the header already exists
-            if( isset( $this->_headers[ $name ] ) ) {
-                
-                // Error - The header already exist
-                throw new Woops_Amf_Packet_Exception(
-                    'A header with the same name (' . $name . ') already exists',
-                    Woops_Amf_Packet_Exception::EXCEPTION_HEADER_EXISTS
-                );
-            }
-            
             // Checks if the marker type is valid
             if( !isset( $this->_amf3Markers[ $markerType ] ) ) {
                 
@@ -195,13 +185,13 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
      * Creates a new AMF message
      * 
      * @param   string                      The target URI
-     * @param   string                      The request URI
+     * @param   string                      The response URI
      * @param   int                         The marker's type (one of the MARKER_XXX constant)
      * @return  Woops_Amf_Message           The AMF message object
      * @throws  Woops_Amf_Packet_Exception  If the marker type is not a valid AMF marker type
      * @throws  Woops_Amf_Packet_Exception  If the previous AMF marker is not an AVM+ marker, when adding an AMF3 marker
      */
-    public function newMessage( $targetUri, $requestUri, $markerType )
+    public function newMessage( $targetUri, $responseUri, $markerType )
     {
         // Checks if we are using an AMF3 marker
         if( $markerType & 0x1000 ) {
@@ -236,7 +226,7 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
             // Creates the new AMF message
             $message = new Woops_Amf_Message(
                 $targetUri,
-                $requestUri,
+                $responseUri,
                 $marker
             );
             
@@ -252,7 +242,7 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
         } else {
             
             // Calls the parent method
-            return parent::newMessage( $targetUri, $requestUri, $markerType );
+            return parent::newMessage( $targetUri, $responseUri, $markerType );
         }
     }
     
@@ -269,14 +259,6 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
     {
         // Checks if we are using an AMF3 marker
         if( $header->getMarker()->getVersion() === 3 ) {
-            
-            if( isset( $this->_headers[ $header->getName() ] ) ) {
-                
-                throw new Woops_Amf_Packet_Exception(
-                    '',
-                    Woops_Amf_Packet_Exception::EXCEPTION_HEADER_EXISTS
-                );
-            }
             
             if( !$this->_headerCount || !( $this->_headers[ $this->_headerCount - 1 ] instanceof Woops_Amf_Marker_Amf0_AvmPlus ) ) {
                 
