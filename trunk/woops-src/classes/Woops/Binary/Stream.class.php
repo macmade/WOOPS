@@ -88,6 +88,17 @@ class Woops_Binary_Stream
     }
     
     /**
+     * Gets the remaining stream data
+     * 
+     * @return  string  The remaining stream data
+     * @see     getRemainingData
+     */
+    public function getRemainingData()
+    {
+        return $this->getRemainingData();
+    }
+    
+    /**
      * Sets the needed static variables
      * 
      * @return  void
