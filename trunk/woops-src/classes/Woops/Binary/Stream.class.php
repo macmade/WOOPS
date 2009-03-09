@@ -88,14 +88,13 @@ class Woops_Binary_Stream
     }
     
     /**
-     * Gets the remaining stream data
+     * Gets the stream data
      * 
-     * @return  string  The remaining stream data
-     * @see     getRemainingData
+     * @return  string  The stream data
      */
     public function __toString()
     {
-        return $this->getRemainingData();
+        return $this->_data;
     }
     
     /**
@@ -127,15 +126,20 @@ class Woops_Binary_Stream
             // Number of bytes to read from the data
             $readBytes = 1;
             
-        } else if( $format === 's' || $format === 'S' || $format === 'n' || $format === 'v' ) {
+        } elseif( $format === 's' || $format === 'S' || $format === 'n' || $format === 'v' ) {
             
             // Number of bytes to read from the data
             $readBytes = 2;
             
-        } else if( $format === 'l' || $format === 'L' || $format === 'N' || $format === 'V' ) {
+        } elseif( $format === 'l' || $format === 'L' || $format === 'N' || $format === 'V' || $format === 'f' ) {
             
             // Number of bytes to read from the data
             $readBytes = 4;
+            
+        } elseif( $format === 'd' ) {
+            
+            // Number of bytes to read from the data
+            $readBytes = 8;
         }
         
         // Checks if the stream end has been reached
@@ -990,93 +994,18 @@ class Woops_Binary_Stream
     /**
      * Gets a double number from the binary stream
      * 
-     * This function gets a double precision floating point number, as specified
-     * by the IEEE Standard for Floating-Point Arithmetic (IEEE 754). This
-     * standard can be found at the folowing address:
-     * {@link http://ieeexplore.ieee.org/servlet/opac?punumber=4610933}
-     * 
-     * Double precsion floating point numbers are usually called 'double'.
-     * They are 8 bytes long, and are packed the same way as single precision
-     * floating point numbers, except the fact that the fields are bigger:
-     * 
-     * - Sign:     1 bit
-     * - Exponent: 11 bits
-     * - Mantissa: 52 bits
-     * 
-     * Please see the documentation about the 'float()' method if you want to
-     * know more about floating point arithmetic.
-     * 
-     * @see 
      * @return  double  The floating point number
      */
     public function double()
     {
-        // Gets the data as a 64bit integer
-        $binary = ( $this->unsignedLong() << 32 ) | $this->unsignedLong();
+        // Reads 64bits
+        $bytes = strrev( $this->read( 8 ) );
         
-        // Gets the sign field
-        // Bit 0, left to right
-        $sign     = $binary >> 63;
+        // Reverses the bytes
+        $unpackData = unpack( 'dflt', $bytes );
         
-        // Gets the exponent field
-        // Bits 1 to 8, left to right
-        $exp      = ( ( $binary >> 52 ) & 0x7FF );
-        
-        // Gets the mantissa field
-        // Bits 9 to 32, left to right
-        $mantissa = ( $binary & 0xFFFFFFFFFFFF );
-        
-        // Checks the values of the exponent and the mantissa fields to handle
-        // special numbers
-        if( $exp === 0 && $mantissa === 0 ) {
-            
-            // Zero - No need for a computation even if it can be considered
-            // as a denormalized number
-            return 0;
-            
-        } elseif( $exp === 2047 && $mantissa === 0 ) {
-            
-            // Infinity
-            return ( $sign === 0 ) ? INF : '-' . INF;
-            
-        } elseif( $exp === 2047 && $mantissa !== 0 ) {
-            
-            // Not a number
-            return NAN;
-            
-        } elseif( $exp === 0 && $mantissa !== 0 ) {
-            
-            // Donormalized number - Exponent is fixed to -1022
-            $exp = -1022;
-            
-        } else {
-            
-            // Computes the real exponent
-            $exp      = $exp - 1023;
-            
-            // Adds the implicit bit to the mantissa
-            $mantissa = $mantissa | 0x10000000000000;
-        }
-        
-        // Initial value for the float
-        $float = 0;
-        
-        // Process the 24 bits of the mantissa
-        for( $i = 0; $i > -53; $i-- ) {
-            
-            // Checks if the current bit is set
-            if( $mantissa & ( 1 << $i + 53 ) ) {
-                
-                // Adds the value for the current bit
-                // This is done by computing two raised to the power of the
-                // exponent plus the bit position (negative if it's after the
-                // implicit bit, as we are using scientific notation)
-                $float += pow( 2, $i + $exp );
-            }
-        }
-        
-        // Returns the final float value
-        return ( $sign === 0 ) ? $float : -$float;
+        // Returns the double
+        return array_shift( $unpackData );
     }
     
     /**
@@ -1087,7 +1016,7 @@ class Woops_Binary_Stream
      */
     public function writeDouble( $data )
     {
-        $this->_data       .= pack( 'd', ( double )$data );
+        $this->_data       .= strrev( pack( 'd', ( double )$data ) );
         $this->_dataLength += 8;
         $this->_offset      = $this->_dataLength;
     }
