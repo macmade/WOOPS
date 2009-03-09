@@ -112,11 +112,11 @@ class Woops_Amf_UnSerializer
         // Gets the number of messages
         $messageCount    = $this->_stream->bigEndianUnsignedShort();
         
-        // The type of the last header
+        // The type of the last message
         $lastMessageType = 0;
         
         // Process the messages
-        for( $i = 0; $i < $headerCount; $i++ ) {
+        for( $i = 0; $i < $messageCount; $i++ ) {
             
             // Gets the message's informations
             $targetUri       = $this->_stream->utf8String();
@@ -125,7 +125,7 @@ class Woops_Amf_UnSerializer
             $type            = $this->_stream->unsignedChar();
             
             // For AMF0, checks if the last marker was an AVM+ marker
-            if( $version === 0 && $lastHeaderType === Woops_Amf_Packet_Amf0::MARKER_AVM_PLUS ) {
+            if( $version === 0 && $lastMessageType === Woops_Amf_Packet_Amf0::MARKER_AVM_PLUS ) {
                 
                 // AMF3 marker for an AMF0 packet
                 $type = $type | 0x1000;
