@@ -58,8 +58,7 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
      * U29-4 = %x80-FF %x80-FF %x80-FF %x00-FF
      * </code>
      * 
-     * @return  int                                 The AMF integer
-     * @throws  Woops_Amf_Binary_Stream_Exception   If the range of the integer is invalid (> 2^29 - 1)
+     * @return  int     The AMF integer
      */
     public function u29Integer()
     {
@@ -98,65 +97,70 @@ class Woops_Amf_Binary_Stream extends Woops_Binary_Stream
         
         // Returns the integer (27 bits) - Range is 0x00-3FFFFFFF
         return ( ( $byte1 & 0x7F ) << 22 ) | ( ( $byte2 & 0x7F ) << 15 ) | ( ( $byte3 & 0x7F ) << 8 ) | $byte4;
+    }
+    
+    /**
+     * Writes an AMF unsigned integer using 29bits coding, as specified in the
+     * AMF 3 specification.
+     * 
+     * @param   int                                 The AMF integer
+     * @return  void
+     * @throws  Woops_Amf_Binary_Stream_Exception   If the range of the integer is invalid (> 2^29 - 1)
+     */
+    public function writeU29Integer( $int )
+    {
+        // Ensures we have an integer
+        $int = ( int )$int;
         
-        // The following processes are a bit slower, but might be more readable...
-        
-#        // Storage
-#        $curByte = 0;
-#        $int     = 0;
-#        
-#        // Process a maximum of 3 bytes
-#        for( $i = 0; $i < 3; $i++ ) {
-#            
-#            // Gets the current byte
-#            $curByte = $this->unsignedChar();
-#            
-#            // Adds the value of the current byte (7 bits only)
-#            $int    |= $curByte & 0x7F;
-#            
-#            // Checks if we have to read another byte
-#            if( !( $curByte & 0x80 ) ) {
-#                
-#                // Returns the integer
-#                return $int;
-#            }
-#            
-#            // Another byte will be read
-#            $int <<= 7;
-#        }
-#        
-#        // Last byte does not have a flag
-#        $int <<= 1;
-#        
-#        // Returns the integer
-#        return $int | $this->unsignedChar();
-#        
-#        // Storage
-#        $curByte = 0;
-#        $int     = 0;
-#        
-#        // Process a maximum of 3 bytes
-#        for( $i = 0; $i < 4; $i++ ) {
-#            
-#            // Gets the current byte
-#            $curByte = $this->unsignedChar();
-#            
-#            // Checks if we have to read another byte
-#            if( !( $curByte & 0x80 ) ) {
-#                
-#                // Returns the integer
-#                return $int | $curByte;
-#                
-#            } elseif( $i !== 3 ) {
-#                
-#                // Adds the value of the current byte (7 bits only)
-#                $int = ( $int << 7 ) | ( $curByte & 0x7F );
-#                
-#            } else {
-#                
-#                // Returns the integer
-#                return ( $int << 8 ) | $curByte;
-#            }
-#        }
+        // Checks the integer range
+        if( $int <= 0x7F ) {
+            
+            // Writes integer as 1 byte
+            $this->writeChar( $int );
+            
+        } elseif( $int <= 0x3FFF ) {
+            
+            // Computes the 2 bytes of the integer
+            $part1 = ( $int >> 8 ) | 0x80;
+            $part2 =   $int & 0x7F;
+            
+            // Writes integer as 2 byte
+            $this->writeChar( $part1 );
+            $this->writeChar( $part2 );
+            
+        } elseif( $int <= 0x1FFFFF ) {
+            
+            // Computes the 3 bytes of the integer
+            $part1 = ( $int >> 16 ) | 0x80;
+            $part2 = ( $int >> 8 )  | 0x80;
+            $part3 =   $int & 0x7F;
+            
+            // Writes integer as 3 byte
+            $this->writeChar( $part1 );
+            $this->writeChar( $part2 );
+            $this->writeChar( $part3 );
+            
+        } elseif( $int <= 0x3FFFFFFF ) {
+            
+            // Computes the 4 bytes of the integer
+            $part1 = ( $int >> 24 ) | 0x80;
+            $part2 = ( $int >> 16 ) | 0x80;
+            $part3 = ( $int >> 8 )  | 0x80;
+            $part4 =   $int & 0xFF;
+            
+            // Writes integer as 4 byte
+            $this->writeChar( $part1 );
+            $this->writeChar( $part2 );
+            $this->writeChar( $part3 );
+            $this->writeChar( $part4 );
+            
+        } else {
+            
+            // Error - Integer is too big
+            throw new Woops_Amf_Binary_Stream_Exception(
+                'Invalid integer range (bigger than 2^29-1)',
+                Woops_Amf_Binary_Stream_Exception::EXCEPTION_INVALID_INT_RANGE
+            );
+        }
     }
 }
