@@ -63,7 +63,7 @@ abstract class Woops_Amf_Packet
     public function __toString()
     {
         // Creates a new binary stream
-        $stream = new Woops_Binary_Stream();
+        $stream = new Woops_Amf_Binary_Stream();
         
         // Writes the AMF version
         $stream->writeUnsignedShort( $this->_version );

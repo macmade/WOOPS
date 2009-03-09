@@ -64,7 +64,7 @@ class Woops_Amf_Message
     public function __toString()
     {
         // Creates a new binary stream
-        $stream = new Woops_Binary_Stream();
+        $stream = new Woops_Amf_Binary_Stream();
         
         // Writes the target URI
         $stream->writeUtf8String( $this->_targetUri );

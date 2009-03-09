@@ -63,7 +63,7 @@ class Woops_Amf_Header
     public function __toString()
     {
         // Creates a new binary stream
-        $stream = new Woops_Binary_Stream();
+        $stream = new Woops_Amf_Binary_Stream();
         
         // Writes the header's name
         $stream->writeUtf8String( $this->_name );
