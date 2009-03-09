@@ -278,7 +278,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= $data;
         $this->_dataLength += strlen( $data );
-        $this->_offset     += $this->_dataLength;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -325,7 +325,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'c', $data );
         $this->_dataLength += 1;
-        $this->_offset     += 1;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -349,7 +349,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'C', $data );
         $this->_dataLength += 1;
-        $this->_offset     += 1;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -373,7 +373,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 's', $data );
         $this->_dataLength += 2;
-        $this->_offset     += 2;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -397,7 +397,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'S', $data );
         $this->_dataLength += 2;
-        $this->_offset     += 2;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -421,7 +421,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'n', $data );
         $this->_dataLength += 2;
-        $this->_offset     += 2;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -445,7 +445,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'v', $data );
         $this->_dataLength += 2;
-        $this->_offset     += 2;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -469,7 +469,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'l', $data );
         $this->_dataLength += 4;
-        $this->_offset     += 4;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -493,7 +493,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'L', $data );
         $this->_dataLength += 4;
-        $this->_offset     += 4;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -517,7 +517,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'N', $data );
         $this->_dataLength += 4;
-        $this->_offset     += 4;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -541,7 +541,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'V', $data );
         $this->_dataLength += 4;
-        $this->_offset     += 4;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -984,7 +984,7 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'f', ( float )$data );
         $this->_dataLength += 4;
-        $this->_offset     += 4;
+        $this->_offset      = $this->_dataLength;
     }
     
     /**
@@ -1089,6 +1089,6 @@ class Woops_Binary_Stream
     {
         $this->_data       .= pack( 'd', ( double )$data );
         $this->_dataLength += 8;
-        $this->_offset     += 8;
+        $this->_offset      = $this->_dataLength;
     }
 }
