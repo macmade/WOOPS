@@ -144,24 +144,10 @@ abstract class Woops_Amf_Packet
      */
     public function newHeader( $name, $markerType, $mustUnderstand = false )
     {
-        // Checks if the marker type is valid
-        if( !isset( $this->_markers[ $markerType ] ) ) {
-            
-            // Error - Invalid marker type
-            throw new Woops_Amf_Packet_Exception(
-                'Invalid AMF marker type (' . $markerType . ')',
-                Woops_Amf_Packet_Exception::EXCEPTION_INVALID_MARKER_TYPE
-            );
-        }
-        
-        // Creates a new marker
-        $markerClass = $this->_markers[ $markerType ];
-        $marker      = new $markerClass( $this );
-        
         // Creates the new AMF header
         $header = new Woops_Amf_Header(
             $name,
-            $markerType,
+            $this->newMarker( $markerType ),
             $mustUnderstand
         );
         
@@ -186,25 +172,11 @@ abstract class Woops_Amf_Packet
      */
     public function newMessage( $targetUri, $responseUri, $markerType )
     {
-        // Checks if the marker type is valid
-        if( !isset( $this->_markers[ $markerType ] ) ) {
-            
-            // Error - Invalid marker type
-            throw new Woops_Amf_Packet_Exception(
-                'Invalid AMF marker type (' . $markerType . ')',
-                Woops_Amf_Packet_Exception::EXCEPTION_INVALID_MARKER_TYPE
-            );
-        }
-        
-        // Creates a new marker
-        $markerClass = $this->_markers[ $markerType ];
-        $marker      = new $markerClass( $this );
-        
         // Creates the new message
         $message = new Woops_Amf_Message(
             $targetUri,
             $responseUri,
-            $marker
+            $this->newMarker( $markerType )
         );
         
         // Stores the AMF message
