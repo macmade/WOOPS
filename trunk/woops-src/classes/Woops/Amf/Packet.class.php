@@ -106,6 +106,33 @@ abstract class Woops_Amf_Packet
     }
     
     /**
+     * Creates a new marker
+     * 
+     * @param   int                         The AMF marker type
+     * @return  Woops_Amf_Marker            The AMF marker object
+     * @throws  Woops_Amf_Marker_Exception  If the marker type is invalid
+     */
+    public function newMarker( $markerType )
+    {
+        // Checks if the marker type is valid
+        if( !isset( $this->_markers[ $markerType ] ) ) {
+            
+            // Error - Invalid marker type
+            throw new Woops_Amf_Packet_Exception(
+                'Invalid AMF marker type (' . $markerType . ')',
+                Woops_Amf_Packet_Exception::EXCEPTION_INVALID_MARKER_TYPE
+            );
+        }
+        
+        // Creates a new marker
+        $markerClass = $this->_markers[ $markerType ];
+        $marker      = new $markerClass( $this );
+        
+        // Returns the new marker
+        return $marker;
+    }
+    
+    /**
      * Creates a new AMF header
      * 
      * @param   string                      The header's name
@@ -128,8 +155,8 @@ abstract class Woops_Amf_Packet
         }
         
         // Creates a new marker
-        $markerClass = $this->_amf3Markers[ $markerType ];
-        $marker      = new $markerClass();
+        $markerClass = $this->_markers[ $markerType ];
+        $marker      = new $markerClass( $this );
         
         // Creates the new AMF header
         $header = new Woops_Amf_Header(
@@ -171,7 +198,7 @@ abstract class Woops_Amf_Packet
         
         // Creates a new marker
         $markerClass = $this->_markers[ $markerType ];
-        $marker      = new $markerClass();
+        $marker      = new $markerClass( $this );
         
         // Creates the new message
         $message = new Woops_Amf_Message(
@@ -188,59 +215,6 @@ abstract class Woops_Amf_Packet
         
         // Returns the new message
         return $message;
-    }
-    
-    /**
-     * Adds an AMF header
-     * 
-     * @param   Woops_Amf_Header            The AMF header object
-     * @return  void
-     * @throws  Woops_Amf_Packet_Exception  If a header with the same name already exists
-     * @throws  Woops_Amf_Packet_Exception  If the AMF marker contained in the AMF header cannot be placed in the current AMF packet (depending on the AMF version)
-     */
-    public function addHeader( Woops_Amf_Header $header )
-    {
-        // Checks the version of the AMF marker in the header
-        if( $header->getMarker()->getVersion() !== $this->_version ) {
-            
-            // Error - Invalid AMF version
-            throw new Woops_Amf_Packet_Exception(
-                'Cannot add an AMF header containing an AMF' . $message->getMarker()->getVersion() . ' marker in an AMF' . $this->_version . ' packet',
-                Woops_Amf_Packet_Exception::EXCEPTION_INVALID_MARKER_VERSION
-            );
-        }
-        
-        // Updates the number of headers
-        $this->_headerCount++;
-        
-        // Stores the header object
-        $this->_headers[ $header->getName() ] = $header;
-    }
-    
-    /**
-     * Adds an AMF message
-     * 
-     * @param   Woops_Amf_Message           The AMF message object
-     * @return  void
-     * @throws  Woops_Amf_Packet_Exception  If the AMF marker contained in the AMF message cannot be placed in the current AMF packet (depending on the AMF version)
-     */
-    public function addMessage( Woops_Amf_Message $message )
-    {
-        // Checks the version of the AMF marker in the message
-        if( $message->getMarker()->getVersion() !== $this->_version ) {
-            
-            // Error - Invalid AMF version
-            throw new Woops_Amf_Packet_Exception(
-                'Cannot add an AMF message containing an AMF' . $message->getMarker()->getVersion() . ' marker in an AMF' . $this->_version . ' packet',
-                Woops_Amf_Packet_Exception::EXCEPTION_INVALID_MARKER_VERSION
-            );
-        }
-        
-        // Updates the number of messages
-        $this->_messageCount++;
-        
-        // Stores the message object
-        $this->_messages[] = $message;
     }
     
     /**
