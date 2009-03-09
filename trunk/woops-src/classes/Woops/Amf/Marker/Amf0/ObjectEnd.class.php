@@ -45,5 +45,17 @@ class Woops_Amf_Marker_Amf0_ObjectEnd extends Woops_Amf_Marker_Amf0
      * @return  string  The AMF marker
      */
     public function __toString()
-    {}
+    {
+        // Creates a new stream
+        $stream = new Woops_Amf_Binary_Stream();
+        
+        // Writes an empty UTF-8 string
+        $stream->writeBigEndianUnsignedShort( 0 );
+        
+        // Writes the marker type
+        $stream->writeChar( $this->_type );
+        
+        // Returns the stream data
+        return ( string )$stream;
+    }
 }

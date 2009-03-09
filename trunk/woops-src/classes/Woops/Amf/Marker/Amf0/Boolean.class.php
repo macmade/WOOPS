@@ -37,7 +37,10 @@ class Woops_Amf_Marker_Amf0_Boolean extends Woops_Amf_Marker_Amf0
      * @return  void
      */
     public function processData( Woops_Amf_Binary_Stream $stream )
-    {}
+    {
+        // Gets the boolean value
+        $this->_data->value = ( $stream->unsignedChar() > 0 ) ? true : false;
+    }
     
     /**
      * Gets the AMF marker as binary
@@ -45,5 +48,17 @@ class Woops_Amf_Marker_Amf0_Boolean extends Woops_Amf_Marker_Amf0
      * @return  string  The AMF marker
      */
     public function __toString()
-    {}
+    {
+        // Boolean value as it will be expressed in the AMF binary format
+        $data   = ( $this->_data->value ) ? 1 : 0;
+        
+        // Creates a new stream
+        $stream = new Woops_Amf_Binary_Stream( parent::__toString() );
+        
+        // Writes the boolean value
+        $stream->writeUnsignedChar( $data );
+        
+        // Returns the stream data
+        return ( string )$stream;
+    }
 }

@@ -38,12 +38,4 @@ class Woops_Amf_Marker_Amf0_AvmPlus extends Woops_Amf_Marker_Amf0
      */
     public function processData( Woops_Amf_Binary_Stream $stream )
     {}
-    
-    /**
-     * Gets the AMF marker as binary
-     * 
-     * @return  string  The AMF marker
-     */
-    public function __toString()
-    {}
 }

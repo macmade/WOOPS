@@ -37,7 +37,13 @@ class Woops_Amf_Marker_Amf0_Reference extends Woops_Amf_Marker_Amf0
      * @return  void
      */
     public function processData( Woops_Amf_Binary_Stream $stream )
-    {}
+    {
+        // Gets the reference index
+        $this->_data->value     = $stream->bigEndianUnsignedShort();
+        
+        // Gets the referenced marker object
+        $this->_data->reference = $this->_packet->getReference( $this->_data->value );
+    }
     
     /**
      * Gets the AMF marker as binary
@@ -45,5 +51,23 @@ class Woops_Amf_Marker_Amf0_Reference extends Woops_Amf_Marker_Amf0
      * @return  string  The AMF marker
      */
     public function __toString()
-    {}
+    {
+        // Creates a new stream
+        $stream = new Woops_Amf_Binary_Stream( parent::__toString() );
+        
+        // Checks if we have an object or a reference index
+        if( is_object( $this->_data->value ) ) {
+            
+            // Gets and writes the reference index for the object
+            $stream->wrieBigEndignedUnsignedShort( $this->_packet->getReferenceIndex( $this->_data->value ) );
+            
+        } else {
+            
+            // Writes the reference index
+            $stream->wrieBigEndignedUnsignedShort( $this->_data->value );
+        }
+        
+        // Returns the stream data
+        return ( string )$stream;
+    }
 }

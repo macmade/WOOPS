@@ -37,7 +37,43 @@ class Woops_Amf_Marker_Amf0_EcmaArray extends Woops_Amf_Marker_Amf0
      * @return  void
      */
     public function processData( Woops_Amf_Binary_Stream $stream )
-    {}
+    {
+        // Storage for the entries
+        $this->_data->value = array();
+        
+        // Gets the number of entries
+        $entries = $stream->bigEndianUnsignedLong();
+        
+        // The type of the last entry
+        $lastType = 0;
+        
+        // Process each entry
+        for( $i = 0; $i < $entries; $i++ ) {
+            
+            // Gets the entry name
+            $name = $stream->utf8String();
+            
+            // Gets the entry type
+            $type = $stream->unsignedChar();
+            
+            // For AMF0, checks if the last marker was an AVM+ marker
+            if( $lastType === Woops_Amf_Packet_Amf0::MARKER_AVM_PLUS ) {
+                
+                // AMF3 marker for an AMF0 packet
+                $type = $type | 0x1000;
+            }
+            
+            // Creates and stores the marker
+            $marker                      = $this->_packet->newMarker( $type );
+            $this->_data->value[ $name ] = $marker;
+            
+            // Process the marker data
+            $marker->processData( $stream );
+            
+            // Stores the entry's type
+            $lastType = $type;
+        }
+    }
     
     /**
      * Gets the AMF marker as binary
@@ -45,5 +81,33 @@ class Woops_Amf_Marker_Amf0_EcmaArray extends Woops_Amf_Marker_Amf0
      * @return  string  The AMF marker
      */
     public function __toString()
-    {}
+    {
+        // Creates a new stream
+        $stream = new Woops_Amf_Binary_Stream( parent::__toString() );
+        
+        // Checks for entries
+        if( isset( $data->value ) && is_array( $data->value ) ) {
+            
+            // Writes the number of entries
+            $stream->writeBigEndianUnsignedLong( count( $this->_data->value ) );
+            
+            // Process each entry
+            foreach( $this->_data->value as $name => $marker ) {
+                
+                // Writes the entry name
+                $stream->writeUtf8String( $name );
+                
+                // Writes the entry
+                $stream->write( ( string )$marker );
+            }
+            
+        } else {
+            
+            // No entry
+            $stream->writeBigEndianUnsignedLong( 0 );
+        }
+        
+        // Returns the stream data
+        return ( string )$stream;
+    }
 }

@@ -37,7 +37,10 @@ class Woops_Amf_Marker_Amf0_XmlDocument extends Woops_Amf_Marker_Amf0
      * @return  void
      */
     public function processData( Woops_Amf_Binary_Stream $stream )
-    {}
+    {
+        // Gets the XML data
+        $this->_data->value = $stream->longUtf8String();
+    }
     
     /**
      * Gets the AMF marker as binary
@@ -45,5 +48,14 @@ class Woops_Amf_Marker_Amf0_XmlDocument extends Woops_Amf_Marker_Amf0
      * @return  string  The AMF marker
      */
     public function __toString()
-    {}
+    {
+        // Creates a new stream
+        $stream = new Woops_Amf_Binary_Stream();
+        
+        // Writes the XML data
+        $stream->writeLongUtf8String( $data );
+        
+        // Returns the stream data
+        return ( string )$stream;
+    }
 }
