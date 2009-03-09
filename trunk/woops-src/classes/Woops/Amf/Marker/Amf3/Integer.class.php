@@ -38,6 +38,7 @@ class Woops_Amf_Marker_Amf3_Integer extends Woops_Amf_Marker_Amf3
      */
     public function processData( Woops_Amf_Binary_Stream $stream )
     {
+        // Gets the integer
         $this->_data->value = $stream->u29Integer();
     }
     
@@ -51,11 +52,8 @@ class Woops_Amf_Marker_Amf3_Integer extends Woops_Amf_Marker_Amf3
         // Creates a new stream
         $stream = new Woops_Amf_Binary_Stream( parent::__toString() );
         
-        // Writes the value
+        // Writes the integer
         $stream->writeU29Integer( $this->_data->value );
-        
-        // Resets the stream pointer
-        $stream->rewind();
         
         // Returns the stream data
         return ( string )$stream;
