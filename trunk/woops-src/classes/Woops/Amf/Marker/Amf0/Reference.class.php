@@ -56,15 +56,23 @@ class Woops_Amf_Marker_Amf0_Reference extends Woops_Amf_Marker_Amf0
         $stream = new Woops_Amf_Binary_Stream( parent::__toString() );
         
         // Checks if we have an object or a reference index
-        if( is_object( $this->_data->value ) ) {
+        if( isset( $this->_data->value ) && is_object( $this->_data->value ) ) {
             
             // Gets and writes the reference index for the object
-            $stream->wrieBigEndignedUnsignedShort( $this->_packet->getReferenceIndex( $this->_data->value ) );
+            $stream->writeBigEndignedUnsignedShort( $this->_packet->getReferenceIndex( $this->_data->value ) );
+            
+        } elseif( isset( $this->_data->value ) ) {
+            
+            // Writes the reference index
+            $stream->writeBigEndignedUnsignedShort( $this->_data->value );
             
         } else {
             
-            // Writes the reference index
-            $stream->wrieBigEndignedUnsignedShort( $this->_data->value );
+            // No reference
+            throw new Woops_Amf_Marker_Amf0_Reference_Exception(
+                'Reference index is not set',
+                Woops_Amf_Marker_Amf0_Reference_Exception::EXCEPTION_NO_REFERENCE
+            );
         }
         
         // Returns the stream data

@@ -9,16 +9,16 @@
 # All rights reserved                                                          #
 ################################################################################
 
-# $Id$
+# $Id: Exception.class.php 655 2009-03-09 15:48:36Z macmade $
 
 /**
- * AMF0 object end marker (0x09)
+ * Exception class for the Woops_Amf_Server class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Amf.Marker.Amf0
+ * @package     Woops.Amf.UnSerializer
  */
-class Woops_Amf_Marker_Amf0_ObjectEnd extends Woops_Amf_Marker_Amf0
+final class Woops_Amf_Server_Exception extends Woops_Core_Exception_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -26,36 +26,9 @@ class Woops_Amf_Marker_Amf0_ObjectEnd extends Woops_Amf_Marker_Amf0
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * The AMF marker type
+     * Error codes for the exceptions
      */
-    protected $_type = 0x09;
-    
-    /**
-     * Processes the raw data for the marker
-     * 
-     * @param   Woops_Amf_Binary_Stream The AMF binary stream object
-     * @return  void
-     */
-    public function processData( Woops_Amf_Binary_Stream $stream )
-    {}
-    
-    /**
-     * Gets the AMF marker as binary
-     * 
-     * @return  string  The AMF marker
-     */
-    public function __toString()
-    {
-        // Creates a new stream
-        $stream = new Woops_Amf_Binary_Stream();
-        
-        // Writes an empty UTF-8 string
-        $stream->writeBigEndianUnsignedShort( 0 );
-        
-        // Writes the marker type
-        $stream->writeUnsignedChar( $this->_type );
-        
-        // Returns the stream data
-        return ( string )$stream;
-    }
+    const EXCEPTION_INVALID_CLASS    = 0x01;
+    const EXCEPTION_INVALID_METHOD   = 0x02;
+    const EXCEPTION_INVALID_FUNCTION = 0x03;
 }

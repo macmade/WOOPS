@@ -169,6 +169,79 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
     }
     
     /**
+     * Creates an AMF marker from a PHP primitive type
+     * 
+     * @param   mixed               The PHP variable
+     * @return  Woops_Amf_Marker    The AMF marker
+     */
+    public function newMarkerFromPhpVariable( $var )
+    {
+        // Checks the variable type
+        if( is_string( $var ) ) {
+            
+            // String
+            $marker                   = $this->newMarker( self::MARKER_STRING );
+            $marker->getData()->value = $var;
+            
+        } elseif( is_int( $var ) || is_double( $var ) || is_float( $var ) ) {
+            
+            // Number
+            $marker                   = $this->newMarker( self::MARKER_NUMBER );
+            $marker->getData()->value = $var;
+            
+        } elseif( is_array( $var ) ) {
+            
+            // Array
+            $marker      = $this->newMarker( self::MARKER_ECMA_ARRAY );
+            
+            // Gets the data
+            $data        = $marker->getData();
+            
+            // Storage
+            $data->value = array();
+            
+            // Process each entry
+            foreach( $var as $key => $value ) {
+                
+                // Creates the marker for the current entry data
+                $data->value[ $key ] = $this->newMarkerFromPhpVariable( $value );
+            }
+            
+        } elseif( is_object( $var ) ) {
+            
+            // Object
+            $marker      = $this->newMarker( self::MARKER_OBJECT );
+            
+            // Gets the data
+            $data        = $marker->getData();
+            
+            // Storage
+            $data->value = array();
+            
+            // Process each entry
+            foreach( $var as $key => $value ) {
+                
+                // Creates the marker for the current entry data
+                $data->value[ $key ] = $this->newMarkerFromPhpVariable( $value );
+            }
+            
+        } elseif( is_bool( $var ) ) {
+            
+            // Boolean
+            $marker                   = $this->newMarker( self::MARKER_BOOLEAN );
+            $marker->getData()->value = $var;
+            
+        } else {
+            
+            // Unknown type - Creates a NULL marker
+            $marker = $this->newMarker( self::MARKER_NULL );
+        }
+        
+        // Returns the AMF marker
+        return $marker;
+    }
+    
+    /**
      * Creates a new marker
      * 
      * @param   int                         The AMF marker type
@@ -242,6 +315,10 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
      */
     public function newHeader( $name, $markerType, $mustUnderstand = false )
     {
+        // Reinitializes the reference table, as we are adding a new header
+        $this->_references       = array();
+        $this->_referencesByHash = array();
+        
         // Checks if we are using an AMF3 marker
         if( $markerType & 0x1000 ) {
             
@@ -280,6 +357,10 @@ class Woops_Amf_Packet_Amf0 extends Woops_Amf_Packet
      */
     public function newMessage( $targetUri, $responseUri, $markerType )
     {
+        // Reinitializes the reference table, as we are adding a new message
+        $this->_references       = array();
+        $this->_referencesByHash = array();
+        
         // Checks if we are using an AMF3 marker
         if( $markerType & 0x1000 ) {
             

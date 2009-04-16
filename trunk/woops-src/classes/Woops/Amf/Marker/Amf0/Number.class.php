@@ -49,11 +49,14 @@ class Woops_Amf_Marker_Amf0_Number extends Woops_Amf_Marker_Amf0
      */
     public function __toString()
     {
+        // Checks if we have data
+        $data = ( isset( $this->_data->value ) ) ? ( double )$this->_data->value : 0;
+        
         // Creates a new stream
         $stream = new Woops_Amf_Binary_Stream( parent::__toString() );
         
         // Writes the double number
-        $stream->writeDouble( $this->_data->value );
+        $stream->writeDouble( $data );
         
         // Returns the stream data
         return ( string )$stream;

@@ -50,7 +50,7 @@ class Woops_Amf_Marker_Amf0_Boolean extends Woops_Amf_Marker_Amf0
     public function __toString()
     {
         // Boolean value as it will be expressed in the AMF binary format
-        $data   = ( $this->_data->value ) ? 1 : 0;
+        $data   = ( isset( $this->_data->value ) && $this->_data->value ) ? 1 : 0;
         
         // Creates a new stream
         $stream = new Woops_Amf_Binary_Stream( parent::__toString() );

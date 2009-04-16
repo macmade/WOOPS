@@ -74,9 +74,7 @@ abstract class Woops_Amf_Marker
     {
         $stream = new Woops_Amf_Binary_Stream();
         
-        $stream->writeChar( $this->_type );
-        
-        $stream->rewind();
+        $stream->writeUnsignedChar( $this->_type );
         
         return ( string )$stream;
     }

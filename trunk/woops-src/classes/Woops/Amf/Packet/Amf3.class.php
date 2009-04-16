@@ -97,11 +97,93 @@ class Woops_Amf_Packet_Amf3 extends Woops_Amf_Packet
     protected $_traitReferencesByHash  = array();
     
     /**
+     * Creates an AMF marker from a PHP primitive type
+     * 
+     * @param   mixed               The PHP variable
+     * @return  Woops_Amf_Marker    The AMF marker
+     */
+    public function newMarkerFromPhpVariable( $var )
+    {
+        // Checks the variable type
+        if( is_string( $var ) ) {
+            
+            // String
+            $marker                   = $this->newMarker( self::MARKER_STRING );
+            $marker->getData()->value = $var;
+            
+        } elseif( is_int( $var ) ) {
+            
+            // Number
+            $marker                   = $this->newMarker( self::MARKER_INTEGER );
+            $marker->getData()->value = $var;
+            
+        } elseif( is_double( $var ) || is_float( $var ) ) {
+            
+            // Number
+            $marker                   = $this->newMarker( self::MARKER_DOUBLE );
+            $marker->getData()->value = $var;
+            
+        } elseif( is_array( $var ) ) {
+            
+            // Array
+            $marker      = $this->newMarker( self::MARKER_ARRAY );
+            
+            // Gets the data
+            $data        = $marker->getData();
+            
+            // Storage
+            $data->value = array();
+            
+            // Process each entry
+            foreach( $var as $key => $value ) {
+                
+                // Creates the marker for the current entry data
+                $data->value[ $key ] = $this->newMarkerFromPhpVariable( $value );
+            }
+            
+        } elseif( is_object( $var ) ) {
+            
+            // Object
+            $marker      = $this->newMarker( self::MARKER_OBJECT );
+            
+            // Gets the data
+            $data        = $marker->getData();
+            
+            // Storage
+            $data->value = array();
+            
+            // Process each entry
+            foreach( $var as $key => $value ) {
+                
+                // Creates the marker for the current entry data
+                $data->value[ $key ] = $this->newMarkerFromPhpVariable( $value );
+            }
+            
+        } elseif( is_bool( $var ) && $var === true ) {
+            
+            // Boolean
+            $marker                   = $this->newMarker( self::MARKER_TRUE );
+            
+        }  elseif( is_bool( $var ) && $var === false ) {
+            
+            // Boolean
+            $marker                   = $this->newMarker( self::MARKER_FALSE );
+            
+        } else {
+            
+            // Unknown type - Creates a NULL marker
+            $marker = $this->newMarker( self::MARKER_NULL );
+        }
+        
+        // Returns the AMF marker
+        return $marker;
+    }
+    
+    /**
      * Creates a new marker
      * 
      * @param   int                         The AMF marker type
      * @return  Woops_Amf_Marker            The AMF marker object
-     * @throws  Woops_Amf_Marker_Exception  If the marker type is invalid
      */
     public function newMarker( $markerType )
     {
@@ -115,12 +197,12 @@ class Woops_Amf_Packet_Amf3 extends Woops_Amf_Packet
             $this->_stringReferences[]                                   = $marker;
             $this->_stringReferencesByHash[ spl_object_hash( $marker ) ] = count( $this->_stringReferences ) - 1;
             
-        } elseif( $markerType === self::MARKER_OBJECT
-                  $markerType === self::MARKER_ARRAY
-                  $markerType === self::MARKER_XML
-                  $markerType === self::MARKER_XML_DOC
-                  $markerType === self::MARKER_BYTE_ARRAY
-                  $markerType === self::MARKER_DATE
+        } elseif(    $markerType === self::MARKER_OBJECT
+                  || $markerType === self::MARKER_ARRAY
+                  || $markerType === self::MARKER_XML
+                  || $markerType === self::MARKER_XML_DOC
+                  || $markerType === self::MARKER_BYTE_ARRAY
+                  || $markerType === self::MARKER_DATE
         ) {
             
             // Adds the marker to the object reference table

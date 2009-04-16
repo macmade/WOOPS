@@ -53,8 +53,10 @@ class Woops_Amf_Marker_Amf0_Object extends Woops_Amf_Marker_Amf0
             // Gets the entry type
             $type = $stream->unsignedChar();
             
+            // Checks for the object-end marker
             if( $type === Woops_Amf_Packet_Amf0::MARKER_OBJECT_END ) {
                 
+                // No more properties
                 break;
             }
             
@@ -88,7 +90,7 @@ class Woops_Amf_Marker_Amf0_Object extends Woops_Amf_Marker_Amf0
         $stream = new Woops_Amf_Binary_Stream( parent::__toString() );
         
         // Checks for properties
-        if( isset( $data->value ) && is_array( $data->value ) ) {
+        if( isset( $this->_data->value ) && is_array( $this->_data->value ) ) {
             
             // Process each property
             foreach( $this->_data->value as $name => $marker ) {
@@ -96,10 +98,16 @@ class Woops_Amf_Marker_Amf0_Object extends Woops_Amf_Marker_Amf0
                 // Writes the property name
                 $stream->writeUtf8String( $name );
                 
-                // Writes the property
+                // Checks if we have a PHP variable or an AMF marker object
+                if( !is_object( $marker ) || !( $marker instanceof Woops_Amf_Marker ) ) {
+                    
+                    // Creates the marker object from the PHP variable
+                    $marker = $this->_packet->newMarkerFromPhpVariable( $marker );
+                }
+                
+                // Writes the entry
                 $stream->write( ( string )$marker );
             }
-            
         }
         
         // Adds an object-end marker

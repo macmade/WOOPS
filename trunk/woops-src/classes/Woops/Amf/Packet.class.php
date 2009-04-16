@@ -26,6 +26,14 @@ abstract class Woops_Amf_Packet
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * Creates an AMF marker from a PHP primitive type
+     * 
+     * @param   mixed               The PHP variable
+     * @return  Woops_Amf_Marker    The AMF marker
+     */
+    abstract public function newMarkerFromPhpVariable( $var );
+    
+    /**
      * The allowed AMF markers
      */
     protected $_markers      = array();
@@ -66,10 +74,10 @@ abstract class Woops_Amf_Packet
         $stream = new Woops_Amf_Binary_Stream();
         
         // Writes the AMF version
-        $stream->writeUnsignedShort( $this->_version );
+        $stream->writeBigEndianUnsignedShort( $this->_version );
         
         // Writes the number of headers
-        $stream->writeUnsignedShort( $this->_headerCount );
+        $stream->writeBigEndianUnsignedShort( $this->_headerCount );
         
         // Process each header
         foreach( $this->_headers as $header ) {
@@ -79,7 +87,7 @@ abstract class Woops_Amf_Packet
         }
         
         // Writes the number of messages
-        $stream->writeUnsignedShort( $this->_messageCount );
+        $stream->writeBigEndianUnsignedShort( $this->_messageCount );
         
         // Process each message
         foreach( $this->_messages as $message ) {
@@ -87,9 +95,6 @@ abstract class Woops_Amf_Packet
             // Writes the message
             $stream->write( ( string )$message );
         }
-        
-        // Resets the stream pointer
-        $stream->rewind();
         
         // Returns the stream data
         return ( string )$stream;
@@ -135,12 +140,10 @@ abstract class Woops_Amf_Packet
     /**
      * Creates a new AMF header
      * 
-     * @param   string                      The header's name
-     * @param   int                         The marker's type (one of the MARKER_XXX constant)
-     * @param   boolean                     Whether the header must be understood
-     * @return  Woops_Amf_header            The AMF message object
-     * @throws  Woops_Amf_Packet_Exception  If a header with the same name already exists
-     * @throws  Woops_Amf_Packet_Exception  If the marker type is not a valid AMF marker type
+     * @param   string              The header's name
+     * @param   int                 The marker's type (one of the MARKER_XXX constant)
+     * @param   boolean             Whether the header must be understood
+     * @return  Woops_Amf_Header    The AMF header object
      */
     public function newHeader( $name, $markerType, $mustUnderstand = false )
     {
@@ -151,24 +154,53 @@ abstract class Woops_Amf_Packet
             $mustUnderstand
         );
         
+        // Stores the AMF header
+        $this->_headers[] = $header;
+        
+        // Updates the number of headers
+        $this->_headerCount++;
+        
+        // Returns the new AMF header
+        return $header;
+    }
+    
+    /**
+     * Creates a new AMF header from a PHP primitive type
+     * 
+     * @param   string              The header's name
+     * @param   mixed               The PHP variable
+     * @param   boolean             Whether the header must be understood
+     * @return  Woops_Amf_Header    The AMF header object
+     */
+    public function newHeaderFromPhpVariable( $name, $var, $markerType, $mustUnderstand = false )
+    {
+        // Creates the AMF marker object
+        $marker = $this->newMarkerFromPhpVariable( $var );
+        
+        // Creates the new AMF header
+        $header = new Woops_Amf_Header(
+            $name,
+            $marker,
+            $mustUnderstand
+        );
+        
         // Stores the AMF message
         $this->_headers[] = $header;
         
         // Updates the number of messages
         $this->_headerCount++;
         
-        // Returns the new AMF message
+        // Returns the new AMF header
         return $header;
     }
     
     /**
      * Creates a new AMF message
      * 
-     * @param   string                      The target URI
-     * @param   string                      The response URI
-     * @param   int                         The marker's type (one of the MARKER_XXX constant)
-     * @return  Woops_Amf_Message           The AMF message object
-     * @throws  Woops_Amf_Packet_Exception  If the marker type is not a valid AMF marker type
+     * @param   string              The target URI
+     * @param   string              The response URI
+     * @param   int                 The marker's type (one of the MARKER_XXX constant)
+     * @return  Woops_Amf_Message   The AMF message object
      */
     public function newMessage( $targetUri, $responseUri, $markerType )
     {
@@ -177,6 +209,36 @@ abstract class Woops_Amf_Packet
             $targetUri,
             $responseUri,
             $this->newMarker( $markerType )
+        );
+        
+        // Stores the AMF message
+        $this->_messages[] = $message;
+        
+        // Updates the number of messages
+        $this->_messageCount++;
+        
+        // Returns the new message
+        return $message;
+    }
+    
+    /**
+     * Creates a new AMF message from a PHP primitive type
+     * 
+     * @param   string              The target URI
+     * @param   string              The response URI
+     * @param   mixed               The PHP variable
+     * @return  Woops_Amf_Message   The AMF message object
+     */
+    public function newMessageFromPhpVariable( $targetUri, $responseUri, $var )
+    {
+        // Creates the AMF marker object
+        $marker = $this->newMarkerFromPhpVariable( $var );
+        
+        // Creates the new message
+        $message = new Woops_Amf_Message(
+            $targetUri,
+            $responseUri,
+            $marker
         );
         
         // Stores the AMF message

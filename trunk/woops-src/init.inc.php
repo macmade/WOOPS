@@ -46,7 +46,7 @@ if( !class_exists( 'SimpleXMLElement' ) ) {
 require_once(
     dirname( __FILE__ )
   . DIRECTORY_SEPARATOR
-  . 'Classes'
+  . 'classes'
   . DIRECTORY_SEPARATOR
   . 'Woops'
   . DIRECTORY_SEPARATOR

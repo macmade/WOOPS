@@ -78,9 +78,6 @@ class Woops_Amf_Message
         // Writes the marker
         $stream->write( ( string )$this->_marker );
         
-        // Resets the stream pointer
-        $stream->rewind();
-        
         // Returns the stream data
         return ( string )$stream;
     }

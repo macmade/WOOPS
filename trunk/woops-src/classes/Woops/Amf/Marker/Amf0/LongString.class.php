@@ -49,6 +49,8 @@ class Woops_Amf_Marker_Amf0_LongString extends Woops_Amf_Marker_Amf0
      */
     public function __toString()
     {
+        $data = ( isset( $this->_data->value ) ) ? ( string )$this->_data->value : '';
+        
         // Creates a new stream
         $stream = new Woops_Amf_Binary_Stream( parent::__toString() );
         

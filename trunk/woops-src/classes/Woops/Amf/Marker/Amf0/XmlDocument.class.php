@@ -49,6 +49,9 @@ class Woops_Amf_Marker_Amf0_XmlDocument extends Woops_Amf_Marker_Amf0
      */
     public function __toString()
     {
+        // Checks if we have data
+        $data   = ( isset( $this->_data->value ) ) ? ( string )$this->_data->value : '';
+        
         // Creates a new stream
         $stream = new Woops_Amf_Binary_Stream();
         
