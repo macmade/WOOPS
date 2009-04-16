@@ -549,7 +549,7 @@ class Woops_Binary_Stream
     }
     
     /**
-     * Gets a fixed point number from the binary stream
+     * Gets a big endian fixed point number from the binary stream
      * 
      * @param   int     The number of bits for the integer part
      * @param   int     The number of bits for the fractional part
@@ -587,7 +587,7 @@ class Woops_Binary_Stream
     }
     
     /**
-     * Writes a fixed point number to the binary stream
+     * Writes a big endian fixed point number to the binary stream
      * 
      * @param   float   The fixed point number
      * @param   int     The number of bits for the integer part
@@ -614,6 +614,75 @@ class Woops_Binary_Stream
             
             // Unsigned long - big endian
             $this->writeBigEndianUnsignedLong( $integerData | $fractionalData );
+        }
+    }
+    
+    /**
+     * Gets a little endian fixed point number from the binary stream
+     * 
+     * @param   int     The number of bits for the integer part
+     * @param   int     The number of bits for the fractional part
+     * @return  float   The fixed point number
+     * @see     _unpackData
+     */
+    public function littleEndianFixedPoint( $integerLength, $fractionalLength )
+    {
+        // Checks if the fixed point number is expressed on 16 or 32 bits
+        if( $integerLength + $fractionalLength === 16 ) {
+            
+            // Unsigned short - little endian
+            $unpackFormat   = 'v';
+            
+        } else {
+            
+            // Unsigned long - little endian
+            $unpackFormat   = 'V';
+        }
+        
+        // Gets the decimal value for the fixed point number from the data
+        $unpackData     = $this->_unpackData( $unpackFormat );
+        
+        // Computes the integer part
+        $integer        = $unpackData >> $fractionalLength;
+        
+        // Computes the bitwise mask for the fractionnal part
+        $fractionalMask = pow( 2, $fractionalLength ) - 1;
+        
+        // Computes the fractional part
+        $fractional     = ( $unpackData & $fractionalMask ) / ( 1 << $fractionalLength );
+        
+        // Returns the fixed point number
+        return $integer + $fractional;
+    }
+    
+    /**
+     * Writes a little endian fixed point number to the binary stream
+     * 
+     * @param   float   The fixed point number
+     * @param   int     The number of bits for the integer part
+     * @param   int     The number of bits for the fractional part
+     * @return  void
+     */
+    public function writeLittleEndianFixedPoint( $data, $integerLength, $fractionalLength )
+    {
+        // Computes the integer part
+        $integerPart     = ( int )$data;
+        $integerData     = $integer << $fractionalLength;
+        
+        // Computes the fractionnal part
+        $fractionnalPart = $data - $integerPart;
+        $fractionalData  = $fractionnalPart * pow( 10, strlen( $fractionnalPart ) - 2 );
+        
+        // Checks if the fixed point number is expressed on 16 or 32 bits
+        if( $integerLength + $fractionalLength === 16 ) {
+            
+            // Unsigned short - little endian
+            $this->writeLittleEndianUnsignedShort( $integerData | $fractionalData );
+            
+        } else {
+            
+            // Unsigned long - little endian
+            $this->writeLitleEndianUnsignedLong( $integerData | $fractionalData );
         }
     }
     
