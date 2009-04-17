@@ -746,27 +746,24 @@ class Woops_Binary_Stream
      */
     public function nullTerminatedString()
     {
-        // Gets the position of the next NULL character
-        $null   = strpos( $this->_data, chr( 0 ), $this->_offset );
+        // Result string
+        $result = '';
         
-        // Gets the string
-        $string = substr( $this->_data, $this->_offset, $null );
+        // Gets a character from the stream
+        $char = $this->read( 1 );
         
-        // Checks if a NULL character was found
-        if( !$null ) {
+        // Process the stream till we find an ASCII NUL character
+        while( $char !== self::$_str->NUL ) {
             
-            // No NULL character, reads untils the end of the stream
-            $this->_offset = $this->_dataLength;
+            // Adds the current character
+            $result .= $char;
             
-        } else {
-            
-            // Increases the offset
-            $this->_offset += $null + 1;
+            // Reads another character
+            $char = $this->read( 1 );
         }
         
-        // Returns the string
-        return $string;
-        
+        // Returns the result string
+        return $result;
     }
     
     /**
