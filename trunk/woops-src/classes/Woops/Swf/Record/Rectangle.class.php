@@ -91,7 +91,7 @@ class Woops_Swf_Record_Rectangle
     /**
      * Gets the X minimum position for the rectangle, in twips
      * 
-     * @return  The X minimum position for the rectangle, in twips
+     * @return  int     The X minimum position for the rectangle, in twips
      */
     public function getXMin()
     {
@@ -101,7 +101,7 @@ class Woops_Swf_Record_Rectangle
     /**
      * Sets the X minimum position for the rectangle, in twips
      * 
-     * @param   The X minimum position for the rectangle, in twips
+     * @param   int     The X minimum position for the rectangle, in twips
      * @return  void
      */
     public function setXMin( $value )
@@ -112,7 +112,7 @@ class Woops_Swf_Record_Rectangle
     /**
      * Gets the X maximum position for the rectangle, in twips
      * 
-     * @return  The X maximum position for the rectangle, in twips
+     * @return  int     The X maximum position for the rectangle, in twips
      */
     public function getXMax()
     {
@@ -122,7 +122,7 @@ class Woops_Swf_Record_Rectangle
     /**
      * Sets the X maximum position for the rectangle, in twips
      * 
-     * @param   The X maximum position for the rectangle, in twips
+     * @param   int     The X maximum position for the rectangle, in twips
      * @return  void
      */
     public function setXMax( $value )
@@ -133,7 +133,7 @@ class Woops_Swf_Record_Rectangle
     /**
      * Gets the Y minimum position for the rectangle, in twips
      * 
-     * @return  The Y minimum position for the rectangle, in twips
+     * @return  int     The Y minimum position for the rectangle, in twips
      */
     public function getYMin()
     {
@@ -143,7 +143,7 @@ class Woops_Swf_Record_Rectangle
     /**
      * Sets the Y minimum position for the rectangle, in twips
      * 
-     * @param   The Y minimum position for the rectangle, in twips
+     * @param   int     The Y minimum position for the rectangle, in twips
      * @return  void
      */
     public function setYMin( $value )
@@ -154,7 +154,7 @@ class Woops_Swf_Record_Rectangle
     /**
      * Gets the Y maximum position for the rectangle, in twips
      * 
-     * @return  The Y maximum position for the rectangle, in twips
+     * @return  int     The Y maximum position for the rectangle, in twips
      */
     public function getYMax()
     {
@@ -164,7 +164,7 @@ class Woops_Swf_Record_Rectangle
     /**
      * Sets the Y maximum position for the rectangle, in twips
      * 
-     * @param   The Y maximum position for the rectangle, in twips
+     * @param   int     The Y maximum position for the rectangle, in twips
      * @return  void
      */
     public function setYMax( $value )
