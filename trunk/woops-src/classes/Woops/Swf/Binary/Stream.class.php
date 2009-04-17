@@ -51,7 +51,7 @@ class Woops_Swf_Binary_Stream extends Woops_Binary_Stream
     }
     
     /**
-     * Gets an encoded unsigned 32bits integer, as specified in the SWF specification
+     * Gets an encoded 32bits unsigned integer, as specified in the SWF specification
      * 
      * SWF 9 and later supports the use of integers encoded with a variable
      * number of bytes. One type of encoded integer is supported.
