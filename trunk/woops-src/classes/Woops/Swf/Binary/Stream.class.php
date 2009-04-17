@@ -51,7 +51,9 @@ class Woops_Swf_Binary_Stream extends Woops_Binary_Stream
     }
     
     /**
+     * Compresses the SWF data in the stream
      * 
+     * @return  void
      */
     public function compressData()
     {
