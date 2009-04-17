@@ -198,7 +198,7 @@ class Woops_Swf_File implements Iterator
      */
     public function current()
     {
-        return $this->_iteratorPos;
+        return $this->_tags[ $this->_iteratorPos ];
     }
     
     /**
