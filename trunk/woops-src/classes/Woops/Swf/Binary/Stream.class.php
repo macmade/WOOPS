@@ -115,6 +115,85 @@ class Woops_Swf_Binary_Stream extends Woops_Binary_Stream
     }
     
     /**
+     * Writes an encoded 32bits unsigned integer, as specified in the SWF specification
+     * 
+     * @param   int     The integer
+     * @return  void
+     */
+    public function writeEncodedU32( $int )
+    {
+        // Ensures we have an integer
+        $int = ( int )$int;
+        
+        // Checks the integer range
+        if( $int <= 0x7F ) {
+            
+            // Writes integer as 1 byte
+            $this->writeChar( $int );
+            
+        } elseif( $int <= 0x3FFF ) {
+            
+            // Computes the 2 bytes of the integer
+            $part1 = ( $int >> 8 ) | 0x80;
+            $part2 =   $int & 0x7F;
+            
+            // Writes integer as 2 byte
+            $this->writeChar( $part2 );
+            $this->writeChar( $part1 );
+            
+        } elseif( $int <= 0x1FFFFF ) {
+            
+            // Computes the 3 bytes of the integer
+            $part1 = ( $int >> 16 ) | 0x80;
+            $part2 = ( $int >> 8 )  | 0x80;
+            $part3 =   $int & 0x7F;
+            
+            // Writes integer as 3 byte
+            $this->writeChar( $part3 );
+            $this->writeChar( $part2 );
+            $this->writeChar( $part1 );
+            
+        } elseif( $int <= 0xFFFFFFF ) {
+            
+            // Computes the 4 bytes of the integer
+            $part1 = ( $int >> 24 ) | 0x80;
+            $part2 = ( $int >> 16 ) | 0x80;
+            $part3 = ( $int >> 8 )  | 0x80;
+            $part4 =   $int & 0x7F;
+            
+            // Writes integer as 4 byte
+            $this->writeChar( $part4 );
+            $this->writeChar( $part3 );
+            $this->writeChar( $part2 );
+            $this->writeChar( $part1 );
+            
+        }  elseif( $int <= 0x7FFFFFFFF ) {
+            
+            // Computes the 5 bytes of the integer
+            $part2 = ( $int >> 32 ) | 0x80;
+            $part2 = ( $int >> 24 ) | 0x80;
+            $part3 = ( $int >> 16 ) | 0x80;
+            $part4 = ( $int >> 8 )  | 0x80;
+            $part5 =   $int & 0x7F;
+            
+            // Writes integer as 5 byte
+            $this->writeChar( $part5 );
+            $this->writeChar( $part4 );
+            $this->writeChar( $part3 );
+            $this->writeChar( $part2 );
+            $this->writeChar( $part1 );
+            
+        } else {
+            
+            // Error - Integer is too big
+            throw new Woops_Swf_Binary_Stream_Exception(
+                'Invalid integer range (bigger than 2^35-1)',
+                Woops_Swf_Binary_Stream_Exception::EXCEPTION_INVALID_INT_RANGE
+            );
+        }
+    }
+    
+    /**
      * Compresses the SWF data in the stream
      * 
      * @return  void
