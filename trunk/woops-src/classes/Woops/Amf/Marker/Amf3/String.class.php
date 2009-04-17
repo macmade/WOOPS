@@ -28,7 +28,7 @@ class Woops_Amf_Marker_Amf3_String extends Woops_Amf_Marker_Amf3
     /**
      * The AMF marker type
      */
-    protected $_type        = 0x06
+    protected $_type        = 0x06;
     
     /**
      * Whether the current object is a reference
@@ -64,7 +64,7 @@ class Woops_Amf_Marker_Amf3_String extends Woops_Amf_Marker_Amf3
             $this->_reference   = $this->_packet->getStringReference( $refIndex );
             
             // Gets the data from the referenced object
-            $this->_data =      = $this->_reference->getData();
+            $this->_data        = $this->_reference->getData();
             
         } else {
             
