@@ -12,7 +12,10 @@
 # $Id: Stream.class.php 637 2009-03-09 09:05:52Z macmade $
 
 /**
+ * SWF SetBackgroundColor tag
  * 
+ * The SetBackgroundColor tag sets the background color of the display.
+ * The minimum file format version is SWF 1. 
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
@@ -31,10 +34,37 @@ class Woops_Swf_Tag_Set_BackgroundColor extends Woops_Swf_Tag
     protected $_type = 0x09;
     
     /**
+     * The RGB record
+     */
+    protected $_rgb  = NULL;
+    
+    /**
+     * Class constructor
+     * 
+     * @return  void
+     */
+    public function __construct()
+    {
+        $this->_rgb = new Woops_Swf_Record_Rgb();
+    }
+    
+    /**
      * Process the raw data from a binary stream
      * 
      * @return  void
      */
     public function processData( Woops_Swf_Binary_Stream $stream )
-    {}
+    {
+        $this->_rgb->processData( $stream );
+    }
+    
+    /**
+     * Gets the RGB record
+     * 
+     * @return  Woops_Swf_Record_Rgb    The RGB record
+     */
+    public function getRgb()
+    {
+        return $this->_rgb;
+    }
 }
