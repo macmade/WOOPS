@@ -51,6 +51,70 @@ class Woops_Swf_Binary_Stream extends Woops_Binary_Stream
     }
     
     /**
+     * Gets an encoded unsigned 32bits integer, as specified in the SWF specification
+     * 
+     * SWF 9 and later supports the use of integers encoded with a variable
+     * number of bytes. One type of encoded integer is supported.
+     * This is a 32-bit unsigned integer value encoded with a variable number of
+     * bytes to save space. 
+     * All EncodedU32's are encoded as 1-5 bytes depending on the value (larger
+     * values need more space). The encoding method is if the hi bit in the
+     * current byte is set, then the next byte is also part of the value. Each
+     * bit in a byte contributes 7 bits to the value, with the hi bit telling us 
+     * whether to use the next byte, or if this is the last byte for the value.
+     * 
+     * @return  int     The integer
+     */
+    public function encodedU32()
+    {
+        // Gets the first byte
+        $byte1 = $this->unsignedChar();
+        
+        // Checks the MSB
+        if( !( $byte1 & 0x80 ) ) {
+            
+            // Returns the integer (7 bits) - Range is 0x00-0x7F
+            return $byte1;
+        }
+        
+        // Gets the second byte
+        $byte2 = $this->unsignedChar();
+        
+        // Checks the MSB
+        if( !( $byte2 & 0x80 ) ) {
+            
+            // Returns the integer (14 bits) - Range is 0x00-0x3FFF
+            return ( $byte1 & 0x7F ) | ( $byte2 << 7 );
+        }
+        
+        // Gets the third byte
+        $byte3 = $this->unsignedChar();
+        
+        // Checks the MSB
+        if( !( $byte3 & 0x80 ) ) {
+            
+            // Returns the integer (21 bits) - Range is 0x00-0x1FFFFF
+            return ( $byte1 & 0x7F ) | ( ( $byte2 & 0x7F ) << 7 ) | ( $byte3 << 14 );
+        }
+        
+        // Gets the fourth byte
+        $byte4 = $this->unsignedChar();
+        
+        // Checks the MSB
+        if( !( $byte4 & 0x80 ) ) {
+            
+            // Returns the integer (28 bits) - Range is 0x00-0xFFFFFFF
+            return ( $byte1 & 0x7F ) | ( ( $byte2 & 0x7F ) << 7 ) | ( ( $byte3 & 0x7F ) << 14 ) | ( $byte4 << 21 );
+        }
+        
+        // Gets the fifth byte
+        $byte5 = $this->unsignedChar();
+        
+        // Returns the integer (35 bits) - Range is 0x00-0x7FFFFFFFF
+        return ( $byte1 & 0x7F ) | ( ( $byte2 & 0x7F ) << 7 ) | ( ( $byte3 & 0x7F ) << 14 ) | ( ( $byte4 & 0x7F ) << 21 ) | ( ( $byte5 & 0x7F ) << 28 );
+    }
+    
+    /**
      * Compresses the SWF data in the stream
      * 
      * @return  void
