@@ -99,6 +99,13 @@ class Woops_Swf_Parser
             
             // Processes the tag data
             $tag->processData( $tagData );
+            
+            // Checks for the SWF end tag
+            if( $tagType === Woops_Swf_File::TAG_END ) {
+                
+                // End of the SWF data has been reached
+                break;
+            }
         }
     }
     
