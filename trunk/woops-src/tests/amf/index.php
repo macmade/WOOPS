@@ -11,9 +11,10 @@
       . 'init.inc.php'
     );
     
-    $amfServer = new Woops_Amf_Server();
-    $amfServer->handle();
-    print $amfServer;
+    // Creates an AMF server
+    $AMF_SERVER = new Woops_Amf_Server();
+    $AMF_SERVER->handle();
+    print $AMF_SERVER;
 ?>
 
 <!-- $Id: index.php 658 2009-03-09 16:19:21Z macmade $ -->
