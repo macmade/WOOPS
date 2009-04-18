@@ -13,7 +13,7 @@
 
 /**
  * Abstract for the SWF tag classes
- *
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Swf
@@ -36,6 +36,21 @@ abstract class Woops_Swf_Tag
      * The SWF tag type
      */
     protected $_type = 0x00;
+    
+    /**
+     * The instance of the SWF file in which the tag is contained
+     */
+    protected $_file = NULL;
+    
+    /**
+     * Class constructor
+     * 
+     * @param   Woops_Swf_File  The instance of the SWF file in which the tag is contained
+     */
+    public function __construct( Woops_Swf_File $file )
+    {
+        $this->_file = $file;
+    }
     
     /**
      * Gets the SWF tag type
