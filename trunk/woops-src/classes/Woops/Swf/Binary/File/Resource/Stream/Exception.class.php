@@ -13,7 +13,7 @@
 
 /**
  * Exception class for the Woops_Swf_Binary_File_Resource_Stream class
- *
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Swf.Binary.File.Resource.Stream

@@ -13,7 +13,7 @@
 
 /**
  * SWF RGB record
- *
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Swf.Record

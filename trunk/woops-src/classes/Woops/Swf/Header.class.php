@@ -13,7 +13,7 @@
 
 /**
  * SWF file header
- *
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Swf

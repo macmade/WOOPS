@@ -13,7 +13,7 @@
 
 /**
  * 
- *
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Swf.Tag.Sound.Stream.Head
@@ -29,12 +29,4 @@ class Woops_Swf_Tag_Sound_Stream_Head_2 extends Woops_Swf_Tag_Sound_Stream_Head
      * The SWF tag type
      */
     protected $_type = 0x2D;
-    
-    /**
-     * Process the raw data from a binary stream
-     * 
-     * @return  void
-     */
-    public function processData( Woops_Swf_Binary_Stream $stream )
-    {}
 }

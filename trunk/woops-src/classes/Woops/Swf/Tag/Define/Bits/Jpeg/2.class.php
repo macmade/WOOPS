@@ -13,7 +13,7 @@
 
 /**
  * 
- *
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Swf.Tag.Define.Bits.Jpeg
@@ -29,12 +29,4 @@ class Woops_Swf_Tag_Define_Bits_Jpeg_2 extends Woops_Swf_Tag_Define_Bits
      * The SWF tag type
      */
     protected $_type = 0x15;
-    
-    /**
-     * Process the raw data from a binary stream
-     * 
-     * @return  void
-     */
-    public function processData( Woops_Swf_Binary_Stream $stream )
-    {}
 }

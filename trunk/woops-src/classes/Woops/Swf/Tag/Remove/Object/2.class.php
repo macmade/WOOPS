@@ -13,7 +13,7 @@
 
 /**
  * 
- *
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Swf.Tag.Remove.Object
@@ -29,12 +29,4 @@ class Woops_Swf_Tag_Remove_Object_2 extends Woops_Swf_Tag_Remove_Object
      * The SWF tag type
      */
     protected $_type = 0x1C;
-    
-    /**
-     * Process the raw data from a binary stream
-     * 
-     * @return  void
-     */
-    public function processData( Woops_Swf_Binary_Stream $stream )
-    {}
 }

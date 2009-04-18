@@ -13,7 +13,7 @@
 
 /**
  * 
- *
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Swf.Tag.Define.Text
@@ -29,12 +29,4 @@ class Woops_Swf_Tag_Define_Text_2 extends Woops_Swf_Tag_Define_Text
      * The SWF tag type
      */
     protected $_type = 0x21;
-    
-    /**
-     * Process the raw data from a binary stream
-     * 
-     * @return  void
-     */
-    public function processData( Woops_Swf_Binary_Stream $stream )
-    {}
 }

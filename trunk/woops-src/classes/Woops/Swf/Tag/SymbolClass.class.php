@@ -23,7 +23,7 @@
  * PlaceObject3 (PlaceFlagHasClassName and PlaceFlagHasImage). For example, ten
  * SWF files that are all part of the same website can share an embedded custom
  * font if one file embeds and exports the font class.
- *
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Swf.Tag

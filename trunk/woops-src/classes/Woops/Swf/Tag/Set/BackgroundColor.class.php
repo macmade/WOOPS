@@ -16,7 +16,7 @@
  * 
  * The SetBackgroundColor tag sets the background color of the display.
  * The minimum file format version is SWF 1. 
- *
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Swf.Tag.Set
@@ -41,10 +41,14 @@ class Woops_Swf_Tag_Set_BackgroundColor extends Woops_Swf_Tag
     /**
      * Class constructor
      * 
-     * @return  void
+     * @param   Woops_Swf_File  The instance of the SWF file in which the tag is contained
      */
-    public function __construct()
+    public function __construct( Woops_Swf_File $file )
     {
+        // Calls the parent constructor
+        parent::__construct( $file );
+        
+        // Creates a new RGB record
         $this->_rgb = new Woops_Swf_Record_Rgb();
     }
     
