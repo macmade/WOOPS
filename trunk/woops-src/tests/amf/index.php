@@ -1,20 +1,28 @@
 <?php
-    
-    // Includes the initialization script
-    require_once(
-        dirname( __FILE__ )
-      . DIRECTORY_SEPARATOR
-      . '..'
-      . DIRECTORY_SEPARATOR
-      . '..'
-      . DIRECTORY_SEPARATOR
-      . 'init.inc.php'
-    );
-    
-    // Creates an AMF server
-    $AMF_SERVER = new Woops_Amf_Server();
-    $AMF_SERVER->handle();
-    print $AMF_SERVER;
+	
+	// Includes the initialization script
+	require_once(
+		dirname( __FILE__ )
+	  . DIRECTORY_SEPARATOR
+	  . '..'
+	  . DIRECTORY_SEPARATOR
+	  . '..'
+	  . DIRECTORY_SEPARATOR
+	  . 'init.inc.php'
+	);
+	
+	// Creates an AMF server
+	$AMF_SERVER = new Woops_Amf_Server();
+	$AMF_SERVER->handle();
+	print $AMF_SERVER;
+	
+	// WOOPS environment object
+	$ENV    = Woops_Core_Env_Getter::getInstance();
+	
+	// URL of the AMF server
+	$URL    = urlencode( ( ( $ENV->HTTPS ) ? 'https://' : 'http://' )
+			. $ENV->HTTP_HOST
+			. $ENV->getSourceWebPath( 'tests/amf/' ) );
 ?>
 
 <!-- $Id: index.php 658 2009-03-09 16:19:21Z macmade $ -->
@@ -60,7 +68,8 @@
 			<param name="movie" value="test.swf" />
 			<param name="quality" value="high" />
 			<param name="bgcolor" value="#ffffff" />
-			<embed src="test.swf" quality="high" bgcolor="#ffffff" width="400" height="400" name="test" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer" />
+			<param name="FlashVars" value="amfTestUrl=amfTestUrl=<?php print $URL; ?>" />
+			<embed src="test.swf" FlashVars="amfTestUrl=<?php print $URL; ?>" quality="high" bgcolor="#ffffff" width="400" height="400" name="test" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/go/getflashplayer" />
 		</object>
 	</body>
 </html>
