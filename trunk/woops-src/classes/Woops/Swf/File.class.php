@@ -13,7 +13,7 @@
 
 /**
  * SWF file
- *
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Swf
@@ -242,6 +242,43 @@ class Woops_Swf_File implements Iterator
     }
     
     /**
+     * Checks if a type is valid
+     * 
+     * @param   int     The SWF tag type
+     * @return  boolean True if the tag type is valid, otherwise false
+     */
+    public static function isValidTagType( $type )
+    {
+        return isset( self::$_types[ ( int )$type ] );
+    }
+    
+    /**
+     * Gets the PHP classname for a SWF tag type
+     * 
+     * @param   int     The SWF tag type
+     * @return  string  The PHP classname for the tag
+     * @throws  Woops_Swf_File_Exception    If the tag type is invalid
+     */
+    public static function getTagClass( $type )
+    {
+        // Ensures we have an integer
+        $type = ( int )$type;
+        
+        // Checks if the type is valid
+        if( !isset( self::$_types[ $type ] ) ) {
+            
+            // Error - Invalid tag type
+            throw new Woops_Swf_File_Exception(
+                'Invalid tag type (' . $type . ')',
+                Woops_Swf_File_Exception::EXCEPTION_INVALID_TAG_TYPE
+            );
+        }
+        
+        // Returns the tag classname
+        return self::$_types[ $type ];
+    }
+    
+    /**
      * Creates a new SWF tag in the current SWF file instance
      * 
      * @param   int                         The SWF tag type (one of the TAG_XXX constant)
@@ -267,7 +304,7 @@ class Woops_Swf_File implements Iterator
         $tagClass      = self::$_types[ $type ];
         
         // Creates the tag object
-        $tag           = new $tagClass();
+        $tag           = new $tagClass( $this );
         
         // Stores the tag
         $this->_tags[] = $tag;
