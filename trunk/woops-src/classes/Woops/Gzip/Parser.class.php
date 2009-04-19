@@ -65,7 +65,42 @@ class Woops_Gzip_Parser
     }
     
     protected function _parseFile()
-    {}
+    {
+        // Signature for the GZIP members
+        $memberSignature = chr( 31 ) . chr( 139 ) . chr( 8 );
+        
+        // Gets the offset of the first member
+        $memberOffset    = $this->_stream->pos( $memberSignature );
+        
+        // Checks if a member signature was found
+        if( $memberOffset === false ) {
+            
+            // Error - No member in the GZIP file
+            throw new Woops_Gzip_Parser_Exception(
+                'No member in the GZIP file',
+                Woops_Gzip_Parser_Exception::EXCEPTION_NO_MEMBER
+            );
+        }
+        
+        // Process each member
+        while( $memberOffset !== false ) {
+            
+            // Moves the stream pointer to the start of the member
+            $this->_stream->seek( $memberOffset, Woops_Gzip_Binary_File_Stream::SEEK_SET );
+            
+            // Creates a new GZIP member
+            $member = new Woops_Gzip_Member();
+            
+            // Adds the member to the GZIP file
+            $this->_file->addMember( $member );
+            
+            // Processes the member data
+            $member->processData( $this->_stream );
+            
+            // Tries to find another member
+            $memberOffset = $this->_stream->pos( $memberSignature, $this->_stream->getOffset() );
+        }
+    }
     
     /**
      * Gets the GZIP file object
