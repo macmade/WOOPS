@@ -53,7 +53,7 @@ class Woops_Tiff_File implements Iterator
     /**
      * Gets the current IFD object (SPL Iterator method)
      * 
-     * @return  Woops_Tiff_Ifd  The current SWF tag object
+     * @return  Woops_Tiff_Ifd  The current IFD object
      */
     public function current()
     {
