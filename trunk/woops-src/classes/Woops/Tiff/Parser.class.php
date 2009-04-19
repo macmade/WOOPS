@@ -65,7 +65,32 @@ class Woops_Tiff_Parser
     }
     
     protected function _parseFile()
-    {}
+    {
+        // Gets the TIFF header
+        $header = $this->_file->getHeader();
+        
+        // Process the header data
+        $header->processData( $this->_stream );
+        
+        // Gets the first IFD offset
+        $offset = $header->getFirstIfdOffset();
+        
+        // Processes the IFDs
+        while( $offset !== 0 ) {
+            
+            // Seeks to the start of the IFD
+            $this->_stream->seek( $offset, Woops_Tiff_Binary_File_Stream::SEEK_SET );
+            
+            // Creates a new IFD
+            $ifd = $this->_file->newIfd();
+            
+            // Process the IFD data
+            $ifd->processData( $this->_stream );
+            
+            // Gets the offset for the next IFD, if any
+            $offset = $ifd->getNextIfdOffset();
+        }
+    }
     
     /**
      * Gets the TIFF file object
