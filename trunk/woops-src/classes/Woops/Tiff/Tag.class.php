@@ -98,7 +98,11 @@ abstract class Woops_Tiff_Tag
     }
     
     /**
+     * Reads tag value(s) from the binary stream
      * 
+     * @param   Woops_Tiff_Binary_Stream    The binary stream
+     * @param   int                         The number of values
+     * @return  void
      */
     protected function _readValuesFromStream( $stream, $count )
     {
@@ -244,6 +248,7 @@ abstract class Woops_Tiff_Tag
     /**
      * Process the raw data from a binary stream
      * 
+     * @param   Woops_Tiff_Binary_Stream    The binary stream
      * @return  void
      * @throws  Woops_Tiff_Tag_Exception    If the value type is invalid
      */
