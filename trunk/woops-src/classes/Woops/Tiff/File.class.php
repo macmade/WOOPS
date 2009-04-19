@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Tiff
  */
-class Woops_Tiff_File
+class Woops_Tiff_File implements Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -28,12 +28,17 @@ class Woops_Tiff_File
     /**
      * The TIFF header
      */
-    protected $_header = NULL;
+    protected $_header      = NULL;
     
     /**
      * The image file directories (IFD)
      */
-    protected $_ifds   = array();
+    protected $_ifds        = array();
+    
+    /**
+     * The SPL iterator position
+     */
+    protected $_iteratorPos = 0;
     
     /**
      * Class constructor
@@ -43,6 +48,56 @@ class Woops_Tiff_File
     public function __construct()
     {
         $this->_header = new Woops_Tiff_Header();
+    }
+    
+    /**
+     * Gets the current IFD object (SPL Iterator method)
+     * 
+     * @return  Woops_Tiff_Ifd  The current SWF tag object
+     */
+    public function current()
+    {
+        return $this->_ifds[ $this->_iteratorPos ];
+    }
+    
+    /**
+     * Moves to the next IFD object (SPL Iterator method)
+     * 
+     * @return  void
+     */
+    public function next()
+    {
+        $this->_iteratorPos++;
+    }
+    
+    /**
+     * Gets the index of the current IFD object (SPL Iterator method)
+     * 
+     * @return  int     The index of the current TIFF tag
+     */
+    public function key()
+    {
+        return $this->_iteratorPos;
+    }
+    
+    /**
+     * Checks if there is a next IFD object (SPL Iterator method)
+     * 
+     * @return  boolean True if there is a next TIFF IFD, otherwise false
+     */
+    public function valid()
+    {
+        return $this->_iteratorPos < count( $this->_ifds );
+    }
+    
+    /**
+     * Rewinds the SPL Iterator pointer (SPL Iterator method)
+     * 
+     * @return  void
+     */
+    public function rewind()
+    {
+        $this->_iteratorPos = 0;
     }
     
     /**
