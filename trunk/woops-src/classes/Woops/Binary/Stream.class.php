@@ -163,6 +163,18 @@ class Woops_Binary_Stream
     }
     
     /**
+     * Search for the first occurence of a string
+     * 
+     * @param   string  The string to search for
+     * @param   int     An optionnal offset from which to begin the search
+     * @return  mixed   The position of the string as an integer, or false if the string is not found
+     */
+    public function pos( $needle, $offset = 0 )
+    {
+        return strpos( $this->_data, $needle, $offset );
+    }
+    
+    /**
      * Tests for the end of the stream
      * 
      * @return  boolean True if the end of the stream has been reached, otheriwse false;
