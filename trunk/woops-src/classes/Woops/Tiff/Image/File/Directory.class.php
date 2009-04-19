@@ -26,7 +26,7 @@ class Woops_Tiff_Image_File_Directory implements Iterator
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * The TIFF tag types
+     * The TIFF tag types in TIFF revision 6
      */
     const TAG_NEWSUBFILETYPE                 = 0x00FE;
     const TAG_SUBFILETYPE                    = 0x00FF;
@@ -104,9 +104,16 @@ class Woops_Tiff_Image_File_Directory implements Iterator
     const TAG_COPYRIGHT                      = 0x8298;
     
     /**
+     * The third-party TIFF tag types
+     */
+    const TAG_XMP                            = 0x02BC;
+    
+    /**
      * The types of the TIFF tags, with their corresponding PHP class
      */
     protected static $_types = array(
+        
+        // Tags in TIFF revision 6
         0x00FE => 'Woops_Tiff_Tag_NewSubfileType',
         0x00FF => 'Woops_Tiff_Tag_SubfileType',
         0x0100 => 'Woops_Tiff_Tag_Image_Width',
@@ -180,7 +187,10 @@ class Woops_Tiff_Image_File_Directory implements Iterator
         0x0212 => 'Woops_Tiff_Tag_YCbCr_SubSampling',
         0x0213 => 'Woops_Tiff_Tag_YCbCr_Positioning',
         0x0214 => 'Woops_Tiff_Tag_ReferenceBlackWhite',
-        0x8298 => 'Woops_Tiff_Tag_Copyright'
+        0x8298 => 'Woops_Tiff_Tag_Copyright',
+        
+        // Third-party tags
+        0x02BC => 'Woops_Tiff_Tag_Xmp'
     );
     
     /**
