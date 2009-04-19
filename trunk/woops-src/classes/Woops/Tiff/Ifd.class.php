@@ -28,88 +28,95 @@ class Woops_Tiff_Ifd implements Iterator
     /**
      * The TIFF tag types in TIFF revision 6
      */
-    const TAG_NEWSUBFILETYPE                 = 0x00FE;
-    const TAG_SUBFILETYPE                    = 0x00FF;
-    const TAG_IMAGE_WIDTH                    = 0x0100;
-    const TAG_IMAGE_LENGTH                   = 0x0101;
-    const TAG_BITSPERSAMPLE                  = 0x0102;
-    const TAG_COMPRESSION                    = 0x0103;
-    const TAG_PHOTOMETRICINTERPRETATION      = 0x0106;
-    const TAG_THRESHHOLDING                  = 0x0107;
-    const TAG_CELL_WIDTH                     = 0x0108;
-    const TAG_CELL_LENGTH                    = 0x0109;
-    const TAG_FILLORDER                      = 0x010A;
-    const TAG_DOCUMENTNAME                   = 0x010D;
-    const TAG_IMAGE_DESCRIPTION              = 0x010E;
-    const TAG_MAKE                           = 0x010F;
-    const TAG_MODEL                          = 0x0110;
-    const TAG_STRIP_OFFSETS                  = 0x0111;
-    const TAG_ORIENTATION                    = 0x0112;
-    const TAG_SAMPLESPERPIXEL                = 0x0115;
-    const TAG_ROWSPERSTRIP                   = 0x0116;
-    const TAG_STRIP_BYTECOUNTS               = 0x0117;
-    const TAG_MINSAMPLEVALUE                 = 0x0118;
-    const TAG_MAXSAMPLEVALUE                 = 0x0119;
-    const TAG_X_RESOLUTION                   = 0x011A;
-    const TAG_Y_RESOLUTION                   = 0x011B;
-    const TAG_PLANARCONFIGURATION            = 0x011C;
-    const TAG_PAGE_NAME                      = 0x011D;
-    const TAG_X_POSITION                     = 0x011E;
-    const TAG_Y_POSITION                     = 0x011F;
-    const TAG_FREE_OFFSETS                   = 0x0120;
-    const TAG_FREE_BYTECOUNTS                = 0x0121;
-    const TAG_GRAY_RESPONSE_UNIT             = 0x0122;
-    const TAG_GRAY_RESPONSE_CURVE            = 0x0123;
-    const TAG_T4OPTIONS                      = 0x0124;
-    const TAG_T6OPTIONS                      = 0x0125;
-    const TAG_RESOLUTIONUNIT                 = 0x0128;
-    const TAG_PAGE_NUMBER                    = 0x0129;
-    const TAG_TRANSFERFUNCTION               = 0x012D;
-    const TAG_SOFTWARE                       = 0x0131;
-    const TAG_DATETIME                       = 0x0132;
-    const TAG_ARTIST                         = 0x013B;
-    const TAG_HOSTCOMPUTER                   = 0x013C;
-    const TAG_PREDICTOR                      = 0x013D;
-    const TAG_WHITEPOINT                     = 0x013E;
-    const TAG_PRIMARYCHROMATICITIES          = 0x013F;
-    const TAG_COLORMAP                       = 0x0140;
-    const TAG_HALFTONEHINTS                  = 0x0141;
-    const TAG_TILE_WIDTH                     = 0x0142;
-    const TAG_TILE_LENGTH                    = 0x0143;
-    const TAG_TILE_OFFSETS                   = 0x0144;
-    const TAG_TILE_BYTECOUNTS                = 0x0145;
-    const TAG_INK_SET                        = 0x014C;
-    const TAG_INK_NAMES                      = 0x014D;
-    const TAG_NUMBEROFINKS                   = 0x014E;
-    const TAG_DOTRANGE                       = 0x0150;
-    const TAG_TARGETPRINTER                  = 0x0151;
-    const TAG_EXTRASAMPLES                   = 0x0152;
-    const TAG_SAMPLEFORMAT                   = 0x0153;
-    const TAG_SMINSAMPLEVALUE                = 0x0154;
-    const TAG_SMAXSAMPLEVALUE                = 0x0155;
-    const TAG_TRANSFERRANGE                  = 0x0156;
-    const TAG_JPEG_PROC                      = 0x0200;
-    const TAG_JPEG_INTERCHANGE_FORMAT        = 0x0201;
-    const TAG_JPEG_INTERCHANGE_FORMAT_LENGTH = 0x0202;
-    const TAG_JPEG_RESTARTINTERVAL           = 0x0203;
-    const TAG_JPEG_LOSSLESSPREDICTORS        = 0x0205;
-    const TAG_JPEG_POINTTRANSFORMS           = 0x0206;
-    const TAG_JPEG_QTABLES                   = 0x0207;
-    const TAG_JPEG_DCTABLES                  = 0x0208;
-    const TAG_JPEG_ACTABLES                  = 0x0209;
-    const TAG_YCBCR_COEFFICIENTS             = 0x0211;
-    const TAG_YCBCR_SUBSAMPLING              = 0x0212;
-    const TAG_YCBCR_POSITIONING              = 0x0213;
-    const TAG_REFERENCEBLACKWHITE            = 0x0214;
-    const TAG_COPYRIGHT                      = 0x8298;
+    const TAG_NEWSUBFILETYPE                    = 0x00FE;
+    const TAG_SUBFILETYPE                       = 0x00FF;
+    const TAG_IMAGE_WIDTH                       = 0x0100;
+    const TAG_IMAGE_LENGTH                      = 0x0101;
+    const TAG_BITSPERSAMPLE                     = 0x0102;
+    const TAG_COMPRESSION                       = 0x0103;
+    const TAG_PHOTOMETRICINTERPRETATION         = 0x0106;
+    const TAG_THRESHHOLDING                     = 0x0107;
+    const TAG_CELL_WIDTH                        = 0x0108;
+    const TAG_CELL_LENGTH                       = 0x0109;
+    const TAG_FILLORDER                         = 0x010A;
+    const TAG_DOCUMENTNAME                      = 0x010D;
+    const TAG_IMAGE_DESCRIPTION                 = 0x010E;
+    const TAG_MAKE                              = 0x010F;
+    const TAG_MODEL                             = 0x0110;
+    const TAG_STRIP_OFFSETS                     = 0x0111;
+    const TAG_ORIENTATION                       = 0x0112;
+    const TAG_SAMPLESPERPIXEL                   = 0x0115;
+    const TAG_ROWSPERSTRIP                      = 0x0116;
+    const TAG_STRIP_BYTECOUNTS                  = 0x0117;
+    const TAG_MINSAMPLEVALUE                    = 0x0118;
+    const TAG_MAXSAMPLEVALUE                    = 0x0119;
+    const TAG_X_RESOLUTION                      = 0x011A;
+    const TAG_Y_RESOLUTION                      = 0x011B;
+    const TAG_PLANARCONFIGURATION               = 0x011C;
+    const TAG_PAGE_NAME                         = 0x011D;
+    const TAG_X_POSITION                        = 0x011E;
+    const TAG_Y_POSITION                        = 0x011F;
+    const TAG_FREE_OFFSETS                      = 0x0120;
+    const TAG_FREE_BYTECOUNTS                   = 0x0121;
+    const TAG_GRAY_RESPONSE_UNIT                = 0x0122;
+    const TAG_GRAY_RESPONSE_CURVE               = 0x0123;
+    const TAG_T4OPTIONS                         = 0x0124;
+    const TAG_T6OPTIONS                         = 0x0125;
+    const TAG_RESOLUTIONUNIT                    = 0x0128;
+    const TAG_PAGE_NUMBER                       = 0x0129;
+    const TAG_TRANSFERFUNCTION                  = 0x012D;
+    const TAG_SOFTWARE                          = 0x0131;
+    const TAG_DATETIME                          = 0x0132;
+    const TAG_ARTIST                            = 0x013B;
+    const TAG_HOSTCOMPUTER                      = 0x013C;
+    const TAG_PREDICTOR                         = 0x013D;
+    const TAG_WHITEPOINT                        = 0x013E;
+    const TAG_PRIMARYCHROMATICITIES             = 0x013F;
+    const TAG_COLORMAP                          = 0x0140;
+    const TAG_HALFTONEHINTS                     = 0x0141;
+    const TAG_TILE_WIDTH                        = 0x0142;
+    const TAG_TILE_LENGTH                       = 0x0143;
+    const TAG_TILE_OFFSETS                      = 0x0144;
+    const TAG_TILE_BYTECOUNTS                   = 0x0145;
+    const TAG_INK_SET                           = 0x014C;
+    const TAG_INK_NAMES                         = 0x014D;
+    const TAG_NUMBEROFINKS                      = 0x014E;
+    const TAG_DOTRANGE                          = 0x0150;
+    const TAG_TARGETPRINTER                     = 0x0151;
+    const TAG_EXTRASAMPLES                      = 0x0152;
+    const TAG_SAMPLEFORMAT                      = 0x0153;
+    const TAG_SMINSAMPLEVALUE                   = 0x0154;
+    const TAG_SMAXSAMPLEVALUE                   = 0x0155;
+    const TAG_TRANSFERRANGE                     = 0x0156;
+    const TAG_JPEG_PROC                         = 0x0200;
+    const TAG_JPEG_INTERCHANGE_FORMAT           = 0x0201;
+    const TAG_JPEG_INTERCHANGE_FORMAT_LENGTH    = 0x0202;
+    const TAG_JPEG_RESTARTINTERVAL              = 0x0203;
+    const TAG_JPEG_LOSSLESSPREDICTORS           = 0x0205;
+    const TAG_JPEG_POINTTRANSFORMS              = 0x0206;
+    const TAG_JPEG_QTABLES                      = 0x0207;
+    const TAG_JPEG_DCTABLES                     = 0x0208;
+    const TAG_JPEG_ACTABLES                     = 0x0209;
+    const TAG_YCBCR_COEFFICIENTS                = 0x0211;
+    const TAG_YCBCR_SUBSAMPLING                 = 0x0212;
+    const TAG_YCBCR_POSITIONING                 = 0x0213;
+    const TAG_REFERENCEBLACKWHITE               = 0x0214;
+    const TAG_COPYRIGHT                         = 0x8298;
     
     /**
      * The third-party TIFF tag types
      */
-    const TAG_XMP                            = 0x02BC;
-    const TAG_IPTC                           = 0x83BB;
-    const TAG_PHOTOSHOP                      = 0x8649;
-    const TAG_ICC_PROFILE                    = 0x8773;
+    const TAG_XMP                               = 0x02BC;
+    const TAG_IPTC                              = 0x83BB;
+    const TAG_PHOTOSHOP                         = 0x8649;
+    const TAG_ICC_PROFILE                       = 0x8773;
+    
+    /**
+     * The EXIF pointer TIFF tag types
+     */
+    const TAG_EXIF_IFD_POINTER                  = 0x8769;
+    const TAG_EXIF_GPS_IFD_POINTER              = 0x8825;
+    const TAG_EXIF_INTEROPERABILITY_IFD_POINTER = 0xA005;
     
     /**
      * The types of the TIFF tags, with their corresponding PHP class
@@ -196,7 +203,12 @@ class Woops_Tiff_Ifd implements Iterator
         0x02BC => 'Woops_Tiff_Tag_Xmp',
         0x83BB => 'Woops_Tiff_Tag_Iptc',
         0x8649 => 'Woops_Tiff_Tag_Photoshop',
-        0x8773 => 'Woops_Tiff_Tag_IccProfile'
+        0x8773 => 'Woops_Tiff_Tag_IccProfile',
+        
+        // EXIF pointer tags
+        0x8769 => 'Woops_Tiff_Tag_Exif_Ifd_Pointer',
+        0x8825 => 'Woops_Tiff_Tag_Exif_Gps_Ifd_Pointer',
+        0xA005 => 'Woops_Tiff_Tag_Exif_Interoperability_Ifd_Pointer'
         
     );
     
