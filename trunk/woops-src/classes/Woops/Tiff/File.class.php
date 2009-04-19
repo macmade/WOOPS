@@ -58,12 +58,12 @@ class Woops_Tiff_File
     /**
      * Creates a new IFD in the current TIFF file
      * 
-     * @return  Woops_Tiff_Image_File_Directory The IFD object
+     * @return  Woops_Tiff_Ifd  The IFD object
      */
     public function newIfd()
     {
         // Creates the IFD
-        $ifd           = new Woops_Tiff_Image_File_Directory( $this );
+        $ifd           = new Woops_Tiff_Ifd( $this );
         
         // Stores the IFD
         $this->_ifds[] = $ifd;

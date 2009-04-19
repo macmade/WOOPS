@@ -16,9 +16,9 @@
  * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Tiff.Image.File
+ * @package     Woops.Tiff
  */
-class Woops_Tiff_Image_File_Directory implements Iterator
+class Woops_Tiff_Ifd implements Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -312,10 +312,10 @@ class Woops_Tiff_Image_File_Directory implements Iterator
                 // Creates a new tag
                 $tag = $this->newTag( $type );
                 
-            } catch( Woops_Tiff_Image_File_Directory_Exception $e ) {
+            } catch( Woops_Tiff_Ifd_Exception $e ) {
                 
                 // Checks if the exception was made for an unknown TIFF tag
-                if( $e->getCode() !== Woops_Tiff_Image_File_Directory_Exception::EXCEPTION_INVALID_TAG_TYPE ) {
+                if( $e->getCode() !== Woops_Tiff_Ifd_Exception::EXCEPTION_INVALID_TAG_TYPE ) {
                     
                     // No - Throws the exception again
                     throw $e;
@@ -358,9 +358,9 @@ class Woops_Tiff_Image_File_Directory implements Iterator
     /**
      * Creates a new tag in the IFD
      * 
-     * @param   int                                         The tag type (one of the TAG_XXX constant)
-     * @return  Woops_Tiff_Tag                              The tag object
-     * @throws  Woops_Tiff_Image_File_Directory_Exception   If the tag type is invalid
+     * @param   int                         The tag type (one of the TAG_XXX constant)
+     * @return  Woops_Tiff_Tag              The tag object
+     * @throws  Woops_Tiff_Ifd_Exception    If the tag type is invalid
      */
     public function newTag( $type )
     {
@@ -371,9 +371,9 @@ class Woops_Tiff_Image_File_Directory implements Iterator
         if( !isset( self::$_types[ $type ] ) ) {
             
             // Error - Invalid value type
-            throw new Woops_Tiff_Image_File_Directory_Exception(
+            throw new Woops_Tiff_Ifd_Exception(
                 'Invalid tag type (' .  $type . ')',
-                Woops_Tiff_Image_File_Directory_Exception::EXCEPTION_INVALID_TAG_TYPE
+                Woops_Tiff_Ifd_Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         

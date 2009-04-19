@@ -12,13 +12,13 @@
 # $Id: Exception.class.php 559 2009-03-04 17:18:24Z macmade $
 
 /**
- * Exception class for the Woops_Tiff_Image_File_Directory class
+ * Exception class for the Woops_Tiff_Ifd class
  * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Tiff.Header
+ * @package     Woops.Tiff.Ifd
  */
-final class Woops_Tiff_Image_File_Directory_Exception extends Woops_Core_Exception_Base
+final class Woops_Tiff_Ifd_Exception extends Woops_Core_Exception_Base
 {
     /**
      * Error codes for the exceptions
