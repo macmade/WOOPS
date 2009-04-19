@@ -58,12 +58,32 @@ class Woops_Tiff_File
     /**
      * Creates a new IFD in the current TIFF file
      * 
+     * @param   string          An optionnal PHP classname, for a custom IFD object (the class MUST extends the Woops_Tiff_Ifd class)
      * @return  Woops_Tiff_Ifd  The IFD object
+     * @throws  Woops_Tiff_File_Exception   If the custom class does not extends Woops_Tiff_Ifd
      */
-    public function newIfd()
+    public function newIfd( $customClass = '' )
     {
-        // Creates the IFD
-        $ifd           = new Woops_Tiff_Ifd( $this );
+        // Checks for a custom class
+        if( $customClass ) {
+            
+            // Creates the IFD
+            $ifd = new $customClass( $this );
+            
+            // Checks if the custom class extends the Woops_Tiff_Ifd class
+            if( !( $ifd instanceof Woops_Tiff_Ifd ) ) {
+                
+                throw new Woops_Tiff_File_Exception(
+                    'Invalid IFD custom class \'' . $customClass . '\'. It must extends the Woops_Tiff_Ifd class',
+                    Woops_Tiff_File_Exception::EXCEPTION_INVALID_IFD_CLASS
+                );
+            }
+            
+        } else {
+            
+            // Creates the IFD
+            $ifd = new Woops_Tiff_Ifd( $this );
+        }
         
         // Stores the IFD
         $this->_ifds[] = $ifd;
