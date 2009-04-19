@@ -326,6 +326,32 @@ abstract class Woops_Tiff_Tag
     }
     
     /**
+     * Gets a tag value
+     * 
+     * @param   int                         The value index
+     * @return  mixed                       The tag value
+     * @throws  Woops_Tiff_Tag_Exception    If the index does not exist
+     */
+    public function getValue( $index = 0 )
+    {
+        // Ensures we have an integer
+        $index = ( int )$index;
+        
+        // Checks the index
+        if( !isset( $this->_values[ $index ] ) ) {
+            
+            // Error - Unexisting index
+            throw new Woops_Tiff_Tag_Exception(
+                'Unexisting value index (' . $index . ')',
+                Woops_Tiff_Tag_Exception::EXCEPTION_INVALID_VALUE_INDEX
+            );
+        }
+        
+        // Returns the value
+        return $this->_values[ $index ];
+    }
+    
+    /**
      * Gets the tag values
      * 
      * @return  array   An array with the tag values
@@ -362,6 +388,18 @@ abstract class Woops_Tiff_Tag
     }
     
     /**
+     * Sets a tag value
+     * 
+     * @param   int     The value index
+     * @param   mixed   The tag value
+     * @return  void
+     */
+    public function setValue( $index, $value )
+    {
+        $this->_values[ ( int )$index ] = $value;
+    }
+    
+    /**
      * Sets the tag values
      * 
      * @param   array   An array with the tag values
@@ -370,5 +408,16 @@ abstract class Woops_Tiff_Tag
     public function setValues( array $values )
     {
         $this->_values = $values;
+    }
+    
+    /**
+     * Adds a tag value
+     * 
+     * @param   mixed   The tag value
+     * @return  void
+     */
+    public function addValue( $value )
+    {
+        $this->_values[] = $value;
     }
 }

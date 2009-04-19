@@ -23,5 +23,6 @@ final class Woops_Tiff_Tag_Exception extends Woops_Core_Exception_Base
     /**
      * Error codes for the exceptions
      */
-    const EXCEPTION_INVALID_VALUE_TYPE = 0x01;
+    const EXCEPTION_INVALID_VALUE_TYPE  = 0x01;
+    const EXCEPTION_INVALID_VALUE_INDEX = 0x02;
 }
