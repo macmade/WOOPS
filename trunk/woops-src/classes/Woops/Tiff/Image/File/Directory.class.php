@@ -107,6 +107,9 @@ class Woops_Tiff_Image_File_Directory implements Iterator
      * The third-party TIFF tag types
      */
     const TAG_XMP                            = 0x02BC;
+    const TAG_IPTC                           = 0x83BB;
+    const TAG_PHOTOSHOP                      = 0x8649;
+    const TAG_ICC_PROFILE                    = 0x8773;
     
     /**
      * The types of the TIFF tags, with their corresponding PHP class
@@ -190,7 +193,11 @@ class Woops_Tiff_Image_File_Directory implements Iterator
         0x8298 => 'Woops_Tiff_Tag_Copyright',
         
         // Third-party tags
-        0x02BC => 'Woops_Tiff_Tag_Xmp'
+        0x02BC => 'Woops_Tiff_Tag_Xmp',
+        0x83BB => 'Woops_Tiff_Tag_Iptc',
+        0x8649 => 'Woops_Tiff_Tag_Photoshop',
+        0x8773 => 'Woops_Tiff_Tag_IccProfile'
+        
     );
     
     /**
