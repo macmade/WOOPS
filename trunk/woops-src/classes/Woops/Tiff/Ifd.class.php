@@ -12,7 +12,7 @@
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
 /**
- * TIFF file
+ * TIFF Image File Directory (IFD)
  * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
