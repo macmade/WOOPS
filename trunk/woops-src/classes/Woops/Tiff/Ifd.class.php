@@ -340,6 +340,35 @@ class Woops_Tiff_Ifd implements Iterator
             
             // Process the tag data
             $tag->processData( $stream );
+            
+            // Support for the EXIF IFD pointer tags
+            if(    $type === self::TAG_EXIF_IFD_POINTER
+                || $type === self::TAG_EXIF_GPS_IFD_POINTER
+                || $type === self::TAG_EXIF_INTEROPERABILITY_IFD_POINTER
+             ) {
+                
+                // Stores the current offset
+                $offset    = $stream->getOffset();
+                
+                // Gets the IFD offset
+                $ifdOffset = $tag->getValue();
+                
+                // Moves to the IFD offset
+                $stream->seek( $ifdOffset, Woops_Tiff_Binary_Stream::SEEK_SET );
+                
+                // Exif IFD classname
+                $classname = ( $type === self::TAG_EXIF_IFD_POINTER ) ? 'Woops_Exif_Tiff_Ifd' : ( ( $type === self::TAG_EXIF_GPS_IFD_POINTER ) ? 'Woops_Exif_Tiff_Gps_Ifd' : 'Woops_Exif_Tiff_Interoperability_Ifd' );
+                
+                // Creates the EXIF IFD
+                $ifd = $this->_file->newIfd( $classname );
+                
+                // Process the IFD data
+                $ifd->processData( $stream );
+                
+                // Rewinds the stream
+                $stream->seek( $offset, Woops_Tiff_Binary_Stream::SEEK_SET );
+                
+            }
         }
         
         // Gets the offset of the next IFD

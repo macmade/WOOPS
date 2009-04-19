@@ -67,17 +67,21 @@ class Woops_Tiff_File
         // Checks for a custom class
         if( $customClass ) {
             
-            // Creates the IFD
-            $ifd = new $customClass( $this );
+            // Creates a reflection object for the custom class
+            $ref = Woops_Core_Reflection_Class::getInstance( $customClass );
             
-            // Checks if the custom class extends the Woops_Tiff_Ifd class
-            if( !( $ifd instanceof Woops_Tiff_Ifd ) ) {
+            // Checks if the custom class implements the Woops_Tiff_Ifd_Interface class
+            if( !$ref->implementsInterface( 'Woops_Tiff_Ifd_Interface' ) ) {
                 
+                // Error - INvalid IFD class
                 throw new Woops_Tiff_File_Exception(
-                    'Invalid IFD custom class \'' . $customClass . '\'. It must extends the Woops_Tiff_Ifd class',
+                    'Invalid IFD custom class \'' . $customClass . '\'. It must implement the Woops_Tiff_Ifd_Interface interface',
                     Woops_Tiff_File_Exception::EXCEPTION_INVALID_IFD_CLASS
                 );
             }
+            
+            // Creates the IFD
+            $ifd = new $customClass( $this );
             
         } else {
             
