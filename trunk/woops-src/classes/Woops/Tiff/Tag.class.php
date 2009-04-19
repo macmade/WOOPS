@@ -420,4 +420,15 @@ abstract class Woops_Tiff_Tag
     {
         $this->_values[] = $value;
     }
+    
+    /**
+     * Removes a tag value
+     * 
+     * @param   int     The value index
+     * @return  void
+     */
+    public function removeValue( $index )
+    {
+        unset( $this->_values[ ( int )$index ] );
+    }
 }
