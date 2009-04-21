@@ -208,5 +208,8 @@ class Woops_Icc_Header
         $this->_creator         = $stream->read( 4 );
         
         $this->_id              = $stream->read( 16 );
+        
+        // Reserved bytes
+        $stream->seek( 28, Woops_Icc_Binary_Stream::SEEK_CUR );
     }
 }
