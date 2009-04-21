@@ -44,8 +44,14 @@ class Woops_Icc_Parser
         // Gets the ICC header
         $header         = $this->_profile->getHeader();
         
+        // Gets the ICC tag table
+        $tagTable       = $this->_profile->getTagTAble();
+        
         // Process the ICC header data
         $header->processData( $stream );
+        
+        // Process the ICC tag table data
+        $tagTable->processData( $stream );
     }
     
     /**
