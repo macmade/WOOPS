@@ -28,7 +28,12 @@ class Woops_Icc_Profile
     /**
      * The ICC header
      */
-    protected $_header = NULL;
+    protected $_header   = NULL;
+    
+    /**
+     * The ICC tag table
+     */
+    protected $_tagTable = NULL;
     
     /**
      * Class constructor
@@ -37,7 +42,8 @@ class Woops_Icc_Profile
      */
     public function __construct()
     {
-        $this->_header = new Woops_Icc_Header();
+        $this->_header   = new Woops_Icc_Header();
+        $this->_tagTable = new Woops_Icc_TagTable();
     }
     
     /**
@@ -48,5 +54,15 @@ class Woops_Icc_Profile
     public function getHeader()
     {
         return $this->_header;
+    }
+    
+    /**
+     * Gets the ICC tag table
+     * 
+     * @return  Woops_Icc_Tag_Table The ICC tag table
+     */
+    public function getTagTable()
+    {
+        return $this->_tagTable;
     }
 }
