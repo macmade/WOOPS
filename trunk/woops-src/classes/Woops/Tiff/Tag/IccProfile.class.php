@@ -28,7 +28,12 @@ class Woops_Tiff_Tag_IccProfile extends Woops_Tiff_Tag
     /**
      * The TIFF tag type
      */
-    protected $_type = 0x8773;
+    protected $_type    = 0x8773;
+    
+    /**
+     * The ICC profile object
+     */
+    protected $_profile = NULL;
     
     /**
      * Reads tag value(s) from the binary stream
@@ -39,6 +44,28 @@ class Woops_Tiff_Tag_IccProfile extends Woops_Tiff_Tag
      */
     protected function _readValuesFromStream( $stream, $count )
     {
-        $this->_values[] = $stream->read( $count );
+        // Gets the raw ICC profile data
+        $profileData     = $stream->read( $count );
+        $this->_values[] = $profileData;
+        
+        // Creates an ICC binary stream
+        $iccStream       = new Woops_Icc_Binary_Stream( $profileData );
+        
+        // Creates an ICC parser
+        $parser          = new Woops_Icc_Parser( $iccStream );
+        
+        // Stores the ICC profile
+        $this->_profile  = $parser->getProfile();
     }
+    
+    /**
+     * Gets the ICC profile
+     * 
+     * @return  Woops_Icc_Profile   The ICC profile object
+     */
+    public function getProfile()
+    {
+        return $this->_profile;
+    }
+    
 }
