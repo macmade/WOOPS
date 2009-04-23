@@ -148,4 +148,25 @@ class Woops_Flv_Header
     {
         $this->_hasVideo = ( boolean )$value;
     }
+    
+    /**
+     * Gets the data offset
+     * 
+     * @return  int     The data offset in bytes
+     */
+    public function getDataOffset()
+    {
+        return $this->_dataOffset;
+    }
+    
+    /**
+     * Sets the data offset
+     * 
+     * @param   int     The data offset in bytes
+     * @return  void
+     */
+    public function setDataOffset( $value )
+    {
+        $this->_dataOffset = ( int )$value;
+    }
 }
