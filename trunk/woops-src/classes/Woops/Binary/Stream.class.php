@@ -185,6 +185,16 @@ class Woops_Binary_Stream
     }
     
     /**
+     * Tests for the end of the stream
+     * 
+     * @return  boolean True if the end of the stream has been reached, otheriwse false;
+     */
+    public function eos()
+    {
+        return $this->_offset === $this->_dataLength;
+    }
+    
+    /**
      * Seeks on the stream pointer
      * 
      * @param   int                             The offset
@@ -248,6 +258,16 @@ class Woops_Binary_Stream
      * @return  int The current position of the stream pointer
      */
     public function getOffset()
+    {
+        return $this->_offset;
+    }
+    
+    /**
+     * Returns the current position of the stream pointer
+     * 
+     * @return  int The current position of the stream pointer
+     */
+    public function tell()
     {
         return $this->_offset;
     }
