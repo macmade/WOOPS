@@ -71,6 +71,21 @@ class Woops_Flv_Parser
         
         // Process the header data
         $header->processData( $this->_stream );
+        
+        // Moves to the data start
+        $this->_stream->seek( $header->getDataOffset() + 4, Woops_Flv_Binary_File_Stream::SEEK_SET );
+        
+        // Process the FLV body
+        while( !$this->_stream->endOfStream() ) {
+            
+            $type         = $this->_stream->unsignedChar();
+            
+            $tag          = $this->_file->newTag( $type );
+            
+            $tag->processData( $this->_stream );
+            
+            $previousSize = $this->_stream->bigEndianUnsignedLong();
+        }
     }
     
     /**
