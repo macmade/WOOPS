@@ -486,7 +486,7 @@ abstract class Woops_Core_Aop_Advisor
         $allowedAdviceType = self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ][ 1 ];
         
         // Creates a callback for the internal method
-        $methodCallback    = new Woops_Core_Callback_Helper( array( $this, $method ) );
+        $methodCallback    = new Woops_Core_Callback( array( $this, $method ) );
         
         // Creates a reflection object for the internal method
         $ref               = Woops_Core_Reflection_Method::getInstance( $this, $method );
@@ -755,7 +755,7 @@ abstract class Woops_Core_Aop_Advisor
                     
                     // Adds the advice callback for the join point
                     self::$_advices[ $adviceType ][ $className ][] = array(
-                        new Woops_Core_Callback_Helper( $callback ),
+                        new Woops_Core_Callback( $callback ),
                         $objectHash
                     );
                 }
@@ -813,7 +813,7 @@ abstract class Woops_Core_Aop_Advisor
                         
                         // Adds the advice
                         self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array(
-                            new Woops_Core_Callback_Helper( $callback ),
+                            new Woops_Core_Callback( $callback ),
                             $objectHash
                         );
                     }
@@ -844,7 +844,7 @@ abstract class Woops_Core_Aop_Advisor
                         
                         // Adds the advice callback for the join point
                         self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array(
-                            new Woops_Core_Callback_Helper( $callback ),
+                            new Woops_Core_Callback( $callback ),
                             $objectHash
                         );
                         return true;

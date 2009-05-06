@@ -106,7 +106,7 @@ final class Woops_Mod_Pdo_Database_Engine implements Woops_Database_Engine_Inter
         }
         
         // Creates a callback
-        $callback = new Woops_Core_Callback_Helper( array( $this->_pdo, $name ) );
+        $callback = new Woops_Core_Callback( array( $this->_pdo, $name ) );
         
         // Invokes the callback and returns it's result
         return $callback->invoke( $args );

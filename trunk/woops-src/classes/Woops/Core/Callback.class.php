@@ -9,16 +9,16 @@
 # All rights reserved                                                          #
 ################################################################################
 
-# $Id$
+# $Id: Helper.class.php 534 2009-03-03 07:15:08Z macmade $
 
 /**
  * Callback helper class
  * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core.Callback
+ * @package     Woops.Core
  */
-class Woops_Core_Callback_Helper
+class Woops_Core_Callback
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -47,9 +47,9 @@ class Woops_Core_Callback_Helper
         if( !is_callable( $callback ) ) {
             
             // Error - The callback is not valid
-            throw new Woops_Core_Callback_Helper_Exception(
+            throw new Woops_Core_Callback_Exception(
                 'Invalid PHP callback',
-                Woops_Core_Callback_Helper_Exception::EXCEPTION_INVALID_CALLBACK
+                Woops_Core_Callback_Exception::EXCEPTION_INVALID_CALLBACK
             );
         }
         

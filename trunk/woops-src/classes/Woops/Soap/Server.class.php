@@ -83,7 +83,7 @@ class Woops_Soap_Server
         }
         
         // Creates a callback
-        $callback = new Woops_Core_Callback_Helper( array( $this->_soapServer, $name ) );
+        $callback = new Woops_Core_Callback( array( $this->_soapServer, $name ) );
         
         // Invokes the callback and returns it's result
         return $callback->invoke( $args );

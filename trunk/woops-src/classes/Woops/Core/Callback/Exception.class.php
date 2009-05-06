@@ -9,16 +9,16 @@
 # All rights reserved                                                          #
 ################################################################################
 
-# $Id$
+# $Id: Exception.class.php 434 2009-02-24 15:19:13Z macmade $
 
 /**
- * Exception class for the Woops_Core_Callback_Helper class
+ * Exception class for the Woops_Core_Callback class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core.Callback.Helper
+ * @package     Woops.Core.Callback
  */
-final class Woops_Core_Callback_Helper_Exception extends Woops_Core_Exception_Base
+final class Woops_Core_Callback_Exception extends Woops_Core_Exception_Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
