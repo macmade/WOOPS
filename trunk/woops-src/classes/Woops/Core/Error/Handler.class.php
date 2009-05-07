@@ -37,7 +37,7 @@
  * @version     1.0
  * @package     Woops.Core.Error
  */
-final class Woops_Core_Error_Handler
+final class Woops_Core_Error_Handler extends Woops_Core_Object implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -45,27 +45,79 @@ final class Woops_Core_Error_Handler
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * The unique instance of the class (singleton)
+     */
+    private static $_instance = NULL;
+    
+    /**
      * 
      */
-    private static $_disabledErrors = 0;
+    private $_disabledErrors  = 0;
     
     /**
      * Class constructor
      * 
-     * The class constructor is private as all methods from this class are
-     * static.
+     * The class constructor is private to avoid multiple instances of the
+     * class (singleton).
      * 
-     * @return  void
+     * @return void
      */
     private function __construct()
     {}
+    
+    /**
+     * Clones an instance of the class
+     * 
+     * A call to this method will produce an exception, as the class cannot
+     * be cloned (singleton).
+     * 
+     * @return  void
+     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     */
+    public function __clone()
+    {
+        throw new Woops_Core_Singleton_Exception(
+            'Class ' . __CLASS__ . ' cannot be cloned',
+            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+        );
+    }
+    
+    /**
+     * Gets the unique class instance
+     * 
+     * This method is used to get the unique instance of the class
+     * (singleton). If no instance is available, it will create it.
+     * 
+     * @return  Woops_Core_Error_Handler    The unique instance of the class
+     * @see     __construct
+     */
+    public static function getInstance()
+    {
+        // Checks if the unique instance already exists
+        if( !is_object( self::$_instance ) ) {
+            
+            // Creates the unique instance
+            self::$_instance = new self();
+        }
+        
+        // Returns the unique instance
+        return self::$_instance;
+    }
     
     /**
      * 
      */
     public static function handleError( $code , $message, $file = '', $line = 0, array $context = array() )
     {
-        if( !( $code & self::$_disabledErrors ) ) {
+        self::getInstance()->_handleError( $code , $message, $file, $line, $context );
+    }
+    
+    /**
+     * 
+     */
+    private function _handleError( $code , $message, $file = '', $line = 0, array $context = array() )
+    {
+        if( !( $code & $this->_disabledErrors ) ) {
             
             throw new Woops_Core_Php_Error_Exception(
                 Woops_Core_Exception_Base::getExceptionString( 'Woops_Core_Php_Error_Exception', $code ) . ': ' . $message,
@@ -77,16 +129,16 @@ final class Woops_Core_Error_Handler
     /**
      * 
      */
-    public static function disableErrorReporting( $type )
+    public function disableErrorReporting( $type )
     {
-        self::$_disabledErrors |= $type;
+        $this->_disabledErrors |= $type;
     }
     
     /**
      * 
      */
-    public static function resetErrorReporting()
+    public function resetErrorReporting()
     {
-        self::$_disabledErrors = 0;
+        $this->_disabledErrors = 0;
     }
 }
