@@ -247,7 +247,7 @@ abstract class Woops_Core_Reflection_Base
      * @return  void
      * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
      */
-    final private function __clone()
+    final public function __clone()
     {
         throw new Woops_Core_Singleton_Exception(
             'Class ' . __CLASS__ . ' cannot be cloned',
@@ -258,7 +258,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final protected function __get( $name )
+    final protected function __get( $name )
     {
         return $this->_reflector->$name;
     }
@@ -266,7 +266,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final protected function __set( $name, $value )
+    final protected function __set( $name, $value )
     {
         $this->_reflector->$name = $value;
     }
@@ -274,7 +274,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final protected function __isset( $name )
+    final protected function __isset( $name )
     {
         return isset( $this->_reflector->$name );
     }
@@ -282,7 +282,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final protected function __unset( $name )
+    final protected function __unset( $name )
     {
         unset( $this->_reflector->$name );
     }
@@ -290,7 +290,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final protected function __call( $name, array $args = array() )
+    final protected function __call( $name, array $args = array() )
     {
         if( ( $name === 'getParameters' || $name === 'getExtension' )
             && ( $this->_reflectorClass === 'ReflectionFunction' )
@@ -340,7 +340,7 @@ abstract class Woops_Core_Reflection_Base
     /**
      * 
      */
-    final final protected function __toString()
+    final public function __toString()
     {
         return ( string )$this->_reflector;
     }
