@@ -11,11 +11,14 @@
 
 # $Id$
 
-// Includes the WOOPS singleton interface.
-// The WOOPS class manager can't auto-load it, since it's not available yet.
-// So it has to be included manually. This should be the last time we use
-// the require_once() function for a WOOPS class.
+// Includes the WOOPS singleton interface as well as the informations and object
+// classes.
+// The WOOPS class manager can't auto-load them, since it's not available yet.
+// So they have to be included manually. This should be the last time we use
+// the require_once() function inside WOOPS.
 require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Singleton' ) . DIRECTORY_SEPARATOR . 'Interface.class.php' );
+require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPARATOR . 'Informations.class.php' );
+require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPARATOR . 'Object.class.php' );
 
 /**
  * WOOPS class manager
@@ -32,7 +35,7 @@ require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIREC
  * @version     1.0
  * @package     Woops.Core.Class
  */
-final class Woops_Core_Class_Manager implements Woops_Core_Singleton_Interface
+final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
