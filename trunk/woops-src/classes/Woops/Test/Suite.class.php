@@ -169,7 +169,7 @@ class Woops_Test_Suite implements Iterator
                 // End timer
                 $end = microtime( true );
                 
-            } catch Exception( $e ) {
+            } catch( Exception $e ) {
                 
                 // End timer
                 $end = microtime( true );
