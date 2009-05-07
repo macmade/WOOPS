@@ -72,7 +72,7 @@ abstract class Woops_Png_Chunk
     /**
      * 
      */
-    protected function __toString()
+    public function __toString()
     {
         // Gets the chunk length
         $length = pack( 'N', $this->_dataLength );
