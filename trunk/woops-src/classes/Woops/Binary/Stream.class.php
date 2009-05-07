@@ -26,12 +26,6 @@ class Woops_Binary_Stream extends Woops_Core_Object
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * The available byte orders
-     */
-    const ENDIAN_BIG    = 0x01;
-    const ENDIAN_LITTLE = 0x02;
-    
-    /**
      * Seek position equals to offset bytes
      */
     const SEEK_SET = SEEK_SET;
@@ -70,11 +64,6 @@ class Woops_Binary_Stream extends Woops_Core_Object
      * The data offset (in bytes)
      */
     protected $_offset          = 0;
-    
-    /**
-     * The byte order for the data
-     */
-    protected $_endian          = self::ENDIAN_BIG;
     
     /**
      * Class constructor
@@ -266,7 +255,7 @@ class Woops_Binary_Stream extends Woops_Core_Object
     /**
      * Returns the current position of the stream pointer
      * 
-     * @return  int The current position of the stream pointer
+     * @return  int     The current position of the stream pointer
      */
     public function getOffset()
     {
@@ -276,7 +265,7 @@ class Woops_Binary_Stream extends Woops_Core_Object
     /**
      * Returns the current position of the stream pointer
      * 
-     * @return  int The current position of the stream pointer
+     * @return  int     The current position of the stream pointer
      */
     public function tell()
     {
@@ -351,30 +340,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
     }
     
     /**
-     * Sets the byte order
-     * 
-     * @param   int     The byte order (one of the ENDIAN_XXX constant)
-     * @return  void
-     */
-    public function setEndian( $value )
-    {
-        // Checks the passed argument
-        if( ( int )$value === self::ENDIAN_LITTLE ) {
-            
-            // Litle endian stream
-            $this->_endian = self::ENDIAN_LITTLE;
-            
-        } else {
-            
-            // Big endian stream
-            $this->_endian = self::ENDIAN_BIG;
-        }
-    }
-    
-    /**
      * Gets a signed char from the binary stream
      * 
-     * @return  int The signed char
+     * @return  int     The signed char
      * @see     _unpackData
      */
     public function signedChar()
@@ -399,7 +367,7 @@ class Woops_Binary_Stream extends Woops_Core_Object
     /**
      * Gets an unsigned char from the binary stream
      * 
-     * @return  int The unsigned char
+     * @return  int     The unsigned char
      * @see     _unpackData
      */
     public function unsignedChar()
@@ -423,7 +391,7 @@ class Woops_Binary_Stream extends Woops_Core_Object
     /**
      * Gets a signed short from the binary stream
      * 
-     * @return  int The signed short
+     * @return  int     The signed short
      * @see     _unpackData
      */
     public function signedShort()
@@ -447,7 +415,7 @@ class Woops_Binary_Stream extends Woops_Core_Object
     /**
      * Gets an unsigned short from the binary stream
      * 
-     * @return  int The unsigned short
+     * @return  int     The unsigned short
      * @see     _unpackData
      */
     public function unsignedShort()
@@ -471,7 +439,7 @@ class Woops_Binary_Stream extends Woops_Core_Object
     /**
      * Gets a big endian unsigned short from the binary stream
      * 
-     * @return  int The big endian unsigned short
+     * @return  int     The big endian unsigned short
      * @see     _unpackData
      */
     public function bigEndianUnsignedShort()
@@ -495,7 +463,7 @@ class Woops_Binary_Stream extends Woops_Core_Object
     /**
      * Gets a little endian unsigned short from the binary stream
      * 
-     * @return  int The little endian unsigned short
+     * @return  int     The little endian unsigned short
      * @see     _unpackData
      */
     public function littleEndianUnsignedShort()
@@ -519,7 +487,7 @@ class Woops_Binary_Stream extends Woops_Core_Object
     /**
      * Gets a signed long from the binary stream
      * 
-     * @return  int The signed long
+     * @return  int     The signed long
      * @see     _unpackData
      */
     public function signedLong()
@@ -543,7 +511,7 @@ class Woops_Binary_Stream extends Woops_Core_Object
     /**
      * Gets an unsigned long from the binary stream
      * 
-     * @return  int The unsigned long
+     * @return  int     The unsigned long
      * @see     _unpackData
      */
     public function unsignedLong()
@@ -567,7 +535,7 @@ class Woops_Binary_Stream extends Woops_Core_Object
     /**
      * Gets a big endian unsigned long from the binary stream
      * 
-     * @return  int The big endian unsigned long
+     * @return  int     The big endian unsigned long
      * @see     _unpackData
      */
     public function bigEndianUnsignedLong()
@@ -591,7 +559,7 @@ class Woops_Binary_Stream extends Woops_Core_Object
     /**
      * Gets a little endian unsigned long from the binary stream
      * 
-     * @return  int The little endian unsigned long
+     * @return  int     The little endian unsigned long
      * @see     _unpackData
      */
     public function littleEndianUnsignedLong()
