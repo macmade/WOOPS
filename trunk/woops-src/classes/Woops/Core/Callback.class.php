@@ -26,11 +26,6 @@ class Woops_Core_Callback extends Woops_Core_Event_Dispatcher
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
-     * The available events
-     */
-    const EVENT_INVOKE = 0x01;
-    
-    /**
      * THe PHP callback
      */
     protected $_callback         = false;
@@ -88,7 +83,7 @@ class Woops_Core_Callback extends Woops_Core_Event_Dispatcher
     public function &invoke( array $args = array() )
     {
         // Dispatch the event to the listeners
-        $this->dispatchEvent( self::EVENT_INVOKE );
+        $this->dispatchEvent( Woops_Core_Callback_Event::EVENT_INVOKE );
         
         // Gets the number of arguments to pass to the callbak
         $argsCount = count( $args );
