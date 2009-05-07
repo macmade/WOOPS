@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Binary
  */
-class Woops_Binary_Stream extends Woops_Core_Object
+class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -158,6 +158,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         // Increases the offset
         $this->_offset += $readBytes;
         
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_READ );
+        
         // Returns the processed data
         return array_shift( $unpackData );
     }
@@ -229,6 +232,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
             );
         }
         
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_SEEK );
+        
         // Checks the offset
         if( $this->_offset < 0 ) {
             
@@ -250,6 +256,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
     public function rewind()
     {
         $this->_offset = 0;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_REWIND );
     }
     
     /**
@@ -300,6 +309,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         // Increases the offset
         $this->_offset += $readBytes;
         
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_READ );
+        
         // Returns the data
         return $data;
     }
@@ -315,6 +327,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= $data;
         $this->_dataLength += strlen( $data );
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -334,6 +349,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
                 Woops_Binary_Stream_Exception::EXCEPTION_END_OF_STREAM
             );
         }
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_READ );
         
         // Returns the remaining data
         return substr( $this->_data, $this->_offset );
@@ -362,6 +380,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= pack( 'c', $data );
         $this->_dataLength += 1;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -386,6 +407,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= pack( 'C', $data );
         $this->_dataLength += 1;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -410,6 +434,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= pack( 's', $data );
         $this->_dataLength += 2;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -434,6 +461,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= pack( 'S', $data );
         $this->_dataLength += 2;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -458,6 +488,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= pack( 'n', $data );
         $this->_dataLength += 2;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -482,6 +515,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= pack( 'v', $data );
         $this->_dataLength += 2;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -506,6 +542,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= pack( 'l', $data );
         $this->_dataLength += 4;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -530,6 +569,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= pack( 'L', $data );
         $this->_dataLength += 4;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -554,6 +596,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= pack( 'N', $data );
         $this->_dataLength += 4;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -578,6 +623,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= pack( 'V', $data );
         $this->_dataLength += 4;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -647,6 +695,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
             // Unsigned long - big endian
             $this->writeBigEndianUnsignedLong( $integerData | $fractionalData );
         }
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -716,6 +767,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
             // Unsigned long - little endian
             $this->writeLitleEndianUnsignedLong( $integerData | $fractionalData );
         }
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -769,6 +823,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         
         // Writes the language code as a big endian unsigned short
         $this->writeBigEndianUnsignedShort( $code );
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -808,6 +865,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
     {
         // Writes the string with a NULL character
         $this->write( $data . self::$_str->NULL );
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -837,6 +897,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         
         // Writes the string
         $this->write( $data );
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -866,6 +929,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         
         // Writes the string
         $this->write( $data );
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -1072,6 +1138,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
             }
         }
         
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_READ );
+        
         // Returns the final float value
         return ( $sign === 0 ) ? $float : -$float;
     }
@@ -1087,6 +1156,9 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= pack( 'f', ( float )$data );
         $this->_dataLength += 4;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
     
     /**
@@ -1117,5 +1189,8 @@ class Woops_Binary_Stream extends Woops_Core_Object
         $this->_data       .= strrev( pack( 'd', ( double )$data ) );
         $this->_dataLength += 8;
         $this->_offset      = $this->_dataLength;
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
     }
 }
