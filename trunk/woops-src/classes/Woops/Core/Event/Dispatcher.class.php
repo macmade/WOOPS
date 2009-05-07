@@ -35,7 +35,18 @@ abstract class Woops_Core_Event_Dispatcher extends Woops_Core_Object
      */
     public function dispatchEvent( $type )
     {
-        $this->dispatchEventObject( new Woops_Core_Event( $type, $this ) );
+        // Name of the specific event class, for the current object
+        $eventClass = get_class( $this ) . '_Event';
+        
+        // Checks if a specific event class exists
+        if( !class_exists( $eventClass ) ) {
+            
+            // Generic event
+            $eventClass = 'Woops_Core_Event';
+        }
+        
+        // Dispatch the event object
+        $this->dispatchEventObject( new $eventClass( $type, $this ) );
     }
     
     /**
