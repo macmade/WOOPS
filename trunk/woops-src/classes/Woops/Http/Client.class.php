@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Http
  */
-class Woops_Http_Client extends Woops_Core_Object
+class Woops_Http_Client extends Woops_Core_Event_Dispatcher
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -1125,6 +1125,9 @@ class Woops_Http_Client extends Woops_Core_Object
                 Woops_Http_Client_Exception::EXCEPTION_NO_FSOCKOPEN
             );
         }
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Http_Client_Event::EVENT_CONNECT );
         
         // Creates a socket
         $this->_socket = fsockopen(

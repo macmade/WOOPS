@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Database
  */
-final class Woops_Database_Layer extends Woops_Core_Object implements Woops_Core_Singleton_Interface
+final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -31,7 +31,7 @@ final class Woops_Database_Layer extends Woops_Core_Object implements Woops_Core
     private static $_instance  = NULL;
     
     /**
-     * The WOOPS cpnfiguration object
+     * The WOOPS configuration object
      */
     private $_conf             = NULL;
     
@@ -92,6 +92,9 @@ final class Woops_Database_Layer extends Woops_Core_Object implements Woops_Core
             
             // Checks if the engine is connected
             if( isset( $this->_connectedEngines[ $key ] ) ) {
+                
+                // Dispatch the event to the listeners
+                $this->dispatchEventObject( new Woops_Database_Layer_Event( Woops_Database_Layer_Event::EVENT_ENGINE_DISCONNECT, $value ) );
                 
                 // Closes the connection
                 $value->disconnect();
@@ -194,6 +197,9 @@ final class Woops_Database_Layer extends Woops_Core_Object implements Woops_Core
         
         // Gets the available drivers from the engine
         $this->_drivers[ $name ]     = $this->_engines[ $name ]->getAvailableDrivers();
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEventObject( new Woops_Database_Layer_Event( Woops_Database_Layer_Event::EVENT_ENGINE_REGISTER, $this->_engines[ $name ] ) );
     }
     
     /**
@@ -280,8 +286,14 @@ final class Woops_Database_Layer extends Woops_Core_Object implements Woops_Core
             // Loads the engine
             $this->_engines[ $name ]->load( $driver, $host, $port, $database, $tablePrefix );
             
+            // Dispatch the event to the listeners
+            $this->dispatchEventObject( new Woops_Database_Layer_Event( Woops_Database_Layer_Event::EVENT_ENGINE_LOAD, $this->_engines[ $name ] ) );
+            
             // Establish a connection with the database
             $this->_engines[ $name ]->connect( $username, $password );
+            
+            // Dispatch the event to the listeners
+            $this->dispatchEventObject( new Woops_Database_Layer_Event( Woops_Database_Layer_Event::EVENT_ENGINE_CONNECT, $this->_engines[ $name ] ) );
             
             // Engine is connected
             $this->_connectedEngines[ $name ] = true;
