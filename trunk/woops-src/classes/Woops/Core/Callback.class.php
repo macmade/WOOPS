@@ -18,12 +18,17 @@
  * @version     1.0
  * @package     Woops.Core
  */
-class Woops_Core_Callback
+class Woops_Core_Callback extends Woops_Core_Event_Dispatcher
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
     const PHP_COMPATIBLE = '5.2.0';
+    
+    /**
+     * The available events
+     */
+    const EVENT_INVOKE = 0x01;
     
     /**
      * THe PHP callback
@@ -82,6 +87,9 @@ class Woops_Core_Callback
      */
     public function &invoke( array $args = array() )
     {
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( self::EVENT_INVOKE );
+        
         // Gets the number of arguments to pass to the callbak
         $argsCount = count( $args );
         
