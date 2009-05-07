@@ -51,7 +51,6 @@ abstract class Woops_Mpeg4_Atom
      */
     const PHP_COMPATIBLE = '5.2.0';
     
-    abstract public function __toString();
     abstract public function getLength();
     
     /**
