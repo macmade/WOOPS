@@ -16,7 +16,7 @@
  * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Htp.Client
+ * @package     Woops.Http.Client
  */
 class Woops_Http_Client_Event extends Woops_Core_Event
 {
