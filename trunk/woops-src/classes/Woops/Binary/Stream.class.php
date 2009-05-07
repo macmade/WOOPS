@@ -26,6 +26,12 @@ class Woops_Binary_Stream extends Woops_Core_Object
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * The available byte orders
+     */
+    const ENDIAN_BIG    = 0x01;
+    const ENDIAN_LITTLE = 0x02;
+    
+    /**
      * Seek position equals to offset bytes
      */
     const SEEK_SET = SEEK_SET;
@@ -64,6 +70,11 @@ class Woops_Binary_Stream extends Woops_Core_Object
      * The data offset (in bytes)
      */
     protected $_offset          = 0;
+    
+    /**
+     * The byte order for the data
+     */
+    protected $_endian          = self::ENDIAN_BIG;
     
     /**
      * Class constructor
@@ -337,6 +348,27 @@ class Woops_Binary_Stream extends Woops_Core_Object
         
         // Returns the remaining data
         return substr( $this->_data, $this->_offset );
+    }
+    
+    /**
+     * Sets the byte order
+     * 
+     * @param   int     The byte order (one of the ENDIAN_XXX constant)
+     * @return  void
+     */
+    public function setEndian( $value )
+    {
+        // Checks the passed argument
+        if( ( int )$value === self::ENDIAN_LITTLE ) {
+            
+            // Litle endian stream
+            $this->_endian = self::ENDIAN_LITTLE;
+            
+        } else {
+            
+            // Big endian stream
+            $this->_endian = self::ENDIAN_BIG;
+        }
     }
     
     /**
