@@ -33,56 +33,24 @@ abstract class Woops_Core_Event_Dispatcher extends Woops_Core_Object
     /**
      * 
      */
-    public function addEventListener( $eventType, $callback, $priority = 0 )
+    public function dispatchEvent( $type )
     {
-        // Creates the callback for the event listener
-        $listener  = new Woops_Core_Callback( $callback );
-        $istenerId = $listener->getObjectHash();
-        
-        // Ensures we have integers
-        $eventType = ( int )$eventType;
-        $priority  = ( int )$priority;
-        
-        // Checks if the event type exists
-        if( !is_array( $this->_listeners[ $eventType ] ) ) {
-            
-            // Creates the storage array for the requested event
-            $this->_listeners[ $eventType ] = array();
-        }
-        
-        // Checks if the priority exists
-        if( !is_array( $this->_listeners[ $eventType ][ $priority ] ) ) {
-            
-            // Creates the storage array for the requested priority
-            $this->_listeners[ $eventType ][ $priority ] = array();
-            
-            // Sorts the priorities
-            krsort( $this->_listeners[ $eventType ][ $priority ] );
-        }
-        
-        // Stores the callback for the event listener
-        $this->_listeners[ $eventType ][ $priority ][ $listenerId ] = $listener;
-        
-        // Returns the listener ID
-        return $listenerId;
+        $this->dispatchEventObject( new Woops_Core_Event( $type, $this ) );
     }
     
     /**
      * 
      */
-    public function dispatchEvent( $eventType, array $args = array() )
+    public function dispatchEventObject( Woops_Core_Event $event )
     {
-        // Ensures we have an integer
-        $eventType = ( int )$eventType;
+        // Gets the event type
+        $type = $event->getType();
         
-        // Process each registered events
-        foreach( $this->_listeners as $type => $priorities ) {
+        // Process each registered event type
+        foreach( $this->_listeners as $eventType => $priorities ) {
             
             // Checks the event type
-            if( $eventType & $type ) {
-                
-                // Adds the target object and event type to the passed arguments
-                array_unshift( $args, $this, $eventType );
+            if( $type & $eventType ) {
                 
                 // Process each priority
                 foreach( $priorities as $priority => $listeners ) {
@@ -91,11 +59,55 @@ abstract class Woops_Core_Event_Dispatcher extends Woops_Core_Object
                     foreach( $listeners as $listener ) {
                         
                         // Invokes the listener
-                        $listener->invoke( $args );
+                        $listener->invoke( array( $event ) );
+                        
+                        // Checks if we have to stop the event propagation
+                        if( !$event->isPropagating() ) {
+                            
+                            // Do not invokes the remaining listeners
+                            return;
+                        }
                     }
                 }
             }
         }
+    }
+    
+    /**
+     * 
+     */
+    public function addEventListener( $eventType, $callback, $priority = 0 )
+    {
+        // Creates the callback for the event listener
+        $listener   = new Woops_Core_Callback( $callback );
+        $listenerId = $listener->getObjectHash();
+        
+        // Ensures we have integers
+        $eventType  = ( int )$eventType;
+        $priority   = ( int )$priority;
+        
+        // Checks if the event type exists
+        if( !isset( $this->_listeners[ $eventType ] ) ) {
+            
+            // Creates the storage array for the requested event
+            $this->_listeners[ $eventType ] = array();
+        }
+        
+        // Checks if the priority exists
+        if( !isset( $this->_listeners[ $eventType ][ $priority ] ) ) {
+            
+            // Creates the storage array for the requested priority
+            $this->_listeners[ $eventType ][ $priority ] = array();
+            
+            // Sorts the priorities
+            krsort( $this->_listeners[ $eventType ] );
+        }
+        
+        // Stores the callback for the event listener
+        $this->_listeners[ $eventType ][ $priority ][ $listenerId ] = $listener;
+        
+        // Returns the listener ID
+        return $listenerId;
     }
     
     /**
