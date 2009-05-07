@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Page
  */
-final class Woops_Page_Engine extends Woops_Core_Object implements Woops_Core_Singleton_Interface
+final class Woops_Page_Engine extends Woops_Core_Event_Dispatcher implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -118,6 +118,9 @@ final class Woops_Page_Engine extends Woops_Core_Object implements Woops_Core_Si
             );
         }
         
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Page_Engine_Event::EVENT_ENGINE_REGISTER );
+        
         $this->_pageEngines[ $className ] = true;
     }
     
@@ -161,6 +164,9 @@ final class Woops_Page_Engine extends Woops_Core_Object implements Woops_Core_Si
             }
             
             $this->_pageEngine->loadEngine( $engineOptions );
+            
+            // Dispatch the event to the listeners
+            $this->dispatchEventObject( new Woops_Page_Engine_Event( Woops_Page_Engine_Event::EVENT_ENGINE_LOAD, $this->_pageEngine ) );
         }
         
         return $this->_pageEngine;
