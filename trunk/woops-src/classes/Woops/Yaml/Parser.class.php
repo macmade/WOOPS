@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Yaml
  */
-class Woops_Yaml_Parser
+class Woops_Yaml_Parser extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

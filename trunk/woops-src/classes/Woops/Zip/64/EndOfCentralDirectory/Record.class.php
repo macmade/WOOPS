@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Zip.64.EndOfCentralDirectory
  */
-class Woops_Zip_64_EndOfCentralDirectory_Record
+class Woops_Zip_64_EndOfCentralDirectory_Record extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

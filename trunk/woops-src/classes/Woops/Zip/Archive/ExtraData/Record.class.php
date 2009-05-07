@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Zip.Archive.ExtraData
  */
-class Woops_Zip_Archive_ExtraData_Record
+class Woops_Zip_Archive_ExtraData_Record extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

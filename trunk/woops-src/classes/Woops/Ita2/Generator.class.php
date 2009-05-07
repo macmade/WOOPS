@@ -24,7 +24,7 @@
  * @version     1.0
  * @package     Woops.Ita2
  */
-class Woops_Ita2_Generator
+class Woops_Ita2_Generator extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

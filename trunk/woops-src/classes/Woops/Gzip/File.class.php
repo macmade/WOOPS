@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Gzip
  */
-class Woops_Gzip_File implements Iterator
+class Woops_Gzip_File extends Woops_Core_Object implements Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

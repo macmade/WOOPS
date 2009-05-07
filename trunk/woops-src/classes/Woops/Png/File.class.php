@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Png
  */
-class Woops_Png_File implements Iterator, ArrayAccess
+class Woops_Png_File extends Woops_Core_Object implements Iterator, ArrayAccess
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

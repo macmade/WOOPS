@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Ini.Item
  */
-class Woops_Ini_Item_Value
+class Woops_Ini_Item_Value extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

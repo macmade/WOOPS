@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Lexical
  */
-abstract class Woops_Lexical_Analyser
+abstract class Woops_Lexical_Analyser extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

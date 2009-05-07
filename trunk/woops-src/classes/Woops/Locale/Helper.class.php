@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Locale
  */
-final class Woops_Locale_Helper
+final class Woops_Locale_Helper extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

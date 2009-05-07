@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Core.Session
  */
-final class Woops_Core_Session_Helper implements Woops_Core_Singleton_Interface
+final class Woops_Core_Session_Helper extends Woops_Core_Object implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

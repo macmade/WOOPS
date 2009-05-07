@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.String
  */
-final class Woops_String_Utils implements Woops_Core_Singleton_Interface
+final class Woops_String_Utils extends Woops_Core_Object implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

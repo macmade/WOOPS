@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Mod.Cms.Block.ProcessingInstruction
  */
-class Woops_Mod_Cms_Block_ProcessingInstruction_Handler implements Woops_Xhtml_ProcessingInstruction_Handler_Interface
+class Woops_Mod_Cms_Block_ProcessingInstruction_Handler extends Woops_Core_Object implements Woops_Xhtml_ProcessingInstruction_Handler_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

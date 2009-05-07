@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Icc
  */
-class Woops_Icc_Profile
+class Woops_Icc_Profile extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

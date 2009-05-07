@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Flv
  */
-abstract class Woops_Flv_Tag
+abstract class Woops_Flv_Tag extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

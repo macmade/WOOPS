@@ -55,7 +55,7 @@
  * @version     1.0
  * @package     Woops.Uniform.Resource
  */
-class Woops_Uniform_Resource_Identifier
+class Woops_Uniform_Resource_Identifier extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

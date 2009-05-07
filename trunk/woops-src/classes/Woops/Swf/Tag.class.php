@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Swf
  */
-abstract class Woops_Swf_Tag
+abstract class Woops_Swf_Tag extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

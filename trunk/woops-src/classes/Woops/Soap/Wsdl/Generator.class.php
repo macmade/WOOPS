@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Soap.Wsdl
  */
-class Woops_Soap_Wsdl_Generator
+class Woops_Soap_Wsdl_Generator extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

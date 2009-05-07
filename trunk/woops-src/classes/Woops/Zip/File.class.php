@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Zip
  */
-class Woops_Zip_File
+class Woops_Zip_File extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

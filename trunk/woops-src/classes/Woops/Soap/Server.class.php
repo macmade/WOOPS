@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Soap
  */
-class Woops_Soap_Server
+class Woops_Soap_Server extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

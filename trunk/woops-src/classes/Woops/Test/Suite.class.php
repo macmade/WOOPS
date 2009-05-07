@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Test
  */
-class Woops_Test_Suite implements Iterator
+class Woops_Test_Suite extends Woops_Core_Object implements Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

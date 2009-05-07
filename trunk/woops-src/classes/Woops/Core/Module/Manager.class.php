@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Core.Module
  */
-final class Woops_Core_Module_Manager implements Woops_Core_Singleton_Interface
+final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

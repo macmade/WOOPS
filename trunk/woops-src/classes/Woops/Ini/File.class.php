@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Ini
  */
-class Woops_Ini_File implements Iterator, ArrayAccess
+class Woops_Ini_File extends Woops_Core_Object implements Iterator, ArrayAccess
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

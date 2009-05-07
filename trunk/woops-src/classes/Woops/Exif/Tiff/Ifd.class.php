@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Exif.Tiff
  */
-class Woops_Exif_Tiff_Ifd implements Woops_Tiff_Ifd_Interface
+class Woops_Exif_Tiff_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

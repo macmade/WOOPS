@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.File.Mime
  */
-final class Woops_File_Types implements Woops_Core_Singleton_Interface
+final class Woops_File_Types extends Woops_Core_Object implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

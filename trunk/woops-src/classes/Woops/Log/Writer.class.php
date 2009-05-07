@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Log
  */
-final class Woops_Log_Writer implements Woops_Core_Singleton_Interface
+final class Woops_Log_Writer extends Woops_Core_Object implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

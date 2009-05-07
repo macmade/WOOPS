@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Png
  */
-abstract class Woops_Png_Chunk
+abstract class Woops_Png_Chunk extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

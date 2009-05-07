@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Core.Env
  */
-final class Woops_Core_Env_Getter implements Woops_Core_Singleton_Interface
+final class Woops_Core_Env_Getter extends Woops_Core_Object implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

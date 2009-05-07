@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Binary
  */
-class Woops_Binary_Stream
+class Woops_Binary_Stream extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

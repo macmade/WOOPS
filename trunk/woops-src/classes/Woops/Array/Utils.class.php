@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Array
  */
-final class Woops_Array_Utils implements Woops_Core_Singleton_Interface
+final class Woops_Array_Utils extends Woops_Core_Object implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

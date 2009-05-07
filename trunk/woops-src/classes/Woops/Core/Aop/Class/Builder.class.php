@@ -25,7 +25,7 @@
  * @version     1.0
  * @package     Woops.Core.Aop.Class
  */
-class Woops_Core_Aop_Class_Builder
+class Woops_Core_Aop_Class_Builder extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

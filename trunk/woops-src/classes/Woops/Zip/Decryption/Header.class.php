@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Zip.Decryption
  */
-class Woops_Zip_Decryption_Header
+class Woops_Zip_Decryption_Header extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

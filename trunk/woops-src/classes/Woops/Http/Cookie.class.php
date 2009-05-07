@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Http
  */
-class Woops_Http_Cookie
+class Woops_Http_Cookie extends Woops_Core_Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
