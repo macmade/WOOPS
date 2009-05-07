@@ -74,7 +74,7 @@
  * @version     1.0
  * @package     Woops.Core.Aop
  */
-abstract class Woops_Core_Aop_Advisor
+abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -211,7 +211,7 @@ abstract class Woops_Core_Aop_Advisor
     public function __construct()
     {
         // Stores a hash for the current object, and gets the class name
-        $this->_objectHash = spl_object_hash( $this );
+        $this->_objectHash = $this->getObjectHash();
         $this->_className  = get_class( $this );
         
         // Registers all the public methods of the child class ending with '_' as join points
