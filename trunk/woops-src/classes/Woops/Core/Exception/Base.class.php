@@ -187,6 +187,14 @@ abstract class Woops_Core_Exception_Base extends Exception
             // Process each trace entry
             foreach( $traceArray as $key => $value  ) {
                 
+                // Do not displays the backtrace for the error and exception handlers
+                if( isset( $value[ 'class' ] )
+                    && ( ( $value[ 'class' ] === 'Woops_Core_Error_Handler'     && $value[ 'function' ] === '_handleError' )
+                    ||   ( $value[ 'class' ] === 'Woops_Core_Exception_Handler' && $value[ 'function' ] === '_handleException' ) )
+                ) {
+                    continue;
+                }
+                
                 // Gets the available informations from the trace entry
                 $file     = ( isset( $value[ 'file' ] ) )                              ? $this->_traceInfo( 'File:', $value[ 'file' ] )                                            : '';
                 $line     = ( isset( $value[ 'line' ] ) )                              ? $this->_traceInfo( 'Line:', $value[ 'line' ] )                                            : '';
