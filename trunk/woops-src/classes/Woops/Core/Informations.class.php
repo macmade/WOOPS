@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Core
  */
-final class Woops_Core_Informations
+abstract class Woops_Core_Informations
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -34,15 +34,4 @@ final class Woops_Core_Informations
      * The WOOPS version suffix (like rc, beta, aplha, dev, etc)
      */
     const WOOPS_VERSION_SUFFIX = 'dev';
-    
-    /**
-     * Class constructor
-     * 
-     * The class constructor is private as this class should never been
-     * instanciated (it doesn't contains any methods).
-     * 
-     * @return  void
-     */
-    private function __construct()
-    {}
 }
