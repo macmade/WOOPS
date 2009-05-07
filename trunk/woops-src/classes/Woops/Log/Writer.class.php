@@ -18,7 +18,7 @@
  * @version     1.0
  * @package     Woops.Log
  */
-final class Woops_Log_Writer extends Woops_Core_Object implements Woops_Core_Singleton_Interface
+final class Woops_Log_Writer extends Woops_Core_Event_Dispatcher implements Woops_Core_Singleton_Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -142,6 +142,9 @@ final class Woops_Log_Writer extends Woops_Core_Object implements Woops_Core_Sin
             );
         }
         
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Log_Writer_Event::EVENT_LOG );
+        
         // Process all the registered loggers
         foreach( $this->_loggers as $key => $value ) {
             
@@ -212,6 +215,9 @@ final class Woops_Log_Writer extends Woops_Core_Object implements Woops_Core_Sin
                 Woops_Log_Writer_Exception::EXCEPTION_INVALID_WRITER_CLASS
             );
         }
+        
+        // Dispatch the event to the listeners
+        $this->dispatchEvent( Woops_Log_Writer_Event::EVENT_LOG_WRITER_REGISTER );
         
         // Registers the log writer class
         $this->_loggers[ $class ] = array(
