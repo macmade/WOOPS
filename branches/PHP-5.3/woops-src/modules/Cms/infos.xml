@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- $Id$  -->
+
+<woops-module-infos>
+	<title>CMS</title>
+	<description>Web Content Management System</description>
+	<author>Jean-David Gadina</author>
+	<company>eosgarden</company>
+	<email>macmade@eosgarden.com</email>
+	<version>0.0.0</version>
+	<category>Core</category>
+	<state>experimental</state>
+</woops-module-infos>
