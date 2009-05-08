@@ -26,6 +26,13 @@ class Woops_Color_Utils extends Woops_Core_Object
     const PHP_COMPATIBLE = '5.2.0';
     
     /**
+     * The available color methods
+     */
+    const METHOD_RGB = 0x01;
+    const METHOD_HSL = 0x02;
+    const METHOD_HSV = 0x03;
+    
+    /**
      * Whether the static variables are set or not
      */
     private static $_hasStatic   = false;
@@ -41,17 +48,17 @@ class Woops_Color_Utils extends Woops_Core_Object
     protected static $_converter = NULL;
     
     /**
-     * The color method to use (RGB, HSL or HSV)
+     * The color method to use
      */
-    protected $_colorMethod      = 'RGB';
+    protected $_colorMethod      = self::METHOD_RGB;
     
     /**
      * Class constructor
      * 
-     * @param   string  The color method to use (RGB, HSV or HSL)
+     * @param   int     The color method to use (one of the METHOD_XXX constant)
      * @return  void
      */
-    public function __construct( $method = 'RGB' )
+    public function __construct( $method = self::METHOD_RGB )
     {
         // Checks if the static variables are set
         if( !self::$_hasStatic ) {
@@ -84,34 +91,29 @@ class Woops_Color_Utils extends Woops_Core_Object
     /**
      * Sets the color method to use
      * 
-     * @param   string  The color method to use (RGB, HSV or HSL)
+     * @param   int     The color method to use (one of the METHOD_XXX constant)
      * @return  void
      */
     public function setColorMethod( $method )
     {
-        // Converts the method to uppercase
-        $method = strtoupper( $method );
+        // Ensures we have an integer
+        $method = ( int )$method;
         
         // Checks the color method
-        switch( $method ) {
+        if( $method === self::METHOD_HSV ) {
             
             // Hue Saturation Value
-            case 'HSV':
-                
-                $this->_colorMethod = 'HSV';
-                break;
+            $this->_colorMethod = self::METHOD_HSV;
+            
+        } elseif( $method === self::METHOD_HSV ) {
             
             // Hue Saturation Luminosity
-            case 'HSL':
-                
-                $this->_colorMethod = 'HSL';
-                break;
+            $this->_colorMethod = self::METHOD_HSL;
+            
+        } else {
             
             // Default - Red Green Blue
-            default:
-                
-                $this->_colorMethod = 'RGB';
-                break;
+            $this->_colorMethod = self::METHOD_RGB;
         }
     }
     
@@ -134,7 +136,7 @@ class Woops_Color_Utils extends Woops_Core_Object
     public function createHexColor( $v1, $v2, $v3, $uppercase = false )
     {
         // Check color creation method
-        if( $this->_colorMethod === 'HSL' ) {
+        if( $this->_colorMethod === self::METHOD_HSL ) {
             
             // Convert colors
             $colors = self::$_converter->hslToRgb( $v1, $v2, $v3 );
@@ -144,7 +146,7 @@ class Woops_Color_Utils extends Woops_Core_Object
             $v2 = $colors[ 'G' ];
             $v3 = $colors[ 'B' ];
             
-        } elseif( $this->_colorMethod === 'HSV' ) {
+        } elseif( $this->_colorMethod === self::METHOD_HSV ) {
             
             // Convert colors
             $colors = self::$_converter->hsvToRgb( $v1, $v2, $v3 );
@@ -214,7 +216,7 @@ class Woops_Color_Utils extends Woops_Core_Object
         }
         
         // Check modification method
-        if( $this->_colorMethod === 'HSL' ) {
+        if( $this->_colorMethod === self::METHOD_HSL ) {
             
             // Convert colors
             $colors = self::$_converter->rgbToHsl( $R, $G, $B );
@@ -224,11 +226,10 @@ class Woops_Color_Utils extends Woops_Core_Object
                 $colors[ 'H' ] + $v1,
                 $colors[ 'S' ] + $v2,
                 $colors[ 'L' ] + $v3,
-                'HSL',
                 $uppercase
             );
             
-        } elseif( $this->_colorMethod === 'HSV' ) {
+        } elseif( $this->_colorMethod === self::METHOD_HSV ) {
             
             // Convert colors
             $colors = self::$_converter->rgbToHsv( $R,$G,$B );
@@ -238,7 +239,6 @@ class Woops_Color_Utils extends Woops_Core_Object
                 $colors[ 'H' ] + $v1,
                 $colors[ 'S' ] + $v2,
                 $colors[ 'V' ] + $v3,
-                'HSV',
                 $uppercase
             );
             
@@ -249,7 +249,6 @@ class Woops_Color_Utils extends Woops_Core_Object
                 $R + $v1,
                 $G + $v2,
                 $B + $v3,
-                'RGB',
                 $uppercase
             );
         }

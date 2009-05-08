@@ -16,7 +16,7 @@
  * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core.Database.Layer
+ * @package     Woops.Database.Layer
  */
 class Woops_Database_Layer_Event extends Woops_Core_Event
 {
