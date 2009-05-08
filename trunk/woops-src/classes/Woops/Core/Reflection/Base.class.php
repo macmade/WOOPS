@@ -258,7 +258,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
     /**
      * 
      */
-    final protected function __get( $name )
+    final public function __get( $name )
     {
         return $this->_reflector->$name;
     }
@@ -266,7 +266,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
     /**
      * 
      */
-    final protected function __set( $name, $value )
+    final public function __set( $name, $value )
     {
         $this->_reflector->$name = $value;
     }
@@ -274,7 +274,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
     /**
      * 
      */
-    final protected function __isset( $name )
+    final public function __isset( $name )
     {
         return isset( $this->_reflector->$name );
     }
@@ -282,7 +282,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
     /**
      * 
      */
-    final protected function __unset( $name )
+    final public function __unset( $name )
     {
         unset( $this->_reflector->$name );
     }
@@ -290,7 +290,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
     /**
      * 
      */
-    final protected function __call( $name, array $args = array() )
+    final public function __call( $name, array $args = array() )
     {
         if( ( $name === 'getParameters' || $name === 'getExtension' )
             && ( $this->_reflectorClass === 'ReflectionFunction' )
