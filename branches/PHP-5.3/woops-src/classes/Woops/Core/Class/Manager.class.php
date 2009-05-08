@@ -26,10 +26,11 @@ require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' ) . DIR
  * This class will handle every request to a class from the WOOPS project,
  * by automatically loading the class file (thanx to the SPL).
  * 
- * If an error occurs, this class will simply prints the error message.
+ * If an error occurs during the load process, this class will simply prints
+ * the error message.
  * No trigger_error, nor exception, as this may cause strange PHP behavior,
- * because of the particularity of the SPL autoload method. So no fancy
- * error reporting here, unfortunately.
+ * because of the particularity of the SPL autoload method.
+ * So no fancy error reporting in such a case, unfortunately.
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
@@ -249,7 +250,11 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
         if( !is_object( self::$_instance ) ) {
             
             // Creates the unique instance
-            self::$_instance                    = new self();
+            self::$_instance = new self();
+            
+            // Loads the error and exception handler (otherwise a problem here won't be able to be reported)
+            self::$_instance->_loadClass( 'Woops_Core_Error_Handler' );
+            self::$_instance->_loadClass( 'Woops_Core_Exception_Handler' );
             
             // Gets the instance of the WOOPS environment
             self::$_instance->_env              = Woops_Core_Env_Getter::getInstance();
