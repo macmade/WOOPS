@@ -29,7 +29,7 @@ class Woops_Check_Environment
             'status'  => '',
             'success' => 'The running PHP version (<strong>{VERSION}</strong>) is able to run WOOPS.',
             'warning' => '',
-            'error'   => 'The running PHP version (<strong>{VERSION}</strong>) is too low. The minimal required version is <strong>5.2.0</strong>.',
+            'error'   => 'The running PHP version (<strong>{VERSION}</strong>) is too low. The minimal required version is <strong>5.3.0</strong>.',
             'replace' => array()
         ),
         'zendCompat'  => array(
@@ -138,7 +138,7 @@ class Woops_Check_Environment
         $version              = phpversion();
         $replace[ 'VERSION' ] = $version;
         
-        if( version_compare( $version, '5.2.0', '<' ) ) {
+        if( ( double )PHP_VERSION < 5.3 ) {
             
             return 'ERROR';
         }

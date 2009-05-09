@@ -15,11 +15,11 @@
 error_reporting( E_ALL | E_STRICT );
 
 // Checks the PHP version
-if( ( double )PHP_VERSION < 5.2 ) {
+if( ( double )PHP_VERSION < 5.3 ) {
     
-    // We are not running PHP 5.2 or greater
+    // We are not running PHP 5.3 or greater
     trigger_error(
-        'PHP version 5.2 is required to use this script (actual version is ' . PHP_VERSION . ')',
+        'PHP version 5.3 is required to use this script (actual version is ' . PHP_VERSION . ')',
         E_USER_ERROR
     );
 }
