@@ -24,7 +24,7 @@ namespace Woops\Database;
  * @version     1.0
  * @package     Woops.Database
  */
-final class Layer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Singleton\ObjectInterface
+class Layer extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -32,39 +32,34 @@ final class Layer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Si
     const PHP_COMPATIBLE = '5.3.0';
     
     /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance  = NULL;
-    
-    /**
      * The WOOPS configuration object
      */
-    private $_conf             = NULL;
+    protected $_conf             = NULL;
     
     /**
      * The registered database engines
      */
-    private $_engines          = array();
+    protected $_engines          = array();
     
     /**
      * The names of the registered database engines
      */
-    private $_engineNames      = array();
+    protected $_engineNames      = array();
     
     /**
      * The connected database engines
      */
-    private $_connectedEngines = array();
+    protected $_connectedEngines = array();
     
     /**
      * The supported drivers for each engine
      */
-    private $_drivers          = array();
+    protected $_drivers          = array();
     
     /**
      * The name of the default database engine
      */
-    private $_defaultEngine    = '';
+    protected $_defaultEngine    = '';
     
     /**
      * Class constructor
@@ -74,7 +69,7 @@ final class Layer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Si
      * 
      * @return  void
      */
-    private function __construct()
+    protected function __construct()
     {
         // Gets the instance of the configuration object
         $this->_conf          = \Woops\Core\Config\Getter::getInstance();
@@ -89,7 +84,7 @@ final class Layer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Si
      * This method will close the database connection on all loaded engines.
      * 
      * @return  void
-     * @see     Woops\Core\Singleton\ObjectInterface::disconnect
+     * @see     Woops\Database\Engine\ObjectInterface::disconnect
      */
     public function __destruct()
     {
@@ -106,45 +101,6 @@ final class Layer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Si
                 $value->disconnect();
             }
         }
-    }
-    
-    /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new \Woops\Core\Singleton\Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops\Database\Layer    The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
     }
     
     /**

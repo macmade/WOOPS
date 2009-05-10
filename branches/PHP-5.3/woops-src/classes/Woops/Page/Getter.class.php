@@ -24,7 +24,7 @@ namespace Woops\Page;
  * @version     1.0
  * @package     Woops.Page
  */
-final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\ObjectInterface
+class Getter extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -32,56 +32,51 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\O
     const PHP_COMPATIBLE = '5.3.0';
     
     /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance = NULL;
-    
-    /**
      * The configuration object
      */
-    private $_conf            = NULL;
+    protected $_conf            = NULL;
     
     /**
      * The environment object
      */
-    private $_env             = NULL;
+    protected $_env             = NULL;
     
     /**
      * The request object
      */
-    private $_request         = NULL;
+    protected $_request         = NULL;
     
     /**
      * The database object
      */
-    private $_db              = NULL;
+    protected $_db              = NULL;
     
     /**
      * The string utilities
      */
-    private $_str             = NULL;
+    protected $_str             = NULL;
     
     /**
      * The ID of the current page
      */
-    private $_pageId          = 0;
+    protected $_pageId          = 0;
     
     /**
      * The name of the current language
      */
-    private $_langName        = '';
+    protected $_langName        = '';
     
     /**
      * The database row for the current page
      */
-    private $_page            = array();
+    protected $_page            = array();
     
     /**
      * Class constructor
      * 
      * @return  void
      */
-    private function __construct()
+    protected function __construct()
     {
         $this->_conf     = \Woops\Core\Config\Getter::getInstance();
         $this->_env      = \Woops\Core\Env\Getter::getInstance();
@@ -96,48 +91,9 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\O
     }
     
     /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new \Woops\Core\Singleton\Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops\Page\Getter   The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
-    }
-    
-    /**
      * 
      */
-    private function _getPageId()
+    protected function _getPageId()
     {
         $id = ( int )$this->_request->pid;
         
@@ -169,7 +125,7 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\O
     /**
      * 
      */
-    private function _getLanguage()
+    protected function _getLanguage()
     {
         $lang = $this->_request->lang;
         
@@ -192,7 +148,7 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\O
     /**
      * 
      */
-    private function _getPage( $id, $lang )
+    protected function _getPage( $id, $lang )
     {
         $page = $this->_db->getRecordsByFields(
             'pageheaders',
@@ -227,7 +183,7 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\O
     /**
      * 
      */
-    private function _getTemplate( $id )
+    protected function _getTemplate( $id )
     {
         $template = $this->_db->getRecord( 'templates', $id );
         

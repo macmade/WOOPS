@@ -24,7 +24,7 @@ namespace Woops\Core\Config;
  * @version     1.0
  * @package     Woops.Core.Config
  */
-final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\ObjectInterface
+final class Getter extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -32,24 +32,19 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\O
     const PHP_COMPATIBLE = '5.3.0';
     
     /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance = NULL;
-    
-    /**
      * The environment object
      */
-    private $_env             = NULL;
+    protected $_env     = NULL;
     
     /**
      * The WOOPS configuration array
      */
-    private $_conf            = array();
+    protected $_conf    = array();
     
     /**
      * The configuration options for the WOOPS modules
      */
-    private $_modConf         = array();
+    protected $_modConf = array();
     
     /**
      * Class constructor
@@ -64,7 +59,7 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\O
      * 
      * @return  void
      */
-    private function __construct()
+    protected function __construct()
     {
         // Gets the instance of the environment object
         $this->_env = \Woops\Core\Env\Getter::getInstance();
@@ -98,23 +93,6 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\O
     }
     
     /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new \Woops\Core\Singleton\Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
      * Gets a section from the WOOPS configuration
      * 
      * @param   string  The name of the section
@@ -137,7 +115,7 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\O
      * @param   string  The error message to display.
      * @return  void
      */
-    private static function _error( $message )
+    protected static function _error( $message )
     {
         // Gets the debug backtrace
         $backTrace = debug_backtrace();
@@ -179,35 +157,13 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\O
     }
     
     /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops\Core\Env\Getter   The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
-    }
-    
-    /**
      * Reads a configuration file from a WOOPS module
      * 
      * @param   string  The name of the module
      * @return  void
      * @throws  Woops\Core\Config\Getter\Exception  If the configuration file is not readable
      */
-    private function _loadModuleConf( $name )
+    protected function _loadModuleConf( $name )
     {
         // Gets the path to the module's configuration file
         $modConf = \Woops\Core\Module\Manager::getInstance()->getModulePath( $name ) . 'config.ini.php';

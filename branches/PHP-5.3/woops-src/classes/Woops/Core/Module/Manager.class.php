@@ -24,7 +24,7 @@ namespace Woops\Core\Module;
  * @version     1.0
  * @package     Woops.Core.Module
  */
-final class Manager extends \Woops\Core\Object implements \Woops\Core\Singleton\ObjectInterface
+final class Manager extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -32,61 +32,56 @@ final class Manager extends \Woops\Core\Object implements \Woops\Core\Singleton\
     const PHP_COMPATIBLE = '5.3.0';
     
     /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance   = NULL;
-    
-    /**
      * The configuration object
      */
-    private $_conf              = NULL;
+    protected $_conf              = NULL;
     
     /**
      * The environment object
      */
-    private $_env               = NULL;
+    protected $_env               = NULL;
     
     /**
      * The directories with WOOPS modules
      */
-    private $_modulesDirs       = array();
+    protected $_modulesDirs       = array();
     
     /**
      * The existing modules
      */
-    private $_modules           = array();
+    protected $_modules           = array();
     
     /**
      * The loaded (active) modules
      */
-    private $_loadedModules     = array();
+    protected $_loadedModules     = array();
     
     /**
      * 
      */
-    private $_blockTypes        = array();
+    protected $_blockTypes        = array();
     
     /**
      * 
      */
-    private $_blocks            = array();
+    protected $_blocks            = array();
     
     /**
      * 
      */
-    private $_moduleDeps        = array();
+    protected $_moduleDeps        = array();
     
     /**
      * 
      */
-    private $_priorityModules   = array();
+    protected $_priorityModules   = array();
     
     /**
      * Class constructor
      * 
      * @return  void
      */
-    private function __construct()
+    protected function __construct()
     {
         $this->_conf = \Woops\Core\Config\Getter::getInstance();
         $this->_env  = \Woops\Core\Env\Getter::getInstance();
@@ -125,48 +120,9 @@ final class Manager extends \Woops\Core\Object implements \Woops\Core\Singleton\
     }
     
     /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new \Woops\Core\Singleton\Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops\Core\Module\Manager   The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
-    }
-    
-    /**
      * 
      */
-    private function _registerModuleDirectory( $path, $relPath )
+    protected function _registerModuleDirectory( $path, $relPath )
     {
         if( !file_exists( $path ) && !is_dir( $path ) ) {
             
@@ -208,7 +164,7 @@ final class Manager extends \Woops\Core\Object implements \Woops\Core\Singleton\
     /**
      * 
      */
-    private function _loadModuleInfos( $moduleName )
+    protected function _loadModuleInfos( $moduleName )
     {
         $infoFile = $this->_modules[ $moduleName ][ 0 ] . 'infos.xml';
         
@@ -257,7 +213,7 @@ final class Manager extends \Woops\Core\Object implements \Woops\Core\Singleton\
     /**
      * 
      */
-    private function _initModule( $moduleName )
+    protected function _initModule( $moduleName )
     {
         if( isset( $this->_moduleDeps[ $moduleName ] ) ) {
             

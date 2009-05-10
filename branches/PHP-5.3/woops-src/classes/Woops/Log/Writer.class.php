@@ -24,7 +24,7 @@ namespace Woops\Log;
  * @version     1.0
  * @package     Woops.Log
  */
-final class Writer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Singleton\ObjectInterface
+class Writer extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -50,19 +50,14 @@ final class Writer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\S
     const LOG_TYPE_ALL      = 0x00FF;
     
     /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance = NULL;
-    
-    /**
      * The reigistered loggers
      */
-    private $_loggers         = array();
+    protected $_loggers  = array();
     
     /**
      * The name of the log types
      */
-    private $_logTypes        = array(
+    protected $_logTypes = array(
         0x0001 => 'LOG_TYPE_INFO',
         0x0002 => 'LOG_TYPE_NOTICE',
         0x0004 => 'LOG_TYPE_WARNING',
@@ -81,47 +76,8 @@ final class Writer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\S
      * 
      * @return  void
      */
-    private function __construct()
+    protected function __construct()
     {}
-    
-    /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new \Woops\Core\Singleton\Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops\Log\Writer    The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
-    }
     
     /**
      * Logs a message
