@@ -29,7 +29,7 @@ class Callback extends Event\Dispatcher
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.3.0';
+    const PHP_COMPATIBLE = '5.2.0';
     
     /**
      * THe PHP callback
@@ -66,13 +66,13 @@ class Callback extends Event\Dispatcher
         if( is_array( $this->_callback ) ) {
             
             // Checks if the callback returns a reference
-            $ref                     = \Woops\Core\Reflection\MethodReflector::getInstance( $callback[ 0 ], $callback[ 1 ] );
+            $ref                     = Reflection\MethodReflector::getInstance( $callback[ 0 ], $callback[ 1 ] );
             $this->_returnsReference = $ref->returnsReference();
             
         } else {
             
             // Checks if the callback returns a reference
-            $ref                     = \Woops\Core\Reflection\FunctionReflector::getInstance( $callback );
+            $ref                     = Reflection\FunctionReflector::getInstance( $callback );
             $this->_returnsReference = $ref->returnsReference();
         }
     }
@@ -242,16 +242,144 @@ class Callback extends Event\Dispatcher
                 
             } else {
                 
+                // Gets the class and the method to use
+                $class  = $this->_callback[ 0 ];
+                $method = $this->_callback[ 1 ];
+                
                 // Checks if we have to return a reference or not
                 if( $this->_returnsReference ) {
                     
-                    // We'll use eval as late static bindings are only available since PHP 5.3
-                    eval( '$return = ' . $this->_callback[ 0 ] . '::' . $this->_callback[ 1 ] . '( $args[ ' . implode( ' ], $args[ ', array_keys( $args ) ) . ' ] );' );
+                    // Checks the number of arguments
+                    // This will avoid a call to eval() if the number of arguments is lower than ten
+                    switch( $argsCount ) {
+                        
+                        case 0:
+                            
+                            $return =& $class::$method();
+                            break;
+                            
+                        case 1:
+                            
+                            $return =& $class::$method( $args[ 0 ] );
+                            break;
+                            
+                        case 2:
+                            
+                            $return =& $class::$method( $args[ 0 ], $args[ 1 ] );
+                            break;
+                            
+                        case 3:
+                            
+                            $return =& $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ] );
+                            break;
+                            
+                        case 4:
+                            
+                            $return =& $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ] );
+                            break;
+                            
+                        case 5:
+                            
+                            $return =& $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ] );
+                            break;
+                            
+                        case 6:
+                            
+                            $return =& $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ] );
+                            break;
+                            
+                        case 7:
+                            
+                            $return =& $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ] );
+                            break;
+                            
+                        case 8:
+                            
+                            $return =& $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ] );
+                            break;
+                            
+                        case 9:
+                            
+                            $return =& $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ], $args[ 8 ] );
+                            break;
+                            
+                        case 10:
+                            
+                            $return =& $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ], $args[ 8 ], $args[ 9 ] );
+                            break;
+                            
+                        // More than ten arguments - We'll use eval() as call_user_func_array cannot return references
+                        default:
+                            
+                            eval( '$return =& $class::$method( $args[ ' . implode( ' ], $args[ ', array_keys( $args ) ) . ' ] );' );
+                    }
                     
                 } else {
                     
-                    // We'll use eval as late static bindings are only available since PHP 5.3
-                    eval( '$return = ' . $this->_callback[ 0 ] . '::' . $this->_callback[ 1 ] . '( $args[ ' . implode( ' ], $args[ ', array_keys( $args ) ) . ' ] );' );
+                    // Checks the number of arguments
+                    // This will avoid a call to eval() if the number of arguments is lower than ten
+                    switch( $argsCount ) {
+                        
+                        case 0:
+                            
+                            $return = $class::$method();
+                            break;
+                            
+                        case 1:
+                            
+                            $return = $class::$method( $args[ 0 ] );
+                            break;
+                            
+                        case 2:
+                            
+                            $return = $class::$method( $args[ 0 ], $args[ 1 ] );
+                            break;
+                            
+                        case 3:
+                            
+                            $return = $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ] );
+                            break;
+                            
+                        case 4:
+                            
+                            $return = $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ] );
+                            break;
+                            
+                        case 5:
+                            
+                            $return = $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ] );
+                            break;
+                            
+                        case 6:
+                            
+                            $return = $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ] );
+                            break;
+                            
+                        case 7:
+                            
+                            $return = $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ] );
+                            break;
+                            
+                        case 8:
+                            
+                            $return = $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ] );
+                            break;
+                            
+                        case 9:
+                            
+                            $return = $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ], $args[ 8 ] );
+                            break;
+                            
+                        case 10:
+                            
+                            $return = $class::$method( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ], $args[ 5 ], $args[ 6 ], $args[ 7 ], $args[ 8 ], $args[ 9 ] );
+                            break;
+                            
+                        // More than ten arguments - We'll use eval() as call_user_func_array cannot return references
+                        default:
+                            
+                            eval( '$return = $class::$method( $args[ ' . implode( ' ], $args[ ', array_keys( $args ) ) . ' ] );' );
+                    }
                 }
             }
             
