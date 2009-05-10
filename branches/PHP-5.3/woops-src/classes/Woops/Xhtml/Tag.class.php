@@ -436,7 +436,7 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
     /**
      * 
      */
-    public function addChildNode( Woops\Xhtml\Tag $child )
+    public function addChildNode( \Woops\Xhtml\Tag $child )
     {
         if( !isset( self::$_emptyTags[ $this->_tagName ] ) ) {
             

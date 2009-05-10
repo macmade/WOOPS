@@ -237,7 +237,7 @@ class Ifd extends \Woops\Core\Object implements \Woops\Tiff\Ifd\ObjectInterface
      * @param   Woops\Tiff\Tag The tag object
      * @return  void
      */
-    public function addTag( Woops\Tiff\Tag $tag )
+    public function addTag( \Woops\Tiff\Tag $tag )
     {
         $this->_tags[] = $tag;
     }
