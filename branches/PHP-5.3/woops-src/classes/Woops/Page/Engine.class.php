@@ -108,6 +108,13 @@ final class Engine extends \Woops\Core\Event\Dispatcher implements \Woops\Core\S
      */
     public function registerPageEngine( $className )
     {
+        // Checks for a leading backslash
+        if( substr( $class, 0, 1 ) !== '\\' ) {
+            
+            // Adds the leading backslash
+            $class = '\\' . $class;
+        }
+        
         if( !class_exists( $className ) ) {
             
             throw new Engine\Exception(
