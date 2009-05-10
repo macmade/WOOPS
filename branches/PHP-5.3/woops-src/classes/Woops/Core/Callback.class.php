@@ -66,7 +66,7 @@ class Callback extends Event\Dispatcher
         if( is_array( $this->_callback ) ) {
             
             // Checks if the callback returns a reference
-            $ref                     = \Woops\Core\Reflection\MethodReflectorReflector::getInstance( $callback[ 0 ], $callback[ 1 ] );
+            $ref                     = \Woops\Core\Reflection\MethodReflector::getInstance( $callback[ 0 ], $callback[ 1 ] );
             $this->_returnsReference = $ref->returnsReference();
             
         } else {
