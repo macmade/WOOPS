@@ -121,9 +121,8 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         }
         
         // Stores the directory containing the WOOPS classes
-        $this->_classDir = realpath(
-            __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
-        ) . DIRECTORY_SEPARATOR;
+        $this->_classDir = realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' )
+                         . DIRECTORY_SEPARATOR;
         
         // Creates a directory iterator in the directory containing this file
         $dirIterator = new \DirectoryIterator( $this->_classDir );
