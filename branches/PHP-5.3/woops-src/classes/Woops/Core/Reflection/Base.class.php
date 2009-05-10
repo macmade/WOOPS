@@ -475,7 +475,7 @@ abstract class Base extends \Woops\Core\Object
             
             foreach( $parameters as $parameter ) {
                 
-                $this->_parameters[ $parameter->getName() ] = Parameter::getInstance(
+                $this->_parameters[ $parameter->getName() ] = ParameterReflector::getInstance(
                     $this->_reflector->getName(),
                     $parameter->getName()
                 );
@@ -498,7 +498,7 @@ abstract class Base extends \Woops\Core\Object
             
             if( $extension ) {
                 
-                $this->_extension = Extension::getInstance(
+                $this->_extension = ExtensionReflector::getInstance(
                     $extension->getName()
                 );
                 
@@ -524,14 +524,14 @@ abstract class Base extends \Woops\Core\Object
             
             if( get_class( $declaringFunction ) === 'ReflectionMethod' ) {
                 
-                $this->_declaringFunction = Class::getInstance(
+                $this->_declaringFunction = ClassReflector::getInstance(
                     $declaringFunction->getDeclaringClass()->getName(),
                     $declaringFunction->getName()
                 );
                 
             } else {
                 
-                $this->_declaringFunction = Function::getInstance(
+                $this->_declaringFunction = FunctionReflector::getInstance(
                     $declaringFunction->getName()
                 );
             }
@@ -550,7 +550,7 @@ abstract class Base extends \Woops\Core\Object
         if( !$this->_hasDeclaringClass ) {
             
             $declaringClass        = $this->_reflector->getDeclaringClass();
-            $this->_declaringClass = Class::getInstance(
+            $this->_declaringClass = ClassReflector::getInstance(
                 $declaringClass->getName()
             );
             
@@ -571,7 +571,7 @@ abstract class Base extends \Woops\Core\Object
             
             if( $class ) {
                 
-                $this->_class = Class::getInstance(
+                $this->_class = ClassReflector::getInstance(
                     $class->getName()
                 );
                 
@@ -597,7 +597,7 @@ abstract class Base extends \Woops\Core\Object
             
             foreach( $functions as $function ) {
                 
-                $this->_functions[ $function->getName() ] = Function::getInstance(
+                $this->_functions[ $function->getName() ] = FunctionReflector::getInstance(
                     $function->getName()
                 );
             }
@@ -619,7 +619,7 @@ abstract class Base extends \Woops\Core\Object
             
             foreach( $classes as $class ) {
                 
-                $this->_classes[ $class->getName() ] = Class::getInstance(
+                $this->_classes[ $class->getName() ] = ClassReflector::getInstance(
                     $class->getName()
                 );
             }
@@ -639,7 +639,7 @@ abstract class Base extends \Woops\Core\Object
             
             $method     = $this->_reflector->getMethod( $name );
             
-            $reflection = Method::getInstance(
+            $reflection = MethodReflector::getInstance(
                 $this->_reflector->getName(),
                 $name
             );
@@ -696,7 +696,7 @@ abstract class Base extends \Woops\Core\Object
                 
                 if( !isset( $this->_methods[ $methodName ] ) ) {
                     
-                    $reflection = Method::getInstance(
+                    $reflection = MethodReflector::getInstance(
                         $className,
                         $methodName
                     );
@@ -791,7 +791,7 @@ abstract class Base extends \Woops\Core\Object
             
             if( $constructor ) {
                 
-                $this->_constructor = Method::getInstance(
+                $this->_constructor = MethodReflector::getInstance(
                     $constructor->getDeclaringClass()->getName(),
                     $constructor->getName()
                 );
@@ -818,7 +818,7 @@ abstract class Base extends \Woops\Core\Object
             
             foreach( $interfaces as $interface ) {
                 
-                $this->_interfaces[ $interface->getName() ] = Class::getInstance(
+                $this->_interfaces[ $interface->getName() ] = ClassReflector::getInstance(
                     $interface->getName()
                 );
             }
@@ -838,7 +838,7 @@ abstract class Base extends \Woops\Core\Object
             
             $property   = $this->_reflector->getProperty( $name );
             
-            $reflection = Property::getInstance(
+            $reflection = PropertyReflector::getInstance(
                 $this->_reflector->getName(),
                 $name
             );
@@ -885,7 +885,7 @@ abstract class Base extends \Woops\Core\Object
                 
                 if( !isset( $this->_methods[ $propertyName ] ) ) {
                     
-                    $reflection = Property::getInstance(
+                    $reflection = PropertyReflector::getInstance(
                         $className,
                         $propertyName
                     );
@@ -960,7 +960,7 @@ abstract class Base extends \Woops\Core\Object
             
             if( $parentClass ) {
                 
-                $this->_parentClass = Class::getInstance(
+                $this->_parentClass = ClassReflector::getInstance(
                     $parentClass->getName()
                 );
                 

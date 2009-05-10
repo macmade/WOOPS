@@ -24,7 +24,7 @@ namespace Woops\Core\Reflection;
  * @version     1.0
  * @package     Woops.Core.Reflection
  */
-final class Object extends Base
+final class ClassReflector extends Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -34,19 +34,19 @@ final class Object extends Base
     /**
      * 
      */
-    const IS_EXPLICIT_ABSTRACT = \ReflectionObject::IS_EXPLICIT_ABSTRACT;
-    const IS_FINAL             = \ReflectionObject::IS_FINAL;
-    const IS_IMPLICIT_ABSTRACT = \ReflectionObject::IS_IMPLICIT_ABSTRACT;
+    const IS_EXPLICIT_ABSTRACT = \ReflectionClass::IS_EXPLICIT_ABSTRACT;
+    const IS_FINAL             = \ReflectionClass::IS_FINAL;
+    const IS_IMPLICIT_ABSTRACT = \ReflectionClass::IS_IMPLICIT_ABSTRACT;
     
     /**
      * 
      */
-    public static function getInstance( $object )
+    public static function getInstance( $className )
     {
         return self::_getInstance(
             __CLASS__,
-            '\ReflectionObject',
-            array( $object )
+            '\ReflectionClass',
+            array( $className )
         );
     }
     

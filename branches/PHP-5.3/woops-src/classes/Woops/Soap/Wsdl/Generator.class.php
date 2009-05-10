@@ -132,7 +132,7 @@ class Generator extends \Woops\Core\Object
         if( is_object( $handlerClass ) ) {
             
             // Creates the reflection object
-            $this->_reflection = \Woops\Core\Reflection\Object::getInstance( $handlerClass );
+            $this->_reflection = \Woops\Core\Reflection\ClassReflectorReflector::getInstance( $handlerClass );
             
             // Stores the web service name
             $this->_name       = get_class( $handlerClass );
@@ -140,7 +140,7 @@ class Generator extends \Woops\Core\Object
         } else {
             
             // Creates the reflection object
-            $this->_reflection = \Woops\Core\Reflection\Class::getInstance( $handlerClass );
+            $this->_reflection = \Woops\Core\Reflection\ClassReflector::getInstance( $handlerClass );
             
             // Stores the web service name
             $this->_name       = $handlerClass;

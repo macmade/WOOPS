@@ -495,7 +495,7 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
         $methodCallback    = new \Woops\Core\Callback( array( $this, $method ) );
         
         // Creates a reflection object for the internal method
-        $ref               = \Woops\Core\Reflection\Method::getInstance( $this, $method );
+        $ref               = \Woops\Core\Reflection\MethodReflector::getInstance( $this, $method );
         
         // By default, the call on the join point internal method is allowed
         $valid             = true;
@@ -908,7 +908,7 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
             }
             
             // Creates a reflection object for the current instance
-            $reflection = \Woops\Core\Reflection\Object::getInstance( $this );
+            $reflection = \Woops\Core\Reflection\ObjectReflector::getInstance( $this );
             
             // Gets all the public methods
             $methods    = $reflection->getMethods( \ReflectionMethod::IS_PUBLIC );
