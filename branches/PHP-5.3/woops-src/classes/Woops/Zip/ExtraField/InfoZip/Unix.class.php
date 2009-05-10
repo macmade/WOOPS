@@ -15,7 +15,7 @@
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\Zip\ExtraField;
+namespace Woops\Zip\ExtraField\InfoZip;
 
 /**
  * 
@@ -24,7 +24,7 @@ namespace Woops\Zip\ExtraField;
  * @version     1.0
  * @package     Woops.Zip.ExtraField.InfoZip
  */
-class InfoZip_Unix extends \Woops\Zip\ExtraField
+class Unix extends \Woops\Zip\ExtraField
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
