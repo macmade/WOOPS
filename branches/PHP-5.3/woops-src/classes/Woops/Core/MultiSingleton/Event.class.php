@@ -9,7 +9,7 @@
 # All rights reserved                                                          #
 ################################################################################
 
-# $Id$
+# $Id: Helper.class.php 534 2009-03-03 07:15:08Z macmade $
 
 // File encoding
 declare( ENCODING = 'UTF-8' );
@@ -18,19 +18,21 @@ declare( ENCODING = 'UTF-8' );
 namespace Woops\Core\MultiSingleton;
 
 /**
- * Interface for the multi-singleton classes
- *
+ * Event object for the Woops\Core\MultiSingleton\Base class
+ * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core.MultiSingleton
+ * @package     Woops.Core.Singleton
  */
-interface ObjectInterface
+class Event extends \Woops\Core\Event
 {
     /**
-     * Gets a singleton instance
-     * 
-     * @param   string  The instance name
-     * @return  object  The requested instance
+     * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    public static function getInstance( $instanceName );
+    const PHP_COMPATIBLE = '5.2.0';
+    
+    /**
+     * The available events
+     */
+    const EVENT_CONSTRUCT = 0x01;
 }

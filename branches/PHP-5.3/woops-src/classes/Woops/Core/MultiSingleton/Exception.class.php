@@ -9,7 +9,7 @@
 # All rights reserved                                                          #
 ################################################################################
 
-# $Id$
+# $Id: Exception.class.php 822 2009-05-10 03:27:06Z macmade $
 
 // File encoding
 declare( ENCODING = 'UTF-8' );
@@ -18,19 +18,21 @@ declare( ENCODING = 'UTF-8' );
 namespace Woops\Core\MultiSingleton;
 
 /**
- * Interface for the multi-singleton classes
+ * Exception class for the multi-singleton classes
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core.MultiSingleton
+ * @package     Woops.Core.Singleton
  */
-interface ObjectInterface
+final class Exception extends \Woops\Core\Exception\Base
 {
     /**
-     * Gets a singleton instance
-     * 
-     * @param   string  The instance name
-     * @return  object  The requested instance
+     * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    public static function getInstance( $instanceName );
+    const PHP_COMPATIBLE = '5.3.0';
+    
+    /**
+     * Error codes for the exceptions
+     */
+    const EXCEPTION_CLONE = 0x01;
 }
