@@ -24,11 +24,11 @@ if( ( double )PHP_VERSION < 5.3 ) {
     );
 }
 
-// Sets a dummy timezone, to prevent warnings if an error occurs before the configured timezone is set
-date_default_timezone_set( 'Europe/Zurich' );
-
 // File encoding
 declare( ENCODING = 'UTF-8' );
+
+// Sets a dummy timezone, to prevent warnings if an error occurs before the configured timezone is set
+date_default_timezone_set( 'Europe/Zurich' );
 
 // Checks for the SPL
 if( !function_exists( 'spl_autoload_register' ) ) {
