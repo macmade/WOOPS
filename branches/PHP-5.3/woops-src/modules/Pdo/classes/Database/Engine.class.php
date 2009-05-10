@@ -27,7 +27,7 @@ namespace Woops\Mod\Pdo\Database;
  * @version     1.0
  * @package     Woops.Mod.Pdo.Database
  */
-final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\Interface
+final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

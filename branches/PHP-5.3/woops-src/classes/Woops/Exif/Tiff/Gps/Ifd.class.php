@@ -24,7 +24,7 @@ namespace Woops\Exif\Tiff\Gps;
  * @version     1.0
  * @package     Woops.Exif.Tiff.Gps
  */
-class Ifd extends \Woops\Core\Object implements \Woops\Tiff\Ifd\Interface
+class Ifd extends \Woops\Core\Object implements \Woops\Tiff\Ifd\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

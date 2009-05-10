@@ -55,7 +55,7 @@ final class Object extends Base
      */
     public function isSingleton()
     {
-        return $this->_reflector->implementsInterface( '\Woops\Core\Singleton\Interface' );
+        return $this->_reflector->implementsInterface( '\Woops\Core\Singleton\ObjectInterface' );
     }
     
     /**
@@ -63,7 +63,7 @@ final class Object extends Base
      */
     public function isMultiSingleton()
     {
-        return $this->_reflector->implementsInterface( '\Woops\Core\MultiSingleton\Interface' );
+        return $this->_reflector->implementsInterface( '\Woops\Core\MultiSingleton\ObjectInterface' );
     }
     
     /**

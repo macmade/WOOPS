@@ -24,7 +24,7 @@ namespace Woops\Xhtml\ProcessingInstruction\Handler;
  * @version     1.0
  * @package     Woops.Xhtml.ProcessingInstruction_Handler
  */
-interface Interface
+interface ObjectInterface
 {
     /**
      * Process a processing instruction

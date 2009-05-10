@@ -24,7 +24,7 @@ namespace Woops\Core\Lang;
  * @version     1.0
  * @package     Woops.Core.Lang
  */
-final class Getter extends \Woops\Core\Object implements \Woops\Core\MultiSingleton\Interface
+final class Getter extends \Woops\Core\Object implements \Woops\Core\MultiSingleton\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

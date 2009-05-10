@@ -131,12 +131,12 @@ class File extends \Woops\Core\Object implements \Iterator
             // Creates a reflection object for the custom class
             $ref = \Woops\Core\Reflection\Class::getInstance( $customClass );
             
-            // Checks if the custom class implements the Woops\Tiff\Ifd\Interface class
-            if( !$ref->implementsInterface( 'Woops\Tiff\Ifd\Interface' ) ) {
+            // Checks if the custom class implements the Woops\Tiff\Ifd\ObjectInterface class
+            if( !$ref->implementsInterface( 'Woops\Tiff\Ifd\ObjectInterface' ) ) {
                 
                 // Error - Invalid IFD class
                 throw new File\Exception(
-                    'Invalid IFD custom class \'' . $customClass . '\'. It must implement the Woops\Tiff\Ifd\Interface interface',
+                    'Invalid IFD custom class \'' . $customClass . '\'. It must implement the Woops\Tiff\Ifd\ObjectInterface interface',
                     File\Exception::EXCEPTION_INVALID_IFD_CLASS
                 );
             }

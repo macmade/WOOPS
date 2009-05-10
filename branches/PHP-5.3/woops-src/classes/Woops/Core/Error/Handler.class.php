@@ -43,7 +43,7 @@ namespace Woops\Core\Error;
  * @version     1.0
  * @package     Woops.Core.Error
  */
-final class Handler extends \Woops\Core\Object implements \Woops\Core\Singleton\Interface
+final class Handler extends \Woops\Core\Object implements \Woops\Core\Singleton\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

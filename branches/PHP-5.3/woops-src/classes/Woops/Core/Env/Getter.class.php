@@ -24,7 +24,7 @@ namespace Woops\Core\Env;
  * @version     1.0
  * @package     Woops.Core.Env
  */
-final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\Interface
+final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

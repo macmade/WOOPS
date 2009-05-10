@@ -54,7 +54,7 @@ if( $GETVARS && isset( $GETVARS[ 'className' ] ) ) {
             
             // Checks if AOP is enabled, and if the class is not an interface
             if( Woops\Core\Config\Getter::getInstance()->getVar( 'aop', 'enable' )
-                && substr( $CLASSNAME, -9 ) !== 'Interface'
+                && substr( $CLASSNAME, -9 ) !== 'ObjectInterface'
             ) {
                 
                 // Creates an AOP version of the class

@@ -24,7 +24,7 @@ namespace Woops\Core\Module;
  * @version     1.0
  * @package     Woops.Core.Module
  */
-final class Manager extends \Woops\Core\Object implements \Woops\Core\Singleton\Interface
+final class Manager extends \Woops\Core\Object implements \Woops\Core\Singleton\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

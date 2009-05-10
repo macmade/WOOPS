@@ -15,23 +15,22 @@
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\Xml\ProcessingInstruction\Handler;
+namespace Woops\Core\MultiSingleton;
 
 /**
- * Interface for the XML processing instruction handlers
+ * Interface for the multi singleton classes
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Xml.ProcessingInstruction.Handler
+ * @package     Woops.Core.MultiSingleton
  */
-interface Interface
+interface ObjectInterface
 {
     /**
-     * Process a processing instruction
+     * Gets a singleton instance
      * 
-     * @param   
-     * @param   
-     * @return  
+     * @param   string  The instance name
+     * @return  object  The requested instance
      */
-    public function process( \stdClass $options );
+    public static function getInstance( $instanceName );
 }

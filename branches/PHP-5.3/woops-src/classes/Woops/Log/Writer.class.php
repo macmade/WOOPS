@@ -24,7 +24,7 @@ namespace Woops\Log;
  * @version     1.0
  * @package     Woops.Log
  */
-final class Writer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Singleton\Interface
+final class Writer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Singleton\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -182,7 +182,7 @@ final class Writer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\S
      * @return  void
      * throws   Woops\Log\Writer\Exception  If the log writer class if already registered
      * throws   Woops\Log\Writer\Exception  If the log writer class does not exists
-     * throws   Woops\Log\Writer\Exception  If the log writer class does not implements the Woops\Log\Writer\Interface interface
+     * throws   Woops\Log\Writer\Exception  If the log writer class does not implements the Woops\Log\Writer\ObjectInterface interface
      */
     public function registerLogWriter( $class, $types = 0x00FF )
     {
@@ -213,11 +213,11 @@ final class Writer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\S
         $interfaces = class_implements( $class );
         
         // Checks if the log writer class implements the log writer interface
-        if( !isset( $interfaces[ 'Woops\Log\Writer\Interface' ] ) ) {
+        if( !isset( $interfaces[ 'Woops\Log\Writer\ObjectInterface' ] ) ) {
             
             // Error - The log writer class must extends the log writer interface
             throw new Writer\Exception(
-                'Cannot register class \'' . $class . '\' as a log writer, since it does not implements the \'Woops\Log\Writer\Interface\' interface',
+                'Cannot register class \'' . $class . '\' as a log writer, since it does not implements the \'Woops\Log\Writer\ObjectInterface\' interface',
                 Writer\Exception::EXCEPTION_INVALID_WRITER_CLASS
             );
         }

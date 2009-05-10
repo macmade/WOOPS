@@ -15,21 +15,25 @@
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\Core\Singleton;
+namespace Woops\Log\Writer;
 
 /**
- * Interface for the singleton classes
+ * Interface for the log writer classes
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core.Singleton
+ * @package     Woops.Log.Writer
  */
-interface Interface
+interface ObjectInterface extends \Woops\Core\Singleton\ObjectInterface
 {
     /**
-     * Gets the unique instance (singleton)
+     * Writes a log message
      * 
-     * @return  Woops\Core\SIngleton\Interface  The requested instance
+     * @param   string  The message to write
+     * @param   int     The current time, as a timestamp
+     * @param   int     The log type
+     * @param   string  The name of the type
+     * @return  void
      */
-    public static function getInstance();
+    public function write( $message, $time, $type, $typeName );
 }

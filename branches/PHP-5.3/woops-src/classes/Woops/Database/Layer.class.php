@@ -24,7 +24,7 @@ namespace Woops\Database;
  * @version     1.0
  * @package     Woops.Database
  */
-final class Layer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Singleton\Interface
+final class Layer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Singleton\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -89,7 +89,7 @@ final class Layer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Si
      * This method will close the database connection on all loaded engines.
      * 
      * @return  void
-     * @see     Woops\Core\Singleton\Interface::disconnect
+     * @see     Woops\Core\Singleton\ObjectInterface::disconnect
      */
     public function __destruct()
     {
@@ -151,14 +151,14 @@ final class Layer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Si
      * Registers a class as a database engine
      * 
      * Note that the database engine class must implement the
-     * Woops\Database\Engine\Interface interface.
+     * Woops\Database\Engine\ObjectInterface interface.
      * 
      * @param   string  The name of the database engine
      * @param   string  The class of the database engine
      * @return  void
      * @throws  Woops\Database\Layer\Exception  If an engine with the same name is already registered
      * @throws  Woops\Database\Layer\Exception  If the engine class does not exists
-     * @throws  Woops\Database\Layer\Exception  If the engine class does not implements the Woops\Database\Engine\Interface interface
+     * @throws  Woops\Database\Layer\Exception  If the engine class does not implements the Woops\Database\Engine\ObjectInterface interface
      */
     public function registerDatabaseEngine( $name, $class )
     {
@@ -186,11 +186,11 @@ final class Layer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Si
         $interfaces = class_implements( $class );
         
         // Checks if the engine class implements the database engine interface
-        if( !isset( $interfaces[ 'Woops\Database\Engine\Interface' ] ) ) {
+        if( !isset( $interfaces[ 'Woops\Database\Engine\ObjectInterface' ] ) ) {
             
             // Invalid class
             throw new Layer\Exception(
-                'Cannot register class \'' . $class . '\' as a database engine, since it does not implements the \'Woops\Database\Engine\Interface\' interface',
+                'Cannot register class \'' . $class . '\' as a database engine, since it does not implements the \'Woops\Database\Engine\ObjectInterface\' interface',
                 Layer\Exception::EXCEPTION_INVALID_ENGINE_CLASS
             );
         }

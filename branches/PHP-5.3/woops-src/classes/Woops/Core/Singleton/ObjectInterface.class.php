@@ -15,22 +15,21 @@
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\Core\MultiSingleton;
+namespace Woops\Core\Singleton;
 
 /**
- * Interface for the multi singleton classes
+ * Interface for the singleton classes
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Core.MultiSingleton
+ * @package     Woops.Core.Singleton
  */
-interface Interface
+interface ObjectInterface
 {
     /**
-     * Gets a singleton instance
+     * Gets the unique instance (singleton)
      * 
-     * @param   string  The instance name
-     * @return  object  The requested instance
+     * @return  Woops\Core\SIngleton\ObjectInterface    The requested instance
      */
-    public static function getInstance( $instanceName );
+    public static function getInstance();
 }

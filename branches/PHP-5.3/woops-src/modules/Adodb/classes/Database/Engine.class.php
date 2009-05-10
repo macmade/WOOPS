@@ -27,7 +27,7 @@ namespace Woops\Mod\Adodb\Database;
  * @version     1.0
  * @package     Woops.Mod.Adodb.Database
  */
-final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\Interface
+final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

@@ -24,7 +24,7 @@ namespace Woops\Page;
  * @version     1.0
  * @package     Woops.Page
  */
-final class Engine extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Singleton\Interface
+final class Engine extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Singleton\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

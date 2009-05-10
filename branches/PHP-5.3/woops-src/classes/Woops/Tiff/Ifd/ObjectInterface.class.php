@@ -24,7 +24,7 @@ namespace Woops\Tiff\Ifd;
  * @version     1.0
  * @package     Woops.Tiff.Ifd
  */
-interface Interface extends \Iterator
+interface ObjectInterface extends \Iterator
 {
     /**
      * Class constructor

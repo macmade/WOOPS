@@ -15,25 +15,23 @@
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\Log\Writer;
+namespace Woops\Xml\ProcessingInstruction\Handler;
 
 /**
- * Interface for the log writer classes
+ * Interface for the XML processing instruction handlers
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Log.Writer
+ * @package     Woops.Xml.ProcessingInstruction.Handler
  */
-interface Interface extends \Woops\Core\Singleton\Interface
+interface ObjectInterface
 {
     /**
-     * Writes a log message
+     * Process a processing instruction
      * 
-     * @param   string  The message to write
-     * @param   int     The current time, as a timestamp
-     * @param   int     The log type
-     * @param   string  The name of the type
-     * @return  void
+     * @param   
+     * @param   
+     * @return  
      */
-    public function write( $message, $time, $type, $typeName );
+    public function process( \stdClass $options );
 }

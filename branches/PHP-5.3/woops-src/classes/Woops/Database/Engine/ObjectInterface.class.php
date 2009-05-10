@@ -24,7 +24,7 @@ namespace Woops\Database\Engine;
  * @version     1.0
  * @package     Woops.Database.Engine
  */
-interface Interface extends \Woops\Core\Singleton\Interface
+interface ObjectInterface extends \Woops\Core\Singleton\ObjectInterface
 {
     /**
      * 

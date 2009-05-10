@@ -177,11 +177,11 @@ class Parser extends \Woops\Core\Object
         $interfaces = class_implements( $className );
         
         if( !is_array( $interfaces )
-            || !isset( $interfaces[ 'Woops\Xml\ProcessingInstruction\Handler\Interface' ] )
+            || !isset( $interfaces[ 'Woops\Xml\ProcessingInstruction\Handler\ObjectInterface' ] )
         ) {
             
             throw new Parser\Exception(
-                'The class \'' . $className . '\' is not a valid processing instruction handler, since it does not implement the \'Woops\Xml\ProcessingInstruction\Handler\Interface\' interface',
+                'The class \'' . $className . '\' is not a valid processing instruction handler, since it does not implement the \'Woops\Xml\ProcessingInstruction\Handler\ObjectInterface\' interface',
                 Parser\Exception::EXCEPTION_INVALID_PI_CLASS
             );
         }

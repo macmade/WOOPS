@@ -24,7 +24,7 @@ namespace Woops\Mod\Cms\Block\ProcessingInstruction;
  * @version     1.0
  * @package     Woops.Mod.Cms.Block.ProcessingInstruction
  */
-class Handler extends \Woops\Core\Object implements \Woops\Xhtml\ProcessingInstruction\Handler\Interface
+class Handler extends \Woops\Core\Object implements \Woops\Xhtml\ProcessingInstruction\Handler\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

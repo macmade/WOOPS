@@ -22,7 +22,7 @@ namespace Woops\Core;
 // The WOOPS class manager can't auto-load them, since it's not available yet.
 // So they have to be included manually. This should be the last time we use
 // the require_once() function inside WOOPS.
-require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Singleton' ) . DIRECTORY_SEPARATOR . 'Interface.class.php' );
+require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Singleton' ) . DIRECTORY_SEPARATOR . 'ObjectInterface.class.php' );
 require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPARATOR . 'Informations.class.php' );
 require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPARATOR . 'Object.class.php' );
 
@@ -42,7 +42,7 @@ require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPAR
  * @version     1.0
  * @package     Woops.Core.Class
  */
-final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singleton\Interface
+final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singleton\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -132,12 +132,12 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         $this->_loadedClasses[ __CLASS__ ]                        = __FILE__;
         
         // Adds the singleton interface to the loaded classes array
-        $this->_loadedClasses[ 'Woops\Core\Singleton\Interface' ] = $this->_classDir
-                                                                  . 'Core'
-                                                                  . DIRECTORY_SEPARATOR
-                                                                  . 'Singleton'
-                                                                  . DIRECTORY_SEPARATOR
-                                                                  . 'Interface.class.php';
+        $this->_loadedClasses[ 'Woops\Core\Singleton\ObjectInterface' ] = $this->_classDir
+                                                                        . 'Core'
+                                                                        . DIRECTORY_SEPARATOR
+                                                                        . 'Singleton'
+                                                                        . DIRECTORY_SEPARATOR
+                                                                        . 'ObjectInterface.class.php';
         
         // Process each directory
         foreach( $dirIterator as $file ) {
@@ -449,7 +449,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         }
         
         // Checks if the requested class is an interface
-        if( substr( $className, -9 ) === 'Interface' ) {
+        if( substr( $className, -15 ) === 'ObjectInterface' ) {
             
             // Checks if the interface is defined
             if( !interface_exists( $className ) ) {

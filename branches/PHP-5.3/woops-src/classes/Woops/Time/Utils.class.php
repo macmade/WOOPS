@@ -24,7 +24,7 @@ namespace Woops\Time;
  * @version     1.0
  * @package     Woops.Time
  */
-final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\Interface
+final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
