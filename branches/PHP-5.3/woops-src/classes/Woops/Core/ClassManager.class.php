@@ -407,7 +407,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             if( $moduleClass ) {
                 
                 // Gets the path to the module class
-                $modName   = substr( $className, 10, strpos( $className, '_', 10 ) - 10 );
+                $modName   = substr( $className, 10, strpos( $className, '\\', 10 ) - 10 );
                 $modPath   = $this->_modManager->getModulePath( $modName );
                 $classPath = $modPath
                            . 'classes'
