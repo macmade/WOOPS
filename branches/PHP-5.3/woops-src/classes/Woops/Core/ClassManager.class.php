@@ -345,6 +345,13 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             $instance = self::getInstance();
         }
         
+        // Checks for a leading backslash
+        if( substr( $className, 0, 1 ) === '\\' ) {
+            
+            // Removes the leading backslash
+            $className = substr( $className, 1 );
+        }
+        
         // Checks if the class belongs to the 'Woops' package
         if( substr( $className, 0, 6 ) === 'Woops\\' ) {
             
@@ -663,7 +670,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
     public function getSingleton( $className )
     {
         // Creates a reflection object for the requested class
-        $reflection = \Woops\Core\Reflection\FunctionReflector::getInstance( $className );
+        $reflection = \Woops\Core\Reflection\ClassReflector::getInstance( $className );
         
         // Checks if the class is a singleton
         if( $reflection->isSingleton() ) {
