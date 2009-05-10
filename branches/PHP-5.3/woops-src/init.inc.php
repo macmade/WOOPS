@@ -58,13 +58,11 @@ require_once(
   . DIRECTORY_SEPARATOR
   . 'Core'
   . DIRECTORY_SEPARATOR
-  . 'Class'
-  . DIRECTORY_SEPARATOR
-  . 'Manager.class.php'
+  . 'ClassManager.class.php'
 );
 
 // Registers an SPL autoload method to use to load the classes form the Woops project
-spl_autoload_register( array( 'Woops\Core\Class\Manager', 'autoLoad' ) );
+spl_autoload_register( array( 'Woops\Core\ClassManager', 'autoLoad' ) );
 
 // Sets the error and exception handlers - From now every mistake will produce a fatal error
 set_exception_handler( array( 'Woops\Core\Exception\Handler', 'handleException' ) );

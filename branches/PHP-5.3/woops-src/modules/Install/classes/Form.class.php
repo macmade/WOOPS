@@ -522,7 +522,7 @@ class Form extends \Woops\Core\Module\Base
         $engineClass    = \Woops\Database\Layer::getInstance()->getEngineClass();
         
         // Gets the engine instance
-        $engine         = \Woops\Core\Class\Manager::getInstance()->getSingleton( $engineClass );
+        $engine         = \Woops\Core\ClassManager::getInstance()->getSingleton( $engineClass );
         
         // Stores the available database drivers
         $this->_drivers = $engine->getAvailableDrivers();
@@ -678,7 +678,7 @@ class Form extends \Woops\Core\Module\Base
         $engineClass    = \Woops\Database\Layer::getInstance()->getEngineClass();
         
         // Gets the engine instance
-        $engine         = \Woops\Core\Class\Manager::getInstance()->getSingleton( $engineClass );
+        $engine         = \Woops\Core\ClassManager::getInstance()->getSingleton( $engineClass );
         
         // We don't want any error here, we are just testing the database settings
         try {

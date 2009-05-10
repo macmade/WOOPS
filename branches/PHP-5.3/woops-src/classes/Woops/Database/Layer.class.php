@@ -196,7 +196,7 @@ final class Layer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Si
         }
         
         // Gets and stores the instance of the database engine class
-        $this->_engines[ $name ]     = \Woops\Core\Class\Manager::getInstance()->getSingleton( $class );
+        $this->_engines[ $name ]     = \Woops\Core\ClassManager::getInstance()->getSingleton( $class );
         $this->_engineNames[ $name ] = true;
         
         // Gets the available drivers from the engine

@@ -15,10 +15,10 @@
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\Core\Class\Manager;
+namespace Woops\Core\ClassManager;
 
 /**
- * Exception class for the Woops\Core\Class\Manager class
+ * Exception class for the Woops\Core\ClassManager class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0

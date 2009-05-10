@@ -227,7 +227,7 @@ final class Writer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\S
         
         // Registers the log writer class
         $this->_loggers[ $class ] = array(
-            \Woops\Core\Class\Manager::getInstance()->getSingleton( $class ),
+            \Woops\Core\ClassManager::getInstance()->getSingleton( $class ),
             $types
         );
     }
