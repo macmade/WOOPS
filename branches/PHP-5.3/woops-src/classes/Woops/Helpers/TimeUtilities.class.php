@@ -9,13 +9,13 @@
 # All rights reserved                                                          #
 ################################################################################
 
-# $Id$
+# $Id: Utils.class.php 824 2009-05-10 03:43:04Z macmade $
 
 // File encoding
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\Time;
+namespace Woops\Helpers;
 
 /**
  * Time relatded utilities
@@ -24,17 +24,12 @@ namespace Woops\Time;
  * @version     1.0
  * @package     Woops.Time
  */
-final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\ObjectInterface
+class Utils extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
     const PHP_COMPATIBLE = '5.3.0';
-    
-    /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance = NULL;
     
     /**
      * The available timezones
@@ -490,56 +485,6 @@ final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\Ob
         'Pacific/Wallis'                   => true,
         'Pacific/Yap'                      => true
     );
-    
-    /**
-     * Class constructor
-     * 
-     * The class constructor is private to avoid multiple instances of the
-     * class (singleton).
-     * 
-     * @return  void
-     */
-    private function __construct()
-    {}
-    
-    /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new \Woops\Core\Singleton\Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops\Time\Utils    The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
-    }
     
     /**
      * Returns an age.

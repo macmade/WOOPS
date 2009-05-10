@@ -9,13 +9,13 @@
 # All rights reserved                                                          #
 ################################################################################
 
-# $Id$
+# $Id: Utils.class.php 824 2009-05-10 03:43:04Z macmade $
 
 // File encoding
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\String;
+namespace Woops\Helpers;
 
 /**
  * String utilities
@@ -24,7 +24,7 @@ namespace Woops\String;
  * @version     1.0
  * @package     Woops.String
  */
-final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\ObjectInterface
+class StringUtilities extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -32,29 +32,24 @@ final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\Ob
     const PHP_COMPATIBLE = '5.3.0';
     
     /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance = NULL;
-    
-    /**
      * The ASCII table (control characters only)
      */
-    private $_asciiTable      = array();
+    protected $_asciiTable      = array();
     
     /**
      * Whether the random number generator device exists
      */
-    private $_hasRandomDevice = false;
+    protected $_hasRandomDevice = false;
     
     /**
      * A file resource to the random generator device, if available
      */
-    private $_randomDevice    = NULL;
+    protected $_randomDevice    = NULL;
     
     /**
      * The name of the ASCII control characters
      */
-    private $_asciiName       = array(
+    protected $_asciiName       = array(
         'NUL', 'SOH', 'STX', 'ETX', 'EOT', 'ENQ', 'ACK', 'BEL', 'BS',  'TAB',
         'LF',  'VT',  'FF',  'CR',  'SO',  'SI',  'DLE', 'DC1', 'DC2', 'DC3',
         'DC4', 'NAK', 'SYN', 'ETB', 'CAN', 'EM',  'SUB', 'ESC', 'FS',  'GS',
@@ -69,7 +64,7 @@ final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\Ob
      * 
      * @return void
      */
-    private function __construct()
+    protected function __construct()
     {
         // Process each ASCII control character
         for( $i = 0; $i < 33; $i++ ) {
@@ -112,23 +107,6 @@ final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\Ob
     }
     
     /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new \Woops\Core\Singleton\Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
      * Gets an ASCII control character
      * 
      * Valid name are: NUL, SOH, STX, ETX, EOT, ENQ, ACK, BEL, BS, TAB, LF, VT,
@@ -161,28 +139,6 @@ final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\Ob
         
         // Returns the ASCII character
         return ( $this->_asciiTable[ $name ] ) ? str_repeat( $this->_asciiTable[ $name ], $repeat ) : '';
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops\String\Utils  The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
     }
     
     /**

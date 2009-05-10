@@ -82,7 +82,7 @@ class Getter extends \Woops\Core\Singleton\Base
         $this->_env      = \Woops\Core\Env\Getter::getInstance();
         $this->_request  = \Woops\Core\Request\Getter::getInstance();
         $this->_db       = \Woops\Database\Layer::getInstance()->getEngine();
-        $this->_str      = \Woops\String\Utils::getInstance();
+        $this->_str      = \Woops\Helpers\StringUtilities::getInstance();
         
         $this->_pageId   = $this->_getPageId();
         $this->_langName = $this->_getLanguage();

@@ -99,7 +99,7 @@ abstract class Base extends \Woops\Core\Aop\Advisor
         self::$_conf       = \Woops\Core\Config\Getter::getInstance();
         
         // Gets the instance of the string utilities
-        self::$_str        = \Woops\String\Utils::getInstance();
+        self::$_str        = \Woops\Helpers\StringUtilities::getInstance();
         
         // Static variables are set
         self::$_hasStatic  = true;

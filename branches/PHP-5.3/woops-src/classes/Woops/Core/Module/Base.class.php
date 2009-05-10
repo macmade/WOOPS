@@ -147,7 +147,7 @@ abstract class Base extends \Woops\Core\Aop\Advisor
         self::$_modManager      = \Woops\Core\Module\Manager::getInstance();
         self::$_request         = \Woops\Core\Request\Getter::getInstance();
         self::$_env             = \Woops\Core\Env\Getter::getInstance();
-        self::$_str             = \Woops\String\Utils::getInstance();
+        self::$_str             = \Woops\Helpers\StringUtilities::getInstance();
         self::$_moduleVariables = self::$_request->getWoopsVar( 'mod' );
         
         // Static variables are set

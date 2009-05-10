@@ -9,13 +9,13 @@
 # All rights reserved                                                          #
 ################################################################################
 
-# $Id$
+# $Id: Utils.class.php 822 2009-05-10 03:27:06Z macmade $
 
 // File encoding
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\Debug;
+namespace Woops\Helpers;
 
 /**
  * Debug utilities
@@ -24,7 +24,7 @@ namespace Woops\Debug;
  * @version     1.0
  * @package     Woops.Debug
  */
-class Utils extends \Woops\Core\Object
+class DebugUtilities extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -103,7 +103,7 @@ class Utils extends \Woops\Core\Object
      * @return  mixed   If the $return parameter is set, this method will return a Woops\Xhtml\Tag instance, otherwise NULL
      * @see     _getVarType
      */
-    public static function viewArray( array $array, $return = false )
+    public static function printArray( array $array, $return = false )
     {
         // Common CSS styles
         $commonStyle          = 'font-family: Verdana, sans-serif; font-size: 10px; color: #898989; ';
@@ -126,7 +126,7 @@ class Utils extends \Woops\Core\Object
         foreach( $array as $key => &$value ) {
             
             // Gets the variable type
-            $varType = self::_getVarType( $value );
+            $varType = static::_getVarType( $value );
             
             // Adds a row
             $row = $table->tr;
@@ -150,7 +150,7 @@ class Utils extends \Woops\Core\Object
             if( is_array( $value ) ) {
                 
                 // Displays a sub-array
-                $dataCol->addChildNode( self::viewArray( $value, true ) );
+                $dataCol->addChildNode( static::printArray( $value, true ) );
                 
             } elseif( is_object( $value ) ) {
                 
@@ -188,10 +188,10 @@ class Utils extends \Woops\Core\Object
      * @param   boolean Whether the result must be returned, or directly printed
      * @param   string  An optionnal header to display
      * @return  mixed   If the $return parameter is set, this method will return a Woops\Xhtml\Tag instance, otherwise NULL
-     * @see     viewArray
+     * @see     printArray
      * @see     _getVarType
      */
-    public static function debug( $var, $return = false, $header = 'Debug informations' )
+    public static function printVar( $var, $return = false, $header = 'Debug informations' )
     {
         // Common CSS styles
         $commonStyle          = 'font-family: Verdana, sans-serif; font-size: 10px; color: #898989; ';
@@ -215,7 +215,7 @@ class Utils extends \Woops\Core\Object
         $typeSection[ 'style' ] = $commonStyle . 'background-color: #FFFFFF; border: solid 1px #D3E7F4; margin: 2px; padding: 2px;';
         $typeText               = $typeSection->strong;
         $typeText[ 'style' ]    = 'color: #0062A0;';
-        $typeSection->span      = self::_getVarType( $var );
+        $typeSection->span      = static::_getVarType( $var );
         $typeText->addTextData( 'Variable type:' );
         
         // Adds an HTML comment
@@ -229,7 +229,7 @@ class Utils extends \Woops\Core\Object
         if( is_array( $var ) ) {
             
             // Displays an array
-            $dataDiv->addChildNode( self::viewArray( $var, true ) );
+            $dataDiv->addChildNode( static::printArray( $var, true ) );
             
         } elseif( is_object( $var ) ) {
             
