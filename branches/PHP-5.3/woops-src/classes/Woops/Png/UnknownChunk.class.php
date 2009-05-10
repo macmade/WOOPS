@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Png;
+
 /**
  * Placeholder for the unknown PNG chunks
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Png
  */
-class Woops_Png_UnknownChunk extends Woops_Png_Chunk
+class UnknownChunk extends Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The chunk type
@@ -33,11 +39,11 @@ class Woops_Png_UnknownChunk extends Woops_Png_Chunk
     /**
      * Class constructor
      * 
-     * @param   Png_File    The instance of the Png_File class in which the chunk is placed
-     * @param   string      The chunk type
+     * @param   Woops\Png\File  The instance of the PNG file in which the chunk is placed
+     * @param   string          The chunk type
      * @return  NULL
      */
-    public function __construct( Png_File $pngFile, $type )
+    public function __construct( File $pngFile, $type )
     {
         // Sets the chunk type
         $this->_type = substr( $type, 0, 4 );
@@ -58,6 +64,6 @@ class Woops_Png_UnknownChunk extends Woops_Png_Chunk
      */
     public function getProcessedData()
     {
-        return new stdClass();
+        return new \stdClass();
     }
 }

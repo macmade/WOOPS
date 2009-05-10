@@ -1,9 +1,9 @@
 <?php
 	
 	// Includes the check scripts
-	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '../' . DIRECTORY_SEPARATOR . 'install-check' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Environment.class.php' );
-	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '../' . DIRECTORY_SEPARATOR . 'install-check' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Filesystem.class.php' );
-	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '../' . DIRECTORY_SEPARATOR . 'install-check' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Configuration.class.php' );
+	require_once( __DIR__ . DIRECTORY_SEPARATOR . '../' . DIRECTORY_SEPARATOR . 'install-check' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Environment.class.php' );
+	require_once( __DIR__ . DIRECTORY_SEPARATOR . '../' . DIRECTORY_SEPARATOR . 'install-check' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Filesystem.class.php' );
+	require_once( __DIR__ . DIRECTORY_SEPARATOR . '../' . DIRECTORY_SEPARATOR . 'install-check' . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR . 'Woops_Check_Configuration.class.php' );
 	
 	// Creates instances of the check scripts
 	$CHECK_ENV     = new Woops_Check_Environment();
@@ -28,10 +28,13 @@
 	} else {
 		
 		// Includes the initialization script
-		require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'init.inc.php' );
+		require_once( __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'init.inc.php' );
+		
+		// File encoding
+		declare( ENCODING = 'UTF-8' );
 		
 		// Checks if the Install module is loaded
-		if( !( Woops_Core_Module_Manager::getInstance()->isLoaded( 'Install' ) ) ) {
+		if( !( Woops\Core\Module\Manager::getInstance()->isLoaded( 'Install' ) ) ) {
 			
 			// Install module not loaded
 			$CONTENT = '<div class="box-error">
@@ -45,7 +48,7 @@
 		} else {
 			
 			// Creates an instance of the install form
-			$INSTALL_FORM = new Woops_Mod_Install_Form();
+			$INSTALL_FORM = new Woops\Mod\Install\Form();
 			
 			// Gets the install form content
 			$CONTENT      = ( string )$INSTALL_FORM;

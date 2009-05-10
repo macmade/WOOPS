@@ -11,14 +11,20 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Xml\ProcessingInstruction\Handler;
+
 /**
  * Interface for the XML processing instruction handlers
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Xml.ProcessingInstruction_Handler
+ * @package     Woops.Xml.ProcessingInstruction.Handler
  */
-interface Woops_Xml_ProcessingInstruction_Handler_Interface
+interface Interface
 {
     /**
      * Process a processing instruction
@@ -27,5 +33,5 @@ interface Woops_Xml_ProcessingInstruction_Handler_Interface
      * @param   
      * @return  
      */
-    public function process( stdClass $options );
+    public function process( \stdClass $options );
 }

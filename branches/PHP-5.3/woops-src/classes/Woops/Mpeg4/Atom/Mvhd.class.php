@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4\Atom;
+
 /**
  * MPEG-4 MVHD atom
  * 
@@ -48,12 +54,12 @@
  * @version     1.0
  * @package     Woops.Mpeg4.Atom
  */
-final class Woops_Mpeg4_Atom_Mvhd extends Woops_Mpeg4_FullBox
+final class Mvhd extends \Woops\Mpeg4\FullBox
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The atom type
@@ -62,7 +68,7 @@ final class Woops_Mpeg4_Atom_Mvhd extends Woops_Mpeg4_FullBox
     
     protected function _processFlags( $rawFlags )
     {
-        return new stdClass();
+        return new \stdClass();
     }
     
     public function getProcessedData()
@@ -80,9 +86,9 @@ final class Woops_Mpeg4_Atom_Mvhd extends Woops_Mpeg4_FullBox
             $data->duration          = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
             $data->rate              = $this->_stream->bigEndianFixedPoint( 16, 16 );
             $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
-            $this->_stream->seek( 10, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 10, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->matrix            = $this->_stream->matrix();
-            $this->_stream->seek( 24, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 24, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->next_track_ID     = $this->_stream->bigEndianUnsignedLong();
             
         } else {
@@ -93,9 +99,9 @@ final class Woops_Mpeg4_Atom_Mvhd extends Woops_Mpeg4_FullBox
             $data->duration          = $this->_stream->bigEndianUnsignedLong();
             $data->rate              = $this->_stream->bigEndianFixedPoint( 16, 16 );
             $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
-            $this->_stream->seek( 10, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 10, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->matrix            = $this->_stream->matrix();
-            $this->_stream->seek( 24, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 24, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->next_track_ID     = $this->_stream->bigEndianUnsignedLong();
         }
         

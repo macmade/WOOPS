@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Reflection;
+
 /**
  * WOOPS PHP error exception class
  *
@@ -18,19 +24,19 @@
  * @version     1.0
  * @package     Woops.Core.Reflection
  */
-final class Woops_Core_Reflection_Class extends Woops_Core_Reflection_Base
+final class Class extends Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 
      */
-    const IS_EXPLICIT_ABSTRACT = ReflectionClass::IS_EXPLICIT_ABSTRACT;
-    const IS_FINAL             = ReflectionClass::IS_FINAL;
-    const IS_IMPLICIT_ABSTRACT = ReflectionClass::IS_IMPLICIT_ABSTRACT;
+    const IS_EXPLICIT_ABSTRACT = \ReflectionClass::IS_EXPLICIT_ABSTRACT;
+    const IS_FINAL             = \ReflectionClass::IS_FINAL;
+    const IS_IMPLICIT_ABSTRACT = \ReflectionClass::IS_IMPLICIT_ABSTRACT;
     
     /**
      * 
@@ -39,7 +45,7 @@ final class Woops_Core_Reflection_Class extends Woops_Core_Reflection_Base
     {
         return self::_getInstance(
             __CLASS__,
-            'ReflectionClass',
+            '\ReflectionClass',
             array( $className )
         );
     }
@@ -49,7 +55,7 @@ final class Woops_Core_Reflection_Class extends Woops_Core_Reflection_Base
      */
     public function isSingleton()
     {
-        return $this->_reflector->implementsInterface( 'Woops_Core_Singleton_Interface' );
+        return $this->_reflector->implementsInterface( '\Woops\Core\Singleton\Interface' );
     }
     
     /**
@@ -57,7 +63,7 @@ final class Woops_Core_Reflection_Class extends Woops_Core_Reflection_Base
      */
     public function isMultiSingleton()
     {
-        return $this->_reflector->implementsInterface( 'Woops_Core_MultiSingleton_Interface' );
+        return $this->_reflector->implementsInterface( '\Woops\Core\MultiSingleton\Interface' );
     }
     
     /**
@@ -65,6 +71,6 @@ final class Woops_Core_Reflection_Class extends Woops_Core_Reflection_Base
      */
     public function isAopReady()
     {
-        return $this->_reflector->isSubclassOf( 'Woops_Core_Aop_Advisor' );
+        return $this->_reflector->isSubclassOf( '\Woops\Core\Aop\Advisor' );
     }
 }

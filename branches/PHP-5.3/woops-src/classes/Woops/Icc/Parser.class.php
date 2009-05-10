@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Icc;
+
 /**
  * ICC profile parser
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Icc
  */
-class Woops_Icc_Parser extends Woops_Core_Object
+class Parser extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The ICC profile object
@@ -33,13 +39,13 @@ class Woops_Icc_Parser extends Woops_Core_Object
     /**
      * Class constructor
      * 
-     * @param   Woops_Icc_Binary_Stream     An ICC binary stream
+     * @param   Woops\Icc\Binary\Stream     An ICC binary stream
      * @return  void
      */
-    public function __construct( Woops_Icc_Binary_Stream $stream )
+    public function __construct( Binary\Stream $stream )
     {
         // Creates an ICC profile object
-        $this->_profile = new Woops_Icc_Profile();
+        $this->_profile = new Profile();
         
         // Gets the ICC header
         $header         = $this->_profile->getHeader();
@@ -57,7 +63,7 @@ class Woops_Icc_Parser extends Woops_Core_Object
     /**
      * Gets the ICC profile object
      * 
-     * @return  Woops_Icc_Profile   The ICC profile object
+     * @return  Woops\Icc\Profile   The ICC profile object
      */
     public function getProfile()
     {

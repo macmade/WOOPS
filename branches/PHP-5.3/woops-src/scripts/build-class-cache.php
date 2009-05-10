@@ -18,15 +18,18 @@ define( 'WOOPS_CLASS_CACHE_MODE_OFF', true );
 
 // Includes the initialization script
 require_once(
-    dirname( __FILE__ )
+    __DIR__
   . DIRECTORY_SEPARATOR
   . '..'
   . DIRECTORY_SEPARATOR
   . 'init.inc.php'
 );
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
 // Gets incomming GET variables
-$GETVARS = Woops_Core_Request_Getter::getInstance()->classCache;
+$GETVARS = Woops\Core\Request\Getter::getInstance()->classCache;
 
 // Checks the GET variables
 if( $GETVARS && isset( $GETVARS[ 'className' ] ) ) {
@@ -35,27 +38,27 @@ if( $GETVARS && isset( $GETVARS[ 'className' ] ) ) {
     $CLASSNAME = $GETVARS[ 'className' ];
     
     // Path to the cache directory
-    $CACHEDIR  = Woops_Core_Env_Getter::getInstance()->getPath( 'cache/classes/' );
+    $CACHEDIR  = Woops\Core\Env\Getter::getInstance()->getPath( 'cache/classes/' );
     
     // Checks if the class caching is enabled (or the AOP), and checks the cache directory
-    if(    Woops_Core_Config_Getter::getInstance()->getVar( 'classCache', 'enable' )
-        || Woops_Core_Config_Getter::getInstance()->getVar( 'aop', 'enable' )
+    if(    Woops\Core\Config\Getter::getInstance()->getVar( 'classCache', 'enable' )
+        || Woops\Core\Config\Getter::getInstance()->getVar( 'aop', 'enable' )
         && $CACHEDIR
         && is_dir( $CACHEDIR )
         && is_writeable( $CACHEDIR )
-        && !file_exists( $CACHEDIR . $CLASSNAME )
+        && !file_exists( $CACHEDIR . str_replace( '\\', '.', $CLASSNAME ) )
     ) {
         
         // We don't want any error here
         try {
             
             // Checks if AOP is enabled, and if the class is not an interface
-            if( Woops_Core_Config_Getter::getInstance()->getVar( 'aop', 'enable' )
+            if( Woops\Core\Config\Getter::getInstance()->getVar( 'aop', 'enable' )
                 && substr( $CLASSNAME, -9 ) !== 'Interface'
             ) {
                 
                 // Creates an AOP version of the class
-                $AOP       = new Woops_Core_Aop_Class_Builder( $CLASSNAME );
+                $AOP       = new Woops\Core\Aop\Class\Builder( $CLASSNAME );
                 
                 // Gets the code of the AOP version
                 $CLASSCODE = ( string )$AOP;
@@ -63,17 +66,17 @@ if( $GETVARS && isset( $GETVARS[ 'className' ] ) ) {
             } else {
                 
                 // Creates a reflection object for the class
-                $REF       = Woops_Core_Reflection_Class::getInstance( $CLASSNAME );
+                $REF       = Woops\Core\Reflection\Class::getInstance( $CLASSNAME );
                 
                 // Gets the PHP source code
                 $CLASSCODE = file_get_contents( $REF->getFileName() );
             }
             
             // Checks if the source code must be optimized
-            if( Woops_Core_Config_Getter::getInstance()->getVar( 'classCache', 'optimize' ) ) {
+            if( Woops\Core\Config\Getter::getInstance()->getVar( 'classCache', 'optimize' ) ) {
                 
                 // Creates a source optimizer
-                $OPT       = new Woops_Php_Source_Optimizer( $CLASSCODE );
+                $OPT       = new Woops\Php\Source\Optimizer( $CLASSCODE );
                 
                 // Gets the optimized source code
                 $CLASSCODE = ( string )$OPT;
@@ -81,7 +84,7 @@ if( $GETVARS && isset( $GETVARS[ 'className' ] ) ) {
             
             // Writes the class in the cache
             file_put_contents(
-                $CACHEDIR . $CLASSNAME . '.class.php',
+                $CACHEDIR . str_replace( '\\', '.', $CLASSNAME ) . '.class.php',
                 $CLASSCODE
             );
             

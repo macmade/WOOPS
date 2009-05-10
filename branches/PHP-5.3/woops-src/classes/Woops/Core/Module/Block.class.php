@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Module;
+
 /**
  * Abstract for the module blocks
  *
@@ -18,10 +24,10 @@
  * @version     1.0
  * @package     Woops.Core.Module
  */
-abstract class Woops_Core_Module_Block extends Woops_Core_Module_Base
+abstract class Block extends Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
 }

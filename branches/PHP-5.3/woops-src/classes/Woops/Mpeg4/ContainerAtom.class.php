@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4;
+
 /**
  * Abtsract for the MPEG4 container atoms
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Mpeg4
  */
-abstract class Woops_Mpeg4_ContainerAtom extends Woops_Mpeg4_Atom implements Iterator, ArrayAccess
+abstract class ContainerAtom extends Atom implements \Iterator, \ArrayAccess
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     abstract public function validChildType( $type );
     
@@ -130,7 +136,7 @@ abstract class Woops_Mpeg4_ContainerAtom extends Woops_Mpeg4_Atom implements Ite
         
         foreach( $this->_children as $childAtom ) {
             
-            $childData = new stdClass();
+            $childData = new \stdClass();
             
             $childData->type     = $childAtom->getType();
             $childData->extended = $childAtom->isExtended();
@@ -156,17 +162,17 @@ abstract class Woops_Mpeg4_ContainerAtom extends Woops_Mpeg4_Atom implements Ite
     {
         if( !$this->_allowAnyChildrenType && !$this->validChildType( $childType ) ) {
             
-            throw new Woops_Mpeg4_ContainerAtom_Exception(
+            throw new ContainerAtom\Exception(
                 'Atom of type ' . $childType . ' cannot be contained in ' . $this->_type,
-                Woops_Mpeg4_ContainerAtom_Exception::EXCEPTION_INVALID_ATOM
+                ContainerAtom\Exception::EXCEPTION_INVALID_ATOM
             );
         }
         
-        $className         = 'Woops_Mpeg4_Atom_' . ucfirst( $childType );
+        $className         = 'Atom\\' . ucfirst( $childType );
         
         if( !class_exists( $className ) ) {
             
-            $atom = new Woops_Mpeg4_UnknownAtom( $childType );
+            $atom = new UnknownAtom( $childType );
             
         } else {
             

@@ -2,7 +2,7 @@
     
     // Includes the initialization script
     require_once(
-        dirname( __FILE__ )
+        __DIR__
       . DIRECTORY_SEPARATOR
       . '..'
       . DIRECTORY_SEPARATOR
@@ -11,9 +11,12 @@
       . 'init.inc.php'
     );
     
+    // File encoding
+    declare( ENCODING = 'UTF-8' );
+    
     // Creates a new GZIP parser
-    $GZIP_PARSER = new Woops_Gzip_Parser(
-    	Woops_Core_Env_Getter::getInstance()->getSourcePath( 'tests/gzip/test.gz' )
+    $GZIP_PARSER = new Woops\Gzip\Parser(
+    	Woops\Core\Env\Getter::getInstance()->getSourcePath( 'tests/gzip/test.gz' )
     );
 ?>
 

@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Unit;
+
 /**
  * Abstract class for the unit classes
  * 
@@ -21,12 +27,12 @@
  * @version     1.0
  * @package     Woops.Unit
  */
-abstract class Woops_Unit_Base extends Woops_Core_Object
+abstract class Base extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 
@@ -84,16 +90,16 @@ abstract class Woops_Unit_Base extends Woops_Core_Object
     /**
      * 
      */
-    protected function _checkClass( Woops_Unit_Base $unit )
+    protected function _checkClass( Base $unit )
     {
         $unitClass = get_class( $unit );
         $thisClass = get_class( $this );
         
         if( $unitClass !== $thisClass ) {
             
-            throw new Woops_Unit_Base_Exception(
+            throw new Base\Exception(
                 'Cannot compare a \'' . $unitClass . '\' unit with a \'' . $thisClass . '\' unit',
-                Woops_Unit_Base_Exception::EXCEPTION_INVALID_UNIT
+                Base\Exception::EXCEPTION_INVALID_UNIT
             );
         }
     }
@@ -199,9 +205,9 @@ abstract class Woops_Unit_Base extends Woops_Core_Object
         
             if( !isset( $this->_types[ $type ] ) ) {
                 
-                throw new Woops_Unit_Base_Exception(
+                throw new Base\Exception(
                     'Invalid unit type (' . $type . ')',
-                    Woops_Unit_Base_Exception::EXCEPTION_INVALID_TYPE
+                    Base\Exception::EXCEPTION_INVALID_TYPE
                 );
             }
             
@@ -221,9 +227,9 @@ abstract class Woops_Unit_Base extends Woops_Core_Object
         
         if( !isset( $this->_types[ $type ] ) ) {
             
-            throw new Woops_Unit_Base_Exception(
+            throw new Base\Exception(
                 'Invalid unit type (' . $type . ')',
-                Woops_Unit_Base_Exception::EXCEPTION_INVALID_TYPE
+                Base\Exception::EXCEPTION_INVALID_TYPE
             );
         }
         
@@ -233,7 +239,7 @@ abstract class Woops_Unit_Base extends Woops_Core_Object
     /**
      * 
      */
-    public function isBigger( Woops_Unit_Base $unit )
+    public function isBigger( Base $unit )
     {
         $this->_checkClass( $unit );
         
@@ -243,7 +249,7 @@ abstract class Woops_Unit_Base extends Woops_Core_Object
     /**
      * 
      */
-    public function isSmaller( Woops_Unit_Base $unit )
+    public function isSmaller( Base $unit )
     {
         $this->_checkClass( $unit );
         
@@ -253,7 +259,7 @@ abstract class Woops_Unit_Base extends Woops_Core_Object
     /**
      * 
      */
-    public function isEqual( Woops_Unit_Base $unit )
+    public function isEqual( Base $unit )
     {
         $this->_checkClass( $unit );
         
@@ -263,7 +269,7 @@ abstract class Woops_Unit_Base extends Woops_Core_Object
     /**
      * 
      */
-    public function add( Woops_Unit_Base $unit )
+    public function add( Base $unit )
     {
         $this->_checkClass( $unit );
         
@@ -273,7 +279,7 @@ abstract class Woops_Unit_Base extends Woops_Core_Object
     /**
      * 
      */
-    public function substract( Woops_Unit_Base $unit )
+    public function substract( Base $unit )
     {
         $this->_checkClass( $unit );
         
@@ -283,7 +289,7 @@ abstract class Woops_Unit_Base extends Woops_Core_Object
     /**
      * 
      */
-    public function multiply( Woops_Unit_Base $unit )
+    public function multiply( Base $unit )
     {
         $this->_checkClass( $unit );
         
@@ -293,7 +299,7 @@ abstract class Woops_Unit_Base extends Woops_Core_Object
     /**
      * 
      */
-    public function divide( Woops_Unit_Base $unit )
+    public function divide( Base $unit )
     {
         $this->_checkClass( $unit );
         

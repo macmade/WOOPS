@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Http;
+
 /**
  * HTTP client class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Http
  */
-class Woops_Http_Client extends Woops_Core_Event_Dispatcher
+class Client extends \Woops\Core\Event\Dispatcher
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The available HTTP request methods
@@ -244,9 +250,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         // Sets the user-agent
         $this->setUserAgent(
             'WOOPS/'
-          . Woops_Core_Informations::WOOPS_VERSION
+          . self::WOOPS_VERSION
           . '-'
-          . Woops_Core_Informations::WOOPS_VERSION_SUFFIX
+          . self::WOOPS_VERSION_SUFFIX
         );
         
         // Checks if the GZ functions are available
@@ -328,16 +334,16 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str       = Woops_String_Utils::getInstance();
+        self::$_str       = \Woops\String\Utils::getInstance();
         
         // Gets the instance of the string utilities
-        self::$_array     = Woops_Array_Utils::getInstance();
+        self::$_array     = \Woops\Array\Utils::getInstance();
         
         // Gets the instance of the file types class
-        self::$_fileTypes = Woops_File_Types::getInstance();
+        self::$_fileTypes = \Woops\File\Types::getInstance();
         
         // Gets the instance of the environment object
-        self::$_env       = Woops_Core_Env_Getter::getInstance();
+        self::$_env       = \Woops\Core\Env\Getter::getInstance();
         
         // Sets the newline character (CR-LF)
         self::$_CRLF      = self::$_str->CR . self::$_str->LF;
@@ -557,8 +563,8 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * Sets the HTTP request URI
      * 
      * @param   string                              The URI
-     * @return  Woops_Uniform_Resource_Identifier   The URI object
-     * @throws  Woops_Http_Client_Exception         If the connection has already been established
+     * @return  Woops\Uniform\Resource\Identifier   The URI object
+     * @throws  Woops\Http\Client\Exception         If the connection has already been established
      */
     public function setUri( $uri )
     {
@@ -566,14 +572,14 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
         // Creates and stores the URI object
-        $this->_uri = new Woops_Uniform_Resource_Identifier( $uri );
+        $this->_uri = new \Woops\Uniform\Resource\Identifier( $uri );
         
         // Returns the URI object
         return $this->_uri;
@@ -582,10 +588,10 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
     /**
      * Sets the HTTP request method
      * 
-     * @param   string                      The HTTP request method (should be one of the Woops_Http_Client::METHOD_XXX constant)
+     * @param   string                      The HTTP request method (should be one of the METHOD_XXX constant)
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
-     * @throws  Woops_Http_Client_Exception If the request method is invalid
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the request method is invalid
      */
     public function setRequestMethod( $method )
     {
@@ -593,9 +599,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -606,9 +612,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( !isset( self::$_requestMethods[ $method ] ) ) {
             
             // Invalid request method
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'Invalid HTTP request method (' . $method . ')',
-                Woops_Http_Client_Exception::EXCEPTION_INVALID_REQUEST_METHOD
+                Client\Exception::EXCEPTION_INVALID_REQUEST_METHOD
             );
         }
         
@@ -637,12 +643,12 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
     /**
      * Sets the HTTP authentication type
      * 
-     * @param   string                      The HTTP authentication type (should be one of the Woops_Http_Client::AUTH_XXX constant)
+     * @param   string                      The HTTP authentication type (should be one of the AUTH_XXX constant)
      * @param   string                      The HTTP authentication username
      * @param   string                      The HTTP authentication password
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
-     * @throws  Woops_Http_Client_Exception If the authentication type is invalid
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the authentication type is invalid
      */
     public function setAuthentication( $type, $username, $password )
     {
@@ -650,9 +656,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -663,9 +669,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( !isset( self::$_authTypes[ $type ] ) ) {
             
             // Invalid request method
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'Invalid HTTP authentication type (' . $type . ')',
-                Woops_Http_Client_Exception::EXCEPTION_INVALID_AUTH_TYPE
+                Client\Exception::EXCEPTION_INVALID_AUTH_TYPE
             );
         }
         
@@ -678,10 +684,10 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
     /**
      * Sets the HTTP protocol version
      * 
-     * @param   string                      The HTTP protocol version (should be one of the Woops_Http_Client::HTTP_VERSION_XXX constant)
+     * @param   string                      The HTTP protocol version (should be one of the HTTP_VERSION_XXX constant)
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
-     * @throws  Woops_Http_Client_Exception If the protocol version is invalid
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the protocol version is invalid
      */
     public function setProtocolVersion( $version )
     {
@@ -689,9 +695,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -702,9 +708,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( !isset( self::$_protocolVersions[ ( string )$version ] ) ) {
             
             // Invalid request method
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'Invalid HTTP protocol version (' . $version . ')',
-                Woops_Http_Client_Exception::EXCEPTION_INVALID_PROTOCOL_VERSION
+                Client\Exception::EXCEPTION_INVALID_PROTOCOL_VERSION
             );
         }
         
@@ -717,7 +723,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * 
      * @param   int                         The connection timeout
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function setTimeout( $value )
     {
@@ -725,9 +731,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -740,7 +746,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * 
      * @param   string                      The connection type (keep-alive, close)
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function setConnectionType( $value )
     {
@@ -748,9 +754,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -763,7 +769,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * 
      * @param   string                      The user agent
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function setUserAgent( $value )
     {
@@ -771,9 +777,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -789,7 +795,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * 
      * @param   int                         The value of the Keep-Alive header
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      * @see     setConnection
      */
     public function setKeepAlive( $value )
@@ -798,9 +804,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -814,9 +820,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
     /**
      * Adds a cookie
      * 
-     * @param   mixed                       Either a string, or a Woops_Http_Cookie object
+     * @param   mixed                       Either a string, or a Woops\Http\Cookie object
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function addCookie( $cookie )
     {
@@ -824,14 +830,14 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
         // Checks if the passed argument is a cookie object
-        if( is_object( $cookie ) && $cookie instanceof Woops_Http_Cookie ) {
+        if( is_object( $cookie ) && $cookie instanceof Cookie ) {
             
             // Stores the cookie object
             $this->_cookies[ $cookie->getName() ] = $cookie;
@@ -845,7 +851,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
             foreach( $cookies as $cookie ) {
                 
                 // Creates a new cookie object
-                $cookie = Woops_Http_Cookie::createCookieObject( $cookie );
+                $cookie = Cookie::createCookieObject( $cookie );
                 
                 // Stores the cookie object
                 $this->_cookies[ $cookie->getName() ] = $cookie;
@@ -860,7 +866,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * @param   string                      The header's name
      * @param   string                      The header's value
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function addHeader( $name, $value )
     {
@@ -868,9 +874,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -945,7 +951,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * @param   string  The raw data for the request body
      * @param   string  An optionnal encoding type
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function setRawData( $data, $encoding = '' )
     {
@@ -953,9 +959,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -976,7 +982,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * @param   string  The name of the value to set
      * @param   mixed   The value to set (can be a sub-array)
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function addPostData( $name, $value )
     {
@@ -984,9 +990,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -1022,9 +1028,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * @param   string                      The name of the file, in the $_FILES array
      * @param   string                      The path of the file to send
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
-     * @throws  Woops_Http_Client_Exception If the file does not exist
-     * @throws  Woops_Http_Client_Exception If the file is not readable
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the file does not exist
+     * @throws  Woops\Http\Client\Exception If the file is not readable
      */
     public function addFile( $name, $path )
     {
@@ -1032,9 +1038,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -1042,9 +1048,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( !file_exists( $path ) ) {
             
             // The file does not exist
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'No such file (' . $path . ')',
-                Woops_Http_Client_Exception::EXCEPTION_NO_FILE
+                Client\Exception::EXCEPTION_NO_FILE
             );
         }
         
@@ -1052,9 +1058,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( !file_exists( $path ) ) {
             
             // The file is not readable
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'Unreadable file (' . $path . ')',
-                Woops_Http_Client_Exception::EXCEPTION_FILE_NOT_READABLE
+                Client\Exception::EXCEPTION_FILE_NOT_READABLE
             );
         }
         
@@ -1082,8 +1088,8 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
     /**
      * Gets the HTTP response
      * 
-     * @return  Woops_Http_Response         The HTTP response object
-     * @throws  Woops_Http_Client_Exception If the connection was not established
+     * @return  Woops\Http\Response         The HTTP response object
+     * @throws  Woops\Http\Client\Exception If the connection was not established
      */
     public function getResponse()
     {
@@ -1091,9 +1097,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( !$this->_connected ) {
             
             // No connection
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has not been established yet',
-                Woops_Http_Client_Exception::EXCEPTION_NOT_CONNECTED
+                Client\Exception::EXCEPTION_NOT_CONNECTED
             );
         }
         
@@ -1101,7 +1107,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( !is_object( $this->_response ) ) {
             
             // Creates the response object
-            $this->_response = Woops_Http_Response::createResponseObject( $this->_socket );
+            $this->_response = Response::createResponseObject( $this->_socket );
         }
         
         // Returns the response object
@@ -1112,7 +1118,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * Establish a socket connection with the current settings
      * 
      * @return  boolean                     Whether the connection was successfully established
-     * @throws  Woops_Http_Client_Exception If the fsockopen() function is not available
+     * @throws  Woops\Http\Client\Exception If the fsockopen() function is not available
      */
     public function connect()
     {
@@ -1120,14 +1126,14 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( !function_exists( 'fsockopen' ) ) {
             
             // Error - No fsockopen()
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The PHP function fsockopen() is not available',
-                Woops_Http_Client_Exception::EXCEPTION_NO_FSOCKOPEN
+                Client\Exception::EXCEPTION_NO_FSOCKOPEN
             );
         }
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Http_Client_Event::EVENT_CONNECT );
+        $this->dispatchEvent( Client\Event::EVENT_CONNECT );
         
         // Creates a socket
         $this->_socket = fsockopen(
@@ -1216,7 +1222,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
     /**
      * Gets the request URI
      * 
-     * @return  Woops_Uniform_Resource_Identifier  The URI object
+     * @return  Woops\Uniform\Resource\Identifier  The URI object
      */
     public function getUri()
     {
@@ -1411,7 +1417,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * 
      * @param   string                      The name of the header
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function removeHeader( $name )
     {
@@ -1419,9 +1425,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -1433,7 +1439,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * Removes all headers
      * 
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function removeHeaders()
     {
@@ -1441,9 +1447,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -1456,7 +1462,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * 
      * @param   string                      The name of the cookie
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function removeCookie( $name )
     {
@@ -1464,9 +1470,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -1478,7 +1484,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * Removes all cookies
      * 
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function removeCookies()
     {
@@ -1486,9 +1492,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -1501,7 +1507,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * 
      * @param   string                      The name of the file, in the $_FILES array
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function removeFile( $name )
     {
@@ -1509,9 +1515,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
@@ -1523,7 +1529,7 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
      * Removes all files
      * 
      * @return  void
-     * @throws  Woops_Http_Client_Exception If the connection has already been established
+     * @throws  Woops\Http\Client\Exception If the connection has already been established
      */
     public function removeFiles()
     {
@@ -1531,9 +1537,9 @@ class Woops_Http_Client extends Woops_Core_Event_Dispatcher
         if( $this->_connected ) {
             
             // Connection has been established
-            throw new Woops_Http_Client_Exception(
+            throw new Client\Exception(
                 'The connection has already been established',
-                Woops_Http_Client_Exception::EXCEPTION_CONNECTED
+                Client\Exception::EXCEPTION_CONNECTED
             );
         }
         

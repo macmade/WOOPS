@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Tiff\Ifd;
+
 /**
  * Interface for the custom TIFF IFD classes
  * 
@@ -18,23 +24,23 @@
  * @version     1.0
  * @package     Woops.Tiff.Ifd
  */
-interface Woops_Tiff_Ifd_Interface extends Iterator
+interface Interface extends \Iterator
 {
     /**
      * Class constructor
      * 
-     * @param   Woops_Tiff_File The TIFF file in which the IFD is contained
+     * @param   Woops\Tiff\File The TIFF file in which the IFD is contained
      * @return  void
      */
-    public function __construct( Woops_Tiff_File $file );
+    public function __construct( \Woops\Tiff\File $file );
     
     /**
      * Process the raw data from a binary stream
      * 
-     * @param   Woops_Tiff_Binary_Stream    The binary stream
+     * @param   Woops\Tiff\Binary\Stream    The binary stream
      * @return  void
      */
-    public function processData( Woops_Tiff_Binary_Stream $stream );
+    public function processData( \Woops\Tiff\Binary\Stream $stream );
     
     /**
      * Gets the offset of the next IDF (Image File Directory)
@@ -55,15 +61,15 @@ interface Woops_Tiff_Ifd_Interface extends Iterator
      * Creates a new tag in the IFD
      * 
      * @param   int             The tag type (one of the TAG_XXX constant)
-     * @return  Woops_Tiff_Tag  The tag object
+     * @return  Woops\Tiff\Tag  The tag object
      */
     public function newTag( $type );
     
     /**
      * Adds a tag in the IFD
      * 
-     * @param   Woops_Tiff_Tag  The tag object
+     * @param   Woops\Tiff\Tag  The tag object
      * @return  void
      */
-    public function addTag( Woops_Tiff_Tag $tag );
+    public function addTag( \Woops\Tiff\Tag $tag );
 }

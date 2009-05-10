@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Exception;
+
 /**
  * Abstract class for the exception classes
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Core.Exception
  */
-abstract class Woops_Core_Exception_Base extends Exception
+abstract class Base extends \Exception
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Whether the static variables are set or not
@@ -89,7 +95,7 @@ abstract class Woops_Core_Exception_Base extends Exception
     private static function _setStaticVars()
     {
         // Gets the instance of the number utilities
-        self::$_debug     = ( boolean )Woops_Core_Config_Getter::getInstance()->getVar( 'error', 'verbose' );
+        self::$_debug     = ( boolean )\Woops\Core\Config\Getter::getInstance()->getVar( 'error', 'verbose' );
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -122,11 +128,11 @@ abstract class Woops_Core_Exception_Base extends Exception
         if( is_object( $class ) ) {
             
             $code      = $class->getCode();
-            $reflector = Woops_Core_Reflection_Object::getInstance( $class );
+            $reflector = \Woops\Core\Reflection\Object::getInstance( $class );
             
         } else {
             
-            $reflector = Woops_Core_Reflection_Class::getInstance( $class );
+            $reflector = \Woops\Core\Reflection\Class::getInstance( $class );
         }
         
         $constants = array_flip( $reflector->getConstants() );
@@ -189,8 +195,8 @@ abstract class Woops_Core_Exception_Base extends Exception
                 
                 // Do not displays the backtrace for the error and exception handlers
                 if( isset( $value[ 'class' ] )
-                    && ( ( $value[ 'class' ] === 'Woops_Core_Error_Handler'     && $value[ 'function' ] === '_handleError' )
-                    ||   ( $value[ 'class' ] === 'Woops_Core_Exception_Handler' && $value[ 'function' ] === '_handleException' ) )
+                    && ( ( $value[ 'class' ] === 'Woops\Core\Error\Handler'     && $value[ 'function' ] === '_handleError' )
+                    ||   ( $value[ 'class' ] === 'Woops\Core\Exception\Handler' && $value[ 'function' ] === '_handleException' ) )
                 ) {
                     continue;
                 }

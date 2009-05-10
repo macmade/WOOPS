@@ -11,6 +11,12 @@
 
 # $Id: Stream.class.php 637 2009-03-09 09:05:52Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf\Tag\Define;
+
 /**
  * SWF DefineScalingGrid tag
  * 
@@ -27,12 +33,12 @@
  * @version     1.0
  * @package     Woops.Swf.Tag.Define
  */
-class Woops_Swf_Tag_Define_ScalingGrid extends Woops_Swf_Tag
+class ScalingGrid extends \Woops\Swf\Tag
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The SWF tag type
@@ -52,15 +58,15 @@ class Woops_Swf_Tag_Define_ScalingGrid extends Woops_Swf_Tag
     /**
      * Class constructor
      * 
-     * @param   Woops_Swf_File  The instance of the SWF file in which the tag is contained
+     * @param   Woops\Swf\File  The instance of the SWF file in which the tag is contained
      */
-    public function __construct( Woops_Swf_File $file )
+    public function __construct( \Woops\Swf\File $file )
     {
         // Calls the parent constructor
         parent::__construct( $file );
         
         // Creates a new rectangle record
-        $this->_splitter = new Woops_Swf_Record_Rectangle();
+        $this->_splitter = new \Woops\Swf\Record\Rectangle();
     }
     
     /**
@@ -68,7 +74,7 @@ class Woops_Swf_Tag_Define_ScalingGrid extends Woops_Swf_Tag
      * 
      * @return  void
      */
-    public function processData( Woops_Swf_Binary_Stream $stream )
+    public function processData( \Woops\Swf\Binary\Stream $stream )
     {
         // Gets the character ID
         $this->_characterId = $stream->littleEndianUnsignedShort();
@@ -80,7 +86,7 @@ class Woops_Swf_Tag_Define_ScalingGrid extends Woops_Swf_Tag
     /**
      * Gets the center region of 9-slice grid
      * 
-     * @return  Woops_Swf_Record_Rectangle  The rectangle object for the center region of 9-slice grid
+     * @return  Woops\Swf\Record\Rectangle  The rectangle object for the center region of 9-slice grid
      */
     public function getSplitter()
     {

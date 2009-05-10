@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Binary\File\Resource;
+
 /**
  * Binary file resource stream
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Binary.File.Resource
  */
-class Woops_Binary_File_Resource_Stream extends Woops_Binary_Stream
+class Stream extends \Woops\Binary\Stream
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Class constructor
@@ -31,7 +37,7 @@ class Woops_Binary_File_Resource_Stream extends Woops_Binary_Stream
      * @param   resource    The file handle for which to create a binary stream
      * @param   boolean     Whether to close the file handle or not
      * @return  void
-     * @see     Woops_Binary_Stream::__construct
+     * @see     Woops\Binary\Stream::__construct
      */
     public function __construct( $handle, $closeHandle = true )
     {
@@ -39,9 +45,9 @@ class Woops_Binary_File_Resource_Stream extends Woops_Binary_Stream
         if( !is_resource( $handle ) ) {
             
             // Error - The file does not exist
-            throw new Woops_Binary_File_Resource_Stream_Exception(
+            throw new Stream\Exception(
                 'Passed argument must be a valid file handle',
-                Woops_Binary_File_Resource_Stream_Exception::EXCEPTION_NO_RESOURCE
+                Stream\Exception::EXCEPTION_NO_RESOURCE
             );
         }
         

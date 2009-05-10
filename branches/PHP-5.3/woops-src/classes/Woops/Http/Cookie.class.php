@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Http;
+
 /**
  * HTTP cookie class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Http
  */
-class Woops_Http_Cookie extends Woops_Core_Object
+class Cookie extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The cookie's name
@@ -137,8 +143,8 @@ class Woops_Http_Cookie extends Woops_Core_Object
      * Creates a cookie object from a string
      * 
      * @param   string                      The cookie string
-     * @return  Woops_Http_Cookie           The cookie object
-     * @throws  Woops_Http_Cookie_Exception If the cookie string cannot be parsed
+     * @return  Woops\Http\Cookie           The cookie object
+     * @throws  Woops\Http\Cookie_Exception If the cookie string cannot be parsed
      */
     public static function createCookieObject( $str )
     {
@@ -149,9 +155,9 @@ class Woops_Http_Cookie extends Woops_Core_Object
         if( !$equal ) {
             
             // Invalid cookie - No '=' character
-            throw new Woops_Http_Cookie_Exception(
+            throw new Cookie\Exception(
                 'Invalid cookie: \'' . $str . '\'',
-                Woops_Http_Cookie_Exception::EXCEPTION_BAD_COOKIE
+                Cookie\Exception::EXCEPTION_BAD_COOKIE
             );
         }
         

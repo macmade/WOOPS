@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core;
+
 /**
  * Class that contains WOOPS information constants
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Core
  */
-abstract class Woops_Core_Informations
+abstract class Informations
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE       = '5.2.0';
+    const PHP_COMPATIBLE       = '5.3.0';
     
     /**
      * The WOOPS version

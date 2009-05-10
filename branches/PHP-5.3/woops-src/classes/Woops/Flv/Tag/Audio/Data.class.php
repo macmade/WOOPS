@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Flv\Tag\Audio;
+
 /**
  * 
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Flv.Tag.Audio
  */
-class Woops_Flv_Tag_Audio_Data extends Woops_Flv_Tag
+class Data extends \Woops\Flv\Tag
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The sound formats
@@ -92,7 +98,7 @@ class Woops_Flv_Tag_Audio_Data extends Woops_Flv_Tag
      * 
      * @return  void
      */
-    public function processData( Woops_Flv_Binary_Stream $stream )
+    public function processData( \Woops\Flv\Binary\Stream $stream )
     {
         // Calls the parent method
         parent::processData( $stream );
@@ -106,6 +112,6 @@ class Woops_Flv_Tag_Audio_Data extends Woops_Flv_Tag
         $this->_soundSize   = ( $infos >> 7 ) & 0x01;
         $this->_soundType   = ( $infos )      & 0x01;
         
-        $stream->seek( $this->_dataSize - 1, Woops_Flv_Binary_Stream::SEEK_CUR );
+        $stream->seek( $this->_dataSize - 1, \Woops\Flv\Binary\Stream::SEEK_CUR );
     }
 }

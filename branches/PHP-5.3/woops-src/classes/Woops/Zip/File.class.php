@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Zip;
+
 /**
  * ZIP file
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Zip
  */
-class Woops_Zip_File extends Woops_Core_Object
+class File extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The local file headers
@@ -52,13 +58,13 @@ class Woops_Zip_File extends Woops_Core_Object
      */
     public function __construct()
     {
-        $this->_centralDirectory = new Woops_Zip_Central_Directory();
+        $this->_centralDirectory = new Central\Directory();
     }
     
     /**
      * Gets the current file header object (SPL Iterator method)
      * 
-     * @return  Woops_Zip_Central_File_Header   The current file header object
+     * @return  Woops\Zip\Central\File\Header   The current file header object
      */
     public function current()
     {
@@ -108,7 +114,7 @@ class Woops_Zip_File extends Woops_Core_Object
     /**
      * Gets the central directory object
      * 
-     * @return  Woops_Zip_Central_Directory The central directory object
+     * @return  Woops\Zip\Central\Directory The central directory object
      */
     public function getCentralDirectory()
     {
@@ -118,10 +124,10 @@ class Woops_Zip_File extends Woops_Core_Object
     /**
      * Adds a local file header
      * 
-     * @param   Woops_Zip_Local_File_Header The local file header
+     * @param   Woops\Zip\Local\File\Header The local file header
      * @return  void
      */
-    public function addLocalFileHeader( Woops_Zip_Local_File_Header $header )
+    public function addLocalFileHeader( Local\File\Header $header )
     {
         $this->_localFileHeaders[] = $header;
     }
@@ -129,10 +135,10 @@ class Woops_Zip_File extends Woops_Core_Object
     /**
      * Adds a data descriptor
      * 
-     * @param   Woops_Zip_Data_Descriptor   The data descriptor
+     * @param   Woops\Zip\Data\Descriptor   The data descriptor
      * @return  void
      */
-    public function addDataDescriptor( Woops_Zip_Data_Descriptor $descriptor )
+    public function addDataDescriptor( Data\Descriptor $descriptor )
     {
         $this->_dataDescriptors[] = $descriptor;
     }

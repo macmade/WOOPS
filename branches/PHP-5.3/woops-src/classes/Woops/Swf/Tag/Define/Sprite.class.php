@@ -11,6 +11,12 @@
 
 # $Id: Stream.class.php 637 2009-03-09 09:05:52Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf\Tag\Define;
+
 /**
  * SWF DefineSprite tag
  * 
@@ -28,12 +34,12 @@
  * @version     1.0
  * @package     Woops.Swf.Tag.Define
  */
-class Woops_Swf_Tag_Define_Sprite extends Woops_Swf_Tag implements Iterator
+class Sprite extends \Woops\Swf\Tag implements \Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The SWF tag type
@@ -63,7 +69,7 @@ class Woops_Swf_Tag_Define_Sprite extends Woops_Swf_Tag implements Iterator
     /**
      * Gets the current tag object (SPL Iterator method)
      * 
-     * @return  Woops_Swf_Tag   The current SWF tag object
+     * @return  Woops\Swf\Tag   The current SWF tag object
      */
     public function current()
     {
@@ -115,7 +121,7 @@ class Woops_Swf_Tag_Define_Sprite extends Woops_Swf_Tag implements Iterator
      * 
      * @return  void
      */
-    public function processData( Woops_Swf_Binary_Stream $stream )
+    public function processData( \Woops\Swf\Binary\Stream $stream )
     {
         // Gets the sprite ID and the frame count
         $this->_spriteId   = $stream->littleEndianUnsignedShort();
@@ -147,7 +153,7 @@ class Woops_Swf_Tag_Define_Sprite extends Woops_Swf_Tag implements Iterator
             $tag           = $this->newTag( $tagType );
             
             // Creates a binary stream with the tag data
-            $tagData       = new Woops_Swf_Binary_Stream( $stream->read( $tagLength ) );
+            $tagData       = new \Woops\Swf\Binary\Stream( $stream->read( $tagLength ) );
             
             // Processes the tag data
             $tag->processData( $tagData );
@@ -157,13 +163,13 @@ class Woops_Swf_Tag_Define_Sprite extends Woops_Swf_Tag implements Iterator
     /**
      * Creates a new SWF tag
      * 
-     * @param   int             The SWF tag type (one of the Woops_Swf_File::TAG_XXX constant)
-     * @return  Woops_Swf_Tag   The SWF tag object
+     * @param   int             The SWF tag type (one of the Woops\Swf\File::TAG_XXX constant)
+     * @return  Woops\Swf\Tag   The SWF tag object
      */
     public function newTag( $type )
     {
         // Gets the tag classname
-        $tagClass      = Woops_Swf_File::getTagClass( $type );
+        $tagClass      = \Woops\Swf\File::getTagClass( $type );
         
         // Creates the tag object
         $tag           = new $tagClass( $this->_file );

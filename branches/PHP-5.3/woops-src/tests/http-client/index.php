@@ -13,7 +13,7 @@
 
 // Includes the initialization script
 require_once(
-    dirname( __FILE__ )
+    __DIR__
   . DIRECTORY_SEPARATOR
   . '..'
   . DIRECTORY_SEPARATOR
@@ -22,11 +22,14 @@ require_once(
   . 'init.inc.php'
 );
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
 // Plain text content
 header( 'Content-Type: text/plain' );
 
 // WOOPS environment object
-$ENV    = Woops_Core_Env_Getter::getInstance();
+$ENV    = Woops\Core\Env\Getter::getInstance();
 
 // URL of the test file
 $URL    = ( ( $ENV->HTTPS ) ? 'https://' : 'http://' )
@@ -34,7 +37,7 @@ $URL    = ( ( $ENV->HTTPS ) ? 'https://' : 'http://' )
         . $ENV->getSourceWebPath( 'tests/http-client/test.php' );
 
 // Creates an HTTP client
-$CLIENT = new Woops_Http_Client( $URL );
+$CLIENT = new Woops\Http\Client( $URL );
 
 // Adds some POST data
 $CLIENT->addPostData(

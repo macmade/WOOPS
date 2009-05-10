@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Log\Writer;
+
 /**
  * Interface for the log writer classes
  *
@@ -18,7 +24,7 @@
  * @version     1.0
  * @package     Woops.Log.Writer
  */
-interface Woops_Log_Writer_Interface extends Woops_Core_Singleton_Interface
+interface Interface extends \Woops\Core\Singleton\Interface
 {
     /**
      * Writes a log message

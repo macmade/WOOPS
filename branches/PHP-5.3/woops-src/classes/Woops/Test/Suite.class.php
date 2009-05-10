@@ -11,6 +11,12 @@
 
 # $Id: Angle.class.php 434 2009-02-24 15:19:13Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Test;
+
 /**
  * Unit testing suite
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Test
  */
-class Woops_Test_Suite extends Woops_Core_Object implements Iterator
+class Suite extends \Woops\Core\Object implements \Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The test units
@@ -55,9 +61,9 @@ class Woops_Test_Suite extends Woops_Core_Object implements Iterator
             if( !file_exists( $logFile ) ) {
                 
                 // Error - Log file does not exists
-                throw new Woops_Test_Suite_Exception(
+                throw new Suite\Exception(
                     'The log file does not exist (path: ' . $logFile . ')',
-                    Woops_Test_Suite_Exception::EXCEPTION_NO_LOG_FILE
+                    Suite\Exception::EXCEPTION_NO_LOG_FILE
                 );
             }
             
@@ -65,9 +71,9 @@ class Woops_Test_Suite extends Woops_Core_Object implements Iterator
             if( !is_writable( $logFile ) ) {
                 
                 // Error - Log file is not writeable
-                throw new Woops_Test_Suite_Exception(
+                throw new Suite\Exception(
                     'The log file is not writeable (path: ' . $logFile . ')',
-                    Woops_Test_Suite_Exception::EXCEPTION_LOG_FILE_NOT_WRITEABLE
+                    Suite\Exception::EXCEPTION_LOG_FILE_NOT_WRITEABLE
                 );
             }
             
@@ -78,9 +84,9 @@ class Woops_Test_Suite extends Woops_Core_Object implements Iterator
             if( !$this->_log ) {
                 
                 // Error - Invalid file handle
-                throw new Woops_Test_Suite_Exception(
+                throw new Suite\Exception(
                     'Impossible to create a file handle for the log file (path: ' . $logFile . ')',
-                    Woops_Test_Suite_Exception::EXCEPTION_BAD_LOG_FILE_HANDLE
+                    Suite\Exception::EXCEPTION_BAD_LOG_FILE_HANDLE
                 );
             }
         }
@@ -89,7 +95,7 @@ class Woops_Test_Suite extends Woops_Core_Object implements Iterator
     /**
      * Gets the current test unit object (SPL Iterator method)
      * 
-     * @return  Woops_Test_Unit   The current test unit object
+     * @return  Woops\Test\Unit   The current test unit object
      */
     public function current()
     {
@@ -139,10 +145,10 @@ class Woops_Test_Suite extends Woops_Core_Object implements Iterator
     /**
      * Adds a test unit to the test suite
      * 
-     * @param   Woops_Test_Unit The test unit to add
+     * @param   Woops\Test\Unit The test unit to add
      * @return  void
      */
-    public function addUnit( Woops_Test_Unit $unit )
+    public function addUnit( Unit $unit )
     {
         $this->_units[] = $unit;
     }

@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Database\Engine;
+
 /**
  * Interface for the database engine classes
  *
@@ -18,7 +24,7 @@
  * @version     1.0
  * @package     Woops.Database.Engine
  */
-interface Woops_Database_Engine_Interface extends Woops_Core_Singleton_Interface
+interface Interface extends \Woops\Core\Singleton\Interface
 {
     /**
      * 

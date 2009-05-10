@@ -11,6 +11,12 @@
 
 # $Id: Stream.class.php 637 2009-03-09 09:05:52Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf\Tag\Enable\Debugger;
+
 /**
  * SWF EnableDebugger2 tag
  * 
@@ -22,12 +28,12 @@
  * @version     1.0
  * @package     Woops.Swf.Tag.Enable.Debugger
  */
-class Woops_Swf_Tag_Enable_Debugger_2 extends Woops_Swf_Tag_Enable_Debugger
+class 2 extends \Woops\Swf\Tag\Enable\Debugger
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The SWF tag type
@@ -39,10 +45,10 @@ class Woops_Swf_Tag_Enable_Debugger_2 extends Woops_Swf_Tag_Enable_Debugger
      * 
      * @return  void
      */
-    public function processData( Woops_Swf_Binary_Stream $stream )
+    public function processData( \Woops\Swf\Binary\Stream $stream )
     {
         // Skips the reserved bits
-        $stream->seek( 2, Woops_Swf_Binary_Stream::SEEK_CUR );
+        $stream->seek( 2, \Woops\Swf\Binary\Stream::SEEK_CUR );
         
         // Calls the parent method
         parent::processData( $stream );

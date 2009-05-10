@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Icc;
+
 /**
  * ICC profile header
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Icc
  */
-class Woops_Icc_Header extends Woops_Core_Object
+class Header extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The ICC specification version
@@ -158,10 +164,10 @@ class Woops_Icc_Header extends Woops_Core_Object
     /**
      * Process the raw data from a binary stream
      * 
-     * @param   Woops_Icc_Binary_Stream The IC binary stream
+     * @param   Woops\Icc\Binary\Stream The IC binary stream
      * @return  void
      */
-    public function processData( Woops_Icc_Binary_Stream $stream )
+    public function processData( Binary\Stream $stream )
     {
         $this->_profileSize      = $stream->bigEndianUnsignedLong();
         $this->_preferredCmmType = $stream->read( 4 );
@@ -184,9 +190,9 @@ class Woops_Icc_Header extends Woops_Core_Object
         
         if( $signature !== self::ICC_SIGNATURE ) {
             
-            throw new Woops_Icc_Header_Exception(
+            throw new Header\Exception(
                 'Invalid ICC signature (' . $signature . ')',
-                Woops_Icc_Header_Exception::EXCEPTION_BAD_SIGNATURE
+                Header\Exception::EXCEPTION_BAD_SIGNATURE
             );
         }
         
@@ -210,6 +216,6 @@ class Woops_Icc_Header extends Woops_Core_Object
         $this->_id              = $stream->read( 16 );
         
         // Reserved bytes
-        $stream->seek( 28, Woops_Icc_Binary_Stream::SEEK_CUR );
+        $stream->seek( 28, Binary\Stream::SEEK_CUR );
     }
 }

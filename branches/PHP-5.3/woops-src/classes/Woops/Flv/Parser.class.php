@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Flv;
+
 /**
  * FLV file parser
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Flv
  */
-class Woops_Flv_Parser extends Woops_Core_Object
+class Parser extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The TIFF file object
@@ -49,13 +55,13 @@ class Woops_Flv_Parser extends Woops_Core_Object
     public function __construct( $file )
     {
         // Create a new TIFF file object
-        $this->_file     = new Woops_Flv_File();
+        $this->_file     = new File();
         
         // Stores the file path
         $this->_filePath = $file;
         
         // Creates the binary stream
-        $this->_stream   = new Woops_Flv_Binary_File_Stream( $file );
+        $this->_stream   = new Binary\File\Stream( $file );
         
         // Parses the file
         $this->_parseFile();
@@ -73,7 +79,7 @@ class Woops_Flv_Parser extends Woops_Core_Object
         $header->processData( $this->_stream );
         
         // Moves to the data start
-        $this->_stream->seek( $header->getDataOffset() + 4, Woops_Flv_Binary_File_Stream::SEEK_SET );
+        $this->_stream->seek( $header->getDataOffset() + 4, Binary\File\Stream::SEEK_SET );
         
         // Process the FLV body
         while( !$this->_stream->endOfStream() ) {
@@ -91,7 +97,7 @@ class Woops_Flv_Parser extends Woops_Core_Object
     /**
      * Gets the FLV file object
      * 
-     * @return  Woops_Flv_File  The TIFF file object
+     * @return  Woops\Flv\File  The TIFF file object
      */
     public function getFile()
     {

@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Reflection;
+
 /**
  * WOOPS PHP error exception class
  *
@@ -18,20 +24,20 @@
  * @version     1.0
  * @package     Woops.Core.Reflection
  */
-final class Woops_Core_Reflection_Property extends Woops_Core_Reflection_Base
+final class Property extends Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 
      */
-    const IS_PRIVATE   = ReflectionProperty::IS_PRIVATE;
-    const IS_PROTECTED = ReflectionProperty::IS_PROTECTED;
-    const IS_PUBLIC    = ReflectionProperty::IS_PUBLIC;
-    const IS_STATIC    = ReflectionProperty::IS_STATIC;
+    const IS_PRIVATE   = \ReflectionProperty::IS_PRIVATE;
+    const IS_PROTECTED = \ReflectionProperty::IS_PROTECTED;
+    const IS_PUBLIC    = \ReflectionProperty::IS_PUBLIC;
+    const IS_STATIC    = \ReflectionProperty::IS_STATIC;
     
     /**
      * 
@@ -40,7 +46,7 @@ final class Woops_Core_Reflection_Property extends Woops_Core_Reflection_Base
     {
         return self::_getInstance(
             __CLASS__,
-            'ReflectionProperty',
+            '\ReflectionProperty',
             array( $class, $name )
         );
     }

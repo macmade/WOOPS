@@ -11,16 +11,19 @@
 
 # $Id$
 
-Woops_Core_Module_Manager::getInstance()->registerBlockType(
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+Woops\Core\Module\Manager::getInstance()->registerBlockType(
     'cms',
-    'Woops_Mod_Cms_Block'
+    'Woops\Mod\Cms\Block'
 );
 
-Woops_Xhtml_Parser::registerProcessingInstructionHandler(
+Woops\Xhtml\Parser::registerProcessingInstructionHandler(
     'woops-cms-block',
-    'Woops_Mod_Cms_Block_ProcessingInstruction_Handler'
+    'Woops\Mod\Cms\Block\ProcessingInstruction\Handler'
 );
 
-Woops_Page_Engine::getInstance()->registerPageEngine(
-    'Woops_Mod_Cms_Page_Engine'
+Woops\Page\Engine::getInstance()->registerPageEngine(
+    'Woops\Mod\Cms\Page\Engine'
 );

@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Exif\Tiff;
+
 /**
  * EXIF TIFF Image File Directory (IFD)
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Exif.Tiff
  */
-class Woops_Exif_Tiff_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_Interface
+class Ifd extends \Woops\Core\Object implements \Woops\Tiff\Ifd\Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The EXIF TIFF tags
@@ -91,76 +97,76 @@ class Woops_Exif_Tiff_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_In
     protected static $_types = array(
         
         // Tags Relating to Version
-        0x9000 => 'Woops_Exif_Tiff_Tag_ExifVersion',
-        0xA000 => 'Woops_Exif_Tiff_Tag_FlashpixVersion',
+        0x9000 => '\Woops\Exif\Tiff\Tag\ExifVersion',
+        0xA000 => '\Woops\Exif\Tiff\Tag\FlashpixVersion',
         
         // Tag Relating to Image Data Characteristics
-        0xA001 => 'Woops_Exif_Tiff_Tag_ColorSpace',
+        0xA001 => '\Woops\Exif\Tiff\Tag\ColorSpace',
         
         // Tags Relating to Image Configuration
-        0x9101 => 'Woops_Exif_Tiff_Tag_ComponentsConfiguration',
-        0x9102 => 'Woops_Exif_Tiff_Tag_CompressedBitsPerPixel',
-        0xA002 => 'Woops_Exif_Tiff_Tag_Pixel_XDimension',
-        0xA003 => 'Woops_Exif_Tiff_Tag_Pixel_YDimension',
+        0x9101 => '\Woops\Exif\Tiff\Tag\ComponentsConfiguration',
+        0x9102 => '\Woops\Exif\Tiff\Tag\CompressedBitsPerPixel',
+        0xA002 => '\Woops\Exif\Tiff\Tag\Pixel\XDimension',
+        0xA003 => '\Woops\Exif\Tiff\Tag\Pixel\YDimension',
         
         // Tags Relating to User Information
-        0x927C => 'Woops_Exif_Tiff_Tag_MakerNote',
-        0x9286 => 'Woops_Exif_Tiff_Tag_UserComment',
+        0x927C => '\Woops\Exif\Tiff\Tag\MakerNote',
+        0x9286 => '\Woops\Exif\Tiff\Tag\UserComment',
         
         // Tag Relating to Related File Information
-        0xA004 => 'Woops_Exif_Tiff_Tag_RelatedSoundFile',
+        0xA004 => '\Woops\Exif\Tiff\Tag\RelatedSoundFile',
         
         // Tags Relating to Date and Time
-        0x9003 => 'Woops_Exif_Tiff_Tag_DateTime_Original',
-        0x9004 => 'Woops_Exif_Tiff_Tag_DateTime_Digitized',
-        0x9290 => 'Woops_Exif_Tiff_Tag_SubSec_Time',
-        0x9291 => 'Woops_Exif_Tiff_Tag_SubSec_Time_Original',
-        0x9292 => 'Woops_Exif_Tiff_Tag_SubSec_Time_Digitized',
+        0x9003 => '\Woops\Exif\Tiff\Tag\DateTime\Original',
+        0x9004 => '\Woops\Exif\Tiff\Tag\DateTime\Digitized',
+        0x9290 => '\Woops\Exif\Tiff\Tag\SubSec\Time',
+        0x9291 => '\Woops\Exif\Tiff\Tag\SubSec\Time\Original',
+        0x9292 => '\Woops\Exif\Tiff\Tag\SubSec\Time\Digitized',
         
         // Tags Relating to Picture-Taking Conditions
-        0x829A => 'Woops_Exif_Tiff_Tag_Exposure_Time',
-        0x829D => 'Woops_Exif_Tiff_Tag_FNumber',
-        0x8822 => 'Woops_Exif_Tiff_Tag_Exposure_Program',
-        0x8824 => 'Woops_Exif_Tiff_Tag_SpectralSensitivity',
-        0x8827 => 'Woops_Exif_Tiff_Tag_IsoSpeedRatings',
-        0x8828 => 'Woops_Exif_Tiff_Tag_Oecf',
-        0x9201 => 'Woops_Exif_Tiff_Tag_ShutterSpeedValue',
-        0x9202 => 'Woops_Exif_Tiff_Tag_ApertureValue',
-        0x9203 => 'Woops_Exif_Tiff_Tag_BrightnessValue',
-        0x9204 => 'Woops_Exif_Tiff_Tag_Exposure_BiasValue',
-        0x9205 => 'Woops_Exif_Tiff_Tag_MaxApertureValue',
-        0x9206 => 'Woops_Exif_Tiff_Tag_Subject_Distance',
-        0x9207 => 'Woops_Exif_Tiff_Tag_MeteringMode',
-        0x9208 => 'Woops_Exif_Tiff_Tag_LightSource',
-        0x9209 => 'Woops_Exif_Tiff_Tag_Flash',
-        0x920A => 'Woops_Exif_Tiff_Tag_Focal_Length',
-        0x9214 => 'Woops_Exif_Tiff_Tag_Subject_Area',
-        0xA20B => 'Woops_Exif_Tiff_Tag_Flash_Energy',
-        0xA20C => 'Woops_Exif_Tiff_Tag_SpatialFrequencyResponse',
-        0xA20E => 'Woops_Exif_Tiff_Tag_Focal_Plane_XResolution',
-        0xA20F => 'Woops_Exif_Tiff_Tag_Focal_Plane_YResolution',
-        0xA210 => 'Woops_Exif_Tiff_Tag_Focal_Plane_ResolutionUnit',
-        0xA214 => 'Woops_Exif_Tiff_Tag_Subject_Location',
-        0xA215 => 'Woops_Exif_Tiff_Tag_Exposure_Index',
-        0xA217 => 'Woops_Exif_Tiff_Tag_SensingMethod',
-        0xA300 => 'Woops_Exif_Tiff_Tag_FileSource',
-        0xA301 => 'Woops_Exif_Tiff_Tag_Scene_Type',
-        0xA302 => 'Woops_Exif_Tiff_Tag_CfaPattern',
-        0xA401 => 'Woops_Exif_Tiff_Tag_CustomRendered',
-        0xA402 => 'Woops_Exif_Tiff_Tag_Exposure_Mode',
-        0xA403 => 'Woops_Exif_Tiff_Tag_WhiteBalance',
-        0xA404 => 'Woops_Exif_Tiff_Tag_DigitalZoomRatio',
-        0xA405 => 'Woops_Exif_Tiff_Tag_Focal_LengthIn35mmFilm',
-        0xA406 => 'Woops_Exif_Tiff_Tag_Scene_CaptureType',
-        0xA407 => 'Woops_Exif_Tiff_Tag_GainControl',
-        0xA408 => 'Woops_Exif_Tiff_Tag_Contrast',
-        0xA409 => 'Woops_Exif_Tiff_Tag_Saturation',
-        0xA40A => 'Woops_Exif_Tiff_Tag_Sharpness',
-        0xA40B => 'Woops_Exif_Tiff_Tag_DeviceSettingDescription',
-        0xA40C => 'Woops_Exif_Tiff_Tag_Subject_DistanceRange',
+        0x829A => '\Woops\Exif\Tiff\Tag\Exposure\Time',
+        0x829D => '\Woops\Exif\Tiff\Tag\FNumber',
+        0x8822 => '\Woops\Exif\Tiff\Tag\Exposure\Program',
+        0x8824 => '\Woops\Exif\Tiff\Tag\SpectralSensitivity',
+        0x8827 => '\Woops\Exif\Tiff\Tag\IsoSpeedRatings',
+        0x8828 => '\Woops\Exif\Tiff\Tag\Oecf',
+        0x9201 => '\Woops\Exif\Tiff\Tag\ShutterSpeedValue',
+        0x9202 => '\Woops\Exif\Tiff\Tag\ApertureValue',
+        0x9203 => '\Woops\Exif\Tiff\Tag\BrightnessValue',
+        0x9204 => '\Woops\Exif\Tiff\Tag\Exposure\BiasValue',
+        0x9205 => '\Woops\Exif\Tiff\Tag\MaxApertureValue',
+        0x9206 => '\Woops\Exif\Tiff\Tag\Subject\Distance',
+        0x9207 => '\Woops\Exif\Tiff\Tag\MeteringMode',
+        0x9208 => '\Woops\Exif\Tiff\Tag\LightSource',
+        0x9209 => '\Woops\Exif\Tiff\Tag\Flash',
+        0x920A => '\Woops\Exif\Tiff\Tag\Focal\Length',
+        0x9214 => '\Woops\Exif\Tiff\Tag\Subject\Area',
+        0xA20B => '\Woops\Exif\Tiff\Tag\Flash\Energy',
+        0xA20C => '\Woops\Exif\Tiff\Tag\SpatialFrequencyResponse',
+        0xA20E => '\Woops\Exif\Tiff\Tag\Focal\Plane\XResolution',
+        0xA20F => '\Woops\Exif\Tiff\Tag\Focal\Plane\YResolution',
+        0xA210 => '\Woops\Exif\Tiff\Tag\Focal\Plane\ResolutionUnit',
+        0xA214 => '\Woops\Exif\Tiff\Tag\Subject\Location',
+        0xA215 => '\Woops\Exif\Tiff\Tag\Exposure\Index',
+        0xA217 => '\Woops\Exif\Tiff\Tag\SensingMethod',
+        0xA300 => '\Woops\Exif\Tiff\Tag\FileSource',
+        0xA301 => '\Woops\Exif\Tiff\Tag\Scene\Type',
+        0xA302 => '\Woops\Exif\Tiff\Tag\CfaPattern',
+        0xA401 => '\Woops\Exif\Tiff\Tag\CustomRendered',
+        0xA402 => '\Woops\Exif\Tiff\Tag\Exposure\Mode',
+        0xA403 => '\Woops\Exif\Tiff\Tag\WhiteBalance',
+        0xA404 => '\Woops\Exif\Tiff\Tag\DigitalZoomRatio',
+        0xA405 => '\Woops\Exif\Tiff\Tag\Focal\LengthIn35mmFilm',
+        0xA406 => '\Woops\Exif\Tiff\Tag\Scene\CaptureType',
+        0xA407 => '\Woops\Exif\Tiff\Tag\GainControl',
+        0xA408 => '\Woops\Exif\Tiff\Tag\Contrast',
+        0xA409 => '\Woops\Exif\Tiff\Tag\Saturation',
+        0xA40A => '\Woops\Exif\Tiff\Tag\Sharpness',
+        0xA40B => '\Woops\Exif\Tiff\Tag\DeviceSettingDescription',
+        0xA40C => '\Woops\Exif\Tiff\Tag\Subject\DistanceRange',
         
         // Other Tags
-        0xA420 => 'Woops_Exif_Tiff_Tag_ImageUniqueId'
+        0xA420 => '\Woops\Exif\Tiff\Tag\ImageUniqueId'
     );
     
     /**
@@ -191,10 +197,10 @@ class Woops_Exif_Tiff_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_In
     /**
      * Class constructor
      * 
-     * @param   Woops_Tiff_File The TIFF file in which the IFD is contained
+     * @param   Woops\Tiff\File The TIFF file in which the IFD is contained
      * @return  void
      */
-    public function __construct( Woops_Tiff_File $file )
+    public function __construct( \Woops\Tiff\File $file )
     {
         $this->_file   = $file;
         $this->_header = $this->_file->getHeader();
@@ -203,7 +209,7 @@ class Woops_Exif_Tiff_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_In
     /**
      * Gets the current tag object (SPL Iterator method)
      * 
-     * @return  Woops_Tiff_Tag  The current SWF tag object
+     * @return  Woops\Tiff\Tag  The current SWF tag object
      */
     public function current()
     {
@@ -255,7 +261,7 @@ class Woops_Exif_Tiff_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_In
      * 
      * @return  void
      */
-    public function processData( Woops_Tiff_Binary_Stream $stream )
+    public function processData( \Woops\Tiff\Binary\Stream $stream )
     {
         // Resets the tag array
         $this->_tags = array();
@@ -275,17 +281,17 @@ class Woops_Exif_Tiff_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_In
                 // Creates a new tag
                 $tag = $this->newTag( $type );
                 
-            } catch( Woops_Exif_Tiff_Ifd_Exception $e ) {
+            } catch( Ifd\Exception $e ) {
                 
                 // Checks if the exception was made for an unknown TIFF tag
-                if( $e->getCode() !== Woops_Exif_Tiff_Ifd_Exception::EXCEPTION_INVALID_TAG_TYPE ) {
+                if( $e->getCode() !== Ifd\Exception::EXCEPTION_INVALID_TAG_TYPE ) {
                     
                     // No - Throws the exception again
                     throw $e;
                 }
                 
                 // Creates an unknown tag object, and adds it
-                $tag = new Woops_Exif_Tiff_UnknownTag( $this->_file, $type );
+                $tag = new UnknownTag( $this->_file, $type );
                 $this->addTag( $tag );
             }
             
@@ -322,8 +328,8 @@ class Woops_Exif_Tiff_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_In
      * Creates a new tag in the IFD
      * 
      * @param   int                             The tag type (one of the TAG_XXX constant)
-     * @return  Woops_Tiff_Tag                  The tag object
-     * @throws  Woops_Exif_Tiff_Ifd_Exception   If the tag type is invalid
+     * @return  Woops\Tiff\Tag                  The tag object
+     * @throws  Woops\Exif\Tiff\Ifd_Exception   If the tag type is invalid
      */
     public function newTag( $type )
     {
@@ -334,9 +340,9 @@ class Woops_Exif_Tiff_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_In
         if( !isset( self::$_types[ $type ] ) ) {
             
             // Error - Invalid value type
-            throw new Woops_Exif_Tiff_Ifd_Exception(
+            throw new Ifd\Exception(
                 'Invalid tag type (' .  $type . ')',
-                Woops_Exif_Tiff_Ifd_Exception::EXCEPTION_INVALID_TAG_TYPE
+                Ifd\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         
@@ -354,10 +360,10 @@ class Woops_Exif_Tiff_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_In
     /**
      * Adds a tag in the IFD
      * 
-     * @param   Woops_Tiff_Tag The tag object
+     * @param   Woops\Tiff\Tag The tag object
      * @return  void
      */
-    public function addTag( Woops_Tiff_Tag $tag )
+    public function addTag( \Woops\Tiff\Tag $tag )
     {
         $this->_tags[] = $tag;
     }

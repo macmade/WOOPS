@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Request;
+
 /**
  * WOOPS environment class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Core.Request
  */
-final class Woops_Core_Request_Getter extends Woops_Core_Object implements Woops_Core_Singleton_Interface
+final class Getter extends \Woops\Core\Object implements \Woops\Core\Singleton\Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The unique instance of the class (singleton)
@@ -69,13 +75,13 @@ final class Woops_Core_Request_Getter extends Woops_Core_Object implements Woops
      * be cloned (singleton).
      * 
      * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()
     {
-        throw new Woops_Core_Singleton_Exception(
+        throw new \Woops\Core\Singleton\Exception(
             'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
     }
     
@@ -101,7 +107,7 @@ final class Woops_Core_Request_Getter extends Woops_Core_Object implements Woops
      * This method is used to get the unique instance of the class
      * (singleton). If no instance is available, it will create it.
      * 
-     * @return  Woops_Core_Request_Getter   The unique instance of the class
+     * @return  Woops\Core\Request\Getter   The unique instance of the class
      * @see     __construct
      */
     public static function getInstance()

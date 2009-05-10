@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Icc;
+
 /**
  * ICC tag table
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Icc
  */
-class Woops_Icc_TagTable extends Woops_Core_Object implements Iterator
+class TagTable extends \Woops\Core\Object implements \Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The ICC tag types (long form)
@@ -113,44 +119,44 @@ class Woops_Icc_TagTable extends Woops_Core_Object implements Iterator
      * The ICC tag types, with their corresponding PHP class
      */
      protected static $_types = array(
-        0x41324230 => 'Woops_Icc_Tag_AToB0',
-        0x41324231 => 'Woops_Icc_Tag_AToB1',
-        0x41324232 => 'Woops_Icc_Tag_AToB2',
-        0x6258595A => 'Woops_Icc_Tag_Blue_MatrixColumn',
-        0x62545243 => 'Woops_Icc_Tag_Blue_Trc',
-        0x42324130 => 'Woops_Icc_Tag_BToA0',
-        0x42324131 => 'Woops_Icc_Tag_BToA1',
-        0x42324132 => 'Woops_Icc_Tag_BToA2',
-        0x63616C74 => 'Woops_Icc_Tag_CalibrationDateTime',
-        0x74617267 => 'Woops_Icc_Tag_CharTarget',
-        0x63686164 => 'Woops_Icc_Tag_ChromaticAdaptation',
-        0x6368726D => 'Woops_Icc_Tag_Chromaticity',
-        0x636C726F => 'Woops_Icc_Tag_Colorant_Order',
-        0x636C7274 => 'Woops_Icc_Tag_Colorant_Table',
-        0x636C6F74 => 'Woops_Icc_Tag_Colorant_Table_Out',
-        0x63707274 => 'Woops_Icc_Tag_Copyright',
-        0x646D6E64 => 'Woops_Icc_Tag_Device_MfgDesc',
-        0x646D6464 => 'Woops_Icc_Tag_Device_ModelDesc',
-        0x67616D74 => 'Woops_Icc_Tag_Gamut',
-        0x6B545243 => 'Woops_Icc_Tag_Gray_Trc',
-        0x6758595A => 'Woops_Icc_Tag_Green_MatrixColumn',
-        0x67545243 => 'Woops_Icc_Tag_Green_Trc',
-        0x6C756D69 => 'Woops_Icc_Tag_Luminance',
-        0x6D656173 => 'Woops_Icc_Tag_Measurement',
-        0x626B7074 => 'Woops_Icc_Tag_Media_BlackPoint',
-        0x77747074 => 'Woops_Icc_Tag_Media_WhitePoint',
-        0x6E636C32 => 'Woops_Icc_Tag_NamedColor2',
-        0x72657370 => 'Woops_Icc_Tag_OutputResponse',
-        0x70726530 => 'Woops_Icc_Tag_Preview_0',
-        0x70726531 => 'Woops_Icc_Tag_Preview_1',
-        0x70726532 => 'Woops_Icc_Tag_Preview_2',
-        0x64657363 => 'Woops_Icc_Tag_Profile_Description',
-        0x70736571 => 'Woops_Icc_Tag_Profile_SequenceDesc',
-        0x7258595A => 'Woops_Icc_Tag_Red_MatrixColumn',
-        0x72545243 => 'Woops_Icc_Tag_Red_Trc',
-        0x74656368 => 'Woops_Icc_Tag_Technology',
-        0x76756564 => 'Woops_Icc_Tag_Viewing_CondDesc',
-        0x76696577 => 'Woops_Icc_Tag_Viewing_Conditions'
+        0x41324230 => '\Woops\Icc\Tag\AToB0',
+        0x41324231 => '\Woops\Icc\Tag\AToB1',
+        0x41324232 => '\Woops\Icc\Tag\AToB2',
+        0x6258595A => '\Woops\Icc\Tag\Blue\MatrixColumn',
+        0x62545243 => '\Woops\Icc\Tag\Blue\Trc',
+        0x42324130 => '\Woops\Icc\Tag\BToA0',
+        0x42324131 => '\Woops\Icc\Tag\BToA1',
+        0x42324132 => '\Woops\Icc\Tag\BToA2',
+        0x63616C74 => '\Woops\Icc\Tag\CalibrationDateTime',
+        0x74617267 => '\Woops\Icc\Tag\CharTarget',
+        0x63686164 => '\Woops\Icc\Tag\ChromaticAdaptation',
+        0x6368726D => '\Woops\Icc\Tag\Chromaticity',
+        0x636C726F => '\Woops\Icc\Tag\Colorant\Order',
+        0x636C7274 => '\Woops\Icc\Tag\Colorant\Table',
+        0x636C6F74 => '\Woops\Icc\Tag\Colorant\Table\Out',
+        0x63707274 => '\Woops\Icc\Tag\Copyright',
+        0x646D6E64 => '\Woops\Icc\Tag\Device\MfgDesc',
+        0x646D6464 => '\Woops\Icc\Tag\Device\ModelDesc',
+        0x67616D74 => '\Woops\Icc\Tag\Gamut',
+        0x6B545243 => '\Woops\Icc\Tag\Gray\Trc',
+        0x6758595A => '\Woops\Icc\Tag\Green\MatrixColumn',
+        0x67545243 => '\Woops\Icc\Tag\Green\Trc',
+        0x6C756D69 => '\Woops\Icc\Tag\Luminance',
+        0x6D656173 => '\Woops\Icc\Tag\Measurement',
+        0x626B7074 => '\Woops\Icc\Tag\Media\BlackPoint',
+        0x77747074 => '\Woops\Icc\Tag\Media\WhitePoint',
+        0x6E636C32 => '\Woops\Icc\Tag\NamedColor2',
+        0x72657370 => '\Woops\Icc\Tag\OutputResponse',
+        0x70726530 => '\Woops\Icc\Tag\Preview\0',
+        0x70726531 => '\Woops\Icc\Tag\Preview\1',
+        0x70726532 => '\Woops\Icc\Tag\Preview\2',
+        0x64657363 => '\Woops\Icc\Tag\Profile\Description',
+        0x70736571 => '\Woops\Icc\Tag\Profile\SequenceDesc',
+        0x7258595A => '\Woops\Icc\Tag\Red\MatrixColumn',
+        0x72545243 => '\Woops\Icc\Tag\Red\Trc',
+        0x74656368 => '\Woops\Icc\Tag\Technology',
+        0x76756564 => '\Woops\Icc\Tag\Viewing\CondDesc',
+        0x76696577 => '\Woops\Icc\Tag\Viewing\Conditions'
     );
     
     /**
@@ -166,7 +172,7 @@ class Woops_Icc_TagTable extends Woops_Core_Object implements Iterator
     /**
      * Gets the current file header object (SPL Iterator method)
      * 
-     * @return  Woops_Zip_Central_File_Header   The current file header object
+     * @return  Woops\Zip\Central\File\Header   The current file header object
      */
     public function current()
     {
@@ -217,8 +223,8 @@ class Woops_Icc_TagTable extends Woops_Core_Object implements Iterator
      * Creates a new ICC tag
      * 
      * @param   int                             The ICC tag type (one of the TAG_XXX constant)
-     * @return  Woops_Icc_Tag                   The ICC tag object
-     * @throws  Woops_Icc_TagTable_Exception    If the tag type is invalid
+     * @return  Woops\Icc\Tag                   The ICC tag object
+     * @throws  Woops\Icc\TagTable\Exception    If the tag type is invalid
      */
     public function newTag( $type )
     {
@@ -229,9 +235,9 @@ class Woops_Icc_TagTable extends Woops_Core_Object implements Iterator
         if( !isset( self::$_types[ $type ] ) ) {
             
             // Error - Invalid tag type
-            throw new Woops_Icc_TagTable_Exception(
+            throw new TagTable\Exception(
                 'Invalid tag type (' . $type . ')',
-                Woops_Icc_TagTable_Exception::EXCEPTION_INVALID_TAG_TYPE
+                TagTable\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         
@@ -251,10 +257,10 @@ class Woops_Icc_TagTable extends Woops_Core_Object implements Iterator
     /**
      * Process the raw data from a binary stream
      * 
-     * @param   Woops_Icc_Binary_Stream The IC binary stream
+     * @param   Woops\Icc\Binary\Stream The IC binary stream
      * @return  void
      */
-    public function processData( Woops_Icc_Binary_Stream $stream )
+    public function processData( Binary\Stream $stream )
     {
         $this->_tags = array();
         
@@ -272,14 +278,14 @@ class Woops_Icc_TagTable extends Woops_Core_Object implements Iterator
                 
                 $tag = $this->newTag( $type );
                 
-            } catch( Woops_Icc_TagTable_Exception $e ) {
+            } catch( TagTable\Exception $e ) {
                 
-                if( $e->getCode() !== Woops_Icc_TagTable_Exception::EXCEPTION_INVALID_TAG_TYPE ) {
+                if( $e->getCode() !== TagTable\Exception::EXCEPTION_INVALID_TAG_TYPE ) {
                     
                     throw $e;
                 }
                 
-                $tag = new Woops_Icc_UnknownTag( $type );
+                $tag = new UnknownTag( $type );
                 $this->_tags[] = $tag;
             }
         }

@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4\Atom;
+
 /**
  * MPEG-4 TREF atom
  * 
@@ -30,12 +36,12 @@
  * @version     1.0
  * @package     Woops.Mpeg4.Atom
  */
-final class Woops_Mpeg4_Atom_Tref extends Woops_Mpeg4_DataAtom
+final class Tref extends \Woops\Mpeg4\DataAtom
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The atom type
@@ -53,7 +59,7 @@ final class Woops_Mpeg4_Atom_Tref extends Woops_Mpeg4_DataAtom
         $this->_stream->rewind();
         
         // Data storage
-        $data          = new stdClass();
+        $data          = new \stdClass();
         $data->entries = array();
         
         // Process each entry
@@ -63,7 +69,7 @@ final class Woops_Mpeg4_Atom_Tref extends Woops_Mpeg4_DataAtom
             $entryLength           = $this->_stream->bigEndianUnsignedLong();
             
             // Storage for the current entry
-            $entry                 = new stdClass();
+            $entry                 = new \stdClass();
             
             // Reference type
             $entry->reference_type = $this->_stream->read( 4 );

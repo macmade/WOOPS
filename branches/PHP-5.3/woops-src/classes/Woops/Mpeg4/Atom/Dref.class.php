@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4\Atom;
+
 /**
  * MPEG-4 DREF atom
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Mpeg4.Atom
  */
-final class Woops_Mpeg4_Atom_Dref extends Woops_Mpeg4_FullBox
+final class Dref extends \Woops\Mpeg4\FullBox
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The atom type
@@ -32,7 +38,7 @@ final class Woops_Mpeg4_Atom_Dref extends Woops_Mpeg4_FullBox
     
     protected function _processFlags( $flags )
     {
-        return new stdClass();
+        return new \stdClass();
     }
     
     public function getProcessedData()
@@ -59,7 +65,7 @@ final class Woops_Mpeg4_Atom_Dref extends Woops_Mpeg4_FullBox
                 
             } else {
                 
-                $entry = new stdClass();
+                $entry = new \stdClass();
             }
             
             $data->entries[] = $entry;
@@ -98,11 +104,11 @@ final class Woops_Mpeg4_Atom_Dref extends Woops_Mpeg4_FullBox
     
     protected function _dataEntryBox( $rawData )
     {
-        $data                        = new stdClass();
+        $data                        = new \stdClass();
         $version                     = unpack( 'N', str_pad( substr( $rawData, 0, 1 ), 4, chr( 0 ), STR_PAD_LEFT ) );
         $flags                       = unpack( 'N', str_pad( substr( $rawData, 1, 3 ), 4, chr( 0 ), STR_PAD_LEFT ) );
         $data->version               = $version[ 1 ];
-        $data->flags                 = new stdClass();
+        $data->flags                 = new \stdClass();
         $data->flags->self_reference = $flags & 0x000001;
         
         return $data;

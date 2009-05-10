@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Exif\Tiff\Gps;
+
 /**
  * EXIF TIFF Image File Directory (IFD)
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Exif.Tiff.Gps
  */
-class Woops_Exif_Tiff_Gps_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_Interface
+class Ifd extends \Woops\Core\Object implements \Woops\Tiff\Ifd\Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The EXIF GPS TIFF tags
@@ -64,37 +70,37 @@ class Woops_Exif_Tiff_Gps_Ifd extends Woops_Core_Object implements Woops_Tiff_If
      * The types of the EXIF GPS TIFF tags, with their corresponding PHP class
      */
     protected static $_types = array(
-        0x0000 => 'Woops_Exif_Tiff_Gps_Tag_VersionId',
-        0x0001 => 'Woops_Exif_Tiff_Gps_Tag_Latitude_Ref',
-        0x0002 => 'Woops_Exif_Tiff_Gps_Tag_Latitude',
-        0x0003 => 'Woops_Exif_Tiff_Gps_Tag_Longitude_Ref',
-        0x0004 => 'Woops_Exif_Tiff_Gps_Tag_Longitude',
-        0x0005 => 'Woops_Exif_Tiff_Gps_Tag_Altitude_Ref',
-        0x0006 => 'Woops_Exif_Tiff_Gps_Tag_Altitude',
-        0x0007 => 'Woops_Exif_Tiff_Gps_Tag_TimeStamp',
-        0x0008 => 'Woops_Exif_Tiff_Gps_Tag_Satellites',
-        0x0009 => 'Woops_Exif_Tiff_Gps_Tag_Status',
-        0x000A => 'Woops_Exif_Tiff_Gps_Tag_MeasureMode',
-        0x000B => 'Woops_Exif_Tiff_Gps_Tag_Dop',
-        0x000C => 'Woops_Exif_Tiff_Gps_Tag_Speed_Ref',
-        0x000D => 'Woops_Exif_Tiff_Gps_Tag_Speed',
-        0x000E => 'Woops_Exif_Tiff_Gps_Tag_Track_Ref',
-        0x000F => 'Woops_Exif_Tiff_Gps_Tag_Track',
-        0x0010 => 'Woops_Exif_Tiff_Gps_Tag_ImgDirection_Ref',
-        0x0011 => 'Woops_Exif_Tiff_Gps_Tag_ImgDirection',
-        0x0012 => 'Woops_Exif_Tiff_Gps_Tag_MapDatum',
-        0x0013 => 'Woops_Exif_Tiff_Gps_Tag_Dest_Latitude_Ref',
-        0x0014 => 'Woops_Exif_Tiff_Gps_Tag_Dest_Latitude',
-        0x0015 => 'Woops_Exif_Tiff_Gps_Tag_Dest_Longitude_Ref',
-        0x0016 => 'Woops_Exif_Tiff_Gps_Tag_Dest_Longitude',
-        0x0017 => 'Woops_Exif_Tiff_Gps_Tag_Dest_Bearing_Ref',
-        0x0018 => 'Woops_Exif_Tiff_Gps_Tag_Dest_Bearing',
-        0x0019 => 'Woops_Exif_Tiff_Gps_Tag_Dest_Distance_Ref',
-        0x001A => 'Woops_Exif_Tiff_Gps_Tag_Dest_Distance',
-        0x001B => 'Woops_Exif_Tiff_Gps_Tag_ProcessingMethod',
-        0x001C => 'Woops_Exif_Tiff_Gps_Tag_AreaInformation',
-        0x001D => 'Woops_Exif_Tiff_Gps_Tag_DateStamp',
-        0x001E => 'Woops_Exif_Tiff_Gps_Tag_Differential'
+        0x0000 => '\Woops\Exif\Tiff\Gps\Tag\VersionId',
+        0x0001 => '\Woops\Exif\Tiff\Gps\Tag\Latitude\Ref',
+        0x0002 => '\Woops\Exif\Tiff\Gps\Tag\Latitude',
+        0x0003 => '\Woops\Exif\Tiff\Gps\Tag\Longitude\Ref',
+        0x0004 => '\Woops\Exif\Tiff\Gps\Tag\Longitude',
+        0x0005 => '\Woops\Exif\Tiff\Gps\Tag\Altitude\Ref',
+        0x0006 => '\Woops\Exif\Tiff\Gps\Tag\Altitude',
+        0x0007 => '\Woops\Exif\Tiff\Gps\Tag\TimeStamp',
+        0x0008 => '\Woops\Exif\Tiff\Gps\Tag\Satellites',
+        0x0009 => '\Woops\Exif\Tiff\Gps\Tag\Status',
+        0x000A => '\Woops\Exif\Tiff\Gps\Tag\MeasureMode',
+        0x000B => '\Woops\Exif\Tiff\Gps\Tag\Dop',
+        0x000C => '\Woops\Exif\Tiff\Gps\Tag\Speed\Ref',
+        0x000D => '\Woops\Exif\Tiff\Gps\Tag\Speed',
+        0x000E => '\Woops\Exif\Tiff\Gps\Tag\Track\Ref',
+        0x000F => '\Woops\Exif\Tiff\Gps\Tag\Track',
+        0x0010 => '\Woops\Exif\Tiff\Gps\Tag\ImgDirection\Ref',
+        0x0011 => '\Woops\Exif\Tiff\Gps\Tag\ImgDirection',
+        0x0012 => '\Woops\Exif\Tiff\Gps\Tag\MapDatum',
+        0x0013 => '\Woops\Exif\Tiff\Gps\Tag\Dest\Latitude\Ref',
+        0x0014 => '\Woops\Exif\Tiff\Gps\Tag\Dest\Latitude',
+        0x0015 => '\Woops\Exif\Tiff\Gps\Tag\Dest\Longitude\Ref',
+        0x0016 => '\Woops\Exif\Tiff\Gps\Tag\Dest\Longitude',
+        0x0017 => '\Woops\Exif\Tiff\Gps\Tag\Dest\Bearing\Ref',
+        0x0018 => '\Woops\Exif\Tiff\Gps\Tag\Dest\Bearing',
+        0x0019 => '\Woops\Exif\Tiff\Gps\Tag\Dest\Distance\Ref',
+        0x001A => '\Woops\Exif\Tiff\Gps\Tag\Dest\Distance',
+        0x001B => '\Woops\Exif\Tiff\Gps\Tag\ProcessingMethod',
+        0x001C => '\Woops\Exif\Tiff\Gps\Tag\AreaInformation',
+        0x001D => '\Woops\Exif\Tiff\Gps\Tag\DateStamp',
+        0x001E => '\Woops\Exif\Tiff\Gps\Tag\Differential'
     );
     
     /**
@@ -125,10 +131,10 @@ class Woops_Exif_Tiff_Gps_Ifd extends Woops_Core_Object implements Woops_Tiff_If
     /**
      * Class constructor
      * 
-     * @param   Woops_Tiff_File The TIFF file in which the IFD is contained
+     * @param   Woops\Tiff\File The TIFF file in which the IFD is contained
      * @return  void
      */
-    public function __construct( Woops_Tiff_File $file )
+    public function __construct( \Woops\Tiff\File $file )
     {
         $this->_file   = $file;
         $this->_header = $this->_file->getHeader();
@@ -137,7 +143,7 @@ class Woops_Exif_Tiff_Gps_Ifd extends Woops_Core_Object implements Woops_Tiff_If
     /**
      * Gets the current tag object (SPL Iterator method)
      * 
-     * @return  Woops_Tiff_Tag  The current SWF tag object
+     * @return  Woops\Tiff\Tag  The current SWF tag object
      */
     public function current()
     {
@@ -189,7 +195,7 @@ class Woops_Exif_Tiff_Gps_Ifd extends Woops_Core_Object implements Woops_Tiff_If
      * 
      * @return  void
      */
-    public function processData( Woops_Tiff_Binary_Stream $stream )
+    public function processData( \Woops\Tiff\Binary\Stream $stream )
     {
         // Resets the tag array
         $this->_tags = array();
@@ -209,17 +215,17 @@ class Woops_Exif_Tiff_Gps_Ifd extends Woops_Core_Object implements Woops_Tiff_If
                 // Creates a new tag
                 $tag = $this->newTag( $type );
                 
-            } catch( Woops_Exif_Tiff_Gps_Ifd_Exception $e ) {
+            } catch( Ifd\Exception $e ) {
                 
                 // Checks if the exception was made for an unknown TIFF tag
-                if( $e->getCode() !== Woops_Exif_Tiff_Gps_Ifd_Exception::EXCEPTION_INVALID_TAG_TYPE ) {
+                if( $e->getCode() !== Ifd\Exception::EXCEPTION_INVALID_TAG_TYPE ) {
                     
                     // No - Throws the exception again
                     throw $e;
                 }
                 
                 // Creates an unknown tag object, and adds it
-                $tag = new Woops_Exif_Tiff_Gps_UnknownTag( $this->_file, $type );
+                $tag = new UnknownTag( $this->_file, $type );
                 $this->addTag( $tag );
             }
             
@@ -256,8 +262,8 @@ class Woops_Exif_Tiff_Gps_Ifd extends Woops_Core_Object implements Woops_Tiff_If
      * Creates a new tag in the IFD
      * 
      * @param   int                                 The tag type (one of the TAG_XXX constant)
-     * @return  Woops_Tiff_Tag                      The tag object
-     * @throws  Woops_Exif_Tiff_Gps_Ifd_Exception   If the tag type is invalid
+     * @return  Woops\Tiff\Tag                      The tag object
+     * @throws  Woops\Exif\Tiff\Gps\Ifd\Exception   If the tag type is invalid
      */
     public function newTag( $type )
     {
@@ -268,9 +274,9 @@ class Woops_Exif_Tiff_Gps_Ifd extends Woops_Core_Object implements Woops_Tiff_If
         if( !isset( self::$_types[ $type ] ) ) {
             
             // Error - Invalid value type
-            throw new Woops_Exif_Tiff_Gps_Ifd_Exception(
+            throw new Ifd\Exception(
                 'Invalid tag type (' .  $type . ')',
-                Woops_Exif_Tiff_Gps_Ifd_Exception::EXCEPTION_INVALID_TAG_TYPE
+                Ifd\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         
@@ -288,10 +294,10 @@ class Woops_Exif_Tiff_Gps_Ifd extends Woops_Core_Object implements Woops_Tiff_If
     /**
      * Adds a tag in the IFD
      * 
-     * @param   Woops_Tiff_Tag The tag object
+     * @param   Woops\Tiff\Tag The tag object
      * @return  void
      */
-    public function addTag( Woops_Tiff_Tag $tag )
+    public function addTag( \Woops\Tiff\Tag $tag )
     {
         $this->_tags[] = $tag;
     }

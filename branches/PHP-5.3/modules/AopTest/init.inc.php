@@ -11,16 +11,19 @@
 
 # $Id$
 
-Woops_Core_Aop_Advisor::addAdvice(
-    Woops_Core_Aop_Advisor::ADVICE_TYPE_BEFORE_CALL,
-    array( 'Woops_Mod_AopTest_Interceptor', 'interceptBefore' ),
-    'Woops_Mod_HelloWorld_SayHello',
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+Woops\Core\Aop\Advisor::addAdvice(
+    Woops\Core\Aop_Advisor::ADVICE_TYPE_BEFORE_CALL,
+    array( 'Woops\Mod\AopTest\Interceptor', 'interceptBefore' ),
+    'Woops\Mod\HelloWorld\SayHello',
     'getBlockContent'
 );
 
-Woops_Core_Aop_Advisor::addAdvice(
-    Woops_Core_Aop_Advisor::ADVICE_TYPE_AFTER_CALL,
-    array( 'Woops_Mod_AopTest_Interceptor', 'interceptAfter' ),
-    'Woops_Mod_HelloWorld_SayHello',
+Woops\Core\Aop\Advisor::addAdvice(
+    Woops\Core\Aop\Advisor::ADVICE_TYPE_AFTER_CALL,
+    array( 'Woops\Mod\AopTest\Interceptor', 'interceptAfter' ),
+    'Woops\Mod\HelloWorld\SayHello',
     'getBlockContent'
 );

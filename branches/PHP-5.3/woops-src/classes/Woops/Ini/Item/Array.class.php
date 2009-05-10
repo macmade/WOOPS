@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Ini\Item;
+
 /**
  * INI array class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Ini.Item
  */
-class Woops_Ini_Item_Array extends Woops_Core_Object
+class Array extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Whether the static variables are set or not
@@ -108,7 +114,7 @@ class Woops_Ini_Item_Array extends Woops_Core_Object
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str       = Woops_String_Utils::getInstance();
+        self::$_str       = \Woops\String\Utils::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -122,7 +128,7 @@ class Woops_Ini_Item_Array extends Woops_Core_Object
     public function addValue( $value )
     {
         // Creates the value object
-        $object          = new Woops_Ini_Item_Value( $this->_name . '[]', $value );
+        $object          = new Value( $this->_name . '[]', $value );
         
         // Stores the value object
         $this->_values[] = $object;
@@ -144,7 +150,7 @@ class Woops_Ini_Item_Array extends Woops_Core_Object
     /**
      * Gets the values of the array item
      * 
-     * @return  array   An array with instances of the Woops_Ini_Item_Value class
+     * @return  array   An array with instances of the Woops\Ini\Item\Value class
      */
     public function getValues()
     {

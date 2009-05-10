@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Xhtml;
+
 /**
  * Class to create XHTML comments
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Xhtml
  */
-class Woops_Xhtml_Comment extends Woops_Xhtml_Tag
+class Comment extends Tag
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The text of the comment
@@ -34,7 +40,7 @@ class Woops_Xhtml_Comment extends Woops_Xhtml_Tag
      * Class constructor
      * 
      * @return  void
-     * @see     Woops_Xhtml_Tag::__construct
+     * @see     Woops\Xhtml\Tag::__construct
      */
     public function __construct( $text )
     {

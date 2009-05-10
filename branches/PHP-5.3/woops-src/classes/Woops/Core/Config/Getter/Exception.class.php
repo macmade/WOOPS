@@ -11,19 +11,25 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Config\Getter;
+
 /**
- * Exception class for the Woops_Core_Config class
+ * Exception class for the Woops\Core\Config class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Core.Config.Getter
  */
-final class Woops_Core_Config_Getter_Exception extends Woops_Core_Exception_Base
+final class Exception extends \Woops\Core\Exception\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Error codes for the exceptions

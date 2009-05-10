@@ -11,6 +11,12 @@
 
 # $Id: Helper.class.php 534 2009-03-03 07:15:08Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core;
+
 /**
  * Callback helper class
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Core
  */
-class Woops_Core_Callback extends Woops_Core_Event_Dispatcher
+class Callback extends Event\Dispatcher
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * THe PHP callback
@@ -47,9 +53,9 @@ class Woops_Core_Callback extends Woops_Core_Event_Dispatcher
         if( !is_callable( $callback ) ) {
             
             // Error - The callback is not valid
-            throw new Woops_Core_Callback_Exception(
+            throw new Callback\Exception(
                 'Invalid PHP callback',
-                Woops_Core_Callback_Exception::EXCEPTION_INVALID_CALLBACK
+                Callback\Exception::EXCEPTION_INVALID_CALLBACK
             );
         }
         
@@ -60,13 +66,13 @@ class Woops_Core_Callback extends Woops_Core_Event_Dispatcher
         if( is_array( $this->_callback ) ) {
             
             // Checks if the callback returns a reference
-            $ref                     = Woops_Core_Reflection_Method::getInstance( $callback[ 0 ], $callback[ 1 ] );
+            $ref                     = \Woops\Core\Reflection\Method::getInstance( $callback[ 0 ], $callback[ 1 ] );
             $this->_returnsReference = $ref->returnsReference();
             
         } else {
             
             // Checks if the callback returns a reference
-            $ref                     = Woops_Core_Reflection_Function::getInstance( $callback );
+            $ref                     = \Woops\Core\Reflection\Function::getInstance( $callback );
             $this->_returnsReference = $ref->returnsReference();
         }
     }
@@ -83,7 +89,7 @@ class Woops_Core_Callback extends Woops_Core_Event_Dispatcher
     public function &invoke( array $args = array() )
     {
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Core_Callback_Event::EVENT_INVOKE );
+        $this->dispatchEvent( Callback\Event::EVENT_INVOKE );
         
         // Gets the number of arguments to pass to the callbak
         $argsCount = count( $args );

@@ -11,11 +11,17 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Aop\Class;
+
 /**
  * AOP class builder
  * 
  * This class will process a class file and add the AOP method suffix
- * (the value of the Woops_Core_Aop_Advisor::JOINPOINT_METHOD_SUFFIX constant)
+ * (the value of the Woops\Core\Aop\Advisor::JOINPOINT_METHOD_SUFFIX constant)
  * to every public member method, if the class is a subclass of the AOP advisor
  * class.
  * That behaviour will allow an automatic AOP join point, for all the public
@@ -25,12 +31,12 @@
  * @version     1.0
  * @package     Woops.Core.Aop.Class
  */
-class Woops_Core_Aop_Class_Builder extends Woops_Core_Object
+class Builder extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The regular expression used to find the public member methods of  class,
@@ -77,14 +83,14 @@ class Woops_Core_Aop_Class_Builder extends Woops_Core_Object
         if( !class_exists( $className ) ) {
             
             // Error - No such class
-            throw new Woops_Core_Aop_Class_Builder_Exception(
+            throw new Builder\Exception(
                 'The class ' . $className . ' does not exist',
-                Woops_Core_Aop_Class_Builder_Exception::EXCEPTION_NO_CLASS
+                Builder\Exception::EXCEPTION_NO_CLASS
             );
         }
         
         // Gets a reflection class object
-        $reflection          = Woops_Core_Reflection_Class::getInstance( $className );
+        $reflection          = \Woops\Core\Reflection\Class::getInstance( $className );
         
         // Gets the path to the PHP file
         $filePath            = $reflection->getFileName();
@@ -98,7 +104,7 @@ class Woops_Core_Aop_Class_Builder extends Woops_Core_Object
             // Adds the AOP method suffix to all the public methods
             $this->_classAopCode = preg_replace(
                 self::PUBLIC_METHODS_REGEXP,
-                '\1\2' . Woops_Core_Aop_Advisor::JOINPOINT_METHOD_SUFFIX,
+                '\1\2' . \Woops\Core\Aop\Advisor::JOINPOINT_METHOD_SUFFIX,
                 $this->_classCode
             );
             
@@ -127,7 +133,7 @@ class Woops_Core_Aop_Class_Builder extends Woops_Core_Object
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str       = Woops_String_Utils::getInstance();
+        self::$_str       = \Woops\String\Utils::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;

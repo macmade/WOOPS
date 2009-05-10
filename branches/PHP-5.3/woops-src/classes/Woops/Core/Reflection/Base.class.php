@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Reflection;
+
 /**
  * WOOPS PHP error exception class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Core.Reflection
  */
-abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
+abstract class Base extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 
@@ -233,7 +239,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
      * 
      * @return void
      */
-    final protected function __construct( Reflector $reflector )
+    final protected function __construct( \Reflector $reflector )
     {
         $this->_reflector = $reflector;
     }
@@ -245,13 +251,13 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
      * be cloned (singleton).
      * 
      * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
      */
     final public function __clone()
     {
-        throw new Woops_Core_Singleton_Exception(
+        throw new \Woops\Core\Singleton\Exception(
             'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
     }
     
@@ -293,43 +299,43 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
     final public function __call( $name, array $args = array() )
     {
         if( ( $name === 'getParameters' || $name === 'getExtension' )
-            && ( $this->_reflectorClass === 'ReflectionFunction' )
+            && ( $this->_reflectorClass === '\ReflectionFunction' )
         ) {
             return $this->_callMethod( $this, '_' . $name, $args );
         }
         
         if( ( $name === 'getDeclaringClass' )
-            && ( $this->_reflectorClass === 'ReflectionProperty' )
+            && ( $this->_reflectorClass === '\ReflectionProperty' )
         ) {
             return $this->_callMethod( $this, '_' . $name, $args );
         }
         
         if( ( $name === 'getParameters' || $name === 'getDeclaringClass' || $name === 'getExtension' )
-            && ( $this->_reflectorClass === 'ReflectionMethod' )
+            && ( $this->_reflectorClass === '\ReflectionMethod' )
         ) {
             return $this->_callMethod( $this, '_' . $name, $args );
         }
         
         if( ( $name === 'getDeclaringFunction' || $name === 'getDeclaringClass' || $name === 'getClass' )
-            && ( $this->_reflectorClass === 'ReflectionParameter' )
+            && ( $this->_reflectorClass === '\ReflectionParameter' )
         ) {
             return $this->_callMethod( $this, '_' . $name, $args );
         }
         
         if( ( $name === 'getFunctions' || $name === 'getClasses' )
-            && ( $this->_reflectorClass === 'ReflectionExtension' )
+            && ( $this->_reflectorClass === '\ReflectionExtension' )
         ) {
             return $this->_callMethod( $this, '_' . $name, $args );
         }
         
         if( ( $name === 'getMethod' || $name === 'getMethods' || $name === 'getConstructor' || $name === 'getInterfaces' || $name === 'getProperty' || $name === 'getProperties' || $name === 'getParentClass' || $name === 'isSubclassOf' || $name === 'getExtension' )
-            && ( $this->_reflectorClass === 'ReflectionClass' )
+            && ( $this->_reflectorClass === '\ReflectionClass' )
         ) {
             return $this->_callMethod( $this, '_' . $name, $args );
         }
         
         if( ( $name === 'getMethod' || $name === 'getMethods' || $name === 'getConstructor' || $name === 'getInterfaces' || $name === 'getProperty' || $name === 'getProperties' || $name === 'getParentClass' || $name === 'isSubclassOf' || $name === 'getExtension' )
-            && ( $this->_reflectorClass === 'ReflectionObject' )
+            && ( $this->_reflectorClass === '\ReflectionObject' )
         ) {
             return $this->_callMethod( $this, '_' . $name, $args );
         }
@@ -411,9 +417,9 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
         if( !is_callable( array( $object, $name ) ) ) {
             
             // Called method does not exist
-            throw new Woops_Core_Reflection_Base_Exception(
+            throw new Base\Exception(
                 'The method \'' . $name . '\' cannot be called on the current object',
-                Woops_Core_Reflection_Base_Exception::EXCEPTION_BAD_METHOD
+                Base\Exception::EXCEPTION_BAD_METHOD
             );
         }
         
@@ -469,7 +475,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
             
             foreach( $parameters as $parameter ) {
                 
-                $this->_parameters[ $parameter->getName() ] = Woops_Core_Reflection_Parameter::getInstance(
+                $this->_parameters[ $parameter->getName() ] = Parameter::getInstance(
                     $this->_reflector->getName(),
                     $parameter->getName()
                 );
@@ -492,7 +498,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
             
             if( $extension ) {
                 
-                $this->_extension = Woops_Core_Reflection_Extension::getInstance(
+                $this->_extension = Extension::getInstance(
                     $extension->getName()
                 );
                 
@@ -518,14 +524,14 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
             
             if( get_class( $declaringFunction ) === 'ReflectionMethod' ) {
                 
-                $this->_declaringFunction = Woops_Core_Reflection_Class::getInstance(
+                $this->_declaringFunction = Class::getInstance(
                     $declaringFunction->getDeclaringClass()->getName(),
                     $declaringFunction->getName()
                 );
                 
             } else {
                 
-                $this->_declaringFunction = Woops_Core_Reflection_Function::getInstance(
+                $this->_declaringFunction = Function::getInstance(
                     $declaringFunction->getName()
                 );
             }
@@ -544,7 +550,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
         if( !$this->_hasDeclaringClass ) {
             
             $declaringClass        = $this->_reflector->getDeclaringClass();
-            $this->_declaringClass = Woops_Core_Reflection_Class::getInstance(
+            $this->_declaringClass = Class::getInstance(
                 $declaringClass->getName()
             );
             
@@ -565,7 +571,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
             
             if( $class ) {
                 
-                $this->_class = Woops_Core_Reflection_Class::getInstance(
+                $this->_class = Class::getInstance(
                     $class->getName()
                 );
                 
@@ -591,7 +597,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
             
             foreach( $functions as $function ) {
                 
-                $this->_functions[ $function->getName() ] = Woops_Core_Reflection_Function::getInstance(
+                $this->_functions[ $function->getName() ] = Function::getInstance(
                     $function->getName()
                 );
             }
@@ -613,7 +619,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
             
             foreach( $classes as $class ) {
                 
-                $this->_classes[ $class->getName() ] = Woops_Core_Reflection_Class::getInstance(
+                $this->_classes[ $class->getName() ] = Class::getInstance(
                     $class->getName()
                 );
             }
@@ -633,7 +639,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
             
             $method     = $this->_reflector->getMethod( $name );
             
-            $reflection = Woops_Core_Reflection_Method::getInstance(
+            $reflection = Method::getInstance(
                 $this->_reflector->getName(),
                 $name
             );
@@ -690,7 +696,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
                 
                 if( !isset( $this->_methods[ $methodName ] ) ) {
                     
-                    $reflection = Woops_Core_Reflection_Method::getInstance(
+                    $reflection = Method::getInstance(
                         $className,
                         $methodName
                     );
@@ -739,32 +745,32 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
         
         $methods = array();
         
-        if( $filter & ReflectionMethod::IS_ABSTRACT ) {
+        if( $filter & \ReflectionMethod::IS_ABSTRACT ) {
             
             $methods = array_merge( $this->_abstractMethods, $methods );
         }
         
-        if( $filter & ReflectionMethod::IS_FINAL ) {
+        if( $filter & \ReflectionMethod::IS_FINAL ) {
             
             $methods = array_merge( $this->_finalMethods, $methods );
         }
         
-        if( $filter & ReflectionMethod::IS_PRIVATE ) {
+        if( $filter & \ReflectionMethod::IS_PRIVATE ) {
             
             $methods = array_merge( $this->_privateMethods, $methods );
         }
         
-        if( $filter & ReflectionMethod::IS_PROTECTED ) {
+        if( $filter & \ReflectionMethod::IS_PROTECTED ) {
             
             $methods = array_merge( $this->_protectedMethods, $methods );
         }
         
-        if( $filter & ReflectionMethod::IS_PUBLIC ) {
+        if( $filter & \ReflectionMethod::IS_PUBLIC ) {
             
             $methods = array_merge( $this->_publicMethods, $methods );
         }
         
-        if( $filter & ReflectionMethod::IS_STATIC ) {
+        if( $filter & \ReflectionMethod::IS_STATIC ) {
             
             $methods = array_merge( $this->_staticMethods, $methods );
         }
@@ -785,7 +791,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
             
             if( $constructor ) {
                 
-                $this->_constructor = Woops_Core_Reflection_Method::getInstance(
+                $this->_constructor = Method::getInstance(
                     $constructor->getDeclaringClass()->getName(),
                     $constructor->getName()
                 );
@@ -812,7 +818,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
             
             foreach( $interfaces as $interface ) {
                 
-                $this->_interfaces[ $interface->getName() ] = Woops_Core_Reflection_Class::getInstance(
+                $this->_interfaces[ $interface->getName() ] = Class::getInstance(
                     $interface->getName()
                 );
             }
@@ -832,7 +838,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
             
             $property   = $this->_reflector->getProperty( $name );
             
-            $reflection = Woops_Core_Reflection_Property::getInstance(
+            $reflection = Property::getInstance(
                 $this->_reflector->getName(),
                 $name
             );
@@ -879,7 +885,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
                 
                 if( !isset( $this->_methods[ $propertyName ] ) ) {
                     
-                    $reflection = Woops_Core_Reflection_Property::getInstance(
+                    $reflection = Property::getInstance(
                         $className,
                         $propertyName
                     );
@@ -918,22 +924,22 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
         
         $properties = array();
         
-        if( $filter & ReflectionProperty::IS_PRIVATE ) {
+        if( $filter & \ReflectionProperty::IS_PRIVATE ) {
             
             $properties = array_merge( $this->_privateProperties, $properties );
         }
         
-        if( $filter & ReflectionProperty::IS_PROTECTED ) {
+        if( $filter & \ReflectionProperty::IS_PROTECTED ) {
             
             $properties = array_merge( $this->_protectedProperties, $properties );
         }
         
-        if( $filter & ReflectionProperty::IS_PUBLIC ) {
+        if( $filter & \ReflectionProperty::IS_PUBLIC ) {
             
             $properties = array_merge( $this->_publicProperties, $properties );
         }
         
-        if( $filter & ReflectionProperty::IS_STATIC ) {
+        if( $filter & \ReflectionProperty::IS_STATIC ) {
             
             $properties = array_merge( $this->_staticProperties, $properties );
         }
@@ -954,7 +960,7 @@ abstract class Woops_Core_Reflection_Base extends Woops_Core_Object
             
             if( $parentClass ) {
                 
-                $this->_parentClass = Woops_Core_Reflection_Class::getInstance(
+                $this->_parentClass = Class::getInstance(
                     $parentClass->getName()
                 );
                 

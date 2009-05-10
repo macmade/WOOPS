@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Log;
+
 /**
  * Log writer
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Log
  */
-final class Woops_Log_Writer extends Woops_Core_Event_Dispatcher implements Woops_Core_Singleton_Interface
+final class Writer extends \Woops\Core\Event\Dispatcher implements \Woops\Core\Singleton\Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The types of log that can be used
@@ -85,13 +91,13 @@ final class Woops_Log_Writer extends Woops_Core_Event_Dispatcher implements Woop
      * be cloned (singleton).
      * 
      * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()
     {
-        throw new Woops_Core_Singleton_Exception(
+        throw new \Woops\Core\Singleton\Exception(
             'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
     }
     
@@ -101,7 +107,7 @@ final class Woops_Log_Writer extends Woops_Core_Event_Dispatcher implements Woop
      * This method is used to get the unique instance of the class
      * (singleton). If no instance is available, it will create it.
      * 
-     * @return  Woops_Log_Writer    The unique instance of the class
+     * @return  Woops\Log\Writer    The unique instance of the class
      * @see     __construct
      */
     public static function getInstance()
@@ -136,14 +142,14 @@ final class Woops_Log_Writer extends Woops_Core_Event_Dispatcher implements Woop
         if( !isset( $this->_logTypes[ $type ] ) ) {
             
             // Invalid log type
-            throw new Woops_Log_Writer_Exception(
+            throw new Writer\Exception(
                 'Invalid log type ' . $message . ' for message \'' . $message . '\'',
-                Woops_Log_Writer_Exception::EXCEPTION_INVALID_LOG_TYPE
+                Writer\Exception::EXCEPTION_INVALID_LOG_TYPE
             );
         }
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Log_Writer_Event::EVENT_LOG );
+        $this->dispatchEvent( Writer\Event::EVENT_LOG );
         
         // Process all the registered loggers
         foreach( $this->_loggers as $key => $value ) {
@@ -174,9 +180,9 @@ final class Woops_Log_Writer extends Woops_Core_Event_Dispatcher implements Woop
      * @param   string                      The name of the log writer class
      * @param   int                         The log types supported by the log writer class (some LOG_TYPE_XXX constants)
      * @return  void
-     * throws   Woops_Log_Writer_Exception  If the log writer class if already registered
-     * throws   Woops_Log_Writer_Exception  If the log writer class does not exists
-     * throws   Woops_Log_Writer_Exception  If the log writer class does not implements the Woops_Log_Writer_Interface interface
+     * throws   Woops\Log\Writer\Exception  If the log writer class if already registered
+     * throws   Woops\Log\Writer\Exception  If the log writer class does not exists
+     * throws   Woops\Log\Writer\Exception  If the log writer class does not implements the Woops\Log\Writer\Interface interface
      */
     public function registerLogWriter( $class, $types = 0x00FF )
     {
@@ -187,9 +193,9 @@ final class Woops_Log_Writer extends Woops_Core_Event_Dispatcher implements Woop
         if( isset( $this->_loggers[ $class ] ) ) {
             
             // Class is already registered
-            throw new Woops_Log_Writer_Exception(
+            throw new Writer\Exception(
                 'The log writer \'' . $class . '\' is already registered',
-                Woops_Log_Writer_Exception::EXCEPTION_WRITER_EXISTS
+                Writer\Exception::EXCEPTION_WRITER_EXISTS
             );
         }
         
@@ -197,9 +203,9 @@ final class Woops_Log_Writer extends Woops_Core_Event_Dispatcher implements Woop
         if( !class_exists( $class ) ) {
             
             // The class does not exists
-            throw new Woops_Log_Writer_Exception(
+            throw new Writer\Exception(
                 'Cannot register unexisting class \'' . $class . '\' as a log writer',
-                Woops_Log_Writer_Exception::EXCEPTION_NO_WRITER
+                Writer\Exception::EXCEPTION_NO_WRITER
             );
         }
         
@@ -207,21 +213,21 @@ final class Woops_Log_Writer extends Woops_Core_Event_Dispatcher implements Woop
         $interfaces = class_implements( $class );
         
         // Checks if the log writer class implements the log writer interface
-        if( !isset( $interfaces[ 'Woops_Log_Writer_Interface' ] ) ) {
+        if( !isset( $interfaces[ 'Woops\Log\Writer\Interface' ] ) ) {
             
             // Error - The log writer class must extends the log writer interface
-            throw new Woops_Log_Writer_Exception(
-                'Cannot register class \'' . $class . '\' as a log writer, since it does not implements the \'Woops_Log_Writer_Interface\' interface',
-                Woops_Log_Writer_Exception::EXCEPTION_INVALID_WRITER_CLASS
+            throw new Writer\Exception(
+                'Cannot register class \'' . $class . '\' as a log writer, since it does not implements the \'Woops\Log\Writer\Interface\' interface',
+                Writer\Exception::EXCEPTION_INVALID_WRITER_CLASS
             );
         }
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Log_Writer_Event::EVENT_LOG_WRITER_REGISTER );
+        $this->dispatchEvent( Writer\Event::EVENT_LOG_WRITER_REGISTER );
         
         // Registers the log writer class
         $this->_loggers[ $class ] = array(
-            Woops_Core_Class_Manager::getInstance()->getSingleton( $class ),
+            \Woops\Core\Class\Manager::getInstance()->getSingleton( $class ),
             $types
         );
     }

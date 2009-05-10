@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Debug;
+
 /**
  * Debug utilities
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Debug
  */
-class Woops_Debug_Utils extends Woops_Core_Object
+class Utils extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Class constructor
@@ -94,7 +100,7 @@ class Woops_Debug_Utils extends Woops_Core_Object
      * 
      * @param   array   The array to display
      * @param   boolean Whether the result must be returned, or directly printed
-     * @return  mixed   If the $return parameter is set, this method will return a Woops_Xhtml_Tag instance, otherwise NULL
+     * @return  mixed   If the $return parameter is set, this method will return a Woops\Xhtml\Tag instance, otherwise NULL
      * @see     _getVarType
      */
     public static function viewArray( array $array, $return = false )
@@ -103,7 +109,7 @@ class Woops_Debug_Utils extends Woops_Core_Object
         $commonStyle          = 'font-family: Verdana, sans-serif; font-size: 10px; color: #898989; ';
         
         // Creates the container DIV
-        $container            = new Woops_Xhtml_Tag( 'div' );
+        $container            = new \Woops\Xhtml\Tag( 'div' );
         $container[ 'style' ] = $commonStyle;
         
         // Adds an HTML comment
@@ -181,7 +187,7 @@ class Woops_Debug_Utils extends Woops_Core_Object
      * @param   mixed   The variable to display
      * @param   boolean Whether the result must be returned, or directly printed
      * @param   string  An optionnal header to display
-     * @return  mixed   If the $return parameter is set, this method will return a Woops_Xhtml_Tag instance, otherwise NULL
+     * @return  mixed   If the $return parameter is set, this method will return a Woops\Xhtml\Tag instance, otherwise NULL
      * @see     viewArray
      * @see     _getVarType
      */
@@ -191,7 +197,7 @@ class Woops_Debug_Utils extends Woops_Core_Object
         $commonStyle          = 'font-family: Verdana, sans-serif; font-size: 10px; color: #898989; ';
         
         // Creates the container DIV
-        $container            = new Woops_Xhtml_Tag( 'div' );
+        $container            = new Woops\Xhtml\Tag( 'div' );
         $container[ 'style' ] = $commonStyle . 'background-color: #EDF5FA; border: solid 1px #D3E7F4; margin: 2px; padding: 2px;';
         
         // Adds an HTML comment

@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Flv;
+
 /**
  * FLV file
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Flv
  */
-class Woops_Flv_File extends Woops_Core_Object
+class File extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The FLV tag types
@@ -36,9 +42,9 @@ class Woops_Flv_File extends Woops_Core_Object
      * The FLV tag types with their corresponding PHP classname
      */
     protected static $_types = array(
-        0x08 => 'Woops_Flv_Tag_Audio_Data',
-        0x09 => 'Woops_Flv_Tag_Video_Data',
-        0x12 => 'Woops_Flv_Tag_Script_Data'
+        0x08 => '\Woops\Flv\Tag\Audio\Data',
+        0x09 => '\Woops\Flv\Tag\Video\Data',
+        0x12 => '\Woops\Flv\Tag\Script\Data'
     );
     
     /**
@@ -58,13 +64,13 @@ class Woops_Flv_File extends Woops_Core_Object
      */
     public function __construct()
     {
-        $this->_header = new Woops_Flv_Header();
+        $this->_header = new Header();
     }
     
     /**
      * Gets the FLV header
      * 
-     * @return  Woops_Flv_Header    The FLV header
+     * @return  Woops\Flv\Header    The FLV header
      */
     public function getHeader()
     {
@@ -75,10 +81,10 @@ class Woops_Flv_File extends Woops_Core_Object
      * Creates a new tag
      * 
      * @param   int                         The tag type (one of the TAG_XXX constant)
-     * @return  Woops_Flv_Tag               The tag object
-     * @throws  Woops_Flv_File_Exception    If the tag type is invalid
-     * @throws  Woops_Flv_File_Exception    If the tag type is audio, and if there is already an audio tag
-     * @throws  Woops_Flv_File_Exception    If the tag type is video, and if there is already a video tag
+     * @return  Woops\Flv\Tag               The tag object
+     * @throws  Woops\Flv\File\Exception    If the tag type is invalid
+     * @throws  Woops\Flv\File\Exception    If the tag type is audio, and if there is already an audio tag
+     * @throws  Woops\Flv\File\Exception    If the tag type is video, and if there is already a video tag
      */
     public function newTag( $type )
     {
@@ -89,9 +95,9 @@ class Woops_Flv_File extends Woops_Core_Object
         if( !isset( self::$_types[ $type ] ) ) {
             
             // Error - Invalid tag type
-            throw new Woops_Flv_File_Exception(
+            throw new File\Exception(
                 'Invalid FLV tag type (' . $type . ')',
-                Woops_Flv_File_Exception::EXCEPTION_INVALID_TAG_TYPE
+                File\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         

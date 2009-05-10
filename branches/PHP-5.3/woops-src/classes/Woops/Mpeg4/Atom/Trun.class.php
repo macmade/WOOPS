@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4\Atom;
+
 /**
  * MPEG-4 TRUN atom
  * 
@@ -39,12 +45,12 @@
  * @version     1.0
  * @package     Woops.Mpeg4.Atom
  */
-final class Woops_Mpeg4_Atom_Trun extends Woops_Mpeg4_FullBox
+final class Trun extends \Woops\Mpeg4\FullBox
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The atom type
@@ -60,7 +66,7 @@ final class Woops_Mpeg4_Atom_Trun extends Woops_Mpeg4_FullBox
     protected function _processFlags( $rawFlags )
     {
         // Storage for the atom flags
-        $flags                                          = new stdClass();
+        $flags                                          = new \stdClass();
         
         // Process the atom flags
         $flags->data_offset_present                     = ( $rawFlags & 0x000001 ) ? true: false;
@@ -111,7 +117,7 @@ final class Woops_Mpeg4_Atom_Trun extends Woops_Mpeg4_FullBox
         for( $i = 0; $i < $data->sample_count; $i++ ) {
             
             // Storage for the current sample
-            $sample = new stdClass();
+            $sample = new \stdClass();
             
             // Checks for the sample duration
             if( $data->flags->sample_duration_present ) {

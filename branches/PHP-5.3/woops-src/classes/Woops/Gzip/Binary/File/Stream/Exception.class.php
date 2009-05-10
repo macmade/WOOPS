@@ -11,14 +11,20 @@
 
 # $Id: Exception.class.php 559 2009-03-04 17:18:24Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Gzip\Binary\File\Stream;
+
 /**
- * Exception class for the Woops_Gzip_Binary_File_Stream class
+ * Exception class for the Woops\Gzip\Binary\File_Stream class
  * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Gzip.Binary.File.Stream
  */
-final class Woops_Gzip_Binary_File_Stream_Exception extends Woops_Core_Exception_Base
+final class Exception extends \Woops\Core\Exception\Base
 {
     /**
      * Error codes for the exceptions

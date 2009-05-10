@@ -24,6 +24,12 @@ if( ( double )PHP_VERSION < 5.3 ) {
     );
 }
 
+// Sets a dummy timezone, to prevent warnings if an error occurs before the configured timezone is set
+date_default_timezone_set( 'Europe/Zurich' );
+
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
 // Checks for the SPL
 if( !function_exists( 'spl_autoload_register' ) ) {
     
@@ -44,7 +50,7 @@ if( !class_exists( 'SimpleXMLElement' ) ) {
 
 // Includes the Woops class manager
 require_once(
-    dirname( __FILE__ )
+    __DIR__
   . DIRECTORY_SEPARATOR
   . 'classes'
   . DIRECTORY_SEPARATOR
@@ -58,14 +64,14 @@ require_once(
 );
 
 // Registers an SPL autoload method to use to load the classes form the Woops project
-spl_autoload_register( array( 'Woops_Core_Class_Manager', 'autoLoad' ) );
+spl_autoload_register( array( 'Woops\Core\Class\Manager', 'autoLoad' ) );
 
 // Sets the error and exception handlers - From now every mistake will produce a fatal error
-set_exception_handler( array( 'Woops_Core_Exception_Handler', 'handleException' ) );
-set_error_handler(     array( 'Woops_Core_Error_Handler',     'handleError' ) );
+set_exception_handler( array( 'Woops\Core\Exception\Handler', 'handleException' ) );
+set_error_handler(     array( 'Woops\Core\Error\Handler',     'handleError' ) );
 
 // Sets the default timezone
-date_default_timezone_set( Woops_Core_Config_Getter::getInstance()->getVar( 'time', 'timezone' ) );
+date_default_timezone_set( Woops\Core\Config\Getter::getInstance()->getVar( 'time', 'timezone' ) );
 
 // Loads the active modules
-Woops_Core_Module_Manager::getInstance()->initModules();
+Woops\Core\Module\Manager::getInstance()->initModules();

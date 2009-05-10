@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\MultiSingleton;
+
 /**
  * Interface for the multi singleton classes
  *
@@ -18,7 +24,7 @@
  * @version     1.0
  * @package     Woops.Core.MultiSingleton
  */
-interface Woops_Core_MultiSingleton_Interface
+interface Interface
 {
     /**
      * Gets a singleton instance

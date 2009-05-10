@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Ini\Item;
+
 /**
  * INI value class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Ini.Item
  */
-class Woops_Ini_Item_Value extends Woops_Core_Object
+class Value extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The name of the value item

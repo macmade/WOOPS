@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Session;
+
 /**
  * Session helper class
  *
@@ -18,17 +24,17 @@
  * @version     1.0
  * @package     Woops.Core.Session
  */
-final class Woops_Core_Session_Helper extends Woops_Core_Object implements Woops_Core_Singleton_Interface
+final class Helper extends \Woops\Core\Object implements \Woops\Core\Singleton\Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The session ID for the WOOPS
      */
-    const SESSION_ID     = 'WOOPS-SESSION';
+    const SESSION_ID          = 'WOOPS-SESSION';
     
     /**
      * The unique instance of the class (singleton)
@@ -38,7 +44,7 @@ final class Woops_Core_Session_Helper extends Woops_Core_Object implements Woops
     /**
      * Whether the WOOPS session is started
      */
-    protected $_started     = '';
+    protected $_started       = '';
     
     /**
      * Class constructor
@@ -58,13 +64,13 @@ final class Woops_Core_Session_Helper extends Woops_Core_Object implements Woops
      * be cloned (singleton).
      * 
      * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()
     {
-        throw new Woops_Core_Singleton_Exception(
+        throw new \Woops\Core\Singleton\Exception(
             'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
     }
     
@@ -116,7 +122,7 @@ final class Woops_Core_Session_Helper extends Woops_Core_Object implements Woops
      * This method is used to get the unique instance of the class
      * (singleton). If no instance is available, it will create it.
      * 
-     * @return  Woops_Core_Session_Helper   The unique instance of the class
+     * @return  Woops\Core\Session\Helper   The unique instance of the class
      * @see     __construct
      */
     public static function getInstance()

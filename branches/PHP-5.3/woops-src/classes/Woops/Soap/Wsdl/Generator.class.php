@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Soap\Wsdl;
+
 /**
  * WSDL file generator for SOAP
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Soap.Wsdl
  */
-class Woops_Soap_Wsdl_Generator extends Woops_Core_Object
+class Generator extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The URI of the WSDL namespace
@@ -113,12 +119,12 @@ class Woops_Soap_Wsdl_Generator extends Woops_Core_Object
         }
         
         // Checks for the XmlWriter class
-        if( !class_exists( 'XMLWriter' ) ) {
+        if( !class_exists( '\XMLWriter' ) ) {
             
             // Error - XmlWriter is not available
-            throw new Soap_Wsdl_Generator_Exception(
+            throw new Generator\Exception(
                 'The XMLWriter class is not available',
-                Soap_Wsdl_Generator_Exception::EXCEPTION_NO_XML_WRITER
+                Generator\Exception::EXCEPTION_NO_XML_WRITER
             );
         }
         
@@ -126,7 +132,7 @@ class Woops_Soap_Wsdl_Generator extends Woops_Core_Object
         if( is_object( $handlerClass ) ) {
             
             // Creates the reflection object
-            $this->_reflection = Woop_Core_Reflection_Object::getInstance( $handlerClass );
+            $this->_reflection = \Woops\Core\Reflection\Object::getInstance( $handlerClass );
             
             // Stores the web service name
             $this->_name       = get_class( $handlerClass );
@@ -134,7 +140,7 @@ class Woops_Soap_Wsdl_Generator extends Woops_Core_Object
         } else {
             
             // Creates the reflection object
-            $this->_reflection = Woops_Core_Reflection_Class::getInstance( $handlerClass );
+            $this->_reflection = \Woops\Core\Reflection\Class::getInstance( $handlerClass );
             
             // Stores the web service name
             $this->_name       = $handlerClass;
@@ -150,7 +156,7 @@ class Woops_Soap_Wsdl_Generator extends Woops_Core_Object
         $this->_soapProcedures = $this->_getSoapProcedures();
         
         // Creates the XML writer object
-        $this->_xml            = new XmlWriter();
+        $this->_xml            = new \XmlWriter();
         $this->_xml->openMemory();
         $this->_xml->setIndent( 4 );
         
@@ -182,7 +188,7 @@ class Woops_Soap_Wsdl_Generator extends Woops_Core_Object
     private static function _setStaticVars()
     {
         // Gets the instance of the number utilities
-        self::$_env       = Woops_Core_Env_Getter::getInstance();
+        self::$_env       = \Woops\Core\Env\Getter::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -197,7 +203,7 @@ class Woops_Soap_Wsdl_Generator extends Woops_Core_Object
     protected function _getSoapProcedures()
     {
         // Gets the available public methods
-        $methods = $this->_reflection->getMethods( ReflectionMethod::IS_PUBLIC );
+        $methods = $this->_reflection->getMethods( \ReflectionMethod::IS_PUBLIC );
         
         // Storage
         $proc    = array();

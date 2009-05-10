@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Tiff;
+
 /**
  * TIFF file parser
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Tiff
  */
-class Woops_Tiff_Parser extends Woops_Core_Object
+class Parser extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The TIFF file object
@@ -49,13 +55,13 @@ class Woops_Tiff_Parser extends Woops_Core_Object
     public function __construct( $file )
     {
         // Create a new TIFF file object
-        $this->_file     = new Woops_Tiff_File();
+        $this->_file     = new File();
         
         // Stores the file path
         $this->_filePath = $file;
         
         // Creates the binary stream
-        $this->_stream   = new Woops_Tiff_Binary_File_Stream( $file );
+        $this->_stream   = new Binary\File\Stream( $file );
         
         // Parses the file
         $this->_parseFile();
@@ -79,7 +85,7 @@ class Woops_Tiff_Parser extends Woops_Core_Object
         while( $offset !== 0 ) {
             
             // Seeks to the start of the IFD
-            $this->_stream->seek( $offset, Woops_Tiff_Binary_File_Stream::SEEK_SET );
+            $this->_stream->seek( $offset, Binary\File\Stream::SEEK_SET );
             
             // Creates a new IFD
             $ifd = $this->_file->newIfd();
@@ -95,7 +101,7 @@ class Woops_Tiff_Parser extends Woops_Core_Object
     /**
      * Gets the TIFF file object
      * 
-     * @return  Woops_Tiff_File  The TIFF file object
+     * @return  Woops\Tiff\File  The TIFF file object
      */
     public function getFile()
     {

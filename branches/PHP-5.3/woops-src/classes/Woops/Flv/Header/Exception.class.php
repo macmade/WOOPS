@@ -11,14 +11,20 @@
 
 # $Id: Exception.class.php 559 2009-03-04 17:18:24Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Flv\Header;
+
 /**
- * Exception class for the Woops_Flv_Header class
+ * Exception class for the Woops\Flv\Header class
  * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Flv.Header
  */
-final class Woops_Flv_Header_Exception extends Woops_Core_Exception_Base
+final class Exception extends \Woops\Core\Exception\Base
 {
     /**
      * Error codes for the exceptions

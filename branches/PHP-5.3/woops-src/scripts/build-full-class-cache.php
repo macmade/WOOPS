@@ -18,15 +18,18 @@ define( 'WOOPS_CLASS_CACHE_MODE_OFF', true );
 
 // Includes the initialization script
 require_once(
-    dirname( __FILE__ )
+    __DIR__
   . DIRECTORY_SEPARATOR
   . '..'
   . DIRECTORY_SEPARATOR
   . 'init.inc.php'
 );
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
 // Gets the environment object
-$ENV = Woops_Core_Env_Getter::getInstance();
+$ENV = Woops\Core\Env\Getter::getInstance();
 
 // Creates a recursive directory iterator
 $ITERATOR = new RecursiveIteratorIterator(
@@ -45,7 +48,7 @@ foreach( $ITERATOR as $FILEPATH => $FILE ) {
         $CLASS_RELPATH = str_replace( $ENV->getSourcePath( 'classes/' ), '', $FILEPATH );
         
         // Gets the class name
-        $CLASSNAME     = str_replace( DIRECTORY_SEPARATOR, '_', substr( $CLASS_RELPATH, 0, -10 ) );
+        $CLASSNAME     = str_replace( DIRECTORY_SEPARATOR, '\\', substr( $CLASS_RELPATH, 0, -10 ) );
         
         // Builds the cached version
         createClassCache( $CLASSNAME );
@@ -53,7 +56,7 @@ foreach( $ITERATOR as $FILEPATH => $FILE ) {
 }
 
 // Gets the module manager
-$MOD_MANAGER = Woops_Core_Module_Manager::getInstance();
+$MOD_MANAGER = Woops\Core\Module\Manager::getInstance();
 
 // Gets the available modules
 $MODULES = $MOD_MANAGER->getAvailableModules();
@@ -88,7 +91,7 @@ foreach( $MODULES as $MODNAME => $MODINFOS ) {
                 $CLASS_RELPATH = str_replace( $MODINFOS[ 0 ] . 'classes/', '', $FILEPATH );
                 
                 // Gets the class name
-                $CLASSNAME     = 'Woops_Mod_' . $MODNAME . '_' . str_replace( DIRECTORY_SEPARATOR, '_', substr( $CLASS_RELPATH, 0, -10 ) );
+                $CLASSNAME     = 'Woops\Mod\\' . $MODNAME . '\\' . str_replace( DIRECTORY_SEPARATOR, '\\', substr( $CLASS_RELPATH, 0, -10 ) );
                 
                 // Builds the cached version
                 createClassCache( $CLASSNAME );
@@ -124,10 +127,10 @@ function createClassCache( $className )
     if( !is_object( $env ) ) {
         
         // Gets the environment object
-        $env      = Woops_Core_Env_Getter::getInstance();
+        $env      = Woops\Core\Env\Getter::getInstance();
         
         // Gets the configuration object
-        $conf     = Woops_Core_Config_Getter::getInstance();
+        $conf     = Woops\Core\Config\Getter::getInstance();
         
         // Sets the path to the cache directory
         $cacheDir = $env->getPath( 'cache/classes/' );
@@ -140,7 +143,7 @@ function createClassCache( $className )
     }
     
     // Checks if the cached version already exists
-    if( file_exists( $cacheDir . $className . '.class.php' ) ) {
+    if( file_exists( $cacheDir . str_replace( '\\', '.', $className ) . '.class.php' ) ) {
         
         // Nothing to do, the cached version already exists
         return;
@@ -150,7 +153,7 @@ function createClassCache( $className )
     if( $aop && substr( $className, -9 ) !== 'Interface' ) {
         
         // Creates an AOP version of the class
-        $aopBuilder = new Woops_Core_Aop_Class_Builder( $className );
+        $aopBuilder = new Woops\Core\Aop\Class\Builder( $className );
         
         // Gets the code of the AOP version
         $classCode  = ( string )$aopBuilder;
@@ -158,7 +161,7 @@ function createClassCache( $className )
     } else {
         
         // Creates a reflection object
-        $reflection = Woops_Core_Reflection_Class::getInstance( $className );
+        $reflection = Woops\Core\Reflection\Class::getInstance( $className );
         
         // Gets the PHP source code
         $classCode = file_get_contents( $reflection->getFileName() );
@@ -168,7 +171,7 @@ function createClassCache( $className )
     if( $optimize ) {
         
         // Creates a source optimizer
-        $optimizer = new Woops_Php_Source_Optimizer( $classCode );
+        $optimizer = new Woops\Php\Source\Optimizer( $classCode );
         
         // Gets the optimized source code
         $classCode = ( string )$optimizer;
@@ -176,7 +179,7 @@ function createClassCache( $className )
     
     // Writes the class in the cache
     file_put_contents(
-        $cacheDir . $className . '.class.php',
+        $cacheDir . str_replace( '\\', '.', $className ) . '.class.php',
         $classCode
     );
 }

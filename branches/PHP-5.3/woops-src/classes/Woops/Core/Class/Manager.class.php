@@ -11,14 +11,20 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Class;
+
 // Includes the WOOPS singleton interface as well as the informations and object
 // classes.
 // The WOOPS class manager can't auto-load them, since it's not available yet.
 // So they have to be included manually. This should be the last time we use
 // the require_once() function inside WOOPS.
-require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Singleton' ) . DIRECTORY_SEPARATOR . 'Interface.class.php' );
-require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPARATOR . 'Informations.class.php' );
-require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPARATOR . 'Object.class.php' );
+require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Singleton' ) . DIRECTORY_SEPARATOR . 'Interface.class.php' );
+require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPARATOR . 'Informations.class.php' );
+require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPARATOR . 'Object.class.php' );
 
 /**
  * WOOPS class manager
@@ -36,12 +42,12 @@ require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' ) . DIR
  * @version     1.0
  * @package     Woops.Core.Class
  */
-final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_Core_Singleton_Interface
+final class Manager extends \Woops\Core\Object implements \Woops\Core\Singleton\Interface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The unique instance of the class (singleton)
@@ -116,17 +122,17 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
         
         // Stores the directory containing the WOOPS classes
         $this->_classDir = realpath(
-            dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
+            __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
         ) . DIRECTORY_SEPARATOR;
         
         // Creates a directory iterator in the directory containing this file
-        $dirIterator = new DirectoryIterator( $this->_classDir );
+        $dirIterator = new \DirectoryIterator( $this->_classDir );
         
         // Adds this class to the loaded classes array
         $this->_loadedClasses[ __CLASS__ ]                        = __FILE__;
         
         // Adds the singleton interface to the loaded classes array
-        $this->_loadedClasses[ 'Woops_Core_Singleton_Interface' ] = $this->_classDir
+        $this->_loadedClasses[ 'Woops\Core\Singleton\Interface' ] = $this->_classDir
                                                                   . 'Core'
                                                                   . DIRECTORY_SEPARATOR
                                                                   . 'Singleton'
@@ -172,13 +178,13 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
      * be cloned (singleton).
      * 
      * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()
     {
-        throw new Woops_Core_Singleton_Exception(
+        throw new \Woops\Core\Singleton\Exception(
             'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
     }
     
@@ -241,7 +247,7 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
      * This method is used to get the unique instance of the class
      * (singleton). If no instance is available, it will create it.
      * 
-     * @return  Woops_Core_ClassManager The unique instance of the class
+     * @return  Woops\Core\ClassManager The unique instance of the class
      * @see     __construct
      */
     public static function getInstance()
@@ -253,19 +259,19 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
             self::$_instance = new self();
             
             // Adds the WOOPS version to the HTTP headers
-            header( 'X-WOOPS-VERSION: ' . Woops_Core_Informations::WOOPS_VERSION . '-' . Woops_Core_Informations::WOOPS_VERSION_SUFFIX );
+            header( 'X-WOOPS-VERSION: ' . self::WOOPS_VERSION . '-' . self::WOOPS_VERSION_SUFFIX );
             
             // No exception allowed at the time, as the exception handler is not loaded yet
             try {
                 
                 // Gets the instance of the WOOPS environment
-                self::$_instance->_env              = Woops_Core_Env_Getter::getInstance();
+                self::$_instance->_env              = \Woops\Core\Env\Getter::getInstance();
                 
                 // Gets the instance of the WOOPS module manager
-                self::$_instance->_modManager       = Woops_Core_Module_Manager::getInstance();
+                self::$_instance->_modManager       = \Woops\Core\Module\Manager::getInstance();
                 
                 // Checks if we must use AOP classes
-                self::$_instance->_enableAop        = Woops_Core_Config_Getter::getInstance()->getVar( 'aop', 'enable' );
+                self::$_instance->_enableAop        = \Woops\Core\Config\Getter::getInstance()->getVar( 'aop', 'enable' );
                 
                 // If AOP is enabled, the class cache must also be enabled
                 if( self::$_instance->_enableAop ) {
@@ -276,7 +282,7 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
                 } else {
                     
                     // Checks if we must use a class cache
-                    self::$_instance->_classCache = Woops_Core_Config_Getter::getInstance()->getVar( 'classCache', 'enable' );
+                    self::$_instance->_classCache = \Woops\Core\Config\Getter::getInstance()->getVar( 'classCache', 'enable' );
                 }
                 
                 // Checks if we must use cached classes
@@ -304,8 +310,8 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
             } catch( Exception $e ) {
                 
                 // Loads the error and exception handler (otherwise a problem here won't be able to be reported)
-                self::$_instance->_loadClass( 'Woops_Core_Error_Handler' );
-                self::$_instance->_loadClass( 'Woops_Core_Exception_Handler' );
+                self::$_instance->_loadClass( 'Woops\Core\Error\Handler' );
+                self::$_instance->_loadClass( 'Woops\Core\Exception\Handler' );
                 
                 // Throws the exception back
                 throw $e;
@@ -341,10 +347,10 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
         }
         
         // Checks if the class belongs to the 'Woops' package
-        if( substr( $className, 0, 6 ) === 'Woops_' ) {
+        if( substr( $className, 0, 6 ) === 'Woops\\' ) {
             
             // Gets the class root package
-            $rootPkg = substr( $className, 6, strpos( $className, '_', 6 ) - 6 );
+            $rootPkg = substr( $className, 6, strpos( $className, '\\', 6 ) - 6 );
             
             // Checks if the requested class belongs to the WOOPS cources, or from a WOOPS module
             if( isset( $instance->_packages[ $rootPkg ] )
@@ -385,7 +391,7 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
     private function _loadClass( $className, $moduleClass = false )
     {
         // Path to the cached version of the class
-        $cachedClassPath = $this->_cacheDirectory . $className . '.class.php';
+        $cachedClassPath = $this->_cacheDirectory . str_replace( '\\', '.', $className ) . '.class.php';
                 
         // Checks if the cache is enabled and if the class exists in the cache
         if( $this->_classCache && file_exists( $cachedClassPath ) && !defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) ) {
@@ -407,14 +413,14 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
                 $classPath = $modPath
                            . 'classes'
                            . DIRECTORY_SEPARATOR
-                           . str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, strlen( $modName ) + 11 ) )
+                           . str_replace( '\\', DIRECTORY_SEPARATOR, substr( $className, strlen( $modName ) + 11 ) )
                            . '.class.php';
                 
             } else {
                 
                 // Gets the class path
                 $classPath = $this->_classDir
-                           . str_replace( '_', DIRECTORY_SEPARATOR, substr( $className, 6 ) )
+                           . str_replace( '\\', DIRECTORY_SEPARATOR, substr( $className, 6 ) )
                            . '.class.php';
             }
             
@@ -484,8 +490,8 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
                 self::_error( $errorMsg );
             }
             
-            // Gets the minimal PHP version required (eval() is required as late static bindings are implemented only in PHP 5.3)
-            eval( '$phpCompatible = ' . $className . '::PHP_COMPATIBLE;' );
+            // Gets the minimal PHP version required
+            $phpCompatible = $className::PHP_COMPATIBLE;
             
             // Checks the PHP version
             if( version_compare( PHP_VERSION, $phpCompatible, '<' ) ) {
@@ -661,7 +667,7 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
     public function getSingleton( $className )
     {
         // Creates a reflection object for the requested class
-        $reflection = Woops_Core_Reflection_Class::getInstance( $className );
+        $reflection = \Woops\Core\Reflection\Class::getInstance( $className );
         
         // Checks if the class is a singleton
         if( $reflection->isSingleton() ) {
@@ -672,9 +678,9 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
         } else {
             
             // Error, the class is not a singleton
-            throw new Woops_Core_Class_Manager_Exception(
+            throw new Manager\Exception(
                 'The class \'' . $className . '\' is not a singleton',
-                Woops_Core_Class_Manager_Exception::EXCEPTION_NOT_SINGLETON
+                Manager\Exception::EXCEPTION_NOT_SINGLETON
             );
         }
     }
@@ -689,7 +695,7 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
     public function getMultiSingleton( $className, $instanceName )
     {
         // Creates a reflection object for the requested class
-        $reflection = Woops_Core_Reflection_Class::getInstance( $className );
+        $reflection = \Woops\Core\Reflection\Class::getInstance( $className );
         
         // Checks if the class is a multi-singleton
         if( $reflection->isMultiSingleton() ) {
@@ -700,9 +706,9 @@ final class Woops_Core_Class_Manager extends Woops_Core_Object implements Woops_
         } else {
             
             // Error, the class is not a multi-singleton
-            throw new Woops_Core_Class_Manager_Exception(
+            throw new Manager\Exception(
                 'The class \'' . $className . '\' is not a multi-singleton',
-                Woops_Core_Class_Manager_Exception::EXCEPTION_NOT_MULTISINGLETON
+                Manager\Exception::EXCEPTION_NOT_MULTISINGLETON
             );
         }
     }

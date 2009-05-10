@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Gzip;
+
 /**
  * GZIP file
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Gzip
  */
-class Woops_Gzip_File extends Woops_Core_Object implements Iterator
+class File extends \Woops\Core\Object implements \Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The GZIP members
@@ -38,7 +44,7 @@ class Woops_Gzip_File extends Woops_Core_Object implements Iterator
     /**
      * Gets the current member object (SPL Iterator method)
      * 
-     * @return  Woops_Gzip_Member   The current member object
+     * @return  Woops\Gzip\Member   The current member object
      */
     public function current()
     {
@@ -88,10 +94,10 @@ class Woops_Gzip_File extends Woops_Core_Object implements Iterator
     /**
      * Adds a member to the file
      * 
-     * @param   Woops_Gzip_Member   The GZIP member object
+     * @param   Woops\Gzip\Member   The GZIP member object
      * @return  void
      */
-    public function addMember( Woops_Gzip_Member $member )
+    public function addMember( Member $member )
     {
         $this->_members[] = $member;
     }

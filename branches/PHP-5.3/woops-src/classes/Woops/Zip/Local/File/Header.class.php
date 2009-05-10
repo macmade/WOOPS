@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Zip\Local\File;
+
 /**
  * ZIP local file header
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Zip.Local.File
  */
-class Woops_Zip_Local_File_Header extends Woops_Core_Object
+class Header extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The supported host systems
@@ -159,50 +165,50 @@ class Woops_Zip_Local_File_Header extends Woops_Core_Object
     protected static $_extraTypes = array(
         
         // From PKWARE
-        0x0001 => 'Woops_Zip_ExtraField_Zip64_ExtendedInformation',
-        0x0007 => 'Woops_Zip_ExtraField_AvInfo',
-        0x0008 => 'Woops_Zip_ExtraField_Extended_LanguageEncodingData',
-        0x0009 => 'Woops_Zip_ExtraField_Os2',
-        0x000A => 'Woops_Zip_ExtraField_Ntfs',
-        0x000C => 'Woops_Zip_ExtraField_OpenVms',
-        0x000D => 'Woops_Zip_ExtraField_Unix',
-        0x000E => 'Woops_Zip_ExtraField_FileStreamAndForkDescriptors',
-        0x000F => 'Woops_Zip_ExtraField_PatchDescriptor',
-        0x0014 => 'Woops_Zip_ExtraField_Pkcs7_StoreForX509Certificates',
-        0x0015 => 'Woops_Zip_ExtraField_X509_Certificate_IdAndSignatureForIndividualFile',
-        0x0016 => 'Woops_Zip_ExtraField_X509_Certificate_IdForCentralDirectory',
-        0x0017 => 'Woops_Zip_ExtraField_StrongEncryptionHeader',
-        0x0018 => 'Woops_Zip_ExtraField_RecordManagementControls',
-        0x0019 => 'Woops_Zip_ExtraField_Pkcs7_EncryptionRecipientCertificateList',
-        0x0065 => 'Woops_Zip_ExtraField_IbmS390_Attributes_Uncompressed',
-        0x0066 => 'Woops_Zip_ExtraField_IbmS390_Attributes_Compressed',
-        0x4690 => 'Woops_Zip_ExtraField_PosZip4690',
+        0x0001 => '\Woops\Zip\ExtraField\Zip64\ExtendedInformation',
+        0x0007 => '\Woops\Zip\ExtraField\AvInfo',
+        0x0008 => '\Woops\Zip\ExtraField\Extended\LanguageEncodingData',
+        0x0009 => '\Woops\Zip\ExtraField\Os2',
+        0x000A => '\Woops\Zip\ExtraField\Ntfs',
+        0x000C => '\Woops\Zip\ExtraField\OpenVms',
+        0x000D => '\Woops\Zip\ExtraField\Unix',
+        0x000E => '\Woops\Zip\ExtraField\FileStreamAndForkDescriptors',
+        0x000F => '\Woops\Zip\ExtraField\PatchDescriptor',
+        0x0014 => '\Woops\Zip\ExtraField\Pkcs7\StoreForX509Certificates',
+        0x0015 => '\Woops\Zip\ExtraField\X509\Certificate\IdAndSignatureForIndividualFile',
+        0x0016 => '\Woops\Zip\ExtraField\X509\Certificate\IdForCentralDirectory',
+        0x0017 => '\Woops\Zip\ExtraField\StrongEncryptionHeader',
+        0x0018 => '\Woops\Zip\ExtraField\RecordManagementControls',
+        0x0019 => '\Woops\Zip\ExtraField\Pkcs7\EncryptionRecipientCertificateList',
+        0x0065 => '\Woops\Zip\ExtraField\IbmS390\Attributes\Uncompressed',
+        0x0066 => '\Woops\Zip\ExtraField\IbmS390\Attributes\Compressed',
+        0x4690 => '\Woops\Zip\ExtraField\PosZip4690',
         
         // Third party mappings commonly used
-        0x07C8 => 'Woops_Zip_ExtraField_Macintosh',
-        0x2605 => 'Woops_Zip_ExtraField_ZipIt_Macintosh',
-        0x2705 => 'Woops_Zip_ExtraField_ZipIt_Macintosh_135',
-        0x2805 => 'Woops_Zip_ExtraField_ZipIt_Macintosh_135_Alt',
-        0x334D => 'Woops_Zip_ExtraField_InfoZip_Macintosh',
-        0x4341 => 'Woops_Zip_ExtraField_AcornSparkFs',
-        0x4453 => 'Woops_Zip_ExtraField_Windows_Nt_SecurityDescriptor',
-        0x4704 => 'Woops_Zip_ExtraField_VmCms',
-        0x470F => 'Woops_Zip_ExtraField_Mvs',
-        0x4B46 => 'Woops_Zip_ExtraField_FwkcsMd5',
-        0x4C41 => 'Woops_Zip_ExtraField_Os2_AccessControlList',
-        0x4D49 => 'Woops_Zip_ExtraField_InfoZip_OpenVms',
-        0x4F4C => 'Woops_Zip_ExtraField_Xceed_OriginalLocation',
-        0x5356 => 'Woops_Zip_ExtraField_AosVs',
-        0x5455 => 'Woops_Zip_ExtraField_Extended_Timestamp',
-        0x554E => 'Woops_Zip_ExtraField_Xceed_Unicode',
-        0x5855 => 'Woops_Zip_ExtraField_InfoZip_Unix',
-        0x6375 => 'Woops_Zip_ExtraField_InfoZip_Unicode_Comment',
-        0x6542 => 'Woops_Zip_ExtraField_BeOsBeBox',
-        0x7075 => 'Woops_Zip_ExtraField_InfoZip_Unicode_Path',
-        0x756E => 'Woops_Zip_ExtraField_AsiUnix',
-        0x7855 => 'Woops_Zip_ExtraField_InfoZip_Unix_New',
-        0xA220 => 'Woops_Zip_ExtraField_Microsoft_OpenPackagingGrowthHint',
-        0xFD4A => 'Woops_Zip_ExtraField_SmsQdos'
+        0x07C8 => '\Woops\Zip\ExtraField\Macintosh',
+        0x2605 => '\Woops\Zip\ExtraField\ZipIt\Macintosh',
+        0x2705 => '\Woops\Zip\ExtraField\ZipIt\Macintosh\135',
+        0x2805 => '\Woops\Zip\ExtraField\ZipIt\Macintosh\135\Alt',
+        0x334D => '\Woops\Zip\ExtraField\InfoZip\Macintosh',
+        0x4341 => '\Woops\Zip\ExtraField\AcornSparkFs',
+        0x4453 => '\Woops\Zip\ExtraField\Windows\Nt\SecurityDescriptor',
+        0x4704 => '\Woops\Zip\ExtraField\VmCms',
+        0x470F => '\Woops\Zip\ExtraField\Mvs',
+        0x4B46 => '\Woops\Zip\ExtraField\FwkcsMd5',
+        0x4C41 => '\Woops\Zip\ExtraField\Os2\AccessControlList',
+        0x4D49 => '\Woops\Zip\ExtraField\InfoZip\OpenVms',
+        0x4F4C => '\Woops\Zip\ExtraField\Xceed\OriginalLocation',
+        0x5356 => '\Woops\Zip\ExtraField\AosVs',
+        0x5455 => '\Woops\Zip\ExtraField\Extended\Timestamp',
+        0x554E => '\Woops\Zip\ExtraField\Xceed\Unicode',
+        0x5855 => '\Woops\Zip\ExtraField\InfoZip\Unix',
+        0x6375 => '\Woops\Zip\ExtraField\InfoZip\Unicode\Comment',
+        0x6542 => '\Woops\Zip\ExtraField\BeOsBeBox',
+        0x7075 => '\Woops\Zip\ExtraField\InfoZip\Unicode\Path',
+        0x756E => '\Woops\Zip\ExtraField\AsiUnix',
+        0x7855 => '\Woops\Zip\ExtraField\InfoZip\Unix\New',
+        0xA220 => '\Woops\Zip\ExtraField\Microsoft\OpenPackagingGrowthHint',
+        0xFD4A => '\Woops\Zip\ExtraField\SmsQdos'
     );
     
     /**
@@ -258,7 +264,7 @@ class Woops_Zip_Local_File_Header extends Woops_Core_Object
     /**
      * 
      */
-    protected function _processExtraField( Woops_Zip_Binary_Stream $stream, $length )
+    protected function _processExtraField( \Woops\Zip\Binary\Stream $stream, $length )
     {
         $this->_extraFields = array();
         
@@ -276,7 +282,7 @@ class Woops_Zip_Local_File_Header extends Woops_Core_Object
                 
             } else {
                 
-                $extraField = new Woops_Zip_UnknownExtraField( $id );
+                $extraField = new \Woops\Zip\UnknownExtraField( $id );
             }
             
             $this->_extraFields[] = $extraField;
@@ -290,10 +296,10 @@ class Woops_Zip_Local_File_Header extends Woops_Core_Object
     /**
      * Process the raw data from a binary stream
      * 
-     * @param   Woops_Zip_Binary_Stream The binary stream
+     * @param   Woops\Zip\Binary\Stream The binary stream
      * @return  void
      */
-    public function processData( Woops_Zip_Binary_Stream $stream )
+    public function processData( \Woops\Zip\Binary\Stream $stream )
     {
         $this->_extractVersion         = $stream->littleEndianUnsignedShort();
         

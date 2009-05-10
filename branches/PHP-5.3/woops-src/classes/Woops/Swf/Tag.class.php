@@ -11,6 +11,12 @@
 
 # $Id: Stream.class.php 637 2009-03-09 09:05:52Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf;
+
 /**
  * Abstract for the SWF tag classes
  * 
@@ -18,19 +24,19 @@
  * @version     1.0
  * @package     Woops.Swf
  */
-abstract class Woops_Swf_Tag extends Woops_Core_Object
+abstract class Tag extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Process the raw data from a binary stream
      * 
      * @return  void
      */
-    abstract public function processData( Woops_Swf_Binary_Stream $stream );
+    abstract public function processData( Binary\Stream $stream );
     
     /**
      * The SWF tag type
@@ -45,9 +51,9 @@ abstract class Woops_Swf_Tag extends Woops_Core_Object
     /**
      * Class constructor
      * 
-     * @param   Woops_Swf_File  The instance of the SWF file in which the tag is contained
+     * @param   Woops\Swf\File  The instance of the SWF file in which the tag is contained
      */
-    public function __construct( Woops_Swf_File $file )
+    public function __construct( File $file )
     {
         $this->_file = $file;
     }

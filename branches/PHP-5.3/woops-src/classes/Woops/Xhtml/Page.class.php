@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Xhtml;
+
 /**
  * XHTML page class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Xhtml
  */
-class Woops_Xhtml_Page extends Woops_Core_Object
+class Page extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Whether the static variables are set or not
@@ -125,7 +131,7 @@ class Woops_Xhtml_Page extends Woops_Core_Object
             self::_setStaticVars();
         }
         
-        $this->_xhtml    = new Woops_Xhtml_Tag( 'html' );
+        $this->_xhtml    = new Tag( 'html' );
         
         $this->_head     = $this->_xhtml->head;
         $this->_body     = $this->_xhtml->body;
@@ -200,7 +206,7 @@ class Woops_Xhtml_Page extends Woops_Core_Object
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str       = Woops_String_Utils::getInstance();
+        self::$_str       = \Woops\String\Utils::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -250,7 +256,7 @@ class Woops_Xhtml_Page extends Woops_Core_Object
      */
     public function setTitle( $title )
     {
-        $this->_headerParts[ 'title' ] = new Woops_Xhtml_Tag( 'title' );
+        $this->_headerParts[ 'title' ] = new Tag( 'title' );
         $this->_headerParts[ 'title' ]->addTextData( ( string )$title );
     }
     
@@ -271,7 +277,7 @@ class Woops_Xhtml_Page extends Woops_Core_Object
      */
     public function setBase( $href, $target = '' )
     {
-        $this->_headerParts[ 'base' ]           = new Woops_Xhtml_Tag( 'title' );
+        $this->_headerParts[ 'base' ]           = new Tag( 'title' );
         $this->_headerParts[ 'base' ][ 'href' ] = ( string )$href;
         
         if( $target ) {
@@ -293,7 +299,7 @@ class Woops_Xhtml_Page extends Woops_Core_Object
             
             if( !isset( $this->_headerParts[ 'meta-name' ][ $name ] ) ) {
                 
-                $this->_headerParts[ 'meta-name' ][ $name ] = new Woops_Xhtml_Tag( 'meta' );
+                $this->_headerParts[ 'meta-name' ][ $name ] = new Tag( 'meta' );
             }
             
             $this->_headerParts[ 'meta-name' ][ $name ][ 'name'    ] = (string)$name;
@@ -319,7 +325,7 @@ class Woops_Xhtml_Page extends Woops_Core_Object
             
             if( !isset( $this->_headerParts[ 'meta-http' ][ $httpEquiv ] ) ) {
                 
-                $this->_headerParts[ 'meta-http' ][ $httpEquiv ] = new Woops_Xhtml_Tag( 'meta' );
+                $this->_headerParts[ 'meta-http' ][ $httpEquiv ] = new Tag( 'meta' );
             }
             
             $this->_headerParts[ 'meta-http' ][ $httpEquiv ][ 'http-equiv' ] = (string)$httpEquiv;
@@ -341,7 +347,7 @@ class Woops_Xhtml_Page extends Woops_Core_Object
      */
     public function addLink( $href = '', $type = '', $title = '', $rel = '', $rev = '', $media = '', $charset = '', $hreflang = '', $target = '' )
     {
-        $link = new Woops_Xhtml_Tag( 'link' );
+        $link = new Tag( 'link' );
         
         if( $href ) {
             
@@ -450,7 +456,7 @@ class Woops_Xhtml_Page extends Woops_Core_Object
      */
     public function addScriptSource( $source, $type, $defer = false, $charset = '' )
     {
-        $script = new Woops_Xhtml_Tag( 'script' );
+        $script = new Tag( 'script' );
         
         $script[ 'src' ]  = $source;
         $script[ 'type' ] = $type;
@@ -486,7 +492,7 @@ class Woops_Xhtml_Page extends Woops_Core_Object
      */
     public function addScriptContent( $content, $type, $defer = false )
     {
-        $script = new Woops_Xhtml_Tag( 'script' );
+        $script = new Tag( 'script' );
         
         $script[ 'src' ]  = $source;
         $script[ 'type' ] = $type;
@@ -518,7 +524,7 @@ class Woops_Xhtml_Page extends Woops_Core_Object
      */
     public function addStyle( $content, $media = 'screen', $type = 'text/css' )
     {
-        $style = new Woops_Xhtml_Tag( 'script' );
+        $style = new Tag( 'script' );
         
         if( $media ) {
             
@@ -546,7 +552,7 @@ class Woops_Xhtml_Page extends Woops_Core_Object
     /**
      * 
      */
-    public function addHeadNode( Woops_Xhtml_Tag $node )
+    public function addHeadNode( Tag $node )
     {
         $tagName = $node->getTagName();
         

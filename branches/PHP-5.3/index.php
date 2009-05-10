@@ -13,15 +13,18 @@
 
 // Includes the initialization script
 require_once(
-    dirname( __FILE__ )
+    __DIR__
   . DIRECTORY_SEPARATOR
   . 'woops-src'
   . DIRECTORY_SEPARATOR
   . 'init.inc.php'
 );
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
 // Gets the environment object
-$ENV = Woops_Core_Env_Getter::getInstance();
+$ENV = Woops\Core\Env\Getter::getInstance();
 
 // Checks if the WOOPS configuration file exists
 if( !$ENV->getPath( 'config/woops.ini.php' ) ) {
@@ -31,7 +34,7 @@ if( !$ENV->getPath( 'config/woops.ini.php' ) ) {
 }
 
 // Gets the current page
-$PAGE = Woops_Page_Engine::getInstance()->getPageObject();
+$PAGE = Woops\Page\Engine::getInstance()->getPageObject();
 
 // Prints the current page
 print $PAGE->writePage();

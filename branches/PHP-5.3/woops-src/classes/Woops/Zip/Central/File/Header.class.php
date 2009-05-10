@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Zip\Central\File;
+
 /**
  * ZIP central file header
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Zip.Central.File
  */
-class Woops_Zip_Central_File_Header extends Woops_Zip_Local_File_Header
+class Header extends \Woops\Zip\Local\File\Header
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 
@@ -58,10 +64,10 @@ class Woops_Zip_Central_File_Header extends Woops_Zip_Local_File_Header
     /**
      * Process the raw data from a binary stream
      * 
-     * @param   Woops_Zip_Binary_Stream The binary stream
+     * @param   Woops\Zip\Binary\Stream The binary stream
      * @return  void
      */
-    public function processData( Woops_Zip_Binary_Stream $stream )
+    public function processData( \Woops\Zip\Binary\Stream $stream )
     {
         $this->_madeByVersion          = $stream->littleEndianUnsignedShort();
         $this->_extractVersion         = $stream->littleEndianUnsignedShort();

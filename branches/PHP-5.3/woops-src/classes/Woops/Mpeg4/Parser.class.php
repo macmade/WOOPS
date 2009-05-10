@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4;
+
 /**
  * MPEG-4 file parser
  *
@@ -18,15 +24,15 @@
  * @version     1.0
  * @package     Woops.Mpeg4
  */
-class Woops_Mpeg4_Parser extends Woops_Core_Object
+class Parser extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
-     * An instance of the Woops_Mpeg4_File class
+     * An instance of the Woops\Mpeg4\File class
      */
     protected $_mpeg4File            = NULL;
     
@@ -63,13 +69,13 @@ class Woops_Mpeg4_Parser extends Woops_Core_Object
         $this->_allowInvalidStucture = $allowInvalidStucture;
         
         // Create a new instance of Mpeg4_File
-        $this->_mpeg4File            = new Woops_Mpeg4_File();
+        $this->_mpeg4File            = new File();
         
         // Stores the file path
         $this->_filePath             = $file;
         
         // Creates the binary stream
-        $this->_stream               = new Woops_Binary_File_Stream( $file );
+        $this->_stream               = new \Woops\Binary\File\Stream( $file );
         
         // Parses the file
         $this->_parseFile();
@@ -154,7 +160,7 @@ class Woops_Mpeg4_Parser extends Woops_Core_Object
             
             if( $atomDataLength ) {
                 
-                if( $atomObject && is_subclass_of( $atomObject, 'Woops_Mpeg4_ContainerAtom' ) ) {
+                if( $atomObject && is_subclass_of( $atomObject, 'Woops\Mpeg4\ContainerAtom' ) ) {
                     
                     $this->_parseFile( $atomDataLength, $level + 1, $atomObject );
                     

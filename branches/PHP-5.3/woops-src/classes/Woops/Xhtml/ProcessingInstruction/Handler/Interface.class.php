@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Xhtml\ProcessingInstruction\Handler;
+
 /**
  * Interface for the XHTML processing instruction handlers
  *
@@ -18,7 +24,7 @@
  * @version     1.0
  * @package     Woops.Xhtml.ProcessingInstruction_Handler
  */
-interface Woops_Xhtml_ProcessingInstruction_Handler_Interface
+interface Interface
 {
     /**
      * Process a processing instruction
@@ -27,5 +33,5 @@ interface Woops_Xhtml_ProcessingInstruction_Handler_Interface
      * @param   
      * @return  
      */
-    public function process( stdClass $options );
+    public function process( \stdClass $options );
 }

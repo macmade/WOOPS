@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Tiff;
+
 /**
  * TIFF file
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Tiff
  */
-class Woops_Tiff_File extends Woops_Core_Object implements Iterator
+class File extends \Woops\Core\Object implements \Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The TIFF header
@@ -47,13 +53,13 @@ class Woops_Tiff_File extends Woops_Core_Object implements Iterator
      */
     public function __construct()
     {
-        $this->_header = new Woops_Tiff_Header();
+        $this->_header = new Header();
     }
     
     /**
      * Gets the current IFD object (SPL Iterator method)
      * 
-     * @return  Woops_Tiff_Ifd  The current IFD object
+     * @return  Woops\Tiff\Ifd  The current IFD object
      */
     public function current()
     {
@@ -103,7 +109,7 @@ class Woops_Tiff_File extends Woops_Core_Object implements Iterator
     /**
      * Gets the TIFF header
      * 
-     * @return  Woops_Tiff_Header   The TIFF header
+     * @return  Woops\Tiff\Header   The TIFF header
      */
     public function getHeader()
     {
@@ -113,9 +119,9 @@ class Woops_Tiff_File extends Woops_Core_Object implements Iterator
     /**
      * Creates a new IFD in the current TIFF file
      * 
-     * @param   string          An optionnal PHP classname, for a custom IFD object (the class MUST extends the Woops_Tiff_Ifd class)
-     * @return  Woops_Tiff_Ifd  The IFD object
-     * @throws  Woops_Tiff_File_Exception   If the custom class does not extends Woops_Tiff_Ifd
+     * @param   string                      An optionnal PHP classname, for a custom IFD object (the class MUST extends the Woops\Tiff\Ifd class)
+     * @return  Woops\Tiff\Ifd              The IFD object
+     * @throws  Woops\Tiff\File\Exception   If the custom class does not extends Woops\Tiff\Ifd
      */
     public function newIfd( $customClass = '' )
     {
@@ -123,15 +129,15 @@ class Woops_Tiff_File extends Woops_Core_Object implements Iterator
         if( $customClass ) {
             
             // Creates a reflection object for the custom class
-            $ref = Woops_Core_Reflection_Class::getInstance( $customClass );
+            $ref = \Woops\Core\Reflection\Class::getInstance( $customClass );
             
-            // Checks if the custom class implements the Woops_Tiff_Ifd_Interface class
-            if( !$ref->implementsInterface( 'Woops_Tiff_Ifd_Interface' ) ) {
+            // Checks if the custom class implements the Woops\Tiff\Ifd\Interface class
+            if( !$ref->implementsInterface( 'Woops\Tiff\Ifd\Interface' ) ) {
                 
-                // Error - INvalid IFD class
-                throw new Woops_Tiff_File_Exception(
-                    'Invalid IFD custom class \'' . $customClass . '\'. It must implement the Woops_Tiff_Ifd_Interface interface',
-                    Woops_Tiff_File_Exception::EXCEPTION_INVALID_IFD_CLASS
+                // Error - Invalid IFD class
+                throw new File\Exception(
+                    'Invalid IFD custom class \'' . $customClass . '\'. It must implement the Woops\Tiff\Ifd\Interface interface',
+                    File\Exception::EXCEPTION_INVALID_IFD_CLASS
                 );
             }
             
@@ -141,7 +147,7 @@ class Woops_Tiff_File extends Woops_Core_Object implements Iterator
         } else {
             
             // Creates the IFD
-            $ifd = new Woops_Tiff_Ifd( $this );
+            $ifd = new Ifd( $this );
         }
         
         // Stores the IFD

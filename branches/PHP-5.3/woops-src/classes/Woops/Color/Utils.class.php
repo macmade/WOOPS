@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Color;
+
 /**
  * Color utilities class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Color
  */
-class Woops_Color_Utils extends Woops_Core_Object
+class Utils extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The available color methods
@@ -79,10 +85,10 @@ class Woops_Color_Utils extends Woops_Core_Object
     private static function _setStaticVars()
     {
         // Gets the instance of the number utilities
-        self::$_number    = Woops_Number_Utils::getInstance();
+        self::$_number    = \Woops\Number\Utils::getInstance();
         
         // Gets the instance of the color converter
-        self::$_converter = Woops_Color_Converter::getInstance();
+        self::$_converter = \Woops\Color\Converter::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -129,9 +135,9 @@ class Woops_Color_Utils extends Woops_Core_Object
      * @param   number  The third value (blue, luminosity or value, depending of the method)
      * @param   boolean Return value in uppercase
      * @return  string  The hexadecimal value of the color
-     * @see     Woop_Color_Converter::hslToRgb
-     * @see     Woop_Color_Converter::hsvToRgb
-     * @see     Woop_Number_Utils::inRange
+     * @see     Woop\Color\Converter::hslToRgb
+     * @see     Woop\Color\Converter::hsvToRgb
+     * @see     Woop\Number\Utils::inRange
      */
     public function createHexColor( $v1, $v2, $v3, $uppercase = false )
     {
@@ -190,8 +196,8 @@ class Woops_Color_Utils extends Woops_Core_Object
      * @param   number  The third value (blue, luminosity or value, depending of the method)
      * @param   boolean Return value in uppercase
      * @return  string  The hexadecimal value of the modified color
-     * @see     Woop_Color_Converter::rgbToHsl
-     * @see     Woop_Color_Converter::rgbToHsv
+     * @see     Woop\Color\Converter::rgbToHsl
+     * @see     Woop\Color\Converter::rgbToHsv
      * @see     createHexColor
      */
     public function modifyHexColor( $color, $v1, $v2, $v3, $uppercase = false )

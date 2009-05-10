@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Soap;
+
 /**
  * SOAP server class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Soap
  */
-class Woops_Soap_Server extends Woops_Core_Object
+class Server extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The instance of the SOAP server
@@ -42,9 +48,9 @@ class Woops_Soap_Server extends Woops_Core_Object
         if( !class_exists( 'Soap_Server' ) ) {
             
             // Error - SOAP support is disabled
-            throw new Woops_Soap_Server_Exception(
+            throw new Server\Exception(
                 'The SoapServer class does not exist',
-                Woops_Soap_Server_Exception::EXCEPTION_NO_SOAP
+                Server\Exception::EXCEPTION_NO_SOAP
             );
         }
         
@@ -68,7 +74,7 @@ class Woops_Soap_Server extends Woops_Core_Object
      * @param   string                      The name of the called method
      * @param   array                       The arguments for the called method
      * @return  mixed                       The result of the SOAP server method called
-     * @throws  Woops_Soap_Server_Exception If the called method does not exist
+     * @throws  Woops\Soap\Server\Exception If the called method does not exist
      */
     public function __call( $name, array $args = array() )
     {
@@ -76,14 +82,14 @@ class Woops_Soap_Server extends Woops_Core_Object
         if( !is_callable( array( $this->_soapServer, $name ) ) ) {
             
             // Called method does not exist
-            throw new Woops_Soap_Server_Exception(
+            throw new Server\Exception(
                 'The method \'' . $name . '\' cannot be called on the PDO object',
-                Woops_Soap_Server_Exception::EXCEPTION_BAD_METHOD
+                Server\Exception::EXCEPTION_BAD_METHOD
             );
         }
         
         // Creates a callback
-        $callback = new Woops_Core_Callback( array( $this->_soapServer, $name ) );
+        $callback = new \Woops\Core\Callback( array( $this->_soapServer, $name ) );
         
         // Invokes the callback and returns it's result
         return $callback->invoke( $args );
@@ -111,9 +117,9 @@ class Woops_Soap_Server extends Woops_Core_Object
         }
         
         // The ini_set() function cannot be called
-        throw new Woops_Soap_Server_Exception(
+        throw new Server\Exception(
             'Cannot set the WSDL cache property through the ini_set() function',
-            Woops_Soap_Server_Exception::EXCEPTION_NO_INI_SET
+            Server\Exception::EXCEPTION_NO_INI_SET
         );
     }
     

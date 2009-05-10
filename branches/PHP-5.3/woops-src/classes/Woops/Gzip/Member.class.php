@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Gzip;
+
 /**
  * GZIP member
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Gzip
  */
-class Woops_Gzip_Member extends Woops_Core_Object
+class Member extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The supported compression methods
@@ -78,7 +84,7 @@ class Woops_Gzip_Member extends Woops_Core_Object
      * The extra field types, with their corresponding PHP class name
      */
     protected static $_extraFields = array(
-        0x7041 => 'Woops_Gzip_ExtraField_ApolloFileTypeInformation'
+        0x7041 => '\Woops\Gzip\ExtraField\ApolloFileTypeInformation'
     );
     
     /**
@@ -114,10 +120,10 @@ class Woops_Gzip_Member extends Woops_Core_Object
     /**
      * Process the raw data from a binary stream
      * 
-     * @param   Woops_Gzip_Binary_Stream    The binary stream
+     * @param   Woops\Gzip\Binary\Stream    The binary stream
      * @return  void
      */
-    public function processData( Woops_Gzip_Binary_Stream $stream )
+    public function processData( Binary\Stream $stream )
     {
         // Gets the member signature
         $signature = $stream->littleEndianUnsignedShort();
@@ -126,9 +132,9 @@ class Woops_Gzip_Member extends Woops_Core_Object
         if( $signature !== 0x8B1F ) {
             
             // Error - Invalid member signature
-            throw new Woops_Gzip_Member_Exception(
+            throw new Member\Exception(
                 'Invalid member signature (' . $signature . ')',
-                Woops_Gzip_Member_Exception::EXCEPTION_BAD_SIGNATURE
+                Member\Exception::EXCEPTION_BAD_SIGNATURE
             );
         }
         
@@ -139,9 +145,9 @@ class Woops_Gzip_Member extends Woops_Core_Object
         if( $this->_compressionMethod !== self::COMPRESSION_DEFLATE ) {
             
             // Error - Invalid compression method
-            throw new Woops_Gzip_Member_Exception(
+            throw new Member\Exception(
                 'Invalid compression method (' . $this->_compressionMethod . ')',
-                Woops_Gzip_Member_Exception::EXCEPTION_BAD_COMPRESSION_METHOD
+                Member\Exception::EXCEPTION_BAD_COMPRESSION_METHOD
             );
         }
         
@@ -175,7 +181,7 @@ class Woops_Gzip_Member extends Woops_Core_Object
             } else {
                 
                 // Unknown extra field
-                $this->_extraField = new Woops_Gzip_UnknownExtraField( $type );
+                $this->_extraField = new UnknownExtraField( $type );
             }
             
             // Process the extra field data
@@ -257,7 +263,7 @@ class Woops_Gzip_Member extends Woops_Core_Object
     /**
      * Gets the extra field 
      * 
-     * @return  mixed   An instance of Woops_Gzip_ExtraField, or NULL if no extra field is present
+     * @return  mixed   An instance of Woops\Gzip\ExtraField, or NULL if no extra field is present
      */
     public function getExtraField()
     {
@@ -322,10 +328,10 @@ class Woops_Gzip_Member extends Woops_Core_Object
     /**
      * Gets the extra field 
      * 
-     * @param   Woops_Gzip_ExtraField   The extra field object
+     * @param   Woops\Gzip\ExtraField   The extra field object
      * @return  void
      */
-    public function setExtraField( Woops_Gzip_ExtraField $field )
+    public function setExtraField( ExtraField $field )
     {
         $this->_extraField = $field;
     }

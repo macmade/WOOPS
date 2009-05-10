@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Binary;
+
 /**
  * Binary stream
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Binary
  */
-class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
+class Stream extends \Woops\Core\Event\Dispatcher
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Seek position equals to offset bytes
@@ -105,7 +111,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str       = Woops_String_Utils::getInstance();
+        self::$_str       = \Woops\String\Utils::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -116,7 +122,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
      * 
      * @param   string                          The unpack format (see function unpack())
      * @return  int                             The unpacked data in the specified format
-     * @throws  Woops_Binary_Stream_Exception   If the end of the stream has been reached
+     * @throws  Woops\Binary\Stream\Exception   If the end of the stream has been reached
      */
     protected function _unpackData( $format )
     {
@@ -146,9 +152,9 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         if( $this->_offset + $readBytes > $this->_dataLength ) {
             
             // Error - No more data
-            throw new Woops_Binary_Stream_Exception(
+            throw new Stream\Exception(
                 'Reached the end of the binary stream',
-                Woops_Binary_Stream_Exception::EXCEPTION_END_OF_STREAM
+                Stream\Exception::EXCEPTION_END_OF_STREAM
             );
         }
         
@@ -159,7 +165,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset += $readBytes;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_READ );
+        $this->dispatchEvent( Stream\Event::EVENT_READ );
         
         // Returns the processed data
         return array_shift( $unpackData );
@@ -203,7 +209,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
      * @param   int                             The offset
      * @param   int                             The seek type (one of the SEEK_XXX constant)
      * @return  void
-     * @throws  Woops_Binary_Stream_Exception   If the seek type is invalid
+     * @throws  Woops\Binary\Stream\Exception   If the seek type is invalid
      */
     public function seek( $offset, $whence = self::SEEK_SET )
     {
@@ -226,14 +232,14 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         } else {
             
             // Error - Invalid seek type
-            throw new Woops_Binary_Stream_Exception(
+            throw new Stream\Exception(
                 'Invalid seek type (' . $whence . ')',
-                Woops_Binary_Stream_Exception::EXCEPTION_INVALID_SEEK_TYPE
+                Stream\Exception::EXCEPTION_INVALID_SEEK_TYPE
             );
         }
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_SEEK );
+        $this->dispatchEvent( Stream\Event::EVENT_SEEK );
         
         // Checks the offset
         if( $this->_offset < 0 ) {
@@ -258,7 +264,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset = 0;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_REWIND );
+        $this->dispatchEvent( Stream\Event::EVENT_REWIND );
     }
     
     /**
@@ -286,7 +292,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
      * 
      * @param   int                             The number of bytes to read
      * @return  string                          The number of requested bytes from the binary stream
-     * @throws  Woops_Binary_Stream_Exception   If the end of the stream has been reached
+     * @throws  Woops\Binary\Stream\Exception   If the end of the stream has been reached
      */
     public function read( $readBytes = 1 )
     {
@@ -294,9 +300,9 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         if( $this->_offset + $readBytes > $this->_dataLength ) {
             
             // Error - No more data
-            throw new Woops_Binary_Stream_Exception(
+            throw new Stream\Exception(
                 'Reached the end of the binary stream',
-                Woops_Binary_Stream_Exception::EXCEPTION_END_OF_STREAM
+                Stream\Exception::EXCEPTION_END_OF_STREAM
             );
         }
         
@@ -310,7 +316,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset += $readBytes;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_READ );
+        $this->dispatchEvent( Stream\Event::EVENT_READ );
         
         // Returns the data
         return $data;
@@ -329,14 +335,14 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
      * Gets the remaining stream data
      * 
      * @return  string  The remaining stream data
-     * @throws  Woops_Binary_Stream_Exception   If the end of the stream has been reached
+     * @throws  Woops\Binary\Stream\Exception   If the end of the stream has been reached
      */
     public function getRemainingData()
     {
@@ -344,14 +350,14 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         if( $this->_offset === $this->_dataLength ) {
             
             // Error - No more data
-            throw new Woops_Binary_Stream_Exception(
+            throw new Stream\Exception(
                 'Reached the end of the binary stream',
-                Woops_Binary_Stream_Exception::EXCEPTION_END_OF_STREAM
+                Stream\Exception::EXCEPTION_END_OF_STREAM
             );
         }
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_READ );
+        $this->dispatchEvent( Stream\Event::EVENT_READ );
         
         // Returns the remaining data
         return substr( $this->_data, $this->_offset );
@@ -382,7 +388,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -409,7 +415,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -436,7 +442,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -463,7 +469,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -490,7 +496,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -517,7 +523,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -544,7 +550,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -571,7 +577,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -598,7 +604,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -625,7 +631,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -697,7 +703,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         }
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -769,7 +775,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         }
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -805,9 +811,9 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         if( strlen( $data ) !== 3 ) {
             
             // Error - Language code must be 3 characters
-            throw new Woops_Binary_Stream_Exception(
+            throw new Stream\Exception(
                 'Passed argument is not a valid IS0-639-2 language code',
-                Woops_Binary_Stream_Exception::EXCEPTION_BAD_ISO_639_CODE
+                Stream\Exception::EXCEPTION_BAD_ISO_639_CODE
             );
         }
         
@@ -825,7 +831,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->writeBigEndianUnsignedShort( $code );
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -867,7 +873,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->write( $data . self::$_str->NULL );
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -899,7 +905,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->write( $data );
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -931,7 +937,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->write( $data );
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -1139,7 +1145,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         }
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_READ );
+        $this->dispatchEvent( Stream\Event::EVENT_READ );
         
         // Returns the final float value
         return ( $sign === 0 ) ? $float : -$float;
@@ -1158,7 +1164,7 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
     
     /**
@@ -1191,6 +1197,6 @@ class Woops_Binary_Stream extends Woops_Core_Event_Dispatcher
         $this->_offset      = $this->_dataLength;
         
         // Dispatch the event to the listeners
-        $this->dispatchEvent( Woops_Binary_Stream_Event::EVENT_WRITE );
+        $this->dispatchEvent( Stream\Event::EVENT_WRITE );
     }
 }

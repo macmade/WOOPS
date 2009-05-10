@@ -11,7 +11,10 @@
 
 # $Id$
 
-Woops_Database_Layer::getInstance()->registerDatabaseEngine(
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+Woops\Database\Layer::getInstance()->registerDatabaseEngine(
     'pdo',
-    'Woops_Mod_Pdo_Database_Engine'
+    'Woops\Mod\Pdo\Database\Engine'
 );

@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Singleton;
+
 /**
  * Interface for the singleton classes
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Core.Singleton
  */
-interface Woops_Core_Singleton_Interface
+interface Interface
 {
     /**
      * Gets the unique instance (singleton)
      * 
-     * @return  object  The requested instance
+     * @return  Woops\Core\SIngleton\Interface  The requested instance
      */
     public static function getInstance();
 }
