@@ -105,7 +105,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
     private function __construct()
     {
         // Checks the PHP version required to run this class
-        if( version_compare( PHP_VERSION, self::PHP_COMPATIBLE, '<' ) ) {
+        if( ( double )PHP_VERSION < self::PHP_COMPATIBLE ) {
             
             // Error message
             $errorMsg = 'Class '
@@ -490,17 +490,14 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
                 self::_error( $errorMsg );
             }
             
-            // Gets the minimal PHP version required
-            $phpCompatible = $className::PHP_COMPATIBLE;
-            
-            // Checks the PHP version
-            if( version_compare( PHP_VERSION, $phpCompatible, '<' ) ) {
+            // Checks the minimal PHP version required
+            if( ( double )PHP_VERSION < $className::PHP_COMPATIBLE ) {
                 
                 // Error message
                 $errorMsg = 'Class '
                           . $className
                           . ' requires PHP version '
-                          . $phpCompatible
+                          . $className::PHP_COMPATIBLE
                           . ' (actual version is '
                           . PHP_VERSION
                           . ')';
