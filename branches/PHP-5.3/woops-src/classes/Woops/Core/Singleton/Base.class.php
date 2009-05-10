@@ -39,7 +39,7 @@ abstract class Base extends \Woops\Core\Event\Dispatcher implements ObjectInterf
      * 
      * @return void
      */
-    private function __construct()
+    protected function __construct()
     {}
     
     /**
@@ -57,6 +57,26 @@ abstract class Base extends \Woops\Core\Event\Dispatcher implements ObjectInterf
             'Class ' . get_class( $this ) . ' cannot be cloned',
             Exception::EXCEPTION_CLONE
         );
+    }
+    
+    /**
+     * Gets the unique class instance
+     * 
+     * This method can be used in child classes, if there is a need to
+     * redeclare the getInstance method, to get their unique instances. It will
+     * also allows them to check if the unqiue instance as already been created
+     * since this method will return NULL if the unique instance hasn't been
+     * created.
+     * 
+     * @return  mixed   The unique class instance, if it has already been created, otherwise NULL
+     */
+    protected static function _getInstance()
+    {
+        // Gets the name of the class for which to get the unique instance
+        $class = get_called_class();
+        
+        // Returns the unique instance if it exists
+        return ( isset( self::$_instances[ $class ] ) ) ? self::$_instances[ $class ] : NULL;
     }
     
     /**
@@ -80,10 +100,10 @@ abstract class Base extends \Woops\Core\Event\Dispatcher implements ObjectInterf
             self::$_instances[ $class ] = new $class();
             
             // Dispatch the event to the listeners
-            self::$_instance->dispatchEventObject(
+            self::$_instances[ $class ]->dispatchEventObject(
                 new Event(
                     Event::EVENT_CONSTRUCT,
-                    self::$_instance
+                    self::$_instances[ $class ]
                 )
             );
         }
