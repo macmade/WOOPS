@@ -58,7 +58,7 @@ if( $GETVARS && isset( $GETVARS[ 'className' ] ) ) {
             ) {
                 
                 // Creates an AOP version of the class
-                $AOP       = new Woops\Core\Aop\Class\Builder( $CLASSNAME );
+                $AOP       = new Woops\Core\Aop\ClassBuilder( $CLASSNAME );
                 
                 // Gets the code of the AOP version
                 $CLASSCODE = ( string )$AOP;

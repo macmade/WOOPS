@@ -15,7 +15,7 @@
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\Core\Aop\Class;
+namespace Woops\Core\Aop;
 
 /**
  * AOP class builder
@@ -31,7 +31,7 @@ namespace Woops\Core\Aop\Class;
  * @version     1.0
  * @package     Woops.Core.Aop.Class
  */
-class Builder extends \Woops\Core\Object
+class ClassBuilder extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)

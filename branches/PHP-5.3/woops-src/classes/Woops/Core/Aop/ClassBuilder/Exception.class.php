@@ -15,10 +15,10 @@
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\Core\Aop\Class\Builder;
+namespace Woops\Core\Aop\ClassBuilder;
 
 /**
- * Exception class for the Woops\Core\Aop\Class\Builder class
+ * Exception class for the Woops\Core\Aop\ClassBuilder class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0

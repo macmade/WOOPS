@@ -153,7 +153,7 @@ function createClassCache( $className )
     if( $aop && substr( $className, -9 ) !== 'ObjectInterface' ) {
         
         // Creates an AOP version of the class
-        $aopBuilder = new Woops\Core\Aop\Class\Builder( $className );
+        $aopBuilder = new Woops\Core\Aop\ClassBuilder( $className );
         
         // Gets the code of the AOP version
         $classCode  = ( string )$aopBuilder;
