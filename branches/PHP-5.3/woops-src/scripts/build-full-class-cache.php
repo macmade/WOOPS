@@ -161,7 +161,7 @@ function createClassCache( $className )
     } else {
         
         // Creates a reflection object
-        $reflection = Woops\Core\Reflection\ClassReflectorReflectorReflector::getInstance( $className );
+        $reflection = Woops\Core\Reflection\ClassReflector::getInstance( $className );
         
         // Gets the PHP source code
         $classCode = file_get_contents( $reflection->getFileName() );

@@ -129,7 +129,7 @@ class File extends \Woops\Core\Object implements \Iterator
         if( $customClass ) {
             
             // Creates a reflection object for the custom class
-            $ref = \Woops\Core\Reflection\ClassReflectorReflectorReflector::getInstance( $customClass );
+            $ref = \Woops\Core\Reflection\ClassReflector:getInstance( $customClass );
             
             // Checks if the custom class implements the Woops\Tiff\Ifd\ObjectInterface class
             if( !$ref->implementsInterface( 'Woops\Tiff\Ifd\ObjectInterface' ) ) {
