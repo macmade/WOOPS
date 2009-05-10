@@ -24,7 +24,7 @@ namespace Woops\Helpers;
  * @version     1.0
  * @package     Woops.Time
  */
-class Utils extends \Woops\Core\Singleton\Base
+class TimeUtilities extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
