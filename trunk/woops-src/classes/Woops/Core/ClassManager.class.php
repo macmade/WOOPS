@@ -47,7 +47,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.3.0';
+    const PHP_COMPATIBLE = '5.3.0RC2';
     
     /**
      * The unique instance of the class (singleton)
@@ -105,7 +105,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
     private function __construct()
     {
         // Checks the PHP version required to run this class
-        if( ( double )PHP_VERSION < self::PHP_COMPATIBLE ) {
+        if( version_compare( PHP_VERSION, static::PHP_COMPATIBLE, '<' ) ) {
             
             // Error message
             $errorMsg = 'Class '
@@ -508,7 +508,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             }
             
             // Checks the minimal PHP version required
-            if( ( double )PHP_VERSION < $className::PHP_COMPATIBLE ) {
+            if( version_compare( PHP_VERSION, $className::PHP_COMPATIBLE, '<' ) ) {
                 
                 // Error message
                 $errorMsg = 'Class '

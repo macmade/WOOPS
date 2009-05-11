@@ -29,7 +29,7 @@ class Callback extends Event\Dispatcher
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0RC2';
     
     /**
      * THe PHP callback

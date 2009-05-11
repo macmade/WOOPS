@@ -35,7 +35,7 @@ class Generator extends \Woops\Core\Object
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.3.0';
+    const PHP_COMPATIBLE = '5.3.0RC2';
     
     /**
      * 

@@ -29,7 +29,7 @@ final class Types extends \Woops\Core\Singleton\Base
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.3.0';
+    const PHP_COMPATIBLE = '5.3.0RC2';
     
     /**
      * The list of the available mime types, by category, as defined by the
