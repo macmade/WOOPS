@@ -147,11 +147,6 @@ enable   = On
 ; @type boolean
 optimize = On
 
-; Uses a PHAR (PHP Archive) file instead of storing individual files
-; 
-; @type boolean
-phar     = On
-
 ; ##############################################################################
 ; # AOP related settings                                                       #
 ; ##############################################################################
