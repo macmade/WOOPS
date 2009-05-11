@@ -787,7 +787,7 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
                 
                 // Creates a reflection object for the class
                 // If no instance exist at the moment the advice is added, the automatic join points won't be declared, so we'll have to check it manually
-                $reflection = \Woops\Core\Reflection_Class::getInstance( $className );
+                $reflection = \Woops\Core\Reflection\ClassReflector::getInstance( $className );
                 
                 // Name of the method
                 $methodName = $joinPoint . self::JOINPOINT_METHOD_SUFFIX;
