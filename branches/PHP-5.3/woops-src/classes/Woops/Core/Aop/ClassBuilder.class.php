@@ -83,14 +83,14 @@ class ClassBuilder extends \Woops\Core\Object
         if( !class_exists( $className ) ) {
             
             // Error - No such class
-            throw new Builder\Exception(
+            throw new ClassBuilder\Exception(
                 'The class ' . $className . ' does not exist',
-                Builder\Exception::EXCEPTION_NO_CLASS
+                ClassBuilder\Exception::EXCEPTION_NO_CLASS
             );
         }
         
         // Gets a reflection class object
-        $reflection          = \Woops\Core\Reflection\MethodReflector::getInstance( $className );
+        $reflection          = \Woops\Core\Reflection\ClassReflector::getInstance( $className );
         
         // Gets the path to the PHP file
         $filePath            = $reflection->getFileName();
