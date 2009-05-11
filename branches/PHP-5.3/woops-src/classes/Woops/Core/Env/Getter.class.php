@@ -156,13 +156,10 @@ class Getter extends \Woops\Core\Singleton\Base
     public static function getInstance()
     {
         // Gets the unique instance
-        $instance = parent::_getInstance();
+        $instance = parent::getInstance();
         
         // Checks if the unique instance has been created
-        if( !$instance ) {
-            
-            // Creates the unique instance
-            $instance = parent::getInstance();
+        if( !is_object( $instance->_modManager ) ) {
             
             // Gets the module manager instance
             $instance->_modManager = \Woops\Core\Module\Manager::getInstance();
