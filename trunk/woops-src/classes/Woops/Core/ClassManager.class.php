@@ -130,7 +130,15 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         // Adds this class to the loaded classes array
         $this->_loadedClasses[ __CLASS__ ]                        = __FILE__;
         
-        // Adds the singleton interface to the loaded classes array
+        // Adds the classes included by this script to the loaded classes array
+        $this->_loadedClasses[ 'Woops\Core\Informations' ]              = $this->_classDir
+                                                                        . 'Core'
+                                                                        . DIRECTORY_SEPARATOR
+                                                                        . 'Informations.class.php';
+        $this->_loadedClasses[ 'Woops\Core\Object' ]                    = $this->_classDir
+                                                                        . 'Core'
+                                                                        . DIRECTORY_SEPARATOR
+                                                                        . 'Object.class.php';
         $this->_loadedClasses[ 'Woops\Core\Singleton\ObjectInterface' ] = $this->_classDir
                                                                         . 'Core'
                                                                         . DIRECTORY_SEPARATOR
