@@ -110,6 +110,7 @@
 		<xml-format>Formatting</xml-format>
 		<classCache-enable>Enable</classCache-enable>
 		<classCache-optimize>Optimize</classCache-optimize>
+		<classCache-phar>PHAR</classCache-phar>
 		<aop-enable>Enable</aop-enable>
 		<error-report>Reporting level</error-report>
 		<modules-loaded>Loaded modules</modules-loaded>

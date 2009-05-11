@@ -390,6 +390,7 @@ class Form extends \Woops\Core\Module\Base
         $xmlFormat          = ( isset( $xml[ 'format' ] ) )          ? true : false;
         $classCacheEnable   = ( isset( $classCache[ 'enable' ] ) )   ? true : false;
         $classCacheOptimize = ( isset( $classCache[ 'optimize' ] ) ) ? true : false;
+        $classCachePhar     = ( isset( $classCache[ 'phar' ] ) )     ? true : false;
         $aopEnable          = ( isset( $aop[ 'enable' ] ) )          ? true : false;
         
         // Sets the incoming values
@@ -399,6 +400,7 @@ class Form extends \Woops\Core\Module\Base
         $iniFile->xml->format->setValue(           $xmlFormat );
         $iniFile->classCache->enable->setValue(    $classCacheEnable );
         $iniFile->classCache->optimize->setValue(  $classCacheOptimize );
+        $iniFile->classCache->phar->setValue(      $classCacheOptimize );
         $iniFile->aop->enable->setValue(           $aopEnable );
         $iniFile->error->report->setValue(         $error[ 'report' ] );
         
