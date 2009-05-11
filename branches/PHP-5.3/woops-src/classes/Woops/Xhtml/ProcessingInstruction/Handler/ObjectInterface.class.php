@@ -22,7 +22,7 @@ namespace Woops\Xhtml\ProcessingInstruction\Handler;
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
- * @package     Woops.Xhtml.ProcessingInstruction_Handler
+ * @package     Woops.Xhtml.ProcessingInstruction.Handler
  */
 interface ObjectInterface
 {
