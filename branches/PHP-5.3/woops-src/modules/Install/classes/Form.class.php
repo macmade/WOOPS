@@ -215,7 +215,7 @@ class Form extends \Woops\Core\Module\Base
         self::$_modules   = \Woops\Core\Module\Manager::getInstance()->getAvailableModules();
         
         // Gets the available timezones
-        self::$_timezones = \Woops\Time\Utils::getInstance()->getTimezones();
+        self::$_timezones = \Woops\Helpers\TimeUtilities::getInstance()->getTimezones();
         
         // Gets the available languages
         self::$_languages = \Woops\Locale\Helper::getInstance()->getLanguages();
@@ -406,7 +406,7 @@ class Form extends \Woops\Core\Module\Base
         unset( $iniFile->modules->loaded );
         
         // Creates the loaded modules array
-        $loaded = $iniFile->modules->newArrayItem( 'loaded' );
+        $loaded = $iniFile->modules->newArrayValueItem( 'loaded' );
         
         // Adds the install module, which need to be loaded in order to continue using this script
         $loaded->addValue( 'Install' );

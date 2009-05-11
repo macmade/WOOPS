@@ -207,7 +207,7 @@ class Parser extends \Woops\Core\Object
                             );
                             
                             // Creates the array object
-                            $this->_ini->getItem( $section )->newArrayItem( $key );
+                            $this->_ini->getItem( $section )->newArrayValueItem( $key );
                             
                             // Resets the comments
                             $comments = array();
@@ -250,7 +250,7 @@ class Parser extends \Woops\Core\Object
                             );
                             
                             // Creates the array object
-                            $this->_ini->newArrayItem( $key );
+                            $this->_ini->newArrayValueItem( $key );
                             
                             // Resets the comments
                             $comments = array();

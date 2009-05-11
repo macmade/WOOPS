@@ -187,8 +187,8 @@ class Header extends \Woops\Core\Object
         // Third party mappings commonly used
         0x07C8 => '\Woops\Zip\ExtraField\Macintosh',
         0x2605 => '\Woops\Zip\ExtraField\ZipIt\Macintosh',
-        0x2705 => '\Woops\Zip\ExtraField\ZipIt\Macintosh\135',
-        0x2805 => '\Woops\Zip\ExtraField\ZipIt\Macintosh\135\Alt',
+        0x2705 => '\Woops\Zip\ExtraField\ZipIt\Macintosh135',
+        0x2805 => '\Woops\Zip\ExtraField\ZipIt\Macintosh135Alt',
         0x334D => '\Woops\Zip\ExtraField\InfoZip\Macintosh',
         0x4341 => '\Woops\Zip\ExtraField\AcornSparkFs',
         0x4453 => '\Woops\Zip\ExtraField\Windows\Nt\SecurityDescriptor',
@@ -206,7 +206,7 @@ class Header extends \Woops\Core\Object
         0x6542 => '\Woops\Zip\ExtraField\BeOsBeBox',
         0x7075 => '\Woops\Zip\ExtraField\InfoZip\Unicode\Path',
         0x756E => '\Woops\Zip\ExtraField\AsiUnix',
-        0x7855 => '\Woops\Zip\ExtraField\InfoZip\Unix\New',
+        0x7855 => '\Woops\Zip\ExtraField\InfoZip\UnixNew',
         0xA220 => '\Woops\Zip\ExtraField\Microsoft\OpenPackagingGrowthHint',
         0xFD4A => '\Woops\Zip\ExtraField\SmsQdos'
     );

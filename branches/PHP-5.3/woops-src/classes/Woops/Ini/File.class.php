@@ -105,7 +105,7 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
      * Gets an item
      * 
      * @param   string  The name of the item to get
-     * @return  object  The item object (Woops\Ini\Item\Section, Woops\Ini\Item\Value or Woops\Ini\Item\Array) if it exists, otherwise NULL
+     * @return  object  The item object (Woops\Ini\Item\Section, Woops\Ini\Item\Value or Woops\Ini\Item\ArrayValue) if it exists, otherwise NULL
      * @see     getItem
      */
     public function __get( $name )
@@ -167,7 +167,7 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
     /**
      * Gets the current item (Iterator method)
      * 
-     * @return  object  The item object (Woops\Ini\Item\Section, Woops\Ini\Item\Value or Woops\Ini\Item\Array) if it exists, otherwise NULL
+     * @return  object  The item object (Woops\Ini\Item\Section, Woops\Ini\Item\Value or Woops\Ini\Item\ArrayValue) if it exists, otherwise NULL
      */
     public function current()
     {
@@ -220,7 +220,7 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
      * Gets an item (ArrayAccess method)
      * 
      * @param   string  The name of the item to get
-     * @return  object  The item object (Woops\Ini\Item\Section, Woops\Ini\Item\Value or Woops\Ini\Item\Array) if it exists, otherwise NULL
+     * @return  object  The item object (Woops\Ini\Item\Section, Woops\Ini\Item\Value or Woops\Ini\Item\ArrayValue) if it exists, otherwise NULL
      * @see     getItem
      */
     public function offsetGet( $name )
@@ -292,7 +292,7 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
                 // Section
                 $ini[ $name ] = $object->toArray();
                 
-            } elseif( $object instanceof Item\Array ) {
+            } elseif( $object instanceof Item\ArrayValue ) {
                 
                 // Array
                 $ini[ $name ] = array();
@@ -436,17 +436,17 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
     /**
      * Creates an array item in the INI file
      * 
-     * @param   string                  The name of the array item
-     * @param   string                  An optionnal array with values for the array item
-     * @return  Woops\Ini\Item\Array    The new array object
+     * @param   string                      The name of the array item
+     * @param   string                      An optionnal array with values for the array item
+     * @return  Woops\Ini\Item\ArrayValue   The new array object
      */
-    public function newArrayItem( $name, array $values = array() )
+    public function newArrayValueItem( $name, array $values = array() )
     {
         // Ensures the name is a string
         $name                  = ( string )$name;
         
         // Creates and stores the array object
-        $this->_items[ $name ] = new Item\Array( $name, $values );
+        $this->_items[ $name ] = new Item\ArrayValue( $name, $values );
         
         // Returns the array object
         return $this->_items[ $name ];
@@ -477,10 +477,10 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
     /**
      * Adds an array item in the INI file
      * 
-     * @param   Woops\Ini\Item\Array    The array object to add
+     * @param   Woops\Ini\Item\ArrayValue   The array object to add
      * @return  void
      */
-    public function addArrayItem( Item\Array $array )
+    public function addArrayValueItem( Item\ArrayValue $array )
     {
         $this->_items[ $array->getName() ] = $array;
     }
@@ -526,14 +526,14 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
      */
     public function isArray( $name )
     {
-        return ( $this->itemExists( $name ) && $this->_items[ ( string )$name ] instanceof Item\Array ) ? true : false;
+        return ( $this->itemExists( $name ) && $this->_items[ ( string )$name ] instanceof Item\ArrayValue ) ? true : false;
     }
     
     /**
      * Gets an item form the INI file
      * 
      * @param   string  The name of the item to get
-     * @return  object  The item object (Woops\Ini\Item\Section, Woops\Ini\Item\Value or Woops\Ini\Item\Array) if it exists, otherwise NULL
+     * @return  object  The item object (Woops\Ini\Item\Section, Woops\Ini\Item\Value or Woops\Ini\Item\ArrayValue) if it exists, otherwise NULL
      */
     public function getItem( $name )
     {
