@@ -11,8 +11,11 @@
 
 # $Id$
 
-Woops_Database_Layer::getInstance()->registerDatabaseEngine(
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+Woops\Database\Layer::getInstance()->registerDatabaseEngine(
     'adodb',
-    'Woops_Mod_Adodb_Database_Engine'
+    '\Woops\Mod\Adodb\Database\Engine'
 );
 

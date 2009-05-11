@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf\Record;
+
 /**
  * SWF RGBA record
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Swf.Record
  */
-class Woops_Swf_Record_Argb extends Woops_Swf_Record_Rgb
+class Argb extends Rgb
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The alpha value defining opacity
@@ -53,7 +59,7 @@ class Woops_Swf_Record_Argb extends Woops_Swf_Record_Rgb
      * 
      * @return  void
      */
-    public function processData( Woops_Swf_Binary_Stream $stream )
+    public function processData( \Woops\Swf\Binary\Stream $stream )
     {
         // Gets the alpha value
         $this->_alpha = $stream->unsignedChar();

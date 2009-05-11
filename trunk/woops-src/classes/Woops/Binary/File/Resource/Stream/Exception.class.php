@@ -11,14 +11,20 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Binary\File\Resource\Stream;
+
 /**
- * Exception class for the Woops_Binary_File_Resource_Stream class
+ * Exception class for the Woops\Binary\File\Resource\Stream class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Binary.File.Resource.Stream
  */
-final class Woops_Binary_File_Resource_Stream_Exception extends Woops_Core_Exception_Base
+final class Exception extends \Woops\Core\Exception\Base
 {
     /**
      * Error codes for the exceptions

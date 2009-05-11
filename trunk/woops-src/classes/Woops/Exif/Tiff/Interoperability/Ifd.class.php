@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Exif\Tiff\Interoperability;
+
 /**
  * EXIF TIFF Image File Directory (IFD)
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Exif.Tiff.Interoperability
  */
-class Woops_Exif_Tiff_Interoperability_Ifd extends Woops_Core_Object implements Woops_Tiff_Ifd_Interface
+class Ifd extends \Woops\Core\Object implements \Woops\Tiff\Ifd\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The EXIF Interoperability TIFF tags
@@ -34,7 +40,7 @@ class Woops_Exif_Tiff_Interoperability_Ifd extends Woops_Core_Object implements 
      * The types of the EXIF Interoperability TIFF tags, with their corresponding PHP class
      */
     protected static $_types = array(
-        0x0001 => 'Woops_Exif_Tiff_Interoperability_Tag_InteroperabilityIndex'
+        0x0001 => '\Woops\Exif\Tiff\Interoperability\Tag\InteroperabilityIndex'
     );
     
     /**
@@ -65,10 +71,10 @@ class Woops_Exif_Tiff_Interoperability_Ifd extends Woops_Core_Object implements 
     /**
      * Class constructor
      * 
-     * @param   Woops_Tiff_File The TIFF file in which the IFD is contained
+     * @param   Woops\Tiff\File The TIFF file in which the IFD is contained
      * @return  void
      */
-    public function __construct( Woops_Tiff_File $file )
+    public function __construct( \Woops\Tiff\File $file )
     {
         $this->_file   = $file;
         $this->_header = $this->_file->getHeader();
@@ -77,7 +83,7 @@ class Woops_Exif_Tiff_Interoperability_Ifd extends Woops_Core_Object implements 
     /**
      * Gets the current tag object (SPL Iterator method)
      * 
-     * @return  Woops_Tiff_Tag  The current SWF tag object
+     * @return  Woops\Tiff\Tag  The current SWF tag object
      */
     public function current()
     {
@@ -129,7 +135,7 @@ class Woops_Exif_Tiff_Interoperability_Ifd extends Woops_Core_Object implements 
      * 
      * @return  void
      */
-    public function processData( Woops_Tiff_Binary_Stream $stream )
+    public function processData( \Woops\Tiff\Binary\Stream $stream )
     {
         // Resets the tag array
         $this->_tags = array();
@@ -149,17 +155,17 @@ class Woops_Exif_Tiff_Interoperability_Ifd extends Woops_Core_Object implements 
                 // Creates a new tag
                 $tag = $this->newTag( $type );
                 
-            } catch( Woops_Exif_Tiff_Interoperability_Ifd_Exception $e ) {
+            } catch( Ifd\Exception $e ) {
                 
                 // Checks if the exception was made for an unknown TIFF tag
-                if( $e->getCode() !== Woops_Exif_Tiff_Interoperability_Ifd_Exception::EXCEPTION_INVALID_TAG_TYPE ) {
+                if( $e->getCode() !== Ifd\Exception::EXCEPTION_INVALID_TAG_TYPE ) {
                     
                     // No - Throws the exception again
                     throw $e;
                 }
                 
                 // Creates an unknown tag object, and adds it
-                $tag = new Woops_Exif_Tiff_Interoperability_UnknownTag( $this->_file, $type );
+                $tag = new UnknownTag( $this->_file, $type );
                 $this->addTag( $tag );
             }
             
@@ -196,8 +202,8 @@ class Woops_Exif_Tiff_Interoperability_Ifd extends Woops_Core_Object implements 
      * Creates a new tag in the IFD
      * 
      * @param   int                                             The tag type (one of the TAG_XXX constant)
-     * @return  Woops_Tiff_Tag                                  The tag object
-     * @throws  Woops_Exif_Tiff_Interoperability_Ifd_Exception  If the tag type is invalid
+     * @return  Woops\Tiff\Tag                                  The tag object
+     * @throws  Woops\Exif\Tiff\Interoperability\Ifd\Exception  If the tag type is invalid
      */
     public function newTag( $type )
     {
@@ -208,9 +214,9 @@ class Woops_Exif_Tiff_Interoperability_Ifd extends Woops_Core_Object implements 
         if( !isset( self::$_types[ $type ] ) ) {
             
             // Error - Invalid value type
-            throw new Woops_Exif_Tiff_Interoperability_Ifd_Exception(
+            throw new Ifd\Exception(
                 'Invalid tag type (' .  $type . ')',
-                Woops_Exif_Tiff_Interoperability_Ifd_Exception::EXCEPTION_INVALID_TAG_TYPE
+                Ifd\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         
@@ -228,10 +234,10 @@ class Woops_Exif_Tiff_Interoperability_Ifd extends Woops_Core_Object implements 
     /**
      * Adds a tag in the IFD
      * 
-     * @param   Woops_Tiff_Tag The tag object
+     * @param   Woops\Tiff\Tag The tag object
      * @return  void
      */
-    public function addTag( Woops_Tiff_Tag $tag )
+    public function addTag( \Woops\Tiff\Tag $tag )
     {
         $this->_tags[] = $tag;
     }

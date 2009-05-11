@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Png\Chunk;
+
 /**
  * PNG sPLt chunk (suggested palette)
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Png.Chunk
  */
-class Woops_Png_Chunk_Splt extends Woops_Png_Chunk
+class Splt extends \Woops\Png\Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The chunk type
@@ -46,7 +52,7 @@ class Woops_Png_Chunk_Splt extends Woops_Png_Chunk
         $this->_stream->rewind();
         
         // Storage
-        $data              = new stdClass();
+        $data              = new \stdClass();
         
         // Gets the palette name
         $data->paletteName = $this->_stream->nullTerminatedString();
@@ -91,7 +97,7 @@ class Woops_Png_Chunk_Splt extends Woops_Png_Chunk
         while( !$this->_stream->endOfStream() ) {
             
             // Storage for the current entry
-            $entry = new stdClass();
+            $entry = new \stdClass();
             
             // Gets the values for the current palette entry (depending of the sample depth)
             $red              = $this->_stream->$entryValueMethod();

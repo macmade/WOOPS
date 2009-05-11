@@ -11,6 +11,12 @@
 
 # $Id: Stream.class.php 637 2009-03-09 09:05:52Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf\Binary;
+
 /**
  * SWF binary stream
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Swf.Binary
  */
-class Woops_Swf_Binary_Stream extends Woops_Binary_Stream
+class Stream extends \Woops\Binary\Stream
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Whether the SWF data is compressed or not
@@ -35,7 +41,7 @@ class Woops_Swf_Binary_Stream extends Woops_Binary_Stream
      * 
      * @param   string  The binary data for which to create a stream
      * @return  void
-     * @see     Woops_Binary_Stream::__construct
+     * @see     Woops\Binary\Stream::__construct
      */
     public function __construct( $data = '' )
     {
@@ -186,9 +192,9 @@ class Woops_Swf_Binary_Stream extends Woops_Binary_Stream
         } else {
             
             // Error - Integer is too big
-            throw new Woops_Swf_Binary_Stream_Exception(
+            throw new Stream\Exception(
                 'Invalid integer range (bigger than 2^35-1)',
-                Woops_Swf_Binary_Stream_Exception::EXCEPTION_INVALID_INT_RANGE
+                Stream\Exception::EXCEPTION_INVALID_INT_RANGE
             );
         }
     }
@@ -204,9 +210,9 @@ class Woops_Swf_Binary_Stream extends Woops_Binary_Stream
         if( !function_exists( 'gzcompress' ) ) {
             
             // Error - No GZIP
-            throw new Woops_Swf_Binary_Stream_Exception(
+            throw new Stream\Exception(
                 'The PHP GZIP functions are not available',
-                Woops_Swf_Binary_Stream_Exception::EXCEPTION_NO_GZIP
+                Stream\Exception::EXCEPTION_NO_GZIP
             );
         }
         
@@ -230,9 +236,9 @@ class Woops_Swf_Binary_Stream extends Woops_Binary_Stream
         } else {
             
             // Error - Invalid data
-            throw new Woops_Swf_Binary_Stream_Exception(
+            throw new Stream\Exception(
                 'Invalid SWF data',
-                Woops_Swf_Binary_Stream_Exception::EXCEPTION_
+                Stream\Exception::EXCEPTION_
             );
         }
     }
@@ -248,9 +254,9 @@ class Woops_Swf_Binary_Stream extends Woops_Binary_Stream
         if( !function_exists( 'gzuncompress' ) ) {
             
             // Error - No GZIP
-            throw new Woops_Swf_Binary_Stream_Exception(
+            throw new Stream\Exception(
                 'The PHP GZIP functions are not available',
-                Woops_Swf_Binary_Stream_Exception::EXCEPTION_NO_GZIP
+                Stream\Exception::EXCEPTION_NO_GZIP
             );
         }
         
@@ -274,9 +280,9 @@ class Woops_Swf_Binary_Stream extends Woops_Binary_Stream
         } else {
             
             // Error - Invalid data
-            throw new Woops_Swf_Binary_Stream_Exception(
+            throw new Stream\Exception(
                 'Invalid SWF data',
-                Woops_Swf_Binary_Stream_Exception::EXCEPTION_INVALID_DATA
+                Stream\Exception::EXCEPTION_INVALID_DATA
             );
         }
     }

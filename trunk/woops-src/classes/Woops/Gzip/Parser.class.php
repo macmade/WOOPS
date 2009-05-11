@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Gzip;
+
 /**
  * GZIP file parser
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Gzip
  */
-class Woops_Gzip_Parser extends Woops_Core_Object
+class Parser extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The GZIP file object
@@ -49,13 +55,13 @@ class Woops_Gzip_Parser extends Woops_Core_Object
     public function __construct( $file )
     {
         // Create a new GZIP file object
-        $this->_file     = new Woops_Gzip_File();
+        $this->_file     = new File();
         
         // Stores the file path
         $this->_filePath = $file;
         
         // Creates the binary stream
-        $this->_stream   = new Woops_Gzip_Binary_File_Stream( $file );
+        $this->_stream   = new Binary\File\Stream( $file );
         
         // Parses the file
         $this->_parseFile();
@@ -76,9 +82,9 @@ class Woops_Gzip_Parser extends Woops_Core_Object
         if( $memberOffset === false ) {
             
             // Error - No member in the GZIP file
-            throw new Woops_Gzip_Parser_Exception(
+            throw new Parser\Exception(
                 'No member in the GZIP file',
-                Woops_Gzip_Parser_Exception::EXCEPTION_NO_MEMBER
+                Parser\Exception::EXCEPTION_NO_MEMBER
             );
         }
         
@@ -86,10 +92,10 @@ class Woops_Gzip_Parser extends Woops_Core_Object
         while( $memberOffset !== false ) {
             
             // Moves the stream pointer to the start of the member
-            $this->_stream->seek( $memberOffset, Woops_Gzip_Binary_File_Stream::SEEK_SET );
+            $this->_stream->seek( $memberOffset, Binary\File\Stream::SEEK_SET );
             
             // Creates a new GZIP member
-            $member = new Woops_Gzip_Member();
+            $member = new Member();
             
             // Adds the member to the GZIP file
             $this->_file->addMember( $member );
@@ -105,7 +111,7 @@ class Woops_Gzip_Parser extends Woops_Core_Object
     /**
      * Gets the GZIP file object
      * 
-     * @return  Woops_Gzip_File The GZIP file object
+     * @return  Woops\Gzip\File The GZIP file object
      */
     public function getFile()
     {

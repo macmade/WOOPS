@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Lang;
+
 /**
  * Getter class for the language labels
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Core.Lang
  */
-final class Woops_Core_Lang_Getter extends Woops_Core_Object implements Woops_Core_MultiSingleton_Interface
+final class Getter extends \Woops\Core\Object implements \Woops\Core\MultiSingleton\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * An array with the instances of the class (multi-singleton)
@@ -103,9 +109,9 @@ final class Woops_Core_Lang_Getter extends Woops_Core_Object implements Woops_Co
         
         if( !file_exists( $langFile ) ) {
             
-            throw new Woops_Core_Lang_Getter_Exception(
+            throw new Getter\Exception(
                 'The lang file does not exist (path: ' . $langFile . ')',
-                Woops_Core_Lang_Getter_Exception::EXCEPTION_NO_LANG_FILE
+                Getter\Exception::EXCEPTION_NO_LANG_FILE
             );
         }
         
@@ -115,9 +121,9 @@ final class Woops_Core_Lang_Getter extends Woops_Core_Object implements Woops_Co
             
         } catch( Exception $e ) {
             
-            throw new Woops_Core_Lang_Getter_Exception(
+            throw new Getter\Exception(
                 $e->getMessage(),
-                Woops_Core_Lang_Getter_Exception::EXCEPTION_BAD_XML
+                Getter\Exception::EXCEPTION_BAD_XML
             );
         }
     }
@@ -129,13 +135,13 @@ final class Woops_Core_Lang_Getter extends Woops_Core_Object implements Woops_Co
      * be cloned (singleton).
      * 
      * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()
     {
-        throw new Woops_Core_Singleton_Exception(
+        throw new \Woops\Core\Singleton\Exception(
             'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
     }
     
@@ -155,7 +161,7 @@ final class Woops_Core_Lang_Getter extends Woops_Core_Object implements Woops_Co
     private static function _setStaticVars()
     {
         // Gets the instance of the environment class
-        self::$_env       = Woops_Core_Env_Getter::getInstance();
+        self::$_env       = \Woops\Core\Env\Getter::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -167,7 +173,7 @@ final class Woops_Core_Lang_Getter extends Woops_Core_Object implements Woops_Co
     private static function _createDefaultInstance()
     {
         // Sets the name of the default instance
-        self::$_defaultInstanceName                             = Woops_Core_Env_Getter::getInstance()->getSourcePath( 'lang/default/' );
+        self::$_defaultInstanceName                             = \Woops\Core\Env\Getter::getInstance()->getSourcePath( 'lang/default/' );
         
         // Creates the default instance
         return self::$_instances[ self::$_defaultInstanceName ] = new self( self::$_defaultInstanceName );

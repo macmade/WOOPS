@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mod\Adodb\Database;
+
 /**
  * ADODB database engine
  * 
@@ -21,12 +27,12 @@
  * @version     1.0
  * @package     Woops.Mod.Adodb.Database
  */
-final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements Woops_Database_Engine_Interface
+final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The unique instance of the class (singleton)
@@ -89,10 +95,10 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
     private function __construct()
     {
         // Gets the instance of the environment class
-        $this->_env            = Woops_Core_Env_Getter::getInstance();
+        $this->_env            = Woops\Core\Env\Getter::getInstance();
         
         // Gets the instance of the error handler class
-        $this->_errorReporting = Woops_Core_Error_Handler::getInstance();
+        $this->_errorReporting = Woops\Core\Error\Handler::getInstance();
         
         // Not sure ADODB is completely error free
         $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
@@ -103,7 +109,7 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
         $this->_errorReporting->resetErrorReporting();
         
         // Creates a directory iterator to find the available drivers
-        $iterator = new DirectoryIterator( $this->_env->getPath( 'woops-mod://Adodb/resources/php/adodb5/drivers/' ) );
+        $iterator = new \DirectoryIterator( $this->_env->getPath( 'woops-mod://Adodb/resources/php/adodb5/drivers/' ) );
         
         // Process each file
         foreach( $iterator as $file ) {
@@ -133,7 +139,7 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
      * @param   string                                      The name of the called method
      * @param   array                                       The arguments for the called method
      * @return  mixed                                       The result of the ADODB method called
-     * @throws  Woops_Mod_Adodb_Database_Engine_Exception   If the called method does not exist
+     * @throws  Woops\Mod\Adodb\Database\Engine\Exception   If the called method does not exist
      */
     public function __call( $name, array $args = array() )
     {
@@ -141,14 +147,14 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
         if( !is_callable( array( $this->_adodb, $name ) ) ) {
             
             // Called method does not exist
-            throw new Woops_Mod_Adodb_Database_Engine_Exception(
+            throw new Engine\Exception(
                 'The method \'' . $name . '\' cannot be called on the ADODB object',
-                Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_BAD_METHOD
+                Engine\Exception::EXCEPTION_BAD_METHOD
             );
         }
         
         // Creates a callback
-        $callback = new Woops_Core_Callback( array( $this->_adodb, $name ) );
+        $callback = new \Woops\Core\Callback( array( $this->_adodb, $name ) );
         
         // Not sure ADODB is completely error free
         $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
@@ -169,13 +175,13 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
      * be cloned (singleton).
      * 
      * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()
     {
-        throw new Woops_Core_Singleton_Exception(
+        throw new \Woops\Core\Singleton\Exception(
             'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
     }
     
@@ -185,7 +191,7 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
      * This method is used to get the unique instance of the class
      * (singleton). If no instance is available, it will create it.
      * 
-     * @return  Woops_Mod_Adodb_Database_Engine The unique instance of the class
+     * @return  Woops\Mod\Adodb\Database\Engine The unique instance of the class
      */
     public static function getInstance()
     {
@@ -219,7 +225,7 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
      * @param   string                                      The name of the database to use
      * @param   string                                      The prefix for the database tables
      * @return  void
-     * @throws  Woops_Mod_Adodb_Database_Engine_Exception   If the requested driver is not available
+     * @throws  Woops\Mod\Adodb\Database\Engine\Exception   If the requested driver is not available
      */
     public function load( $driver, $host, $port, $database, $tablePrefix )
     {
@@ -227,9 +233,9 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
         if( !isset( $this->_drivers[ $driver ] ) ) {
             
             // Error - Driver not available
-            throw new Woops_Mod_Adodb_Database_Engine_Exception(
+            throw new Engine\Exception(
                 'Driver ' . $driver . ' is not available in ADODB',
-                Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_NO_ADODB_DRIVER
+                Engine\Exception::EXCEPTION_NO_ADODB_DRIVER
             );
         }
         
@@ -237,7 +243,7 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
         $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
         
         // Creates the ADODB object
-        $db = ADONewConnection( $driver );
+        $db = \ADONewConnection( $driver );
         
         // Resets the error reporting
         $this->_errorReporting->resetErrorReporting();
@@ -246,9 +252,9 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
         if( !$db ) {
             
             // Error - Driver not available
-            throw new Woops_Mod_Adodb_Database_Engine_Exception(
+            throw new Engine\Exception(
                 'Error creating the ADODB object with driver ' . $driver,
-                Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_ADODB_DRIVER_ERROR
+                Engine\Exception::EXCEPTION_ADODB_DRIVER_ERROR
             );
         }
         
@@ -281,7 +287,7 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
      * Database connection
      * 
      * @return  void
-     * @throws  Woops_Mod_Adodb_Database_Engine_Exception   If the database connection failed to be established
+     * @throws  Woops\Mod\Adodb\Database\Engine\Exception   If the database connection failed to be established
      */
     public function connect( $user, $pass )
     {
@@ -292,9 +298,9 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
         if( !$this->_adodb->Connect( $this->_server, $user, $pass, $this->_database ) ) {
             
             // The ADODB object cannot be created - Reroute the exception
-            throw new Woops_Mod_Adodb_Database_Engine_Exception(
+            throw new Engine\Exception(
                 'Impossible to establish an ADODB connection',
-                Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_NO_CONNECTION
+                Engine\Exception::EXCEPTION_NO_CONNECTION
             );
         }
         
@@ -380,7 +386,7 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
      */
     public function rowCount( $res )
     {
-        if( $res instanceof ADORecordSet ) {
+        if( $res instanceof \ADORecordSet ) {
             
             // Not sure ADODB is completely error free
             $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
@@ -393,9 +399,9 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
             return $count;
         }
         
-        throw new Woops_Mod_Adodb_Database_Engine_Exception(
+        throw new Engine\Exception(
             'Passed argument is not a valid ADODB record set',
-            Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_INVALID_RECORD_SET
+            Engine\Exception::EXCEPTION_INVALID_RECORD_SET
         );
     }
     
@@ -404,7 +410,7 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
      */
     public function fetchAssoc( $res )
     {
-        if( $res instanceof ADORecordSet ) {
+        if( $res instanceof \ADORecordSet ) {
             
             // Not sure ADODB is completely error free
             $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
@@ -434,9 +440,9 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
             return $rows;
         }
         
-        throw new Woops_Mod_Adodb_Database_Engine_Exception(
+        throw new Engine\Exception(
             'Passed argument is not a valid ADODB record set',
-            Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_INVALID_RECORD_SET
+            Engine\Exception::EXCEPTION_INVALID_RECORD_SET
         );
     }
     
@@ -445,7 +451,7 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
      */
     public function fetchObject( $res )
     {
-        if( $res instanceof ADORecordSet ) {
+        if( $res instanceof \ADORecordSet ) {
             
             // Not sure ADODB is completely error free
             $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
@@ -475,9 +481,9 @@ final class Woops_Mod_Adodb_Database_Engine extends Woops_Core_Object implements
             return $rows;
         }
         
-        throw new Woops_Mod_Adodb_Database_Engine_Exception(
+        throw new Engine\Exception(
             'Passed argument is not a valid ADODB record set',
-            Woops_Mod_Adodb_Database_Engine_Exception::EXCEPTION_INVALID_RECORD_SET
+            Engine\Exception::EXCEPTION_INVALID_RECORD_SET
         );
     }
     

@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Png\Chunk;
+
 /**
  * PNG pHYs chunk (physical pixel dimensions)
  * 
@@ -21,12 +27,12 @@
  * @version     1.0
  * @package     Woops.Png.Chunk
  */
-class Woops_Png_Chunk_Phys extends Woops_Png_Chunk
+class Phys extends \Woops\Png\Chunk
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The chunk type
@@ -49,7 +55,7 @@ class Woops_Png_Chunk_Phys extends Woops_Png_Chunk
         $this->_stream->rewind();
         
         // Storage
-        $data                = new stdClass();
+        $data                = new \stdClass();
         
         // Gets the pixel aspect ratio
         $data->pixelPerUnitX = $this->_stream->bigEndianUnsignedLong();

@@ -194,7 +194,7 @@ For instance:
     2:  
     3:  // Includes the initialization script
     4:  require_once( 
-    5:      dirname( __FILE__ )
+    5:      __DIR__
     6:    . DIRECTORY_SEPARATOR
     7:    . 'woops-src'
     8:    . DIRECTORY_SEPARATOR

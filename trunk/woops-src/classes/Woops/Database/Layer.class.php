@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Database;
+
 /**
  * WOOPS database layer class
  *
@@ -18,47 +24,42 @@
  * @version     1.0
  * @package     Woops.Database
  */
-final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements Woops_Core_Singleton_Interface
+class Layer extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
-    
-    /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance  = NULL;
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The WOOPS configuration object
      */
-    private $_conf             = NULL;
+    protected $_conf             = NULL;
     
     /**
      * The registered database engines
      */
-    private $_engines          = array();
+    protected $_engines          = array();
     
     /**
      * The names of the registered database engines
      */
-    private $_engineNames      = array();
+    protected $_engineNames      = array();
     
     /**
      * The connected database engines
      */
-    private $_connectedEngines = array();
+    protected $_connectedEngines = array();
     
     /**
      * The supported drivers for each engine
      */
-    private $_drivers          = array();
+    protected $_drivers          = array();
     
     /**
      * The name of the default database engine
      */
-    private $_defaultEngine    = '';
+    protected $_defaultEngine    = '';
     
     /**
      * Class constructor
@@ -68,10 +69,10 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
      * 
      * @return  void
      */
-    private function __construct()
+    protected function __construct()
     {
         // Gets the instance of the configuration object
-        $this->_conf          = Woops_Core_Config_Getter::getInstance();
+        $this->_conf          = \Woops\Core\Config\Getter::getInstance();
         
         // Stores the name of the default database engine
         $this->_defaultEngine = $this->_conf->getVar( 'database', 'engine' );
@@ -83,7 +84,7 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
      * This method will close the database connection on all loaded engines.
      * 
      * @return  void
-     * @see     Woops_Core_Singleton_Interface::disconnect
+     * @see     Woops\Database\Engine\ObjectInterface::disconnect
      */
     public function __destruct()
     {
@@ -94,7 +95,7 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
             if( isset( $this->_connectedEngines[ $key ] ) ) {
                 
                 // Dispatch the event to the listeners
-                $this->dispatchEventObject( new Woops_Database_Layer_Event( Woops_Database_Layer_Event::EVENT_ENGINE_DISCONNECT, $value ) );
+                $this->dispatchEventObject( new Layer\Event( Layer\Event::EVENT_ENGINE_DISCONNECT, $value ) );
                 
                 // Closes the connection
                 $value->disconnect();
@@ -103,58 +104,17 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
     }
     
     /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new Woops_Core_Singleton_Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops_Database_Layer    The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
-    }
-    
-    /**
      * Registers a class as a database engine
      * 
      * Note that the database engine class must implement the
-     * Woops_Database_Engine_Interface interface.
+     * Woops\Database\Engine\ObjectInterface interface.
      * 
      * @param   string  The name of the database engine
      * @param   string  The class of the database engine
      * @return  void
-     * @throws  Woops_Database_Layer_Exception  If an engine with the same name is already registered
-     * @throws  Woops_Database_Layer_Exception  If the engine class does not exists
-     * @throws  Woops_Database_Layer_Exception  If the engine class does not implements the Woops_Database_Engine_Interface interface
-     * @see     Woops_Core_Singleton_Interface::load
-     * @see     Woops_Core_Singleton_Interface::connect
+     * @throws  Woops\Database\Layer\Exception  If an engine with the same name is already registered
+     * @throws  Woops\Database\Layer\Exception  If the engine class does not exists
+     * @throws  Woops\Database\Layer\Exception  If the engine class does not implements the Woops\Database\Engine\ObjectInterface interface
      */
     public function registerDatabaseEngine( $name, $class )
     {
@@ -162,19 +122,26 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
         if( isset( $this->_engines[ $name ] ) ) {
             
             // Engine already registered
-            throw new Woops_Database_Layer_Exception(
+            throw new Layer\Exception(
                 'The engine \'' . $name . '\' is already registered',
-                Woops_Database_Layer_Exception::EXCEPTION_ENGINE_EXISTS
+                Layer\Exception::EXCEPTION_ENGINE_EXISTS
             );
+        }
+        
+        // Checks for a leading backslash
+        if( substr( $class, 0, 1 ) !== '\\' ) {
+            
+            // Adds the leading backslash
+            $class = '\\' . $class;
         }
         
         // Checks for the engine class
         if( !class_exists( $class ) ) {
             
             // The engine class does not exist
-            throw new Woops_Database_Layer_Exception(
+            throw new Layer\Exception(
                 'Cannot register unexisting class \'' . $class . '\' as a database engine',
-                Woops_Database_Layer_Exception::EXCEPTION_NO_ENGINE
+                Layer\Exception::EXCEPTION_NO_ENGINE
             );
         }
         
@@ -182,24 +149,24 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
         $interfaces = class_implements( $class );
         
         // Checks if the engine class implements the database engine interface
-        if( !isset( $interfaces[ 'Woops_Database_Engine_Interface' ] ) ) {
+        if( !isset( $interfaces[ 'Woops\Database\Engine\ObjectInterface' ] ) ) {
             
             // Invalid class
-            throw new Woops_Database_Layer_Exception(
-                'Cannot register class \'' . $class . '\' as a database engine, since it does not implements the \'Woops_Database_Engine_Interface\' interface',
-                Woops_Database_Layer_Exception::EXCEPTION_INVALID_ENGINE_CLASS
+            throw new Layer\Exception(
+                'Cannot register class \'' . $class . '\' as a database engine, since it does not implements the \'Woops\Database\Engine\ObjectInterface\' interface',
+                Layer\Exception::EXCEPTION_INVALID_ENGINE_CLASS
             );
         }
         
         // Gets and stores the instance of the database engine class
-        $this->_engines[ $name ]     = Woops_Core_Class_Manager::getInstance()->getSingleton( $class );
+        $this->_engines[ $name ]     = \Woops\Core\ClassManager::getInstance()->getSingleton( $class );
         $this->_engineNames[ $name ] = true;
         
         // Gets the available drivers from the engine
         $this->_drivers[ $name ]     = $this->_engines[ $name ]->getAvailableDrivers();
         
         // Dispatch the event to the listeners
-        $this->dispatchEventObject( new Woops_Database_Layer_Event( Woops_Database_Layer_Event::EVENT_ENGINE_REGISTER, $this->_engines[ $name ] ) );
+        $this->dispatchEventObject( new Layer\Event( Layer\Event::EVENT_ENGINE_REGISTER, $this->_engines[ $name ] ) );
     }
     
     /**
@@ -210,7 +177,7 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
      * 
      * @param   string                          The name of the database engine
      * @return  object                          The database engine
-     * @throws  Woops_Database_Layer_Exception  If the requested engine does not exist
+     * @throws  Woops\Database\Layer\Exception  If the requested engine does not exist
      */
     public function getEngine( $name = '' )
     {
@@ -225,9 +192,9 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
         if( !isset( $this->_engines[ $name ] ) ) {
             
             // The requested engine is not registered
-            throw new Woops_Database_Layer_Exception(
+            throw new Layer\Exception(
                 'The engine \'' . $name . '\' is not a registered database engine',
-                Woops_Database_Layer_Exception::EXCEPTION_NO_ENGINE
+                Layer\Exception::EXCEPTION_NO_ENGINE
             );
         }
         
@@ -263,9 +230,9 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
             if( !$driver || !$host || !$database ) {
                 
                 // Error - Invalid configuration
-                throw new Woops_Database_Layer_Exception(
+                throw new Layer\Exception(
                     'The database settings are not properly configured',
-                    Woops_Database_Layer_Exception::EXCEPTION_BAD_CONFIGURATION
+                    Layer\Exception::EXCEPTION_BAD_CONFIGURATION
                 );
             }
         }
@@ -274,9 +241,9 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
         if( !isset( $this->_drivers[ $name ][ $driver ] ) ) {
             
             // Error - The engine does not supports the database driver
-            throw new Woops_Database_Layer_Exception(
+            throw new Layer\Exception(
                 'The engine \'' . $name . '\' does not support the driver \'' . $driver . '\'',
-                Woops_Database_Layer_Exception::EXCEPTION_DRIVER_NOT_SUPPORTED
+                Layer\Exception::EXCEPTION_DRIVER_NOT_SUPPORTED
             );
         }
         
@@ -287,13 +254,13 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
             $this->_engines[ $name ]->load( $driver, $host, $port, $database, $tablePrefix );
             
             // Dispatch the event to the listeners
-            $this->dispatchEventObject( new Woops_Database_Layer_Event( Woops_Database_Layer_Event::EVENT_ENGINE_LOAD, $this->_engines[ $name ] ) );
+            $this->dispatchEventObject( new Layer\Event( Layer\Event::EVENT_ENGINE_LOAD, $this->_engines[ $name ] ) );
             
             // Establish a connection with the database
             $this->_engines[ $name ]->connect( $username, $password );
             
             // Dispatch the event to the listeners
-            $this->dispatchEventObject( new Woops_Database_Layer_Event( Woops_Database_Layer_Event::EVENT_ENGINE_CONNECT, $this->_engines[ $name ] ) );
+            $this->dispatchEventObject( new Layer\Event( Layer\Event::EVENT_ENGINE_CONNECT, $this->_engines[ $name ] ) );
             
             // Engine is connected
             $this->_connectedEngines[ $name ] = true;
@@ -311,7 +278,7 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
      * 
      * @param   string                          The name of the database engine
      * @return  string                          The class name of the database engine
-     * @throws  Woops_Database_Layer_Exception  If the requested engine does not exist
+     * @throws  Woops\Database\Layer\Exception  If the requested engine does not exist
      */
     public function getEngineClass( $name = '' )
     {
@@ -326,9 +293,9 @@ final class Woops_Database_Layer extends Woops_Core_Event_Dispatcher implements 
         if( !isset( $this->_engines[ $name ] ) ) {
             
             // The requested engine is not registered
-            throw new Woops_Database_Layer_Exception(
+            throw new Layer\Exception(
                 'The engine \'' . $name . '\' is not a registered database engine',
-                Woops_Database_Layer_Exception::EXCEPTION_NO_ENGINE
+                Layer\Exception::EXCEPTION_NO_ENGINE
             );
         }
         

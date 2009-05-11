@@ -11,6 +11,12 @@
 
 # $Id: Stream.class.php 637 2009-03-09 09:05:52Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Icc\Binary;
+
 /**
  * ICC binary stream
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Icc.Binary
  */
-class Woops_Icc_Binary_Stream extends Woops_Binary_Stream
+class Stream extends \Woops\Binary\Stream
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 

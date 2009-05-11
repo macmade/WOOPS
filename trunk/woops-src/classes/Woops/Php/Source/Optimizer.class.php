@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Php\Source;
+
 /**
  * PHP source code optimizer
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Php.Source
  */
-class Woops_Php_Source_Optimizer extends Woops_Core_Object
+class Optimizer extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The optimized PHP code
@@ -97,6 +103,7 @@ class Woops_Php_Source_Optimizer extends Woops_Core_Object
         # - T_DEC
         # - T_DECLARE
         # - T_DEFAULT
+        # - T_DIR
         # - T_DIV_EQUAL
         # - T_DNUMBER
         # - T_DO
@@ -126,6 +133,7 @@ class Woops_Php_Source_Optimizer extends Woops_Core_Object
         # - T_FOREACH
         # - T_FUNC_C
         # - T_FUNCTION
+        # - T_GOTO
         # - T_GLOBAL
         # - T_HALT_COMPILER
         # - T_IF
@@ -154,6 +162,8 @@ class Woops_Php_Source_Optimizer extends Woops_Core_Object
         # - T_ML_COMMENT (deprecated)
         # - T_MOD_EQUAL
         # - T_MUL_EQUAL
+        # - T_T_NAMESPACE
+        # - T_NS_C
         # - T_NEW
         # - T_NUM_STRING
         # - T_OBJECT_CAST
@@ -185,6 +195,7 @@ class Woops_Php_Source_Optimizer extends Woops_Core_Object
         # - T_TRY
         # - T_UNSET
         # - T_UNSET_CAST
+        # - T_USE
         # - T_USE
         # - T_VAR
         # - T_VARIABLE
@@ -282,7 +293,7 @@ class Woops_Php_Source_Optimizer extends Woops_Core_Object
                     && !isset( self::$_superGlobals[ $token[ 1 ] ] )
                     && !isset( $funcGlobals[ $token[ 1 ] ] )
                     && $token[ 1 ] !== '$this'
-                    && ( !is_array( $lastToken ) || $lastToken[ 0 ] !== T_PAAMAYIM_NEKUDOTAYIM )
+                    && ( !is_array( $lastToken ) || ( $lastToken[ 0 ] !== T_PAAMAYIM_NEKUDOTAYIM || isset( $funcVars[ $token[ 1 ] ] ) ) )
                 ) {
                     // Has the variable been renamed already?
                     if( isset( $funcVars[ $token[ 1 ] ] ) ) {
@@ -309,21 +320,22 @@ class Woops_Php_Source_Optimizer extends Woops_Core_Object
                     
                     // Finds all variables in the evaluated code
                     $matches = array();
-                    preg_match_all( '/[^:]*(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/', $token[ 1 ], $matches );
+                    preg_match_all( '/(.?.?)(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/', $token[ 1 ], $matches );
                     
                     // Checks if variables were found
                     if( is_array( $matches ) ) {
                         
                         // Sorts the variables
-                        arsort($matches[ 1 ]);
+                        arsort($matches[ 2 ]);
                         
                         // Process each variable
-                        foreach( $matches[ 1 ] as $var ) {
+                        foreach( $matches[ 2 ] as $key => $var ) {
                             
                             // May we rename the variable?
                             if( !isset( self::$_superGlobals[ $var ] )
                                 && !isset( $funcGlobals[ $var ] )
                                 && $var !== '$this'
+                                && ( $matches[ 1 ][ $key ] !== '::' || isset( $funcVars[ $var ] ) )
                             ) {
                                 
                                 // Has the variable been renamed already?

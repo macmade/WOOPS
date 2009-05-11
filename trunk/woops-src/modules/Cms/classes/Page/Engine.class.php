@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mod\Cms\Page;
+
 /**
  * CMS page engine
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Mod.Cms.Page
  */
-class Woops_Mod_Cms_Page_Engine extends Woops_Page_Engine_Base
+class Engine extends \Woops\Page\Engine\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 
@@ -54,13 +60,13 @@ class Woops_Mod_Cms_Page_Engine extends Woops_Page_Engine_Base
         
         if( !$path ) {
             
-            throw new Woops_Mod_Cms_Page_Engine_Exception(
+            throw new Engine\Exception(
                 'The template file for page ID ' . self::$_pageGetter->getPageId() . ' does not exist (' . self::$_pageGetter->getTemplate() . ')',
-                Woops_Mod_Cms_Page_Engine_Exception::EXCEPTION_NO_TEMPLATE_FILE
+                Engine\Exception::EXCEPTION_NO_TEMPLATE_FILE
             );
         }
         
-        $parser = new Woops_Xhtml_Parser( $path, dirname( self::$_env->getWebPath( self::$_pageGetter->getTemplate() ) ) . '/' );
+        $parser = new \Woops\Xhtml\Parser( $path, dirname( self::$_env->getWebPath( self::$_pageGetter->getTemplate() ) ) . '/' );
         
         return $parser->getXhtmlObject();
     }
@@ -76,12 +82,12 @@ class Woops_Mod_Cms_Page_Engine extends Woops_Page_Engine_Base
     /**
      * 
      */
-    public function loadEngine( stdClass $options )
+    public function loadEngine( \stdClass $options )
     {
         $this->_tagMap   = ( isset( $options->tagMap )   && is_array( $options->tagMap ) )   ? $options->tagMap   : array();
         $this->_keepHead = ( isset( $options->keepHead ) && is_array( $options->keepHead ) ) ? $options->keepHead : array();
         
-        $this->_page     = new Woops_Xhtml_Page();
+        $this->_page     = new \Woops\Xhtml\Page();
         $this->_template = $this->_parseTemplate();
         
         $head = $this->_template->getTag( 'head' );

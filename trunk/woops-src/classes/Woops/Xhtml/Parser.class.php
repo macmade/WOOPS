@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Xhtml;
+
 /**
  * XHTML parser class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Xhtml
  */
-class Woops_Xhtml_Parser extends Woops_Core_Object
+class Parser extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The supported output charsets
@@ -79,9 +85,9 @@ class Woops_Xhtml_Parser extends Woops_Core_Object
         if( !file_exists( $file ) || !is_file( $file ) ) {
             
             // The file does not exist
-            throw new Woops_Xhtml_Parser_Exception(
+            throw new Parser\Exception(
                 'The specified XML file (\'' . $file . '\') does not exist',
-                Woops_Xhtml_Parser_Exception::EXCEPTION_NO_FILE
+                Parser\Exception::EXCEPTION_NO_FILE
             );
         }
         
@@ -89,9 +95,9 @@ class Woops_Xhtml_Parser extends Woops_Core_Object
         if( !is_readable( $file ) ) {
             
             // Cannot read the file
-            throw new Woops_Xhtml_Parser_Exception(
+            throw new Parser\Exception(
                 'The specified XML file (\'' . $file . '\') is not readable',
-                Woops_Xhtml_Parser_Exception::EXCEPTION_FILE_NOT_READABLE
+                Parser\Exception::EXCEPTION_FILE_NOT_READABLE
             );
         }
         
@@ -99,9 +105,9 @@ class Woops_Xhtml_Parser extends Woops_Core_Object
         if( !isset( self::$_charsets[ $charset ] ) ) {
             
             // Unsupported charset
-            throw new Woops_Xhtml_Parser_Exception(
+            throw new Parser\Exception(
                 'The specified charset (' . $charset . ') is not supported',
-                Woops_Xhtml_Parser_Exception::EXCEPTION_INVALID_CHARSET
+                Parser\Exception::EXCEPTION_INVALID_CHARSET
             );
         }
         
@@ -140,9 +146,9 @@ class Woops_Xhtml_Parser extends Woops_Core_Object
                     $errorLine   = xml_get_current_line_number( $this->_parser );
                     
                     // Throws an exception, as we have an XML error
-                    throw new Woops_Xhtml_Parser_Exception(
+                    throw new Parser\Exception(
                         'XML parser error: ' . $errorString . ' at line number ' . $errorLine,
-                        Woops_Xhtml_Parser_Exception::EXCEPTION_XML_PARSER_ERROR
+                        Parser\Exception::EXCEPTION_XML_PARSER_ERROR
                     );
                 }
             }
@@ -162,29 +168,29 @@ class Woops_Xhtml_Parser extends Woops_Core_Object
     {
         if( isset( self::$_piHandlers[ $name ] ) ) {
             
-            throw new Woops_Xhtml_Parser_Exception(
+            throw new Parser\Exception(
                 'The processing instruction \'' . $name . '\' is already registered',
-                Woops_Xhtml_Parser_Exception::EXCEPTION_PI_EXISTS
+                Parser\Exception::EXCEPTION_PI_EXISTS
             );
         }
         
         if( !class_exists( $className ) ) {
             
-            throw new Woops_Xhtml_Parser_Exception(
+            throw new Parser\Exception(
                 'Cannot register unexisting class \'' . $className . '\' as a processing instruction handler',
-                Woops_Xhtml_Parser_Exception::EXCEPTION_NO_PI_CLASS
+                Parser\Exception::EXCEPTION_NO_PI_CLASS
             );
         }
         
         $interfaces = class_implements( $className );
         
         if( !is_array( $interfaces )
-            || !isset( $interfaces[ 'Woops_Xhtml_ProcessingInstruction_Handler_Interface' ] )
+            || !isset( $interfaces[ 'Woops\Xhtml\ProcessingInstruction\Handler\ObjectInterface' ] )
         ) {
             
-            throw new Woops_Xhtml_Parser_Exception(
-                'The class \'' . $className . '\' is not a valid processing instruction handler, since it does not implement the \'Woops_Xhtml_ProcessingInstruction_Handler_Interface\' interface',
-                Woops_Xhtml_Parser_Exception::EXCEPTION_INVALID_PI_CLASS
+            throw new Parser\Exception(
+                'The class \'' . $className . '\' is not a valid processing instruction handler, since it does not implement the \'Woops\Xhtml\ProcessingInstruction\Handler\ObjectInterface\' interface',
+                Parser\Exception::EXCEPTION_INVALID_PI_CLASS
             );
         }
         
@@ -198,7 +204,7 @@ class Woops_Xhtml_Parser extends Woops_Core_Object
     {
         if( !is_object( $this->_xhtml ) ) {
             
-            $this->_xhtml          = new Woops_Xhtml_Tag( $name );
+            $this->_xhtml          = new Tag( $name );
             $this->_currentElement = $this->_xhtml;
             
         } else {
@@ -258,7 +264,7 @@ class Woops_Xhtml_Parser extends Woops_Core_Object
             
             $piParamsLength = count( $piParams );
             
-            $options      = new stdClass();
+            $options      = new \stdClass();
             
             for( $i = 0; $i < $piParamsLength; $i += 2 ) {
                 
@@ -271,7 +277,7 @@ class Woops_Xhtml_Parser extends Woops_Core_Object
             
             $result       = $handler->process( $options );
             
-            if( is_object( $result ) && $result instanceof Woops_Xhtml_Tag ) {
+            if( is_object( $result ) && $result instanceof Tag ) {
                 
                 $this->_currentElement->addChildNode( $result );
                 

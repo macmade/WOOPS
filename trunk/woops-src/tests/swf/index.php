@@ -2,7 +2,7 @@
     
     // Includes the initialization script
     require_once(
-        dirname( __FILE__ )
+        __DIR__
       . DIRECTORY_SEPARATOR
       . '..'
       . DIRECTORY_SEPARATOR
@@ -11,9 +11,12 @@
       . 'init.inc.php'
     );
     
+    // File encoding
+    declare( ENCODING = 'UTF-8' );
+    
     // Creates a new SWF parser
-    $SWF_PARSER = new Woops_Swf_Parser(
-    	Woops_Core_Env_Getter::getInstance()->getSourcePath( 'tests/amf/test.swf' )
+    $SWF_PARSER = new Woops\Swf\Parser(
+    	Woops\Core\Env\Getter::getInstance()->getSourcePath( 'tests/amf/test.swf' )
     );
 ?>
 

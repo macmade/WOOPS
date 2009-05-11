@@ -2,7 +2,7 @@
 	
 	// Includes the initialization script
 	require_once(
-		dirname( __FILE__ )
+		__DIR__
 	  . DIRECTORY_SEPARATOR
 	  . '..'
 	  . DIRECTORY_SEPARATOR
@@ -11,13 +11,16 @@
 	  . 'init.inc.php'
 	);
 	
+	// File encoding
+	declare( ENCODING = 'UTF-8' );
+	
 	// Creates an AMF server
-	$AMF_SERVER = new Woops_Amf_Server();
+	$AMF_SERVER = new Woops\Amf\Server();
 	$AMF_SERVER->handle();
 	print $AMF_SERVER;
 	
 	// WOOPS environment object
-	$ENV    = Woops_Core_Env_Getter::getInstance();
+	$ENV    = Woops\Core\Env\Getter::getInstance();
 	
 	// URL of the AMF server
 	$URL    = urlencode( ( ( $ENV->HTTPS ) ? 'https://' : 'http://' )

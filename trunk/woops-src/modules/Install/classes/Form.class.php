@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mod\Install;
+
 /**
  * WOOPS installation form
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Mod.Install
  */
-class Woops_Mod_Install_Form extends Woops_Core_Module_Base
+class Form extends \Woops\Core\Module\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Whether the static variables are set or not
@@ -108,14 +114,14 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         }
         
         // Creates an INI file parser with the default configuration file
-        $this->_ini       = new Woops_Ini_Parser( self::$_env->getSourcePath( 'config.ini.php' ) );
+        $this->_ini       = new \Woops\Ini\Parser( self::$_env->getSourcePath( 'config.ini.php' ) );
         
         // Gets the ini values
         $this->_iniValues = $this->_ini->getIniArray();
         
         // Creates the base form tag
-        $this->_content              = new Woops_Xhtml_Tag( 'form' );
-        $this->_content[ 'action' ]  = Woops_Core_Env_Getter::getInstance()->getSourceWebPath( 'scripts/install/' );
+        $this->_content              = new \Woops\Xhtml\Tag( 'form' );
+        $this->_content[ 'action' ]  = \Woops\Core\Env\Getter::getInstance()->getSourceWebPath( 'scripts/install/' );
         
         // Adds the form method
         // GET is used on IIS, as I've got a strange bug on my test VM. I'll need to check this out...
@@ -206,16 +212,16 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
     private static function _setStaticVars()
     {
         // Gets the available modules
-        self::$_modules   = Woops_Core_Module_Manager::getInstance()->getAvailableModules();
+        self::$_modules   = \Woops\Core\Module\Manager::getInstance()->getAvailableModules();
         
         // Gets the available timezones
-        self::$_timezones = Woops_Time_Utils::getInstance()->getTimezones();
+        self::$_timezones = \Woops\Helpers\TimeUtilities::getInstance()->getTimezones();
         
         // Gets the available languages
-        self::$_languages = Woops_Locale_Helper::getInstance()->getLanguages();
+        self::$_languages = \Woops\Locale\Helper::getInstance()->getLanguages();
         
         // Gets the available database engines
-        self::$_engines   = Woops_Database_Layer::getInstance()->getRegisteredEngines();
+        self::$_engines   = \Woops\Database\Layer::getInstance()->getRegisteredEngines();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -224,10 +230,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
     /**
      * Creates the install menu
      * 
-     * @param   Woops_Xhtml_Tag The menu container
+     * @param   Woops\Xhtml\Tag The menu container
      * @return  void
      */
-    protected function _createMenu( Woops_Xhtml_Tag $container )
+    protected function _createMenu( \Woops\Xhtml\Tag $container )
     {
         // Adds the CSS class to the container
         $container[ 'class' ] = 'menu';
@@ -400,7 +406,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         unset( $iniFile->modules->loaded );
         
         // Creates the loaded modules array
-        $loaded = $iniFile->modules->newArrayItem( 'loaded' );
+        $loaded = $iniFile->modules->newArrayValueItem( 'loaded' );
         
         // Adds the install module, which need to be loaded in order to continue using this script
         $loaded->addValue( 'Install' );
@@ -487,7 +493,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
     protected function _writeEngineConfiguration()
     {
         // Gets the INI file
-        $iniParser = new Woops_Ini_Parser( self::$_env->getPath( 'config/woops.ini.php' ) );
+        $iniParser = new \Woops\Ini\Parser( self::$_env->getPath( 'config/woops.ini.php' ) );
         $iniFile   = $iniParser->getIniObject();
         
         // Gets the incoming variables
@@ -513,10 +519,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
     protected function _installStep3()
     {
         // Gets the class name of the database engine (we won't use the getEngine() method, as it will tries to connect the engine with an incomplete configuration)
-        $engineClass    = Woops_Database_Layer::getInstance()->getEngineClass();
+        $engineClass    = \Woops\Database\Layer::getInstance()->getEngineClass();
         
         // Gets the engine instance
-        $engine         = Woops_Core_Class_Manager::getInstance()->getSingleton( $engineClass );
+        $engine         = \Woops\Core\ClassManager::getInstance()->getSingleton( $engineClass );
         
         // Stores the available database drivers
         $this->_drivers = $engine->getAvailableDrivers();
@@ -669,10 +675,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
         $database       = $this->_getModuleVar( 'database' );
         
         // Gets the class name of the database engine (we won't use the getEngine() method, as it will tries to connect the engine with an incomplete configuration)
-        $engineClass    = Woops_Database_Layer::getInstance()->getEngineClass();
+        $engineClass    = \Woops\Database\Layer::getInstance()->getEngineClass();
         
         // Gets the engine instance
-        $engine         = Woops_Core_Class_Manager::getInstance()->getSingleton( $engineClass );
+        $engine         = \Woops\Core\ClassManager::getInstance()->getSingleton( $engineClass );
         
         // We don't want any error here, we are just testing the database settings
         try {
@@ -690,7 +696,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
             $engine->load( $driver, $host, $port, $name, $prefix );
             $engine->connect( $user, $password );
             
-        } catch( Exception $e ) {
+        } catch( \Exception $e ) {
             
             // Returns the error message
             return $e->getMessage();
@@ -708,7 +714,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
     protected function _writeDatabaseConfiguration()
     {
         // Gets the INI file
-        $iniParser = new Woops_Ini_Parser( self::$_env->getPath( 'config/woops.ini.php' ) );
+        $iniParser = new \Woops\Ini\Parser( self::$_env->getPath( 'config/woops.ini.php' ) );
         $iniFile   = $iniParser->getIniObject();
         
         // Gets the incoming variables
@@ -866,10 +872,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
      * @param   string          The action to perform (drop, create or import)
      * @param   string          The path to the SQL file
      * @param   string          The prefix to detect the table names
-     * @param   Woops_Xhtml_Tag The container in which to place the table list
+     * @param   Woops\Xhtml\Tag The container in which to place the table list
      * return   void
      */
-    protected function _tableList( $action, $filePath, $detectPrefix, Woops_Xhtml_Tag $container )
+    protected function _tableList( $action, $filePath, $detectPrefix, \Woops\Xhtml\Tag $container )
     {
         // Gets the file content
         $file    = file_get_contents( $filePath );
@@ -1019,7 +1025,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
             if( !is_object( $engine ) ) {
                 
                 // Gets the database engine
-                $engine = Woops_Database_Layer::getInstance()->getEngine();
+                $engine = \Woops\Database\Layer::getInstance()->getEngine();
             }
             
             // Process each query
@@ -1036,7 +1042,7 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
                 }
             }
             
-        } catch( Exception $e ) {
+        } catch( \Exception $e ) {
             
             // Returns the exception message
             return $e->getMessage();
@@ -1101,10 +1107,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
      * 
      * @param   string          The name of the section
      * @param   array           The INI item array
-     * @param   Woops_Xhtml_Tag The form element container in which to place the elements
+     * @param   Woops\Xhtml\Tag The form element container in which to place the elements
      * @return  void
      */
-    public function _createSectionItems( $section, array $items, Woops_Xhtml_Tag $container )
+    public function _createSectionItems( $section, array $items, \Woops\Xhtml\Tag $container )
     {
         // Counter variables
         $counter    = 0;
@@ -1212,10 +1218,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
      * @param   string          The name of the INI section
      * @param   string          The name of the INI item in the section
      * @param   array           The INI item array
-     * @param   Woops_Xhtml_Tag The form element container in which to place the element
+     * @param   Woops\Xhtml\Tag The form element container in which to place the element
      * @return  void
      */
-    protected function _createModuleList( $section, $itemName, array $item, Woops_Xhtml_Tag $container )
+    protected function _createModuleList( $section, $itemName, array $item, \Woops\Xhtml\Tag $container )
     {
         // Process each module
         foreach( self::$_modules as $modName => $modPath ) {
@@ -1237,21 +1243,21 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
             $label->addTextData( $modName );
             
             // The Adodb module is selected by default if PDO is not available
-            if( $modName === 'Adodb' && !class_exists( 'PDO' ) ) {
+            if( $modName === 'Adodb' && !class_exists( '\PDO' ) ) {
                 
                 // Checks the checkbox
                 $check[ 'checked' ] = 'checked';
             }
             
             // The Pdo module is selected by default if PDO is available
-            if( $modName === 'Pdo' && class_exists( 'PDO' ) ) {
+            if( $modName === 'Pdo' && class_exists( '\PDO' ) ) {
                 
                 // Checks the checkbox
                 $check[ 'checked' ] = 'checked';
             }
             
             // The Pdo module should not be accessible if the PDO class does not exist
-            if( $modName === 'Pdo' && !class_exists( 'PDO' ) ) {
+            if( $modName === 'Pdo' && !class_exists( '\PDO' ) ) {
                 
                 // Disables the checkbox for the "Pdo" module
                 $check[ 'disabled' ] = 'disabled';
@@ -1282,10 +1288,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
      * @param   string          The name of the INI section
      * @param   string          The name of the INI item in the section
      * @param   array           The INI item array
-     * @param   Woops_Xhtml_Tag The form element container in which to place the element
+     * @param   Woops\Xhtml\Tag The form element container in which to place the element
      * @return  void
      */
-    protected function _createTimezoneList( $section, $itemName, array $item, Woops_Xhtml_Tag $container )
+    protected function _createTimezoneList( $section, $itemName, array $item, \Woops\Xhtml\Tag $container )
     {
         // Creates the select box
         $select           = $container->select;
@@ -1314,10 +1320,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
      * @param   string          The name of the INI section
      * @param   string          The name of the INI item in the section
      * @param   array           The INI item array
-     * @param   Woops_Xhtml_Tag The form element container in which to place the element
+     * @param   Woops\Xhtml\Tag The form element container in which to place the element
      * @return  void
      */
-    protected function _createLanguageList( $section, $itemName, array $item, Woops_Xhtml_Tag $container )
+    protected function _createLanguageList( $section, $itemName, array $item, \Woops\Xhtml\Tag $container )
     {
         // Creates the select box
         $select           = $container->select;
@@ -1346,10 +1352,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
      * @param   string          The name of the INI section
      * @param   string          The name of the INI item in the section
      * @param   array           The INI item array
-     * @param   Woops_Xhtml_Tag The form element container in which to place the element
+     * @param   Woops\Xhtml\Tag The form element container in which to place the element
      * @return  void
      */
-    protected function _createDatabaseEngineList( $section, $itemName, array $item, Woops_Xhtml_Tag $container )
+    protected function _createDatabaseEngineList( $section, $itemName, array $item, \Woops\Xhtml\Tag $container )
     {
         // Creates the select box
         $select           = $container->select;
@@ -1378,10 +1384,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
      * @param   string          The name of the INI section
      * @param   string          The name of the INI item in the section
      * @param   array           The INI item array
-     * @param   Woops_Xhtml_Tag The form element container in which to place the element
+     * @param   Woops\Xhtml\Tag The form element container in which to place the element
      * @return  void
      */
-    protected function _createDatabaseDriverList( $section, $itemName, array $item, Woops_Xhtml_Tag $container )
+    protected function _createDatabaseDriverList( $section, $itemName, array $item, \Woops\Xhtml\Tag $container )
     {
         // Creates the select box
         $select           = $container->select;
@@ -1426,10 +1432,10 @@ class Woops_Mod_Install_Form extends Woops_Core_Module_Base
      * @param   string          The name of the INI section
      * @param   string          The name of the INI item in the section
      * @param   array           The INI item array
-     * @param   Woops_Xhtml_Tag The form element container in which to place the element
+     * @param   Woops\Xhtml\Tag The form element container in which to place the element
      * @return  void
      */
-    protected function _createFormItem( $section, $itemName, array $item, Woops_Xhtml_Tag $container )
+    protected function _createFormItem( $section, $itemName, array $item, \Woops\Xhtml\Tag $container )
     {
         // Type of the element (default is string)
         $type      = ( isset( $item[ 'comments' ][ 'type' ] ) ) ? $item[ 'comments' ][ 'type' ] : 'string';

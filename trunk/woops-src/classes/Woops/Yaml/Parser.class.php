@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Yaml;
+
 /**
  * YAML parser class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Yaml
  */
-class Woops_Yaml_Parser extends Woops_Core_Object
+class Parser extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Whether the static variables are set or not
@@ -68,9 +74,9 @@ class Woops_Yaml_Parser extends Woops_Core_Object
             if( strchr( $line, self::$_str->TAB ) ) {
                 
                 // Tabulation characters are not allowed
-                throw new Woops_Yaml_Parser_Exception(
+                throw new Parser\Exception(
                     'Found a tab character at line ' . $key + 1 . '. Tab characters are not allowed in YAML',
-                    Woops_Yaml_Parser_Exception::EXCEPTION_TAB_CHAR
+                    Parser\Exception::EXCEPTION_TAB_CHAR
                 );
             }
         }
@@ -84,7 +90,7 @@ class Woops_Yaml_Parser extends Woops_Core_Object
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str       = Woops_Number_Utils::getInstance();
+        self::$_str       = \Woops\Number\Utils::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;

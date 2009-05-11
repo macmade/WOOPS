@@ -11,14 +11,20 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Database\Layer;
+
 /**
- * Exception class for the Woops_Database_Layer class
+ * Exception class for the Woops\Database\Layer class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Database.Layer
  */
-final class Woops_Database_Layer_Exception extends Woops_Core_Exception_Base
+final class Exception extends \Woops\Core\Exception\Base
 {
     /**
      * Error codes for the exceptions

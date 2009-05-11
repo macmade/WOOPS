@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Tiff;
+
 /**
  * TIFF file header
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Tiff
  */
-class Woops_Tiff_Header extends Woops_Core_Object
+class Header extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Whether the byte order is big endian or not
@@ -40,7 +46,7 @@ class Woops_Tiff_Header extends Woops_Core_Object
      * 
      * @return  void
      */
-    public function processData( Woops_Tiff_Binary_Stream $stream )
+    public function processData( Binary\Stream $stream )
     {
         // Gets the TIFF byte order
         $byteOrder = $stream->read( 2 );
@@ -59,9 +65,9 @@ class Woops_Tiff_Header extends Woops_Core_Object
         } else {
             
             // Error - Invalid byte order
-            throw new Woops_Tiff_Header_Exception(
+            throw new Header\Exception(
                 'Invalid TIFF file signature (' . $byteOrder . ')',
-                Woops_Tiff_Header_Exception::EXCEPTION_BAD_SIGNATURE
+                Header\Exception::EXCEPTION_BAD_SIGNATURE
             );
         }
         
@@ -72,9 +78,9 @@ class Woops_Tiff_Header extends Woops_Core_Object
         if( $signature !== 0x2A ) {
             
             // Error - Invalid TIFF signature
-            throw new Woops_Tiff_Header_Exception(
+            throw new Header\Exception(
                 'Invalid TIFF file signature (' . $signature . ')',
-                Woops_Tiff_Header_Exception::EXCEPTION_BAD_SIGNATURE
+                Header\Exception::EXCEPTION_BAD_SIGNATURE
             );
         }
         

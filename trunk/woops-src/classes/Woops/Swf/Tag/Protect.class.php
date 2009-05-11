@@ -11,6 +11,12 @@
 
 # $Id: Stream.class.php 637 2009-03-09 09:05:52Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf\Tag;
+
 /**
  * SWF protect tag
  * 
@@ -31,12 +37,12 @@
  * @version     1.0
  * @package     Woops.Swf.Tag
  */
-class Woops_Swf_Tag_Protect extends Woops_Swf_Tag
+class Protect extends \Woops\Swf\Tag
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The SWF tag type
@@ -53,7 +59,7 @@ class Woops_Swf_Tag_Protect extends Woops_Swf_Tag
      * 
      * @return  void
      */
-    public function processData( Woops_Swf_Binary_Stream $stream )
+    public function processData( \Woops\Swf\Binary\Stream $stream )
     {
         // Checks if we have data, meaning we have a MD5-encrypted password
         if( !$stream->endOfStream() ) {

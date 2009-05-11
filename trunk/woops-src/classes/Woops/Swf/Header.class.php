@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf;
+
 /**
  * SWF file header
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Swf
  */
-class Woops_Swf_Header extends Woops_Core_Object
+class Header extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The SWF version
@@ -62,7 +68,7 @@ class Woops_Swf_Header extends Woops_Core_Object
         $this->_version   = ( int )$version;
         
         // Creates the rectangle object for the frame size
-        $this->_frameSize = new Woops_Swf_Record_Rectangle();
+        $this->_frameSize = new Record\Rectangle();
     }
     
     /**
@@ -70,7 +76,7 @@ class Woops_Swf_Header extends Woops_Core_Object
      * 
      * @return  void
      */
-    public function processData( Woops_Swf_Binary_Stream $stream )
+    public function processData( Binary\Stream $stream )
     {
         // Gets the SWF file signature
         $signature = $stream->read( 3 );
@@ -89,9 +95,9 @@ class Woops_Swf_Header extends Woops_Core_Object
         } else {
             
             // Error - Invalid SWF signature
-            throw new Woops_Swf_Header_Exception(
+            throw new Header\Exception(
                 'Invalid SWF file signature (' . $signature . ')',
-                Woops_Swf_Header_Exception::EXCEPTION_BAD_SIGNATURE
+                Header\Exception::EXCEPTION_BAD_SIGNATURE
             );
         }
         
@@ -99,7 +105,7 @@ class Woops_Swf_Header extends Woops_Core_Object
         $this->_version = $stream->unsignedChar();
         
         // Do not process the file size
-        $stream->seek( 4, Woops_Swf_Binary_Stream::SEEK_CUR );
+        $stream->seek( 4, Binary\Stream::SEEK_CUR );
         
         // Checks if we have to uncompress the SWF data
         if( $this->_isCompressed ) {
@@ -132,7 +138,7 @@ class Woops_Swf_Header extends Woops_Core_Object
      * Sets the SWF file compression flag
      * 
      * @param   boolean True if the SWF file data must be compressed
-     * @throws  Woops_Swf_Header_Exception  If the SWF version is smaller than 6, as the compression is only available since this version
+     * @throws  Woops\Swf\Header\Exception  If the SWF version is smaller than 6, as the compression is only available since this version
      */
     public function setCompression( $value )
     {
@@ -143,9 +149,9 @@ class Woops_Swf_Header extends Woops_Core_Object
         if( $this->_version < 6 ) {
             
             // Error - Incompatible version
-            throw new Woops_Swf_Header_Exception(
+            throw new Header\Exception(
                 'Incompatible SWF version (' . $this->_version . ')',
-                Woops_Swf_Header_Exception::EXCEPTION_BAD_VERSION
+                Header\Exception::EXCEPTION_BAD_VERSION
             );
         }
     }

@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Module;
+
 /**
  * Abstract for the module blocks
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Core.Module
  */
-abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
+abstract class Base extends \Woops\Core\Aop\Advisor
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Whether the static variables are set or not
@@ -103,25 +109,25 @@ abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
         }
         
         $this->_modClass   = get_class( $this );
-        $this->_modName    = substr( $this->_modClass, 10, strpos( $this->_modClass, '_', 10 ) - 10 );
+        $this->_modName    = substr( $this->_modClass, 10, strpos( $this->_modClass, '\\', 10 ) - 10 );
         $this->_modPath    = self::$_modManager->getModulePath( $this->_modName );
         $this->_modRelPath = self::$_modManager->getModuleRelativePath( $this->_modName );
         
         try {
             
-            $this->_lang       = Woops_Core_Lang_Getter::getInstance(
+            $this->_lang       = \Woops\Core\Lang\Getter::getInstance(
                 $this->_modPath
               . 'lang'
               . DIRECTORY_SEPARATOR
-              . str_replace( 'Woops_Mod_' . $this->_modName . '_', '', $this->_modClass )
+              . str_replace( 'Woops\Mod\\' . $this->_modName . '\\', '', $this->_modClass )
               . '.'
             );
             
-        } catch( Woops_Core_Lang_Getter_Exception $e ) {
+        } catch( \Woops\Core\Lang\Getter\Exception $e ) {
             
-            if( $e->getCode() === Woops_Core_Lang_Getter_Exception::EXCEPTION_NO_LANG_FILE ) {
+            if( $e->getCode() === \Woops\Core\Lang\Getter\Exception::EXCEPTION_NO_LANG_FILE ) {
                 
-                $this->_lang = Woops_Core_Lang_Getter::getDefaultInstance();
+                $this->_lang = \Woops\Core\Lang\Getter::getDefaultInstance();
                 
             } else {
                 
@@ -137,11 +143,11 @@ abstract class Woops_Core_Module_Base extends Woops_Core_Aop_Advisor
      */
     private static function _setStaticVars()
     {
-        self::$_conf            = Woops_Core_Config_Getter::getInstance();
-        self::$_modManager      = Woops_Core_Module_Manager::getInstance();
-        self::$_request         = Woops_Core_Request_Getter::getInstance();
-        self::$_env             = Woops_Core_Env_Getter::getInstance();
-        self::$_str             = Woops_String_Utils::getInstance();
+        self::$_conf            = \Woops\Core\Config\Getter::getInstance();
+        self::$_modManager      = \Woops\Core\Module\Manager::getInstance();
+        self::$_request         = \Woops\Core\Request\Getter::getInstance();
+        self::$_env             = \Woops\Core\Env\Getter::getInstance();
+        self::$_str             = \Woops\Helpers\StringUtilities::getInstance();
         self::$_moduleVariables = self::$_request->getWoopsVar( 'mod' );
         
         // Static variables are set

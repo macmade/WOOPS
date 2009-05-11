@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Color;
+
 /**
  * Color converter class
  *
@@ -18,22 +24,17 @@
  * @version     1.0
  * @package     Woops.Color
  */
-final class Woops_Color_Converter extends Woops_Core_Object implements Woops_Core_Singleton_Interface
+class Converter extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
-    
-    /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance = NULL;
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The instance of the number utilities class
      */
-    private $_number          = NULL;
+    protected $_number          = NULL;
     
     /**
      * Class constructor
@@ -43,49 +44,10 @@ final class Woops_Color_Converter extends Woops_Core_Object implements Woops_Cor
      * 
      * @return  void
      */
-    private function __construct()
+    protected function __construct()
     {
         // Gets the instance of the number utilities class
-        $this->_number = Woop_Number_Utils::getInstance();
-    }
-    
-    /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new Woops_Core_Singleton_Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops_Color_Converter   The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
+        $this->_number = \Woop\Number\Utils::getInstance();
     }
     
     /**
@@ -102,7 +64,7 @@ final class Woops_Color_Converter extends Woops_Core_Object implements Woops_Cor
      * @param   number  The blue value (0-255)
      * @param   boolean Round final values
      * @return  array   An array with HSL color values
-     * @see     Woops_Number_Utils::inRange
+     * @see     Woops\Number\Utils::inRange
      */
     public function rgbToHsl( $R, $G, $B, $round = true )
     {
@@ -221,7 +183,7 @@ final class Woops_Color_Converter extends Woops_Core_Object implements Woops_Cor
      * @param   number  The luminance value (0-100)
      * @param   boolean Round final values
      * @return  array   An array with RGB color values
-     * @see     Woops_Number_Utils::inRange
+     * @see     Woops\Number\Utils::inRange
      */
     public function hslToRgb( $H, $S, $L, $round = true )
     {
@@ -359,7 +321,7 @@ final class Woops_Color_Converter extends Woops_Core_Object implements Woops_Cor
      * @param   number  The blue value (0-255)
      * @param   boolean Round final values
      * @return  array   An array with HSV color values
-     * @see     Woops_Number_Utils::inRange
+     * @see     Woops\Number\Utils::inRange
      */
     public function rgbToHsv( $R, $G, $B, $round = true )
     {
@@ -469,7 +431,7 @@ final class Woops_Color_Converter extends Woops_Core_Object implements Woops_Cor
      * @param   number  The value value (0-100)
      * @param   boolean Round final values
      * @return  array   An array with RGB color values
-     * @see     Woops_Number_Utils::inRange
+     * @see     Woops\Number\Utils::inRange
      */
     public function hsvToRgb( $H, $S, $V, $round = true )
     {

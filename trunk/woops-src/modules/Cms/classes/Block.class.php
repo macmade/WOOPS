@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mod\Cms;
+
 /**
  * Abstract for the CMS blocks
  *
@@ -18,17 +24,17 @@
  * @version     1.0
  * @package     Woops.Mod.Cms
  */
-abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
+abstract class Block extends \Woops\Core\Module\Block
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 
      */
-    abstract public function getBlockContent( Woops_Xhtml_Tag $content, stdClass $options );
+    abstract public function getBlockContent( \Woops\Xhtml\Tag $content, \stdClass $options );
     
     /**
      * Whether the static variables are set or not
@@ -96,7 +102,7 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
             self::_setStaticVars();
         }
         
-        $this->_cssPrefix = str_replace( '_', '-', $this->_modClass ) . '-';
+        $this->_cssPrefix = str_replace( '\\', '-', $this->_modClass ) . '-';
     }
     
     /**
@@ -106,8 +112,8 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
      */
     private static function _setStaticVars()
     {
-        self::$_db        = Woops_Database_Layer::getInstance()->getEngine();
-        self::$_page      = Woops_Page_Engine::getInstance()->getPageObject()->getXhtmlPage();
+        self::$_db        = \Woops\Database\Layer::getInstance()->getEngine();
+        self::$_page      = \Woops\Page\Engine::getInstance()->getPageObject()->getXhtmlPage();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -226,7 +232,7 @@ abstract class Woops_Mod_Cms_Block extends Woops_Core_Module_Block
     /**
      * 
      */
-    protected function _cssClass( Woops_Xhtml_Tag $tag, $name )
+    protected function _cssClass( \Woops\Xhtml\Tag $tag, $name )
     {
         $tag[ 'class' ] = $this->_cssPrefix . $name;
     }

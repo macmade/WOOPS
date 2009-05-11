@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Aop;
+
 /**
  * AOP advisor abstract that allows AOP style programming in child classes
  * 
@@ -28,31 +34,31 @@
  * executed when a call to a PHP magic method is made on the child class is
  * made. Join points are available for the following magic methods:
  * 
- *      -# __construct - Woops_Core_Aop_Advisor::ADVICE_TYPE_CONSTRUCT
- *      -# __destruct  - Woops_Core_Aop_Advisor::ADVICE_TYPE_DESTRUCT
- *      -# __clone     - Woops_Core_Aop_Advisor::ADVICE_TYPE_CLONE
- *      -# __get       - Woops_Core_Aop_Advisor::ADVICE_TYPE_GET
- *      -# __set       - Woops_Core_Aop_Advisor::ADVICE_TYPE_SET
- *      -# __isset     - Woops_Core_Aop_Advisor::ADVICE_TYPE_ISSET
- *      -# __unset     - Woops_Core_Aop_Advisor::ADVICE_TYPE_UNSET
- *      -# __sleep     - Woops_Core_Aop_Advisor::ADVICE_TYPE_SLEEP
- *      -# __wakeup    - Woops_Core_Aop_Advisor::ADVICE_TYPE_WAKEUP
- *      -# __toString  - Woops_Core_Aop_Advisor::ADVICE_TYPE_TO_STRING
+ *      -# __construct - Woops\Core\Aop\Advisor::ADVICE_TYPE_CONSTRUCT
+ *      -# __destruct  - Woops\Core\Aop\Advisor::ADVICE_TYPE_DESTRUCT
+ *      -# __clone     - Woops\Core\Aop\Advisor::ADVICE_TYPE_CLONE
+ *      -# __get       - Woops\Core\Aop\Advisor::ADVICE_TYPE_GET
+ *      -# __set       - Woops\Core\Aop\Advisor::ADVICE_TYPE_SET
+ *      -# __isset     - Woops\Core\Aop\Advisor::ADVICE_TYPE_ISSET
+ *      -# __unset     - Woops\Core\Aop\Advisor::ADVICE_TYPE_UNSET
+ *      -# __sleep     - Woops\Core\Aop\Advisor::ADVICE_TYPE_SLEEP
+ *      -# __wakeup    - Woops\Core\Aop\Advisor::ADVICE_TYPE_WAKEUP
+ *      -# __toString  - Woops\Core\Aop\Advisor::ADVICE_TYPE_TO_STRING
  * 
  * - The second uses specific join points, defined in the child class by it's
  * author, using the _registerJoinPoint() method. Available advices are:
  * 
- *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_VALID_CALL
+ *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_VALID_CALL
  *         Called before the join point is executed, and may prevents the join
  *         point to be executed
- *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_BEFORE_CALL
+ *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_BEFORE_CALL
  *         Called before the join point is executed
- *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_BEFORE_RETURN
+ *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_BEFORE_RETURN
  *         Called before the return value of the join point is return, and may
  *         change the return value
- *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_AFTER_CALL
+ *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_AFTER_CALL
  *         Called after the join point is executed
- *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_AFTER_THROWING
+ *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_AFTER_THROWING
  *         Called after an exception is thrown from the join point. The
  *         original exception won't be thrown if the callback method
  *         returns true
@@ -74,12 +80,12 @@
  * @version     1.0
  * @package     Woops.Core.Aop
  */
-abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
+abstract class Advisor extends \Woops\Core\Event\Dispatcher
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The types of AOP advices that can be used
@@ -428,12 +434,12 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
      * Process the advices for the PHP magic methods join points
      * 
      * @param   int                     The type of the advice
-     * @param   Woops_Core_Aop_Advisor  The instance of the child class (will be added as first argument of the advice callback)
+     * @param   Woops\Core\Aop\Advisor  The instance of the child class (will be added as first argument of the advice callback)
      * @param   string                  The name of the PHP magic method
      * @param   array                   An array with the arguments to pass to the advice callback
      * @return  void        
      */
-    private static function _processGlobalAdvices( $type, Woops_Core_Aop_Advisor $object, $method, array $args = array() )
+    private static function _processGlobalAdvices( $type, Advisor $object, $method, array $args = array() )
     {
         // Gets the class of the object
         $className = $object->_className;
@@ -467,7 +473,7 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
      * @param   string                              The name of the join point to invoke
      * @param   array                               The arguments to pass to the join point method
      * @return  mixed                               The return value of the join point method
-     * @throws  Woops_Core_Aop_Advisor_Exception    If the called join point has not been registered
+     * @throws  Woops\Core\Aop\Advisor\Exception    If the called join point has not been registered
      */
     public function __call( $name, array $args = array() )
     {
@@ -475,9 +481,9 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
         if( !isset( self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ] ) ) {
             
             // Error - The join point has not been registered
-            throw new Woops_Core_Aop_Advisor_Exception(
+            throw new Advisor\Exception(
                 'No joint point named ' . $name . '. Call to undefined method ' . $this->_className . '::' . $name . '()',
-                Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_JOINPOINT
+                Advisor\Exception::EXCEPTION_NO_JOINPOINT
             );
         }
         
@@ -486,10 +492,10 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
         $allowedAdviceType = self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ][ 1 ];
         
         // Creates a callback for the internal method
-        $methodCallback    = new Woops_Core_Callback( array( $this, $method ) );
+        $methodCallback    = new \Woops\Core\Callback( array( $this, $method ) );
         
         // Creates a reflection object for the internal method
-        $ref               = Woops_Core_Reflection_Method::getInstance( $this, $method );
+        $ref               = \Woops\Core\Reflection::getMethodReflector( $this, $method );
         
         // By default, the call on the join point internal method is allowed
         $valid             = true;
@@ -649,17 +655,17 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
      * - The first one allows you to execute code when a PHP magic method is
      * called on the target. The advices types are, in such a case:
      * 
-     *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_CONSTRUCT
+     *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_CONSTRUCT
      *         Called when the constructor of the target class is called
-     *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_DESTRUCT
+     *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_DESTRUCT
      *         Called when the destructor of the target class is called
-     *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_CLONE
+     *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_CLONE
      *         Called when an object of the target class is cloned
-     *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_SLEEP
+     *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_SLEEP
      *         Called when an object of the target class is serialized
-     *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_WAKEUP
+     *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_WAKEUP
      *         Called when an object of the target class is unserialized
-     *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_TO_STRING
+     *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_TO_STRING
      *         Called when an object of the target class is converted to a string
      * 
      * - The second one allows you to execute specific code on specific join
@@ -667,32 +673,32 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
      * the name of the join point on which to place the advice as the fourth
      * parameter. Available advices types in such a case are:
      * 
-     *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_VALID_CALL
+     *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_VALID_CALL
      *         Called before the join point is executed, and may prevents the join
      *         point to be executed
-     *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_BEFORE_CALL
+     *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_BEFORE_CALL
      *         Called before the join point is executed
-     *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_BEFORE_RETURN
+     *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_BEFORE_RETURN
      *         Called before the return value of the join point is return, and may
      *         change the return value
-     *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_AFTER_CALL
+     *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_AFTER_CALL
      *         Called after the join point is executed
-     *      -# Woops_Core_Aop_Advisor::ADVICE_TYPE_AFTER_THROWING
+     *      -# Woops\Core\Aop\Advisor::ADVICE_TYPE_AFTER_THROWING
      *         Called after an exception is thrown from the join point. The
      *         original exception won't be thrown if the callback method
      *         returns true
      * 
-     * @param   int                                 The type of the advice (one of the Woops_Core_Aop_Advisor::ADVICE_TYPE_XXX constant)
+     * @param   int                                 The type of the advice (one of the Woops\Core\Aop\Advisor::ADVICE_TYPE_XXX constant)
      * @param   callback                            The callback to invoke (must be a valid PHP callback)
      * @param   mixed                               The target on which to place the advice (either a class name or an object)
      * @param   string                              The join point on which to place the advice
      * @return  boolean
-     * @throws  Woops_Core_Aop_Advisor_Exception   If the passed callback is not a valid PHP callback
-     * @throws  Woops_Core_Aop_Advisor_Exception   If the target class does not exist
-     * @throws  Woops_Core_Aop_Advisor_Exception   If the no join point is specified, when trying to register a user advice type
-     * @throws  Woops_Core_Aop_Advisor_Exception   If the join point has not been registered in the target
-     * @throws  Woops_Core_Aop_Advisor_Exception   If the advice type is not allowed for the join point
-     * @throws  Woops_Core_Aop_Advisor_Exception   If the advice type does not exist
+     * @throws  Woops\Core\Aop\Advisor\Exception   If the passed callback is not a valid PHP callback
+     * @throws  Woops\Core\Aop\Advisor\Exception   If the target class does not exist
+     * @throws  Woops\Core\Aop\Advisor\Exception   If the no join point is specified, when trying to register a user advice type
+     * @throws  Woops\Core\Aop\Advisor\Exception   If the join point has not been registered in the target
+     * @throws  Woops\Core\Aop\Advisor\Exception   If the advice type is not allowed for the join point
+     * @throws  Woops\Core\Aop\Advisor\Exception   If the advice type does not exist
      */
     final public static function addAdvice( $type, $callback, $target, $joinPoint = '' )
     {
@@ -700,7 +706,7 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
         if( !is_object( self::$_conf ) ) {
             
             // Gets the instance of the configuration object
-            self::$_conf      = Woops_Core_Config_Getter::getInstance();
+            self::$_conf      = \Woops\Core\Config\Getter::getInstance();
             
             // Gets the AOP mode from the configuration to know if it's turned on or not
             self::$_enableAop = self::$_conf->getVar( 'aop', 'enable' );
@@ -730,9 +736,9 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
             if( !class_exists( $className ) ) {
                 
                 // Error - Unexisting class
-                throw new Woops_Core_Aop_Advisor_Exception(
+                throw new Advisor\Exception(
                     'Cannot add an advice on unexisting class ' . $className,
-                    Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_CLASS
+                    Advisor\Exception::EXCEPTION_NO_CLASS
                 );
             }
         }
@@ -755,7 +761,7 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
                     
                     // Adds the advice callback for the join point
                     self::$_advices[ $adviceType ][ $className ][] = array(
-                        new Woops_Core_Callback( $callback ),
+                        new \Woops\Core\Callback( $callback ),
                         $objectHash
                     );
                 }
@@ -770,9 +776,9 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
             if( !$joinPoint ) {
                 
                 // Error - A join point must be specified
-                throw new Woops_Core_Aop_Advisor_Exception(
+                throw new Advisor\Exception(
                     'A join point must be specified for that type of advice',
-                    Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_JOINPOINT
+                    Advisor\Exception::EXCEPTION_NO_JOINPOINT
                 );
             }
             
@@ -781,7 +787,7 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
                 
                 // Creates a reflection object for the class
                 // If no instance exist at the moment the advice is added, the automatic join points won't be declared, so we'll have to check it manually
-                $reflection = Woops_Core_Reflection_Class::getInstance( $className );
+                $reflection = \Woops\Core\Reflection::getClassReflector( $className );
                 
                 // Name of the method
                 $methodName = $joinPoint . self::JOINPOINT_METHOD_SUFFIX;
@@ -792,9 +798,9 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
                 ) {
                     
                     // Error - No such join point in the target class
-                    throw new Woops_Core_Aop_Advisor_Exception(
+                    throw new Advisor\Exception(
                         'The join point ' . $joinPoint .' does not exist in class ' . $className,
-                        Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_JOINPOINT
+                        Advisor\Exception::EXCEPTION_NO_JOINPOINT
                     );
                 }
                 
@@ -813,7 +819,7 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
                         
                         // Adds the advice
                         self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array(
-                            new Woops_Core_Callback( $callback ),
+                            new \Woops\Core\Callback( $callback ),
                             $objectHash
                         );
                     }
@@ -844,7 +850,7 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
                         
                         // Adds the advice callback for the join point
                         self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array(
-                            new Woops_Core_Callback( $callback ),
+                            new \Woops\Core\Callback( $callback ),
                             $objectHash
                         );
                         return true;
@@ -852,9 +858,9 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
                     } else {
                         
                         // Error - The advice type is not allowed for the join point
-                        throw new Woops_Core_Aop_Advisor_Exception(
+                        throw new Advisor\Exception(
                             'Advice of type ' . $adviceType . ' is not permitted for join point ' . $joinPoint,
-                            Woops_Core_Aop_Advisor_Exception::EXCEPTION_ADVICE_TYPE_NOT_PERMITTED
+                            Advisor\Exception::EXCEPTION_ADVICE_TYPE_NOT_PERMITTED
                         );
                     }
                 }
@@ -862,9 +868,9 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
         }
         
         // Error - Advice type is invalid
-        throw new Woops_Core_Aop_Advisor_Exception(
+        throw new Advisor\Exception(
             'Invalid advice type (' . $type . ')',
-            Woops_Core_Aop_Advisor_Exception::EXCEPTION_INVALID_ADVICE_TYPE
+            Advisor\Exception::EXCEPTION_INVALID_ADVICE_TYPE
         );
     }
     
@@ -902,10 +908,10 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
             }
             
             // Creates a reflection object for the current instance
-            $reflection = Woops_Core_Reflection_Object::getInstance( $this );
+            $reflection = \Woops\Core\Reflection::getObjectReflector( $this );
             
             // Gets all the public methods
-            $methods    = $reflection->getMethods( ReflectionMethod::IS_PUBLIC );
+            $methods    = $reflection->getMethods( \ReflectionMethod::IS_PUBLIC );
             
             // Process each method
             foreach( $methods as $method ) {
@@ -967,16 +973,16 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
      * $this->_registerJoinPoint(
      *      'joinPointName',
      *      'internalMethodName',
-     *      Woops_Core_Aop_Advisor::ADVICE_TYPE_BEFORE_CALL | Woops_Core_Aop_Advisor::ADVICE_TYPE_AFTER_CALL
+     *      Woops\Core\Aop\Advisor::ADVICE_TYPE_BEFORE_CALL | Woops\Core\Aop\Advisor::ADVICE_TYPE_AFTER_CALL
      * );
      * </code>
      * 
      * @param   string                              The name of the join point
      * @param   string                              The method to use when the join point is called
-     * @param   int                                 The type of advices that are available for the join point (typically a bitwise operation with some Woops_Core_Aop_Advisor::ADVICE_TYPE_XXX constants)
+     * @param   int                                 The type of advices that are available for the join point (typically a bitwise operation with some Woops\Core\Aop\Advisor::ADVICE_TYPE_XXX constants)
      * @return  void
-     * @throws  Woops_Core_Aop_Advisor_Exception    If the joint point method does not exist
-     * @throws  Woops_Core_Aop_Advisor_Exception    If a join point with the same name is already registered
+     * @throws  Woops\Core\Aop\Advisor\Exception    If the joint point method does not exist
+     * @throws  Woops\Core\Aop\Advisor\Exception    If a join point with the same name is already registered
      */
     final protected function _registerJoinPoint( $name, $method, $availableAdviceTypes = self::ADVICE_TYPE_ALL )
     {
@@ -984,9 +990,9 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
         if( !method_exists( $this, $method ) ) {
             
             // Error - The method does not exist
-            throw new Woops_Core_Aop_Advisor_Exception(
+            throw new Advisor\Exception(
                 'The method ' . $method . ' for join point ' . $name .' does not exist in class ' . $this->_className,
-                Woops_Core_Aop_Advisor_Exception::EXCEPTION_NO_JOINPOINT_METHOD
+                Advisor\Exception::EXCEPTION_NO_JOINPOINT_METHOD
             );
         }
         
@@ -1001,9 +1007,9 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
         if( isset( self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ] ) ) {
             
             // Error - A joint point with the same name already exists
-            throw new Woops_Core_Aop_Advisor_Exception(
+            throw new Advisor\Exception(
                 'A join point named ' . $name . ' is already registered for object ' . $this->_objectHash . ' of class ' . $this->_className,
-                Woops_Core_Aop_Advisor_Exception::EXCEPTION_JOINPOINT_EXISTS
+                Advisor\Exception::EXCEPTION_JOINPOINT_EXISTS
             );
         }
         
@@ -1038,7 +1044,7 @@ abstract class Woops_Core_Aop_Advisor extends Woops_Core_Event_Dispatcher
     /**
      * Gets the advice chain for a specific advice type on a target
      * 
-     * @param   int     The type of the advice (one of the Woops_Core_Aop_Advisor::ADVICE_TYPE_XXX constant)
+     * @param   int     The type of the advice (one of the Woops\Core\Aop\Advisor::ADVICE_TYPE_XXX constant)
      * @param   mixed   The target for which to get the advices (either a class name or an object)
      * @param   string  The join point for wich to return the advices
      * @return  array   An array with all the advice callbacks

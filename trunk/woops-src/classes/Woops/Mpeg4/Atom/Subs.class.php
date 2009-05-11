@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4\Atom;
+
 /**
  * MPEG-4 SUBS atom
  * 
@@ -53,12 +59,12 @@
  * @version     1.0
  * @package     Woops.Mpeg4.Atom
  */
-final class Woops_Mpeg4_Atom_Subs extends Woops_Mpeg4_FullBox
+final class Subs extends \Woops\Mpeg4\FullBox
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The atom type
@@ -73,7 +79,7 @@ final class Woops_Mpeg4_Atom_Subs extends Woops_Mpeg4_FullBox
      */
     protected function _processFlags( $rawFlags )
     {
-        return new stdClass();
+        return new \stdClass();
     }
     
     /**
@@ -99,7 +105,7 @@ final class Woops_Mpeg4_Atom_Subs extends Woops_Mpeg4_FullBox
         for( $i = 0; $i < $data->entry_count; $i++ ) {
             
             // Storage for the current entry
-            $entry                  = new stdClass();
+            $entry                  = new \stdClass();
             
             // Process the data for the current entry
             $entry->sample_delta    = $this->_stream->bigEndianUnsignedLong();
@@ -113,7 +119,7 @@ final class Woops_Mpeg4_Atom_Subs extends Woops_Mpeg4_FullBox
                 for( $j = 0; $j < $subsample_count; $j++ ) {
                     
                     // Storage for the current subsample
-                    $subSample = new stdClass();
+                    $subSample = new \stdClass();
                     
                     // Checks the atom version
                     if( $data->version === 1 ) {

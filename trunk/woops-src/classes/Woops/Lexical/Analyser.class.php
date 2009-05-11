@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Lexical;
+
 /**
  * Abstract class for the lexers
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Lexical
  */
-abstract class Woops_Lexical_Analyser extends Woops_Core_Object
+abstract class Analyser extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 
@@ -88,15 +94,15 @@ abstract class Woops_Lexical_Analyser extends Woops_Core_Object
      */
     private static function _initLexer( $class )
     {
-        $reflection   = Woops_Core_Reflection_Class::getInstance( $class );
+        $reflection   = \Woops\Core\Reflection::getClassReflector( $class );
         $constants    = $reflection->getConstants();
         $staticProps  = $reflection->getStaticProperties();
         
         if( !isset( $staticProps[ '_tokens' ] ) ) {
             
-            throw new Woops_Lexical_Analyser_Exception(
+            throw new Analyser\Exception(
                 '',
-                Woops_Lexical_Analyser_Exception::EXCEPTION_NO_TOKENS
+                Analyser\Exception::EXCEPTION_NO_TOKENS
             );
         }
         
@@ -110,9 +116,9 @@ abstract class Woops_Lexical_Analyser extends Woops_Core_Object
             
             if( !isset( $constants[ $name ] ) ) {
                 
-                throw new Woops_Lexical_Analyser_Exception(
+                throw new Analyser\Exception(
                     '',
-                    Woops_Lexical_Analyser_Exception::EXCEPTION_NO_TOKEN_CONSTANT
+                    Analyser\Exception::EXCEPTION_NO_TOKEN_CONSTANT
                 );
             }
             
@@ -120,9 +126,9 @@ abstract class Woops_Lexical_Analyser extends Woops_Core_Object
             
             if( isset( self::$_tokensByCode[ $class ][ $code ] ) ) {
                 
-                throw new Woops_Lexical_Analyser_Exception(
+                throw new Analyser\Exception(
                     '',
-                    Woops_Lexical_Analyser_Exception::EXCEPTION_DUPLICATE_TOKEN_CODE
+                    Analyser\Exception::EXCEPTION_DUPLICATE_TOKEN_CODE
                 );
             }
             

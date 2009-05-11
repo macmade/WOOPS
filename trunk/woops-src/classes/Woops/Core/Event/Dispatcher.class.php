@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Event;
+
 /**
  * Abstract for all classes that dispatch events
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Core.Event
  */
-abstract class Woops_Core_Event_Dispatcher extends Woops_Core_Object
+abstract class Dispatcher extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The object's event listeners
@@ -36,13 +42,13 @@ abstract class Woops_Core_Event_Dispatcher extends Woops_Core_Object
     public function dispatchEvent( $type )
     {
         // Name of the specific event class, for the current object
-        $eventClass = get_class( $this ) . '_Event';
+        $eventClass = get_class( $this ) . '\Event';
         
         // Checks if a specific event class exists
-        if( !class_exists( $eventClass ) ) {
+        if( !class_exists( '\\' . $eventClass ) ) {
             
             // Generic event
-            $eventClass = 'Woops_Core_Event';
+            $eventClass = '\Woops\Core\Event';
         }
         
         // Dispatch the event object
@@ -52,7 +58,7 @@ abstract class Woops_Core_Event_Dispatcher extends Woops_Core_Object
     /**
      * 
      */
-    public function dispatchEventObject( Woops_Core_Event $event )
+    public function dispatchEventObject( \Woops\Core\Event $event )
     {
         // Gets the event type
         $type = $event->getType();
@@ -90,7 +96,7 @@ abstract class Woops_Core_Event_Dispatcher extends Woops_Core_Object
     public function addEventListener( $eventType, $callback, $priority = 0 )
     {
         // Creates the callback for the event listener
-        $listener   = new Woops_Core_Callback( $callback );
+        $listener   = new \Woops\Core\Callback( $callback );
         $listenerId = $listener->getObjectHash();
         
         // Ensures we have integers

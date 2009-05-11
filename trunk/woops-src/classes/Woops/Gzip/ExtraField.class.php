@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Gzip;
+
 /**
  * Abstract for the GZIP extra fields
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Gzip
  */
-abstract class Woops_Gzip_ExtraField extends Woops_Core_Object
+abstract class ExtraField extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The extra field type
@@ -38,10 +44,10 @@ abstract class Woops_Gzip_ExtraField extends Woops_Core_Object
     /**
      * Process the raw data from a binary stream
      * 
-     * @param   Woops_Gzip_Binary_Stream    The binary stream
+     * @param   Woops\Gzip\Binary\Stream    The binary stream
      * @return  void
      */
-    public function processData( Woops_Gzip_Binary_Stream $stream )
+    public function processData( Binary\Stream $stream )
     {
         // Gets the data length
         $length = $stream->littleEndianUnsignedShort();

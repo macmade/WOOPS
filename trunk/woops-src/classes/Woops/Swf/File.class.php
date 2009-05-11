@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf;
+
 /**
  * SWF file
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Swf
  */
-class Woops_Swf_File extends Woops_Core_Object implements Iterator
+class File extends \Woops\Core\Object implements \Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The SWF tag types
@@ -98,70 +104,70 @@ class Woops_Swf_File extends Woops_Core_Object implements Iterator
      * The SWF tag types, with their corresponding PHP class
      */
     protected static $_types  = array(
-        0x00 => 'Woops_Swf_Tag_End',
-        0x01 => 'Woops_Swf_Tag_ShowFrame',
-        0x02 => 'Woops_Swf_Tag_Define_Shape',
-        0x04 => 'Woops_Swf_Tag_Place_Object',
-        0x05 => 'Woops_Swf_Tag_Remove_Object',
-        0x06 => 'Woops_Swf_Tag_Define_Bits',
-        0x07 => 'Woops_Swf_Tag_Define_Button',
-        0x08 => 'Woops_Swf_Tag_JpegTables',
-        0x09 => 'Woops_Swf_Tag_Set_BackgroundColor',
-        0x0A => 'Woops_Swf_Tag_Define_Font',
-        0x0B => 'Woops_Swf_Tag_Define_Text',
-        0x0C => 'Woops_Swf_Tag_Do_Action',
-        0x0D => 'Woops_Swf_Tag_Define_Font_Info',
-        0x0E => 'Woops_Swf_Tag_Define_Sound',
-        0x0F => 'Woops_Swf_Tag_Start_Sound',
-        0x11 => 'Woops_Swf_Tag_Define_Button_Sound',
-        0x12 => 'Woops_Swf_Tag_Sound_Stream_Head',
-        0x13 => 'Woops_Swf_Tag_Sound_Stream_Block',
-        0x14 => 'Woops_Swf_Tag_Define_Bits_Lossless',
-        0x15 => 'Woops_Swf_Tag_Define_Bits_Jpeg_2',
-        0x16 => 'Woops_Swf_Tag_Define_Shape_2',
-        0x17 => 'Woops_Swf_Tag_Define_Button_Cxform',
-        0x18 => 'Woops_Swf_Tag_Protect',
-        0x1A => 'Woops_Swf_Tag_Place_Object_2',
-        0x1C => 'Woops_Swf_Tag_Remove_Object_2',
-        0x20 => 'Woops_Swf_Tag_Define_Shape_3',
-        0x21 => 'Woops_Swf_Tag_Define_Text_2',
-        0x22 => 'Woops_Swf_Tag_Define_Button_2',
-        0x23 => 'Woops_Swf_Tag_Define_Bits_Jpeg_3',
-        0x24 => 'Woops_Swf_Tag_Define_Bits_Lossless_2',
-        0x25 => 'Woops_Swf_Tag_Define_EditText',
-        0x27 => 'Woops_Swf_Tag_Define_Sprite',
-        0x2B => 'Woops_Swf_Tag_FrameLabel',
-        0x2D => 'Woops_Swf_Tag_Sound_Stream_Head_2',
-        0x2E => 'Woops_Swf_Tag_Define_Morph_Shape',
-        0x30 => 'Woops_Swf_Tag_Define_Font_2',
-        0x38 => 'Woops_Swf_Tag_Export_Assets',
-        0x39 => 'Woops_Swf_Tag_Import_Assets',
-        0x3A => 'Woops_Swf_Tag_Enable_Debugger',
-        0x3B => 'Woops_Swf_Tag_Do_InitAction',
-        0x3C => 'Woops_Swf_Tag_Define_VideoStream',
-        0x3D => 'Woops_Swf_Tag_VideoFrame',
-        0x3E => 'Woops_Swf_Tag_Define_Font_Info_2',
-        0x40 => 'Woops_Swf_Tag_Enable_Debugger_2',
-        0x41 => 'Woops_Swf_Tag_ScriptLimits',
-        0x42 => 'Woops_Swf_Tag_Set_TabIndex',
-        0x45 => 'Woops_Swf_Tag_FileAttributes',
-        0x46 => 'Woops_Swf_Tag_Place_Object_3',
-        0x47 => 'Woops_Swf_Tag_Import_Assets_2',
-        0x49 => 'Woops_Swf_Tag_Define_Font_AlignZones',
-        0x4A => 'Woops_Swf_Tag_CsmTextSettings',
-        0x4B => 'Woops_Swf_Tag_Define_Font_3',
-        0x4C => 'Woops_Swf_Tag_SymbolClass',
-        0x4D => 'Woops_Swf_Tag_Metadata',
-        0x4E => 'Woops_Swf_Tag_Define_ScalingGrid',
-        0x52 => 'Woops_Swf_Tag_Do_Abc',
-        0x53 => 'Woops_Swf_Tag_Define_Shape_4',
-        0x54 => 'Woops_Swf_Tag_Define_Morph_Shape_2',
-        0x56 => 'Woops_Swf_Tag_Define_SceneAndFrameLabelData',
-        0x57 => 'Woops_Swf_Tag_Define_BinaryData',
-        0x58 => 'Woops_Swf_Tag_Define_Font_Name',
-        0x59 => 'Woops_Swf_Tag_Start_Sound_2',
-        0x5A => 'Woops_Swf_Tag_Define_Bits_Jpeg_4',
-        0x5B => 'Woops_Swf_Tag_Define_Font_4'
+        0x00 => '\Woops\Swf\Tag\End',
+        0x01 => '\Woops\Swf\Tag\ShowFrame',
+        0x02 => '\Woops\Swf\Tag\Define\Shape',
+        0x04 => '\Woops\Swf\Tag\Place\Object',
+        0x05 => '\Woops\Swf\Tag\Remove\Object',
+        0x06 => '\Woops\Swf\Tag\Define\Bits',
+        0x07 => '\Woops\Swf\Tag\Define\Button',
+        0x08 => '\Woops\Swf\Tag\JpegTables',
+        0x09 => '\Woops\Swf\Tag\Set\BackgroundColor',
+        0x0A => '\Woops\Swf\Tag\Define\Font',
+        0x0B => '\Woops\Swf\Tag\Define\Text',
+        0x0C => '\Woops\Swf\Tag\DoAction',
+        0x0D => '\Woops\Swf\Tag\Define\Font\Info',
+        0x0E => '\Woops\Swf\Tag\Define\Sound',
+        0x0F => '\Woops\Swf\Tag\Start\Sound',
+        0x11 => '\Woops\Swf\Tag\Define\Button\Sound',
+        0x12 => '\Woops\Swf\Tag\Sound\Stream\Head',
+        0x13 => '\Woops\Swf\Tag\Sound\Stream\Block',
+        0x14 => '\Woops\Swf\Tag\Define\Bits\Lossless',
+        0x15 => '\Woops\Swf\Tag\Define\Bits\Jpeg2',
+        0x16 => '\Woops\Swf\Tag\Define\Shape2',
+        0x17 => '\Woops\Swf\Tag\Define\Button\Cxform',
+        0x18 => '\Woops\Swf\Tag\Protect',
+        0x1A => '\Woops\Swf\Tag\Place\Object2',
+        0x1C => '\Woops\Swf\Tag\Remove\Object2',
+        0x20 => '\Woops\Swf\Tag\Define\Shape3',
+        0x21 => '\Woops\Swf\Tag\Define\Text2',
+        0x22 => '\Woops\Swf\Tag\Define\Button2',
+        0x23 => '\Woops\Swf\Tag\Define\Bits\Jpeg3',
+        0x24 => '\Woops\Swf\Tag\Define\Bits\Lossless2',
+        0x25 => '\Woops\Swf\Tag\Define\EditText',
+        0x27 => '\Woops\Swf\Tag\Define\Sprite',
+        0x2B => '\Woops\Swf\Tag\FrameLabel',
+        0x2D => '\Woops\Swf\Tag\Sound\Stream\Head2',
+        0x2E => '\Woops\Swf\Tag\Define\Morph\Shape',
+        0x30 => '\Woops\Swf\Tag\Define\Font2',
+        0x38 => '\Woops\Swf\Tag\Export\Assets',
+        0x39 => '\Woops\Swf\Tag\Import\Assets',
+        0x3A => '\Woops\Swf\Tag\Enable\Debugger',
+        0x3B => '\Woops\Swf\Tag\DoInitAction',
+        0x3C => '\Woops\Swf\Tag\Define\VideoStream',
+        0x3D => '\Woops\Swf\Tag\VideoFrame',
+        0x3E => '\Woops\Swf\Tag\Define\Font\Info2',
+        0x40 => '\Woops\Swf\Tag\Enable\Debugger2',
+        0x41 => '\Woops\Swf\Tag\ScriptLimits',
+        0x42 => '\Woops\Swf\Tag\Set\TabIndex',
+        0x45 => '\Woops\Swf\Tag\FileAttributes',
+        0x46 => '\Woops\Swf\Tag\Place\Object3',
+        0x47 => '\Woops\Swf\Tag\Import\Assets2',
+        0x49 => '\Woops\Swf\Tag\Define\Font\AlignZones',
+        0x4A => '\Woops\Swf\Tag\CsmTextSettings',
+        0x4B => '\Woops\Swf\Tag\Define\Font3',
+        0x4C => '\Woops\Swf\Tag\SymbolClass',
+        0x4D => '\Woops\Swf\Tag\Metadata',
+        0x4E => '\Woops\Swf\Tag\Define\ScalingGrid',
+        0x52 => '\Woops\Swf\Tag\DoAbc',
+        0x53 => '\Woops\Swf\Tag\Define\Shape4',
+        0x54 => '\Woops\Swf\Tag\Define\Morph\Shape2',
+        0x56 => '\Woops\Swf\Tag\Define\SceneAndFrameLabelData',
+        0x57 => '\Woops\Swf\Tag\Define\BinaryData',
+        0x58 => '\Woops\Swf\Tag\Define\Font\Name',
+        0x59 => '\Woops\Swf\Tag\Start\Sound2',
+        0x5A => '\Woops\Swf\Tag\Define\Bits\Jpeg4',
+        0x5B => '\Woops\Swf\Tag\Define\Font4'
     );
     
     /**
@@ -188,13 +194,13 @@ class Woops_Swf_File extends Woops_Core_Object implements Iterator
     public function __construct( $version = 10 )
     {
         // Creates a SWF header
-        $this->_header = new Woops_Swf_Header( $version );
+        $this->_header = new Header( $version );
     }
     
     /**
      * Gets the current tag object (SPL Iterator method)
      * 
-     * @return  Woops_Swf_Tag   The current SWF tag object
+     * @return  Woops\Swf\Tag   The current SWF tag object
      */
     public function current()
     {
@@ -255,9 +261,9 @@ class Woops_Swf_File extends Woops_Core_Object implements Iterator
     /**
      * Gets the PHP classname for a SWF tag type
      * 
-     * @param   int     The SWF tag type
-     * @return  string  The PHP classname for the tag
-     * @throws  Woops_Swf_File_Exception    If the tag type is invalid
+     * @param   int                         The SWF tag type
+     * @return  string                      The PHP classname for the tag
+     * @throws  Woops\Swf\File\Exception    If the tag type is invalid
      */
     public static function getTagClass( $type )
     {
@@ -268,9 +274,9 @@ class Woops_Swf_File extends Woops_Core_Object implements Iterator
         if( !isset( self::$_types[ $type ] ) ) {
             
             // Error - Invalid tag type
-            throw new Woops_Swf_File_Exception(
+            throw new File\Exception(
                 'Invalid tag type (' . $type . ')',
-                Woops_Swf_File_Exception::EXCEPTION_INVALID_TAG_TYPE
+                File\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         
@@ -282,8 +288,8 @@ class Woops_Swf_File extends Woops_Core_Object implements Iterator
      * Creates a new SWF tag in the current SWF file instance
      * 
      * @param   int                         The SWF tag type (one of the TAG_XXX constant)
-     * @return  Woops_Swf_Tag               The SWF tag object
-     * @throws  Woops_Swf_File_Exception    If the tag type is invalid
+     * @return  Woops\Swf\Tag               The SWF tag object
+     * @throws  Woops\Swf\File\Exception    If the tag type is invalid
      */
     public function newTag( $type )
     {
@@ -294,9 +300,9 @@ class Woops_Swf_File extends Woops_Core_Object implements Iterator
         if( !isset( self::$_types[ $type ] ) ) {
             
             // Error - Invalid tag type
-            throw new Woops_Swf_File_Exception(
+            throw new File\Exception(
                 'Invalid tag type (' . $type . ')',
-                Woops_Swf_File_Exception::EXCEPTION_INVALID_TAG_TYPE
+                File\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         
@@ -316,7 +322,7 @@ class Woops_Swf_File extends Woops_Core_Object implements Iterator
     /**
      * Gets the SWF header object
      * 
-     * @return  Woops_Swf_Header    The header object
+     * @return  Woops\Swf\Header    The header object
      */
     public function getHeader()
     {

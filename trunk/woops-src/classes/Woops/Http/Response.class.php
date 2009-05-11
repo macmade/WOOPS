@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Http;
+
 /**
  * HTTP response class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Http
  */
-class Woops_Http_Response extends Woops_Core_Object
+class Response extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The HTTP reponse codes
@@ -179,7 +185,7 @@ class Woops_Http_Response extends Woops_Core_Object
      * @param   string                          The HTTP response body
      * @param   number                          The HTTP protocol version
      * @return  void
-     * @throws  Woops_Http_Response_Exception   If the HTTP response code is invalid
+     * @throws  Woops\Http\Response\Exception   If the HTTP response code is invalid
      */
     protected function __construct( $code, array $headers, $rawBody, $body, $httpVersion )
     {
@@ -198,9 +204,9 @@ class Woops_Http_Response extends Woops_Core_Object
         if( !isset( self::$_codes[ $code ] ) ) {
             
             // Invalid HTTP response code
-            throw new Woops_Http_Response_Exception(
+            throw new Response\Exception(
                 'Invalid HTTP code (' . $code . ')',
-                Woops_Http_Response_Exception::EXCEPTION_INVALID_CODE
+                Response\Exception::EXCEPTION_INVALID_CODE
             );
         }
         
@@ -218,7 +224,7 @@ class Woops_Http_Response extends Woops_Core_Object
             foreach( $headers[ 'Set-Cookie' ] as $cookie ) {
                 
                 // Creates a cookie object
-                $cookie                               = Woops_Http_Cookie::createCookieObject( trim( $cookie ) );
+                $cookie                               = Cookie::createCookieObject( trim( $cookie ) );
                 
                 // Stores the cookie object
                 $this->_cookies[ $cookie->getName() ] = $cookie;
@@ -273,7 +279,7 @@ class Woops_Http_Response extends Woops_Core_Object
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str    = Woops_String_Utils::getInstance();
+        self::$_str    = \Woops\Helpers\StringUtilities::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -283,9 +289,9 @@ class Woops_Http_Response extends Woops_Core_Object
      * Creates a response object from a string
      * 
      * @param   resource                        The HTTP socket from which to read
-     * @return  Woops_Http_Response             The HTTP response object
-     * @throws  Woops_Http_Response_Exception   If the HTTP status line is invalid
-     * @throws  Woops_Http_Response_Exception   If the transfer-encoding is set and is not recognized
+     * @return  Woops\Http\Response             The HTTP response object
+     * @throws  Woops\Http\Response_Exception   If the HTTP status line is invalid
+     * @throws  Woops\Http\Response_Exception   If the transfer-encoding is set and is not recognized
      */
     public static function createResponseObject( $socket )
     {
@@ -300,9 +306,9 @@ class Woops_Http_Response extends Woops_Core_Object
         if( !is_resource( $socket ) ) {
             
             // Invalid status line
-            throw new Woops_Http_Response_Exception(
+            throw new Response\Exception(
                 'Passed argument must be a valid resource',
-                Woops_Http_Response_Exception::EXCEPTION_INVALID_RESOURCE
+                Response\Exception::EXCEPTION_INVALID_RESOURCE
             );
         }
         
@@ -313,9 +319,9 @@ class Woops_Http_Response extends Woops_Core_Object
         if( feof( $socket ) ) {
             
             // Nothing to read
-            throw new Woops_Http_Response_Exception(
+            throw new Response\Exception(
                 'No more data to read in the resource',
-                Woops_Http_Response_Exception::EXCEPTION_NO_DATA
+                Response\Exception::EXCEPTION_NO_DATA
             );
         }
         
@@ -329,9 +335,9 @@ class Woops_Http_Response extends Woops_Core_Object
         if( count( $statusParts ) < 2 ) {
             
             // Invalid status line
-            throw new Woops_Http_Response_Exception(
+            throw new Response\Exception(
                 'Invalid HTTP status line (' . $status . ')',
-                Woops_Http_Response_Exception::EXCEPTION_INVALID_HTTP_STATUS
+                Response\Exception::EXCEPTION_INVALID_HTTP_STATUS
             );
         }
         
@@ -416,9 +422,9 @@ class Woops_Http_Response extends Woops_Core_Object
         } elseif( isset( $headers[ 'Transfer-Encoding' ] ) ) {
             
             // Unrecognized transfer encoding
-            throw new Woops_Http_Response_Exception(
+            throw new Response\Exception(
                 'Invalid transfer encoding (' . $headers[ 'Content-Encoding' ] . ')',
-                Woops_Http_Response_Exception::EXCEPTION_INVALID_TRANSFER_ENCODING
+                Response\Exception::EXCEPTION_INVALID_TRANSFER_ENCODING
             );
             
         } elseif( isset( $headers[ 'Content-Length' ] ) ) {
@@ -481,9 +487,9 @@ class Woops_Http_Response extends Woops_Core_Object
      * @param   string                          The body
      * @param   string                          The value of the 'Content-Encoding' header
      * @return  string                          The processed body
-     * @throws  Woops_Http_Response_Exception   If the transfer-encoding is set as chunked and if the chunked content is invalid
-     * @throws  Woops_Http_Response_Exception   If the content-encoding is set as deflate and if the PHP function gzuncompress() is not available
-     * @throws  Woops_Http_Response_Exception   If the content-encoding is set as gzip and if the PHP function gzinflate() is not available
+     * @throws  Woops\Http\Response\Exception   If the transfer-encoding is set as chunked and if the chunked content is invalid
+     * @throws  Woops\Http\Response\Exception   If the content-encoding is set as deflate and if the PHP function gzuncompress() is not available
+     * @throws  Woops\Http\Response\Exception   If the content-encoding is set as gzip and if the PHP function gzinflate() is not available
      */
     protected static function _decodeBody( $body, $encoding )
     {
@@ -494,9 +500,9 @@ class Woops_Http_Response extends Woops_Core_Object
             if( !function_exists( 'gzuncompress' ) ) {
                 
                 // Error - Cannot process the body
-                throw new Woops_Http_Response_Exception(
+                throw new Response_Exception(
                     'The PHP function \'gzuncompress()\' is not available',
-                    Woops_Http_Response_Exception::EXCEPTION_NO_GZUNCOMPRESS
+                    Response_Exception::EXCEPTION_NO_GZUNCOMPRESS
                 );
             }
             
@@ -509,9 +515,9 @@ class Woops_Http_Response extends Woops_Core_Object
             if( !function_exists( 'gzinflate' ) ) {
                 
                 // Error - Cannot process the body
-                throw new Woops_Http_Response_Exception(
+                throw new Response\Exception(
                     'The PHP function \'gzinflate()\' is not available',
-                    Woops_Http_Response_Exception::EXCEPTION_NO_GZINFLATE
+                    Response\Exception::EXCEPTION_NO_GZINFLATE
                 );
             }
             
@@ -598,7 +604,7 @@ class Woops_Http_Response extends Woops_Core_Object
      * Gets a cookie (from the 'Set-Cookie' header)
      * 
      * @param   string  The name of the cookie
-     * @return  mixed   An instance of the Woops_Http_Cookie class if the cookie exists, otherwise NULL
+     * @return  mixed   An instance of the Woops\Http\Cookie class if the cookie exists, otherwise NULL
      */
     public function getCookie( $name )
     {
@@ -608,7 +614,7 @@ class Woops_Http_Response extends Woops_Core_Object
     /**
      * Gets the cookies (from the 'Set-Cookie' header)
      * 
-     * @return  array   An array with instances of the Woops_Http_Cookie class
+     * @return  array   An array with instances of the Woops\Http\Cookie class
      */
     public function getCookies()
     {

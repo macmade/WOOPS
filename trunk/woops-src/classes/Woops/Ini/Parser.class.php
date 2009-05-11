@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Ini;
+
 /**
  * INI file parser
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Ini
  */
-class Woops_Ini_Parser extends Woops_Core_Object
+class Parser extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Whether the static variables are set or not
@@ -70,9 +76,9 @@ class Woops_Ini_Parser extends Woops_Core_Object
         if( !file_exists( $path ) ) {
             
             // Error - The file does not exists
-            throw new Woops_Ini_Parser_Exception(
+            throw new Parser\Exception(
                 'The INI file does not exists (path: ' . $path . ')',
-                Woops_Ini_Parser_Exception::EXCEPTION_NO_FILE
+                Parser\Exception::EXCEPTION_NO_FILE
             );
         }
         
@@ -80,9 +86,9 @@ class Woops_Ini_Parser extends Woops_Core_Object
         if( !is_readable( $path ) ) {
             
             // Error - The file is not readable
-            throw new Woops_Ini_Parser_Exception(
+            throw new Parser\Exception(
                 'The INI file is not readable (path: ' . $path . ')',
-                Woops_Ini_Parser_Exception::EXCEPTION_FILE_NOT_READABLE
+                Parser\Exception::EXCEPTION_FILE_NOT_READABLE
             );
         }
         
@@ -101,7 +107,7 @@ class Woops_Ini_Parser extends Woops_Core_Object
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str       = Woops_String_Utils::getInstance();
+        self::$_str       = \Woops\Helpers\StringUtilities::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;
@@ -125,7 +131,7 @@ class Woops_Ini_Parser extends Woops_Core_Object
         $comments   = array();
         
         // Creates an INI file object
-        $this->_ini = new Woops_Ini_File();
+        $this->_ini = new File();
         
         // Process each line of the file
         foreach( $lines as &$line ) {
@@ -201,7 +207,7 @@ class Woops_Ini_Parser extends Woops_Core_Object
                             );
                             
                             // Creates the array object
-                            $this->_ini->getItem( $section )->newArrayItem( $key );
+                            $this->_ini->getItem( $section )->newArrayValueItem( $key );
                             
                             // Resets the comments
                             $comments = array();
@@ -244,7 +250,7 @@ class Woops_Ini_Parser extends Woops_Core_Object
                             );
                             
                             // Creates the array object
-                            $this->_ini->newArrayItem( $key );
+                            $this->_ini->newArrayValueItem( $key );
                             
                             // Resets the comments
                             $comments = array();
@@ -366,7 +372,7 @@ class Woops_Ini_Parser extends Woops_Core_Object
     /**
      * Gets the INI file object
      * 
-     * @return  Woops_Ini_File The INI file object
+     * @return  Woops\Ini\File The INI file object
      */
     public function getIniObject()
     {

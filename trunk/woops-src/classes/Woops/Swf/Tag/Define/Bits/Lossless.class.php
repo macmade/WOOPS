@@ -11,6 +11,12 @@
 
 # $Id: Stream.class.php 637 2009-03-09 09:05:52Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf\Tag\Define\Bits;
+
 /**
  * 
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Swf.Tag.Define.Bits
  */
-class Woops_Swf_Tag_Define_Bits_Lossless extends Woops_Swf_Tag_Define_Bits
+class Lossless extends \Woops\Swf\Tag\Define\Bits
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The SWF tag type

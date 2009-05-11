@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Env;
+
 /**
  * WOOPS environment class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Core.Env
  */
-final class Woops_Core_Env_Getter extends Woops_Core_Object implements Woops_Core_Singleton_Interface
+class Getter extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The name of the WOOPS source directory
@@ -31,19 +37,14 @@ final class Woops_Core_Env_Getter extends Woops_Core_Object implements Woops_Cor
     const WOOPS_SOURCE_DIRNAME = 'woops-src';
     
     /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance = NULL;
-    
-    /**
      * The WOOPS module manager
      */
-    private $_modManager      = NULL;
+    protected $_modManager      = NULL;
     
     /**
      * An array with references to $_SERVER and $_ENV
      */
-    private $_envVars         = array(
+    protected $_envVars         = array(
         '_SERVER' => array(),
         '_ENV'    => array()
     );
@@ -51,12 +52,12 @@ final class Woops_Core_Env_Getter extends Woops_Core_Object implements Woops_Cor
     /**
      * The processed server variables (for $_SERVER and $_ENV )
      */
-    private $_serverVars      = array();
+    protected $_serverVars      = array();
     
     /**
      * The WOOPS variables
      */
-    private $_woopsVars       = array(
+    protected $_woopsVars       = array(
         'sys' => array(
             'root'   => '',
             'src'    => ''
@@ -75,7 +76,7 @@ final class Woops_Core_Env_Getter extends Woops_Core_Object implements Woops_Cor
      * 
      * @return void
      */
-    private function __construct()
+    protected function __construct()
     {
         // Stores references to the environment vars
         $this->_envVars[ '_SERVER' ]  = &$_SERVER;
@@ -90,7 +91,7 @@ final class Woops_Core_Env_Getter extends Woops_Core_Object implements Woops_Cor
         
         // Gets the absolute path to the WOOPS sources (here we are in classes/Woops/Core/Env/)
         $sourceAbsPath = realpath(
-            dirname( __FILE__ )
+            __DIR__
           . DIRECTORY_SEPARATOR
           . '..'
           . DIRECTORY_SEPARATOR
@@ -132,23 +133,6 @@ final class Woops_Core_Env_Getter extends Woops_Core_Object implements Woops_Cor
     }
     
     /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new Woops_Core_Singleton_Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
      * Get a server variable.
      * 
      * @param   string  The server variable to get
@@ -166,23 +150,23 @@ final class Woops_Core_Env_Getter extends Woops_Core_Object implements Woops_Cor
      * This method is used to get the unique instance of the class
      * (singleton). If no instance is available, it will create it.
      * 
-     * @return  Woops_Core_Env_Getter   The unique instance of the class
-     * @see     __construct
+     * @return  Woops\Core\Env\Getter   The unique instance of the class
+     * @see     Woops\Core\Singleton\Base::getInstance
      */
     public static function getInstance()
     {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance              = new self();
+        // Gets the unique instance
+        $instance = parent::getInstance();
+        
+        // Checks if the unique instance has been created
+        if( !is_object( $instance->_modManager ) ) {
             
             // Gets the module manager instance
-            self::$_instance->_modManager = Woops_Core_Module_Manager::getInstance();
+            $instance->_modManager = \Woops\Core\Module\Manager::getInstance();
         }
         
         // Returns the unique instance
-        return self::$_instance;
+        return $instance;
     }
     
     /**
@@ -379,9 +363,9 @@ final class Woops_Core_Env_Getter extends Woops_Core_Object implements Woops_Cor
                 
                 return ( file_exists( $absPath ) ) ? $absPath : false;
                 
-            } catch( Woops_Core_Module_Manager_Exception $e ) {
+            } catch( \Woops\Core\Module\Manager\Exception $e ) {
                 
-                if( $e->getCode() === Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED ) {
+                if( $e->getCode() === \Woops\Core\Module\Manager\Exception::EXCEPTION_MODULE_NOT_LOADED ) {
                     
                     return false;
                     
@@ -429,9 +413,9 @@ final class Woops_Core_Env_Getter extends Woops_Core_Object implements Woops_Cor
                 $modPath    = $this->_modManager->getModuleRelativePath( $moduleName );
                 $webPath    = $modPath . substr( $path, 13 + strlen( $moduleName ) );
                 
-            } catch( Exception $e ) {
+            } catch( \Woops\Core\Module\Manager\Exception $e ) {
                 
-                if( $e->getCode() === Woops_Core_Module_Manager::EXCEPTION_MODULE_NOT_LOADED ) {
+                if( $e->getCode() === \Woops\Core\Module\Manager::EXCEPTION_MODULE_NOT_LOADED ) {
                     
                     return false;
                     

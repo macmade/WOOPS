@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Binary\File;
+
 /**
  * Binary file stream
  *
@@ -18,19 +24,19 @@
  * @version     1.0
  * @package     Woops.Binary.File
  */
-class Woops_Binary_File_Stream extends Woops_Binary_File_Resource_Stream
+class Stream extends Resource\Stream
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Class constructor
      * 
      * @param   string  The path to the file for which to create a binary stream
      * @return  void
-     * @see     Woops_Binary_File_Resource_Stream::__construct
+     * @see     Woops\Binary\File\Resource\Stream::__construct
      */
     public function __construct( $filePath )
     {
@@ -38,9 +44,9 @@ class Woops_Binary_File_Stream extends Woops_Binary_File_Resource_Stream
         if( !file_exists( $filePath ) || !is_file( $filePath ) ) {
             
             // Error - The file does not exist
-            throw new Woops_Binary_File_Stream_Exception(
+            throw new Stream\Exception(
                 'The requested file does not exist (path: ' . $filePath . ')',
-                Woops_Binary_File_Stream_Exception::EXCEPTION_NO_FILE
+                Stream\Exception::EXCEPTION_NO_FILE
             );
         }
         
@@ -48,9 +54,9 @@ class Woops_Binary_File_Stream extends Woops_Binary_File_Resource_Stream
         if( !is_readable( $filePath ) ) {
             
             // Error - The file is not readable
-            throw new Woops_Binary_File_Stream_Exception(
+            throw new Stream\Exception(
                 'The requested file is not readable (path: ' . $filePath . ')',
-                Woops_Binary_File_Stream_Exception::EXCEPTION_FILE_NOT_READABLE
+                Stream\Exception::EXCEPTION_FILE_NOT_READABLE
             );
         }
         

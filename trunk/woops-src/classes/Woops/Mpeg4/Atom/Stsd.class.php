@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4\Atom;
+
 /**
  * MPEG-4 STSD atom
  * 
@@ -86,12 +92,12 @@
  * @version     1.0
  * @package     Woops.Mpeg4.Atom
  */
-final class Woops_Mpeg4_Atom_Stsd extends Woops_Mpeg4_FullBox
+final class Stsd extends \Woops\Mpeg4\FullBox
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The atom type
@@ -107,7 +113,7 @@ final class Woops_Mpeg4_Atom_Stsd extends Woops_Mpeg4_FullBox
     protected function _processFlags( $rawFlags )
     {
         // Returns the atom flags
-        return new stdClass();
+        return new \stdClass();
     }
     
     /**
@@ -173,22 +179,22 @@ final class Woops_Mpeg4_Atom_Stsd extends Woops_Mpeg4_FullBox
      */
     protected function _audioSampleEntry()
     {
-        $data = new stdClass();
+        $data = new \stdClass();
         
-        $this->_stream->seek( 4, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 4, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
         
         $data->format = $this->_stream->read( 4 );
         
-        $this->_stream->seek( 6, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 6, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
         
         $data->data_reference_index = $this->_stream->bigEndianUnsignedShort();
         
-        $this->_stream->seek( 8, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 8, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
         
         $data->channelcount = $this->_stream->bigEndianUnsignedShort();
         $data->samplesize   = $this->_stream->bigEndianUnsignedShort();
         
-        $this->_stream->seek( 4, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 4, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
         
         $data->samplerate = $this->_stream->bigEndianFixedPoint( 16, 16 );
         
@@ -204,24 +210,24 @@ final class Woops_Mpeg4_Atom_Stsd extends Woops_Mpeg4_FullBox
      */
     protected function _visualSampleEntry()
     {
-        $data = new stdClass();
+        $data = new \stdClass();
         
-        $this->_stream->seek( 4, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 4, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
         
         $data->codingname = $this->_stream->read( 4 );
         
-        $this->_stream->seek( 6, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 6, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
         
         $data->data_reference_index = $this->_stream->bigEndianUnsignedShort();
         
-        $this->_stream->seek( 16, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 16, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
         
         $data->width           = $this->_stream->bigEndianUnsignedShort();
         $data->height          = $this->_stream->bigEndianUnsignedShort();
         $data->horizresolution = $this->_stream->bigEndianFixedPoint( 16, 16 );
         $data->vertresolution  = $this->_stream->bigEndianFixedPoint( 16, 16 );
         
-        $this->_stream->seek( 4, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 4, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
         
         $data->frame_count    = $this->_stream->bigEndianUnsignedShort();
         
@@ -231,7 +237,7 @@ final class Woops_Mpeg4_Atom_Stsd extends Woops_Mpeg4_FullBox
             
             $data->compressorname = $this->_stream->read( $compressorNameLength );
             
-            $this->_stream->seek( 31 - strlen( $data->compressorname ), Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 31 - strlen( $data->compressorname ), \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             
         } else {
             
@@ -252,13 +258,13 @@ final class Woops_Mpeg4_Atom_Stsd extends Woops_Mpeg4_FullBox
      */
     protected function _hintSampleEntries()
     {
-        $data = new stdClass();
+        $data = new \stdClass();
         
-        $this->_stream->seek( 4, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 4, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
         
         $data->protocol = $this->_stream->read( 4 );
         
-        $this->_stream->seek( 6, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+        $this->_stream->seek( 6, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
         
         $data->data_reference_index = $this->_stream->bigEndianUnsignedShort();
         

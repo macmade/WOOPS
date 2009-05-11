@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mod\AopTest;
+
 /**
  * AOP test interceptor
  *
@@ -18,17 +24,17 @@
  * @version     1.0
  * @package     Woops.Mod.AopTest
  */
-class Woops_Mod_AopTest_Interceptor extends Woops_Core_Object
+class Interceptor extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 
      */
-    public static function interceptBefore( Woops_Xhtml_Tag $content, stdClass $options )
+    public static function interceptBefore( \Woops\Xhtml\Tag $content, \stdClass $options )
     {
         $message            = $content->div->pre;
         $message[ 'class' ] = 'small';
@@ -39,7 +45,7 @@ class Woops_Mod_AopTest_Interceptor extends Woops_Core_Object
     /**
      * 
      */
-    public static function interceptAfter( Woops_Xhtml_Tag $content, stdClass $options )
+    public static function interceptAfter( \Woops\Xhtml\Tag $content, \stdClass $options )
     {
         $message            = $content->div->pre;
         $message[ 'class' ] = 'small';

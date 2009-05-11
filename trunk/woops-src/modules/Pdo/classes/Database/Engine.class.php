@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mod\Pdo\Database;
+
 /**
  * PDO database engine
  * 
@@ -21,12 +27,12 @@
  * @version     1.0
  * @package     Woops.Mod.Pdo.Database
  */
-final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements Woops_Database_Engine_Interface
+final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\ObjectInterface
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The unique instance of the class (singleton)
@@ -65,22 +71,22 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
      * class (singleton).
      * 
      * @return  void
-     * @throws  Woops_Mod_Pdo_Database_Engine_Exception If PDO is not available
+     * @throws  Woops\Mod\Pdo\Database\Engine\Exception If PDO is not available
      */
     private function __construct()
     {
         // Checks if PDO is available
-        if( !class_exists( 'PDO' ) ) {
+        if( !class_exists( '\PDO' ) ) {
             
             // PDO is not available
-            throw new Woops_Mod_Pdo_Database_Engine_Exception(
+            throw new Engine\Exception(
                 'PDO is not available',
-                Woops_Mod_Pdo_Database_Engine_Exception::EXCEPTION_NO_PDO
+                Engine\Exception::EXCEPTION_NO_PDO
             );
         }
         
         // Gets the available PDO drivers
-        $this->_drivers = array_flip( PDO::getAvailableDrivers() );
+        $this->_drivers = array_flip( \PDO::getAvailableDrivers() );
     }
     
     /**
@@ -91,7 +97,7 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
      * @param   string                                  The name of the called method
      * @param   array                                   The arguments for the called method
      * @return  mixed                                   The result of the PDO method called
-     * @throws  Woops_Mod_Pdo_Database_Engine_Exception If the called method does not exist
+     * @throws  Woops\Mod\Pdo\Database\Engine\Exception If the called method does not exist
      */
     public function __call( $name, array $args = array() )
     {
@@ -99,14 +105,14 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
         if( !is_callable( array( $this->_pdo, $name ) ) ) {
             
             // Called method does not exist
-            throw new Woops_Mod_Pdo_Database_Engine_Exception(
+            throw new Engine\Exception(
                 'The method \'' . $name . '\' cannot be called on the PDO object',
-                Woops_Mod_Pdo_Database_Engine_Exception::EXCEPTION_BAD_METHOD
+                Engine\Exception::EXCEPTION_BAD_METHOD
             );
         }
         
         // Creates a callback
-        $callback = new Woops_Core_Callback( array( $this->_pdo, $name ) );
+        $callback = new \Woops\Core\Callback( array( $this->_pdo, $name ) );
         
         // Invokes the callback and returns it's result
         return $callback->invoke( $args );
@@ -119,13 +125,13 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
      * be cloned (singleton).
      * 
      * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
+     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
      */
     public function __clone()
     {
-        throw new Woops_Core_Singleton_Exception(
+        throw new \Woops\Core\Singleton\Exception(
             'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
+            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
     }
     
@@ -135,7 +141,7 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
      * This method is used to get the unique instance of the class
      * (singleton). If no instance is available, it will create it.
      * 
-     * @return  Woops_Mod_Pdo_Database_Engine   The unique instance of the class
+     * @return  Woops\Mod\Pdo\Database\Engine   The unique instance of the class
      */
     public static function getInstance()
     {
@@ -169,7 +175,7 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
      * @param   string                                  The name of the database to use
      * @param   string                                  The prefix for the database tables
      * @return  void
-     * @throws  Woops_Mod_Pdo_Database_Engine_Exception If the requested driver is not available
+     * @throws  Woops\Mod\Pdo\Database\Engine\Exception If the requested driver is not available
      */
     public function load( $driver, $host, $port, $database, $tablePrefix )
     {
@@ -177,9 +183,9 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
         if( !isset( $this->_drivers[ $driver ] ) ) {
             
             // Error - Driver not available
-            throw new Woops_Mod_Pdo_Database_Engine_Exception(
+            throw new Engine\Exception(
                 'Driver ' . $driver . ' is not available in PDO',
-                Woops_Mod_Pdo_Database_Engine_Exception::EXCEPTION_NO_PDO_DRIVER
+                Engine\Exception::EXCEPTION_NO_PDO_DRIVER
             );
         }
         
@@ -201,7 +207,7 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
      * Database connection
      * 
      * @return  void
-     * @throws  Woops_Mod_Pdo_Database_Engine_Exception If the database connection failed to be established
+     * @throws  Woops\Mod\Pdo\Database\Engine\Exception If the database connection failed to be established
      */
     public function connect( $user, $pass )
     {
@@ -209,14 +215,14 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
         try {
             
             // Creates the PDO object
-            $this->_pdo = new PDO( $this->_dsn, $user, $pass );
+            $this->_pdo = new \PDO( $this->_dsn, $user, $pass );
             
         } catch( Exception $e ) {
             
             // The PDO object cannot be created - Reroute the exception
-            throw new Woops_Mod_Pdo_Database_Engine_Exception(
+            throw new Engine\Exception(
                 $e->getMessage(),
-                Woops_Mod_Pdo_Database_Engine_Exception::EXCEPTION_NO_CONNECTION
+                Engine\Exception::EXCEPTION_NO_CONNECTION
             );
         }
     }
@@ -275,14 +281,14 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
      */
     public function rowCount( $res )
     {
-        if( $res instanceof PDOStatement ) {
+        if( $res instanceof \PDOStatement ) {
             
             return ( array )$res->rowCount();
         }
         
-        throw new Woops_Mod_Pdo_Database_Engine_Exception(
+        throw new Engine\Exception(
             'Passed argument is not a valid PDO statement',
-            Woops_Mod_Pdo_Database_Engine_Exception::EXCEPTION_INVALID_STATEMENT
+            Engine\Exception::EXCEPTION_INVALID_STATEMENT
         );
     }
     
@@ -291,14 +297,14 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
      */
     public function fetchAssoc( $res )
     {
-        if( $res instanceof PDOStatement ) {
+        if( $res instanceof \PDOStatement ) {
             
             return ( array )$res->fetchObject();
         }
         
-        throw new Woops_Mod_Pdo_Database_Engine_Exception(
+        throw new Engine\Exception(
             'Passed argument is not a valid PDO statement',
-            Woops_Mod_Pdo_Database_Engine_Exception::EXCEPTION_INVALID_STATEMENT
+            Engine\Exception::EXCEPTION_INVALID_STATEMENT
         );
     }
     
@@ -307,14 +313,14 @@ final class Woops_Mod_Pdo_Database_Engine extends Woops_Core_Object implements W
      */
     public function fetchObject( $res )
     {
-        if( $res instanceof PDOStatement ) {
+        if( $res instanceof \PDOStatement ) {
             
             return $res->fetchObject();
         }
         
-        throw new Woops_Mod_Pdo_Database_Engine_Exception(
+        throw new Engine\Exception(
             'Passed argument is not a valid PDO statement',
-            Woops_Mod_Pdo_Database_Engine_Exception::EXCEPTION_INVALID_STATEMENT
+            Engine\Exception::EXCEPTION_INVALID_STATEMENT
         );
     }
     

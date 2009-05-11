@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4\Binary;
+
 /**
  * MPEG-4 binary stream
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Mpeg4.Binary
  */
-class Woops_Mpeg4_Binary_Stream extends Woops_Binary_Stream
+class Stream extends \Woops\Binary\Stream
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Decodes a matrix field
@@ -41,7 +47,7 @@ class Woops_Mpeg4_Binary_Stream extends Woops_Binary_Stream
     public function matrix()
     {
         // Storage for the matrix
-        $matrix    = new stdClass();
+        $matrix    = new \stdClass();
         
         // Process the matrix field from the atom data
         $matrix->a = $this->bigEndianFixedPoint( 16, 16 );

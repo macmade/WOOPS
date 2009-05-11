@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Png;
+
 /**
  * PNG file
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Png
  */
-class Woops_Png_File extends Woops_Core_Object implements Iterator, ArrayAccess
+class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Allows invalid chunk structure (not as in the PNG specification)
@@ -277,7 +283,7 @@ class Woops_Png_File extends Woops_Core_Object implements Iterator, ArrayAccess
         foreach( $this->_chunks as $chunk ) {
             
             // Creates a storage object
-            $chunkData               = new stdClass();
+            $chunkData               = new \stdClass();
             
             // Sets the common properties
             $chunkData->type         = $chunk->getType();
@@ -303,7 +309,7 @@ class Woops_Png_File extends Woops_Core_Object implements Iterator, ArrayAccess
      * 
      * @param   string                      The type of the chunk to add
      * @return  object                      The chunk object corresponding to the given type
-     * @throws  Woops_Png_File_Exception    If the chunk type is invalid
+     * @throws  Woops\Png\File\Exception    If the chunk type is invalid
      */
     public function addChunk( $chunkType )
     {
@@ -314,14 +320,14 @@ class Woops_Png_File extends Woops_Core_Object implements Iterator, ArrayAccess
         if( $invalid && !$this->_allowInvalidStucture ) {
             
             // Invalid chunk
-            throw new Woops_Png_File_Exception(
+            throw new File\Exception(
                 $invalid,
-                Woops_Png_File_Exception::EXCEPTION_INVALID_CHUNK
+                File\Exception::EXCEPTION_INVALID_CHUNK
             );
         }
         
         // Name of the chunk class
-        $className = 'Woops_Png_Chunk_' . ucfirst( strtolower( $chunkType ) );
+        $className = 'Chunk\\' . ucfirst( strtolower( $chunkType ) );
         
         // Checks if the class exists
         if( class_exists( $className ) ) {
@@ -332,7 +338,7 @@ class Woops_Png_File extends Woops_Core_Object implements Iterator, ArrayAccess
         } else {
             
             // Chunk is unknown - Creates an instance of the Png_UnknownChunk class
-            $chunk = new Woops_Png_UnknownChunk( $this, $chunkType );
+            $chunk = new UnknownChunk( $this, $chunkType );
         }
         
         // Adds the chunk to the list of the chunks

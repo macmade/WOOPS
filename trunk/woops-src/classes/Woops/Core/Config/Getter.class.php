@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Config;
+
 /**
  * WOOPS configuration getter class
  *
@@ -18,32 +24,27 @@
  * @version     1.0
  * @package     Woops.Core.Config
  */
-final class Woops_Core_Config_Getter extends Woops_Core_Object implements Woops_Core_Singleton_Interface
+final class Getter extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
-    
-    /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance = NULL;
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The environment object
      */
-    private $_env             = NULL;
+    protected $_env     = NULL;
     
     /**
      * The WOOPS configuration array
      */
-    private $_conf            = array();
+    protected $_conf    = array();
     
     /**
      * The configuration options for the WOOPS modules
      */
-    private $_modConf         = array();
+    protected $_modConf = array();
     
     /**
      * Class constructor
@@ -58,10 +59,10 @@ final class Woops_Core_Config_Getter extends Woops_Core_Object implements Woops_
      * 
      * @return  void
      */
-    private function __construct()
+    protected function __construct()
     {
         // Gets the instance of the environment object
-        $this->_env = Woops_Core_Env_Getter::getInstance();
+        $this->_env = \Woops\Core\Env\Getter::getInstance();
         
         // Gets the path to the WOOPS configuration file
         $confFile  = $this->_env->getPath( 'config/woops.ini.php' );
@@ -92,23 +93,6 @@ final class Woops_Core_Config_Getter extends Woops_Core_Object implements Woops_
     }
     
     /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new Woops_Core_Singleton_Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
      * Gets a section from the WOOPS configuration
      * 
      * @param   string  The name of the section
@@ -131,7 +115,7 @@ final class Woops_Core_Config_Getter extends Woops_Core_Object implements Woops_
      * @param   string  The error message to display.
      * @return  void
      */
-    private static function _error( $message )
+    protected static function _error( $message )
     {
         // Gets the debug backtrace
         $backTrace = debug_backtrace();
@@ -173,38 +157,16 @@ final class Woops_Core_Config_Getter extends Woops_Core_Object implements Woops_
     }
     
     /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops_Core_Env_Getter   The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
-    }
-    
-    /**
      * Reads a configuration file from a WOOPS module
      * 
      * @param   string  The name of the module
      * @return  void
-     * @throws  Woops_Core_Config_Getter_Exception  If the configuration file is not readable
+     * @throws  Woops\Core\Config\Getter\Exception  If the configuration file is not readable
      */
-    private function _loadModuleConf( $name )
+    protected function _loadModuleConf( $name )
     {
         // Gets the path to the module's configuration file
-        $modConf = Woops_Core_Module_Manager::getInstance()->getModulePath( $name ) . 'config.ini.php';
+        $modConf = \Woops\Core\Module\Manager::getInstance()->getModulePath( $name ) . 'config.ini.php';
         
         // Checks if the file exists
         if( file_exists( $modConf ) ) {
@@ -213,9 +175,9 @@ final class Woops_Core_Config_Getter extends Woops_Core_Object implements Woops_
             if( !is_readable( $modConf ) ) {
                 
                 // Error - The configuration file is not readable
-                throw new Woops_Core_Config_Getter_Exception(
+                throw new Getter\Exception(
                     'The WOOPS configuration file for module \'' . $name . '\' is not readable',
-                    Woops_Core_Config_Getter_Exception::EXCEPTION_CONFIG_FILE_NOT_READABLE
+                    Getter\Exception::EXCEPTION_CONFIG_FILE_NOT_READABLE
                 );
             }
             

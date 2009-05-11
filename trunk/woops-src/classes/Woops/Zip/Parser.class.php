@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Zip;
+
 /**
  * ZIP file parser
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Zip
  */
-class Woops_Zip_Parser extends Woops_Core_Object
+class Parser extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The ZIP file object
@@ -49,13 +55,13 @@ class Woops_Zip_Parser extends Woops_Core_Object
     public function __construct( $file )
     {
         // Create a new ZIP file object
-        $this->_file     = new Woops_Zip_File();
+        $this->_file     = new File();
         
         // Stores the file path
         $this->_filePath = $file;
         
         // Creates the binary stream
-        $this->_stream   = new Woops_Zip_Binary_File_Stream( $file );
+        $this->_stream   = new Binary\File\Stream( $file );
         
         // Parses the file
         $this->_parseFile();
@@ -73,14 +79,14 @@ class Woops_Zip_Parser extends Woops_Core_Object
         if( $offset === false ) {
             
             // Error - No central directory
-            throw new Woops_Zip_Parser_Exception(
+            throw new Parser\Exception(
                 'No ZIP central directory found',
-                Woops_Zip_Parser_Exception::EXCEPTION_NO_CENTRAL_DIRECTORY
+                Parser\Exception::EXCEPTION_NO_CENTRAL_DIRECTORY
             );
         }
         
         // Moves to the start of the central directory
-        $this->_stream->seek( $offset, Woops_Zip_Binary_File_Stream::SEEK_SET );
+        $this->_stream->seek( $offset, Binary\File\Stream::SEEK_SET );
         
         // Gets the central directory
         $centralDirectory = $this->_file->getCentralDirectory();
@@ -98,7 +104,7 @@ class Woops_Zip_Parser extends Woops_Core_Object
             $offset = $centralFileHeader->getLocalFileHeaderOffset();
             
             // Moves to the start of the local file header
-            $this->_stream->seek( $offset, Woops_Zip_Binary_File_Stream::SEEK_SET );
+            $this->_stream->seek( $offset, Binary\File\Stream::SEEK_SET );
             
             // Gets the local file header signature
             $signature = $this->_stream->read( 4 );
@@ -107,27 +113,27 @@ class Woops_Zip_Parser extends Woops_Core_Object
             if( $signature !== $localSignature ) {
                 
                 // Error - Invalid local file header signature
-                throw new Woops_Zip_Parser_Exception(
+                throw new Parser\Exception(
                     'Invalid ZIP local file header signature (' . $signature . ')',
-                    Woops_Zip_Parser_Exception::EXCEPTION_BAD_FILE_HEADER_SIGNATURE
+                    Parser\Exception::EXCEPTION_BAD_FILE_HEADER_SIGNATURE
                 );
             }
             
             // Creates a new local file header and adds it to the file
-            $header = new Woops_Zip_Local_File_Header();
+            $header = new Local\File\Header();
             $this->_file->addLocalFileHeader( $header );
             
             // Processes the local file header data
             $header->processData( $this->_stream );
             
             // Do not process the file data for now
-            $this->_stream->seek( $centralFileHeader->getCompressedSize(), Woops_Zip_Binary_File_Stream::SEEK_CUR );
+            $this->_stream->seek( $centralFileHeader->getCompressedSize(), Binary\File\Stream::SEEK_CUR );
             
             // Checks if a data descriptor is present
             if( $header->hasDataDescriptor() ) {
                 
                 // Creates a new data descriptor and stores it
-                $descriptor = new Woops_Zip_Data_Descriptor();
+                $descriptor = new Data\Descriptor();
                 $this->_file->addDataDescriptor( $descriptor );
                 
                 // Processes the data descriptor data
@@ -139,7 +145,7 @@ class Woops_Zip_Parser extends Woops_Core_Object
     /**
      * Gets the ZIP file object
      * 
-     * @return  Woops_Zip_File  The ZIP file object
+     * @return  Woops\Zip\File  The ZIP file object
      */
     public function getFile()
     {

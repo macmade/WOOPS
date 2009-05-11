@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Ita2;
+
 /**
  * ITA-2 (International Telegraph Alphabet) generator class
  * 
@@ -24,12 +30,12 @@
  * @version     1.0
  * @package     Woops.Ita2
  */
-class Woops_Ita2_Generator extends Woops_Core_Object
+class Generator extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 
@@ -146,9 +152,9 @@ class Woops_Ita2_Generator extends Woops_Core_Object
     {
         if( !function_exists( 'imagecreatetruecolor' ) ) {
             
-            throw new Woops_Ita2_Generator_Exception(
+            throw new Generator\Exception(
                 'GD is not available',
-                Woops_Ita2_Generator_Exception::EXCEPTION_NO_GD
+                Generator\Exception::EXCEPTION_NO_GD
             );
         }
         

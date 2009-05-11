@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Png;
+
 /**
  * Abstract for the PNG chunks
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Png
  */
-abstract class Woops_Png_Chunk extends Woops_Core_Object
+abstract class Chunk extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * Gets the processed data
@@ -60,10 +66,10 @@ abstract class Woops_Png_Chunk extends Woops_Core_Object
     /**
      * Class constructor
      * 
-     * @param   Png_File    The instance of the Png_File class in which the chunk is placed
+     * @param   Woops\Png\File  The instance of the PNG file class in which the chunk is placed
      * @return  NULL
      */
-    public function __construct( Woops_Png_File $pngFile )
+    public function __construct( File $pngFile )
     {
         // Stores a reference to the PNG file
         $this->_pngFile = $pngFile;
@@ -107,7 +113,7 @@ abstract class Woops_Png_Chunk extends Woops_Core_Object
     {
         $this->_data       = $data;
         $this->_dataLength = strlen( $data );
-        $this->_stream     = new Woops_Png_Binary_Stream( $data );
+        $this->_stream     = new Binary\Stream( $data );
     }
     
     /**

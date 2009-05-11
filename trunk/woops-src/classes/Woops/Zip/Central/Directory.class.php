@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Zip\Central;
+
 /**
  * ZIP central directory
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Zip.Central
  */
-class Woops_Zip_Central_Directory extends Woops_Core_Object implements Iterator
+class Directory extends \Woops\Core\Object implements \Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The central file headers
@@ -43,7 +49,7 @@ class Woops_Zip_Central_Directory extends Woops_Core_Object implements Iterator
     /**
      * Gets the current file header object (SPL Iterator method)
      * 
-     * @return  Woops_Zip_Central_File_Header   The current file header object
+     * @return  Woops\Zip\Central\File\Header   The current file header object
      */
     public function current()
     {
@@ -93,10 +99,10 @@ class Woops_Zip_Central_Directory extends Woops_Core_Object implements Iterator
     /**
      * Process the raw data from a binary stream
      * 
-     * @param   Woops_Zip_Binary_Stream The binary stream
+     * @param   Woops\Zip\Binary\Stream The binary stream
      * @return  void
      */
-    public function processData( Woops_Zip_Binary_Stream $stream )
+    public function processData( \Woops\Zip\Binary\Stream $stream )
     {
         // Resets the digital signature
         $this->_digitalSignature = NULL;
@@ -111,9 +117,9 @@ class Woops_Zip_Central_Directory extends Woops_Core_Object implements Iterator
         if( $signature !== $fileHeaderSignature ) {
             
             // Error - Invalid central file header signature
-            throw new Woops_Zip_Central_Directory_Exception(
+            throw new Directory\Exception(
                 'Invalid central file header signature',
-                Woops_Zip_Central_Directory_Exception::EXCEPTION_BAD_FILE_HEADER_SIGNATURE
+                Directory\Exception::EXCEPTION_BAD_FILE_HEADER_SIGNATURE
             );
         }
         
@@ -121,7 +127,7 @@ class Woops_Zip_Central_Directory extends Woops_Core_Object implements Iterator
         while( $signature === $fileHeaderSignature ) {
             
             // Creates and stores the central file header object
-            $fileHeader = new Woops_Zip_Central_File_Header();
+            $fileHeader = new File\Header();
             $this->_centralFileHeaders[] = $fileHeader;
             
             // Processes the central file header data
@@ -135,7 +141,7 @@ class Woops_Zip_Central_Directory extends Woops_Core_Object implements Iterator
         if( $signature === chr( 0x50 ) . chr( 0x4B ) . chr( 0x05 ) . chr( 0x05 ) ) {
             
             // Creates the digital signature
-            $this->_digitalSignature = new Woops_Zip_Digital_Signature();
+            $this->_digitalSignature = new \Woops\Zip\Digital\Signature();
             
             // Process the digital signature data
             $this->_digitalSignature->processData( $stream );
@@ -146,7 +152,7 @@ class Woops_Zip_Central_Directory extends Woops_Core_Object implements Iterator
         } else {
             
             // Rewinds the stream
-            $stream->seek( -4, Woops_Zip_Binary_Stream::SEEK_CUR );
+            $stream->seek( -4, \Woops\Zip\Binary\Stream::SEEK_CUR );
         }
     }
 }

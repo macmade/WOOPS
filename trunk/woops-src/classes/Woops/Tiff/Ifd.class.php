@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Tiff;
+
 /**
  * TIFF Image File Directory (IFD)
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Tiff
  */
-class Woops_Tiff_Ifd extends Woops_Core_Object implements Iterator
+class Ifd extends \Woops\Core\Object implements \Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The TIFF tag types in TIFF revision 6
@@ -124,91 +130,91 @@ class Woops_Tiff_Ifd extends Woops_Core_Object implements Iterator
     protected static $_types = array(
         
         // Tags in TIFF revision 6
-        0x00FE => 'Woops_Tiff_Tag_NewSubfileType',
-        0x00FF => 'Woops_Tiff_Tag_SubfileType',
-        0x0100 => 'Woops_Tiff_Tag_Image_Width',
-        0x0101 => 'Woops_Tiff_Tag_Image_Length',
-        0x0102 => 'Woops_Tiff_Tag_BitsPerSample',
-        0x0103 => 'Woops_Tiff_Tag_Compression',
-        0x0106 => 'Woops_Tiff_Tag_PhotometricInterpretation',
-        0x0107 => 'Woops_Tiff_Tag_Threshholding',
-        0x0108 => 'Woops_Tiff_Tag_Cell_Width',
-        0x0109 => 'Woops_Tiff_Tag_Cell_Length',
-        0x010A => 'Woops_Tiff_Tag_FillOrder',
-        0x010D => 'Woops_Tiff_Tag_DocumentName',
-        0x010E => 'Woops_Tiff_Tag_Image_Description',
-        0x010F => 'Woops_Tiff_Tag_Make',
-        0x0110 => 'Woops_Tiff_Tag_Model',
-        0x0111 => 'Woops_Tiff_Tag_Strip_Offsets',
-        0x0112 => 'Woops_Tiff_Tag_Orientation',
-        0x0115 => 'Woops_Tiff_Tag_SamplesPerPixel',
-        0x0116 => 'Woops_Tiff_Tag_RowsPerStrip',
-        0x0117 => 'Woops_Tiff_Tag_Strip_ByteCounts',
-        0x0118 => 'Woops_Tiff_Tag_MinSampleValue',
-        0x0119 => 'Woops_Tiff_Tag_MaxSampleValue',
-        0x011A => 'Woops_Tiff_Tag_X_Resolution',
-        0x011B => 'Woops_Tiff_Tag_Y_Resolution',
-        0x011C => 'Woops_Tiff_Tag_PlanarConfiguration',
-        0x011D => 'Woops_Tiff_Tag_Page_Name',
-        0x011E => 'Woops_Tiff_Tag_X_Position',
-        0x011F => 'Woops_Tiff_Tag_Y_Position',
-        0x0120 => 'Woops_Tiff_Tag_Free_Offsets',
-        0x0121 => 'Woops_Tiff_Tag_Free_ByteCounts',
-        0x0122 => 'Woops_Tiff_Tag_Gray_Response_Unit',
-        0x0123 => 'Woops_Tiff_Tag_Gray_Response_Curve',
-        0x0124 => 'Woops_Tiff_Tag_T4Options',
-        0x0125 => 'Woops_Tiff_Tag_T6Options',
-        0x0128 => 'Woops_Tiff_Tag_ResolutionUnit',
-        0x0129 => 'Woops_Tiff_Tag_Page_Number',
-        0x012D => 'Woops_Tiff_Tag_TransferFunction',
-        0x0131 => 'Woops_Tiff_Tag_Software',
-        0x0132 => 'Woops_Tiff_Tag_DateTime',
-        0x013B => 'Woops_Tiff_Tag_Artist',
-        0x013C => 'Woops_Tiff_Tag_HostComputer',
-        0x013D => 'Woops_Tiff_Tag_Predictor',
-        0x013E => 'Woops_Tiff_Tag_WhitePoint',
-        0x013F => 'Woops_Tiff_Tag_PrimaryChromaticities',
-        0x0140 => 'Woops_Tiff_Tag_ColorMap',
-        0x0141 => 'Woops_Tiff_Tag_HalftoneHints',
-        0x0142 => 'Woops_Tiff_Tag_Tile_Width',
-        0x0143 => 'Woops_Tiff_Tag_Tile_Length',
-        0x0144 => 'Woops_Tiff_Tag_Tile_Offsets',
-        0x0145 => 'Woops_Tiff_Tag_Tile_ByteCounts',
-        0x014C => 'Woops_Tiff_Tag_Ink_Set',
-        0x014D => 'Woops_Tiff_Tag_Ink_Names',
-        0x014E => 'Woops_Tiff_Tag_NumberOfInks',
-        0x0150 => 'Woops_Tiff_Tag_DotRange',
-        0x0151 => 'Woops_Tiff_Tag_TargetPrinter',
-        0x0152 => 'Woops_Tiff_Tag_ExtraSamples',
-        0x0153 => 'Woops_Tiff_Tag_SampleFormat',
-        0x0154 => 'Woops_Tiff_Tag_SMinSampleValue',
-        0x0155 => 'Woops_Tiff_Tag_SMaxSampleValue',
-        0x0156 => 'Woops_Tiff_Tag_TransferRange',
-        0x0200 => 'Woops_Tiff_Tag_Jpeg_Proc',
-        0x0201 => 'Woops_Tiff_Tag_Jpeg_Interchange_Format',
-        0x0202 => 'Woops_Tiff_Tag_Jpeg_Interchange_Format_Length',
-        0x0203 => 'Woops_Tiff_Tag_Jpeg_RestartInterval',
-        0x0205 => 'Woops_Tiff_Tag_Jpeg_LosslessPredictors',
-        0x0206 => 'Woops_Tiff_Tag_Jpeg_PointTransforms',
-        0x0207 => 'Woops_Tiff_Tag_Jpeg_QTables',
-        0x0208 => 'Woops_Tiff_Tag_Jpeg_DcTables',
-        0x0209 => 'Woops_Tiff_Tag_Jpeg_AcTables',
-        0x0211 => 'Woops_Tiff_Tag_YCbCr_Coefficients',
-        0x0212 => 'Woops_Tiff_Tag_YCbCr_SubSampling',
-        0x0213 => 'Woops_Tiff_Tag_YCbCr_Positioning',
-        0x0214 => 'Woops_Tiff_Tag_ReferenceBlackWhite',
-        0x8298 => 'Woops_Tiff_Tag_Copyright',
+        0x00FE => '\Woops\Tiff\Tag\NewSubfileType',
+        0x00FF => '\Woops\Tiff\Tag\SubfileType',
+        0x0100 => '\Woops\Tiff\Tag\Image\Width',
+        0x0101 => '\Woops\Tiff\Tag\Image\Length',
+        0x0102 => '\Woops\Tiff\Tag\BitsPerSample',
+        0x0103 => '\Woops\Tiff\Tag\Compression',
+        0x0106 => '\Woops\Tiff\Tag\PhotometricInterpretation',
+        0x0107 => '\Woops\Tiff\Tag\Threshholding',
+        0x0108 => '\Woops\Tiff\Tag\Cell\Width',
+        0x0109 => '\Woops\Tiff\Tag\Cell\Length',
+        0x010A => '\Woops\Tiff\Tag\FillOrder',
+        0x010D => '\Woops\Tiff\Tag\DocumentName',
+        0x010E => '\Woops\Tiff\Tag\Image\Description',
+        0x010F => '\Woops\Tiff\Tag\Make',
+        0x0110 => '\Woops\Tiff\Tag\Model',
+        0x0111 => '\Woops\Tiff\Tag\Strip\Offsets',
+        0x0112 => '\Woops\Tiff\Tag\Orientation',
+        0x0115 => '\Woops\Tiff\Tag\SamplesPerPixel',
+        0x0116 => '\Woops\Tiff\Tag\RowsPerStrip',
+        0x0117 => '\Woops\Tiff\Tag\Strip\ByteCounts',
+        0x0118 => '\Woops\Tiff\Tag\MinSampleValue',
+        0x0119 => '\Woops\Tiff\Tag\MaxSampleValue',
+        0x011A => '\Woops\Tiff\Tag\X\Resolution',
+        0x011B => '\Woops\Tiff\Tag\Y\Resolution',
+        0x011C => '\Woops\Tiff\Tag\PlanarConfiguration',
+        0x011D => '\Woops\Tiff\Tag\Page\Name',
+        0x011E => '\Woops\Tiff\Tag\X\Position',
+        0x011F => '\Woops\Tiff\Tag\Y\Position',
+        0x0120 => '\Woops\Tiff\Tag\Free\Offsets',
+        0x0121 => '\Woops\Tiff\Tag\Free\ByteCounts',
+        0x0122 => '\Woops\Tiff\Tag\Gray\Response\Unit',
+        0x0123 => '\Woops\Tiff\Tag\Gray\Response\Curve',
+        0x0124 => '\Woops\Tiff\Tag\T4Options',
+        0x0125 => '\Woops\Tiff\Tag\T6Options',
+        0x0128 => '\Woops\Tiff\Tag\ResolutionUnit',
+        0x0129 => '\Woops\Tiff\Tag\Page\Number',
+        0x012D => '\Woops\Tiff\Tag\TransferFunction',
+        0x0131 => '\Woops\Tiff\Tag\Software',
+        0x0132 => '\Woops\Tiff\Tag\DateTime',
+        0x013B => '\Woops\Tiff\Tag\Artist',
+        0x013C => '\Woops\Tiff\Tag\HostComputer',
+        0x013D => '\Woops\Tiff\Tag\Predictor',
+        0x013E => '\Woops\Tiff\Tag\WhitePoint',
+        0x013F => '\Woops\Tiff\Tag\PrimaryChromaticities',
+        0x0140 => '\Woops\Tiff\Tag\ColorMap',
+        0x0141 => '\Woops\Tiff\Tag\HalftoneHints',
+        0x0142 => '\Woops\Tiff\Tag\Tile\Width',
+        0x0143 => '\Woops\Tiff\Tag\Tile\Length',
+        0x0144 => '\Woops\Tiff\Tag\Tile\Offsets',
+        0x0145 => '\Woops\Tiff\Tag\Tile\ByteCounts',
+        0x014C => '\Woops\Tiff\Tag\Ink\Set',
+        0x014D => '\Woops\Tiff\Tag\Ink\Names',
+        0x014E => '\Woops\Tiff\Tag\NumberOfInks',
+        0x0150 => '\Woops\Tiff\Tag\DotRange',
+        0x0151 => '\Woops\Tiff\Tag\TargetPrinter',
+        0x0152 => '\Woops\Tiff\Tag\ExtraSamples',
+        0x0153 => '\Woops\Tiff\Tag\SampleFormat',
+        0x0154 => '\Woops\Tiff\Tag\SMinSampleValue',
+        0x0155 => '\Woops\Tiff\Tag\SMaxSampleValue',
+        0x0156 => '\Woops\Tiff\Tag\TransferRange',
+        0x0200 => '\Woops\Tiff\Tag\Jpeg\Proc',
+        0x0201 => '\Woops\Tiff\Tag\Jpeg\Interchange\Format',
+        0x0202 => '\Woops\Tiff\Tag\Jpeg\Interchange\Format\Length',
+        0x0203 => '\Woops\Tiff\Tag\Jpeg\RestartInterval',
+        0x0205 => '\Woops\Tiff\Tag\Jpeg\LosslessPredictors',
+        0x0206 => '\Woops\Tiff\Tag\Jpeg\PointTransforms',
+        0x0207 => '\Woops\Tiff\Tag\Jpeg\QTables',
+        0x0208 => '\Woops\Tiff\Tag\Jpeg\DcTables',
+        0x0209 => '\Woops\Tiff\Tag\Jpeg\AcTables',
+        0x0211 => '\Woops\Tiff\Tag\YCbCr\Coefficients',
+        0x0212 => '\Woops\Tiff\Tag\YCbCr\SubSampling',
+        0x0213 => '\Woops\Tiff\Tag\YCbCr\Positioning',
+        0x0214 => '\Woops\Tiff\Tag\ReferenceBlackWhite',
+        0x8298 => '\Woops\Tiff\Tag\Copyright',
         
         // Third-party tags
-        0x02BC => 'Woops_Tiff_Tag_Xmp',
-        0x83BB => 'Woops_Tiff_Tag_Iptc',
-        0x8649 => 'Woops_Tiff_Tag_Photoshop',
-        0x8773 => 'Woops_Tiff_Tag_IccProfile',
+        0x02BC => '\Woops\Tiff\Tag\Xmp',
+        0x83BB => '\Woops\Tiff\Tag\Iptc',
+        0x8649 => '\Woops\Tiff\Tag\Photoshop',
+        0x8773 => '\Woops\Tiff\Tag\IccProfile',
         
         // EXIF pointer tags
-        0x8769 => 'Woops_Tiff_Tag_Exif_Ifd_Pointer',
-        0x8825 => 'Woops_Tiff_Tag_Exif_Gps_Ifd_Pointer',
-        0xA005 => 'Woops_Tiff_Tag_Exif_Interoperability_Ifd_Pointer'
+        0x8769 => '\Woops\Tiff\Tag\Exif\Ifd\Pointer',
+        0x8825 => '\Woops\Tiff\Tag\Exif\Gps\Ifd\Pointer',
+        0xA005 => '\Woops\Tiff\Tag\Exif\Interoperability\Ifd\Pointer'
         
     );
     
@@ -240,10 +246,10 @@ class Woops_Tiff_Ifd extends Woops_Core_Object implements Iterator
     /**
      * Class constructor
      * 
-     * @param   Woops_Tiff_File The TIFF file in which the IFD is contained
+     * @param   Woops\Tiff\File The TIFF file in which the IFD is contained
      * @return  void
      */
-    public function __construct( Woops_Tiff_File $file )
+    public function __construct( File $file )
     {
         $this->_file   = $file;
         $this->_header = $this->_file->getHeader();
@@ -252,7 +258,7 @@ class Woops_Tiff_Ifd extends Woops_Core_Object implements Iterator
     /**
      * Gets the current tag object (SPL Iterator method)
      * 
-     * @return  Woops_Tiff_Tag  The current TIFF tag object
+     * @return  Woops\Tiff\Tag  The current TIFF tag object
      */
     public function current()
     {
@@ -304,7 +310,7 @@ class Woops_Tiff_Ifd extends Woops_Core_Object implements Iterator
      * 
      * @return  void
      */
-    public function processData( Woops_Tiff_Binary_Stream $stream )
+    public function processData( Binary\Stream $stream )
     {
         // Resets the tag array
         $this->_tags = array();
@@ -324,17 +330,17 @@ class Woops_Tiff_Ifd extends Woops_Core_Object implements Iterator
                 // Creates a new tag
                 $tag = $this->newTag( $type );
                 
-            } catch( Woops_Tiff_Ifd_Exception $e ) {
+            } catch( Ifd\Exception $e ) {
                 
                 // Checks if the exception was made for an unknown TIFF tag
-                if( $e->getCode() !== Woops_Tiff_Ifd_Exception::EXCEPTION_INVALID_TAG_TYPE ) {
+                if( $e->getCode() !== Ifd\Exception::EXCEPTION_INVALID_TAG_TYPE ) {
                     
                     // No - Throws the exception again
                     throw $e;
                 }
                 
                 // Creates an unknown tag object, and adds it
-                $tag = new Woops_Tiff_UnknownTag( $this->_file, $type );
+                $tag = new UnknownTag( $this->_file, $type );
                 $this->addTag( $tag );
             }
             
@@ -354,10 +360,10 @@ class Woops_Tiff_Ifd extends Woops_Core_Object implements Iterator
                 $ifdOffset = $tag->getValue();
                 
                 // Moves to the IFD offset
-                $stream->seek( $ifdOffset, Woops_Tiff_Binary_Stream::SEEK_SET );
+                $stream->seek( $ifdOffset, Binary\Stream::SEEK_SET );
                 
                 // Exif IFD classname
-                $classname = ( $type === self::TAG_EXIF_IFD_POINTER ) ? 'Woops_Exif_Tiff_Ifd' : ( ( $type === self::TAG_EXIF_GPS_IFD_POINTER ) ? 'Woops_Exif_Tiff_Gps_Ifd' : 'Woops_Exif_Tiff_Interoperability_Ifd' );
+                $classname = ( $type === self::TAG_EXIF_IFD_POINTER ) ? '\Woops\Exif\Tiff\Ifd' : ( ( $type === self::TAG_EXIF_GPS_IFD_POINTER ) ? '\Woops\Exif\Tiff\Gps\Ifd' : '\Woops\Exif\Tiff\Interoperability\Ifd' );
                 
                 // Creates the EXIF IFD
                 $ifd = $this->_file->newIfd( $classname );
@@ -366,7 +372,7 @@ class Woops_Tiff_Ifd extends Woops_Core_Object implements Iterator
                 $ifd->processData( $stream );
                 
                 // Rewinds the stream
-                $stream->seek( $offset, Woops_Tiff_Binary_Stream::SEEK_SET );
+                $stream->seek( $offset, Binary\Stream::SEEK_SET );
                 
             }
         }
@@ -400,8 +406,8 @@ class Woops_Tiff_Ifd extends Woops_Core_Object implements Iterator
      * Creates a new tag in the IFD
      * 
      * @param   int                         The tag type (one of the TAG_XXX constant)
-     * @return  Woops_Tiff_Tag              The tag object
-     * @throws  Woops_Tiff_Ifd_Exception    If the tag type is invalid
+     * @return  Woops\Tiff\Tag              The tag object
+     * @throws  Woops\Tiff\Ifd\Exception    If the tag type is invalid
      */
     public function newTag( $type )
     {
@@ -412,9 +418,9 @@ class Woops_Tiff_Ifd extends Woops_Core_Object implements Iterator
         if( !isset( self::$_types[ $type ] ) ) {
             
             // Error - Invalid value type
-            throw new Woops_Tiff_Ifd_Exception(
+            throw new Ifd\Exception(
                 'Invalid tag type (' .  $type . ')',
-                Woops_Tiff_Ifd_Exception::EXCEPTION_INVALID_TAG_TYPE
+                Ifd\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         
@@ -432,10 +438,10 @@ class Woops_Tiff_Ifd extends Woops_Core_Object implements Iterator
     /**
      * Adds a tag in the IFD
      * 
-     * @param   Woops_Tiff_Tag  The tag object
+     * @param   Woops\Tiff\Tag  The tag object
      * @return  void
      */
-    public function addTag( Woops_Tiff_Tag $tag )
+    public function addTag( Tag $tag )
     {
         $this->_tags[] = $tag;
     }

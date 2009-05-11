@@ -11,6 +11,12 @@
 
 # $Id: Stream.class.php 637 2009-03-09 09:05:52Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf\Tag\Set;
+
 /**
  * SWF SetBackgroundColor tag
  * 
@@ -21,12 +27,12 @@
  * @version     1.0
  * @package     Woops.Swf.Tag.Set
  */
-class Woops_Swf_Tag_Set_BackgroundColor extends Woops_Swf_Tag
+class BackgroundColor extends \Woops\Swf\Tag
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The SWF tag type
@@ -41,15 +47,15 @@ class Woops_Swf_Tag_Set_BackgroundColor extends Woops_Swf_Tag
     /**
      * Class constructor
      * 
-     * @param   Woops_Swf_File  The instance of the SWF file in which the tag is contained
+     * @param   Woops\Swf\File  The instance of the SWF file in which the tag is contained
      */
-    public function __construct( Woops_Swf_File $file )
+    public function __construct( \Woops\Swf\File $file )
     {
         // Calls the parent constructor
         parent::__construct( $file );
         
         // Creates a new RGB record
-        $this->_rgb = new Woops_Swf_Record_Rgb();
+        $this->_rgb = new \Woops\Swf\Record\Rgb();
     }
     
     /**
@@ -57,7 +63,7 @@ class Woops_Swf_Tag_Set_BackgroundColor extends Woops_Swf_Tag
      * 
      * @return  void
      */
-    public function processData( Woops_Swf_Binary_Stream $stream )
+    public function processData( \Woops\Swf\Binary\Stream $stream )
     {
         $this->_rgb->processData( $stream );
     }
@@ -65,7 +71,7 @@ class Woops_Swf_Tag_Set_BackgroundColor extends Woops_Swf_Tag
     /**
      * Gets the RGB record
      * 
-     * @return  Woops_Swf_Record_Rgb    The RGB record
+     * @return  Woops\Swf\Record\Rgb    The RGB record
      */
     public function getRgb()
     {

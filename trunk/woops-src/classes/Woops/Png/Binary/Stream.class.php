@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Png\Binary;
+
 /**
  * PNG binary stream
  *
@@ -18,10 +24,10 @@
  * @version     1.0
  * @package     Woops.Png.Binary
  */
-class Woops_Png_Binary_Stream extends Woops_Binary_Stream
+class Stream extends \Woops\Binary\Stream
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
 }

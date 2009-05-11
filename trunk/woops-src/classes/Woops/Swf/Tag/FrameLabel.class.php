@@ -11,6 +11,12 @@
 
 # $Id: Stream.class.php 637 2009-03-09 09:05:52Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Swf\Tag;
+
 /**
  * SWF FrameLabel tag
  * 
@@ -40,12 +46,12 @@
  * @version     1.0
  * @package     Woops.Swf.Tag
  */
-class Woops_Swf_Tag_FrameLabel extends Woops_Swf_Tag
+class FrameLabel extends \Woops\Swf\Tag
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The SWF tag type
@@ -67,7 +73,7 @@ class Woops_Swf_Tag_FrameLabel extends Woops_Swf_Tag
      * 
      * @return  void
      */
-    public function processData( Woops_Swf_Binary_Stream $stream )
+    public function processData( \Woops\Swf\Binary\Stream $stream )
     {
         // Gets the label
         $this->_label = $stream->nullTerminatedString();

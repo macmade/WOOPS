@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Icc;
+
 /**
  * ICC profile
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Icc
  */
-class Woops_Icc_Profile extends Woops_Core_Object
+class Profile extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The ICC header
@@ -42,14 +48,14 @@ class Woops_Icc_Profile extends Woops_Core_Object
      */
     public function __construct()
     {
-        $this->_header   = new Woops_Icc_Header();
-        $this->_tagTable = new Woops_Icc_TagTable();
+        $this->_header   = new Header();
+        $this->_tagTable = new TagTable();
     }
     
     /**
      * Gets the ICC header
      * 
-     * @return  Woops_Icc_Header    The ICC header
+     * @return  Woops\Icc\Header    The ICC header
      */
     public function getHeader()
     {
@@ -59,7 +65,7 @@ class Woops_Icc_Profile extends Woops_Core_Object
     /**
      * Gets the ICC tag table
      * 
-     * @return  Woops_Icc_Tag_Table The ICC tag table
+     * @return  Woops\Icc\Tag_Table The ICC tag table
      */
     public function getTagTable()
     {

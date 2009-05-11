@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4\Atom;
+
 /**
  * MPEG-4 TKHD atom
  * 
@@ -33,12 +39,12 @@
  * @version     1.0
  * @package     Woops.Mpeg4.Atom
  */
-final class Woops_Mpeg4_Atom_Sdtp extends Woops_Mpeg4_FullBox
+final class Sdtp extends \Woops\Mpeg4\FullBox
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The atom type
@@ -54,7 +60,7 @@ final class Woops_Mpeg4_Atom_Sdtp extends Woops_Mpeg4_FullBox
     protected function _processFlags( $rawFlags )
     {
         // Returns the atom flags
-        return new stdClass();
+        return new \stdClass();
     }
     
     /**
@@ -90,7 +96,7 @@ final class Woops_Mpeg4_Atom_Sdtp extends Woops_Mpeg4_FullBox
             $entryData = $this->_stream->unsignedChar();
             
             // Storage for the current sample
-            $entry = new stdClass();
+            $entry = new \stdClass();
             
             // Process the data for the current entry
             $entry->sample_depends_on     = ( $entryData & 0x30 ) >> 4; // Mask is 0011 0000

@@ -11,14 +11,20 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mod\Adodb\Database\Engine;
+
 /**
- * Exception class for the Woops_Mod_Adodb_Database_Engine class
+ * Exception class for the Woops\Mod\Adodb\Database\Engine class
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Mod.Adodb.Database.Engine
  */
-final class Woops_Mod_Adodb_Database_Engine_Exception extends Woops_Core_Exception_Base
+final class Exception extends \Woops\Core\Exception\Base
 {
     /**
      * Error codes for the exceptions

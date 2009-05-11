@@ -11,79 +11,80 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Module;
+
 /**
- * WOOPS page engine class
+ * WOOPS module manager
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Core.Module
  */
-final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops_Core_Singleton_Interface
+final class Manager extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
-    
-    /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance   = NULL;
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The configuration object
      */
-    private $_conf              = NULL;
+    protected $_conf              = NULL;
     
     /**
      * The environment object
      */
-    private $_env               = NULL;
+    protected $_env               = NULL;
     
     /**
      * The directories with WOOPS modules
      */
-    private $_modulesDirs       = array();
+    protected $_modulesDirs       = array();
     
     /**
      * The existing modules
      */
-    private $_modules           = array();
+    protected $_modules           = array();
     
     /**
      * The loaded (active) modules
      */
-    private $_loadedModules     = array();
+    protected $_loadedModules     = array();
     
     /**
      * 
      */
-    private $_blockTypes        = array();
+    protected $_blockTypes        = array();
     
     /**
      * 
      */
-    private $_blocks            = array();
+    protected $_blocks            = array();
     
     /**
      * 
      */
-    private $_moduleDeps        = array();
+    protected $_moduleDeps        = array();
     
     /**
      * 
      */
-    private $_priorityModules   = array();
+    protected $_priorityModules   = array();
     
     /**
      * Class constructor
      * 
      * @return  void
      */
-    private function __construct()
+    protected function __construct()
     {
-        $this->_conf = Woops_Core_Config_Getter::getInstance();
-        $this->_env  = Woops_Core_Env_Getter::getInstance();
+        $this->_conf = \Woops\Core\Config\Getter::getInstance();
+        $this->_env  = \Woops\Core\Env\Getter::getInstance();
         
         $this->_registerModuleDirectory(
             $this->_env->getSourcePath( 'modules/' ),
@@ -102,9 +103,9 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
                 
                 if( !isset( $this->_modules[ $moduleName ] ) ) {
                     
-                    throw new Woops_Core_Module_Manager_Exception(
+                    throw new Manager\Exception(
                         'The module \'' . $moduleName . '\' does not exist',
-                        Woops_Core_Module_Manager_Exception::EXCEPTION_NO_MODULE
+                       Manager\Exception::EXCEPTION_NO_MODULE
                     );
                 }
                 
@@ -119,60 +120,21 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
     }
     
     /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops_Core_Singleton_Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new Woops_Core_Singleton_Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            Woops_Core_Singleton_Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops_Core_Module_Manager   The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
-    }
-    
-    /**
      * 
      */
-    private function _registerModuleDirectory( $path, $relPath )
+    protected function _registerModuleDirectory( $path, $relPath )
     {
         if( !file_exists( $path ) && !is_dir( $path ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'The specified modules directory does not exist (path: ' . $path . ')',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_NO_DIRECTORY
+                Manager\Exception::EXCEPTION_NO_DIRECTORY
             );
         }
         
         $this->_modulesDirs[] = $path;
         
-        $dirIterator = new DirectoryIterator( $path );
+        $dirIterator = new \DirectoryIterator( $path );
         
         // Process each directory
         foreach( $dirIterator as $file ) {
@@ -202,7 +164,7 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
     /**
      * 
      */
-    private function _loadModuleInfos( $moduleName )
+    protected function _loadModuleInfos( $moduleName )
     {
         $infoFile = $this->_modules[ $moduleName ][ 0 ] . 'infos.xml';
         
@@ -225,9 +187,9 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
                         
                         if( !isset( $this->_loadedModules[ $key ] ) ) {
                             
-                            throw new Woops_Core_Module_Manager_Exception(
+                            throw new Manager\Exception(
                                 'The module \'' . $moduleName . '\' has a dependancy to the module \'' . $key . '\' which is not loaded',
-                                Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED
+                                Manager\Exception::EXCEPTION_MODULE_NOT_LOADED
                             );
                         }
                     }
@@ -240,9 +202,9 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
                 
             } catch( Exception $e ) {
                 
-                throw new Woops_Core_Module_Manager_Exception(
+                throw new Manager\Exception(
                     $e->getMessage(),
-                    Woops_Core_Module_Manager_Exception::EXCEPTION_BAD_XML
+                    Manager\Exception::EXCEPTION_BAD_XML
                 );
             }
         }
@@ -251,7 +213,7 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
     /**
      * 
      */
-    private function _initModule( $moduleName )
+    protected function _initModule( $moduleName )
     {
         if( isset( $this->_moduleDeps[ $moduleName ] ) ) {
             
@@ -316,9 +278,9 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
     {
         if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'The module \'' . $moduleName . '\' is not loaded',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED
+                Manager\Exception::EXCEPTION_MODULE_NOT_LOADED
             );
         }
         
@@ -332,9 +294,9 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
     {
         if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'The module \'' . $moduleName . '\' is not loaded',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED
+                Manager\Exception::EXCEPTION_MODULE_NOT_LOADED
             );
         }
         
@@ -356,25 +318,25 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
     {
         if( isset( $this->_blockTypes[ $type ] ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'The block type \'' . $type . '\' is already registered',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_BLOCK_TYPE_EXISTS
+                Manager\Exception::EXCEPTION_BLOCK_TYPE_EXISTS
             );
         }
         
         if( !class_exists( $abstractClass ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'Cannot register the block type \'' . $type . '\' because it\'s abstract class (\'' . $abstractClass . '\') does not exist',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK_ABSTRACT
+                Manager\Exception::EXCEPTION_NO_BLOCK_ABSTRACT
             );
         }
         
-        if( !is_subclass_of( $abstractClass, 'Woops_Core_Module_Block' ) ) {
+        if( !is_subclass_of( $abstractClass, '\Woops\Core\Module\Block' ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
-                'The abstract class \'' . $abstractClass . '\' for block type \'' . $type . '\' does not extends the \'Woops_Core_Module_Block\' abstract class',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_INVALID_BLOCK_ABSTRACT
+            throw new Manager\Exception(
+                'The abstract class \'' . $abstractClass . '\' for block type \'' . $type . '\' does not extends the \'Woops\Core\Module\Block\' abstract class',
+                Manager\Exception::EXCEPTION_INVALID_BLOCK_ABSTRACT
             );
         }
         
@@ -389,9 +351,9 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
     {
         if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'The module \'' . $moduleName . '\' is not loaded',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED
+                Manager\Exception::EXCEPTION_MODULE_NOT_LOADED
             );
         }
         
@@ -399,33 +361,33 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
         
         if( !isset( $this->_blockTypes[ $type ] ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'Cannot register the block \'' . $blockName . '\' because it\'s its type (\'' . $type . '\') is not a registered block type',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK_TYPE
+                Manager\Exception::EXCEPTION_NO_BLOCK_TYPE
             );
         }
         
         if( isset( $this->_blocks[ $type ][ $blockName ] ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'The block \'' . $blockName . '\' is already registered for type \'' . $type . '\'',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_BLOCK_EXISTS
+                Manager\Exception::EXCEPTION_BLOCK_EXISTS
             );
         }
         
         if( !class_exists( $blockClass ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'The class \'' . $blockClass . '\' for block \'' . $blockName . '\' of type \'' . $type . '\' does not exist',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK_CLASS
+                Manager\Exception::EXCEPTION_NO_BLOCK_CLASS
             );
         }
         
         if( !is_subclass_of( $blockClass, $this->_blockTypes[ $type ] ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'The class \'' . $blockClass . '\' for block \'' . $blockName . '\' of type \'' . $type . '\' does not extends its type abstract class (' . $this->_blockTypes[ $type ] . ')',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_INVALID_BLOCK_CLASS
+                Manager\Exception::EXCEPTION_INVALID_BLOCK_CLASS
             );
         }
         
@@ -441,25 +403,25 @@ final class Woops_Core_Module_Manager extends Woops_Core_Object implements Woops
         
         if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'The module \'' . $moduleName . '\' is not loaded',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_MODULE_NOT_LOADED
+                Manager\Exception::EXCEPTION_MODULE_NOT_LOADED
             );
         }
         
         if( !isset( $this->_blockTypes[ $type ] ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'Cannot get the block \'' . $name . '\' because it\'s its type (\'' . $type . '\') is not a registered block type',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK_TYPE
+                Manager\Exception::EXCEPTION_NO_BLOCK_TYPE
             );
         }
         
         if( !isset( $this->_blocks[ $type ][ $name ] ) ) {
             
-            throw new Woops_Core_Module_Manager_Exception(
+            throw new Manager\Exception(
                 'The block \'' . $name . '\' of type \'' . $type . '\' does not exist',
-                Woops_Core_Module_Manager_Exception::EXCEPTION_NO_BLOCK
+                Manager\Exception::EXCEPTION_NO_BLOCK
             );
         }
         

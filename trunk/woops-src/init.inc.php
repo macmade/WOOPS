@@ -15,14 +15,20 @@
 error_reporting( E_ALL | E_STRICT );
 
 // Checks the PHP version
-if( ( double )PHP_VERSION < 5.2 ) {
+if( ( double )PHP_VERSION < 5.3 ) {
     
-    // We are not running PHP 5.2 or greater
+    // We are not running PHP 5.3 or greater
     trigger_error(
-        'PHP version 5.2 is required to use this script (actual version is ' . PHP_VERSION . ')',
+        'PHP version 5.3 is required to use this script (actual version is ' . PHP_VERSION . ')',
         E_USER_ERROR
     );
 }
+
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Sets a dummy timezone, to prevent warnings if an error occurs before the configured timezone is set
+date_default_timezone_set( 'Europe/Zurich' );
 
 // Checks for the SPL
 if( !function_exists( 'spl_autoload_register' ) ) {
@@ -44,7 +50,7 @@ if( !class_exists( 'SimpleXMLElement' ) ) {
 
 // Includes the Woops class manager
 require_once(
-    dirname( __FILE__ )
+    __DIR__
   . DIRECTORY_SEPARATOR
   . 'classes'
   . DIRECTORY_SEPARATOR
@@ -52,20 +58,18 @@ require_once(
   . DIRECTORY_SEPARATOR
   . 'Core'
   . DIRECTORY_SEPARATOR
-  . 'Class'
-  . DIRECTORY_SEPARATOR
-  . 'Manager.class.php'
+  . 'ClassManager.class.php'
 );
 
 // Registers an SPL autoload method to use to load the classes form the Woops project
-spl_autoload_register( array( 'Woops_Core_Class_Manager', 'autoLoad' ) );
+spl_autoload_register( array( 'Woops\Core\ClassManager', 'autoLoad' ) );
 
 // Sets the error and exception handlers - From now every mistake will produce a fatal error
-set_exception_handler( array( 'Woops_Core_Exception_Handler', 'handleException' ) );
-set_error_handler(     array( 'Woops_Core_Error_Handler',     'handleError' ) );
+set_exception_handler( array( 'Woops\Core\Exception\Handler', 'handleException' ) );
+set_error_handler(     array( 'Woops\Core\Error\Handler',     'handleError' ) );
 
 // Sets the default timezone
-date_default_timezone_set( Woops_Core_Config_Getter::getInstance()->getVar( 'time', 'timezone' ) );
+date_default_timezone_set( Woops\Core\Config\Getter::getInstance()->getVar( 'time', 'timezone' ) );
 
 // Loads the active modules
-Woops_Core_Module_Manager::getInstance()->initModules();
+Woops\Core\Module\Manager::getInstance()->initModules();

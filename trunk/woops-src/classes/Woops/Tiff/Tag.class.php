@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Tiff;
+
 /**
  * Abstract for the TIFF tag classes
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Tiff
  */
-abstract class Woops_Tiff_Tag extends Woops_Core_Object
+abstract class Tag extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The value types
@@ -87,10 +93,10 @@ abstract class Woops_Tiff_Tag extends Woops_Core_Object
     /**
      * Class constructor
      * 
-     * @param   Woops_Tiff_File The TIFF file in which the tag is contained
+     * @param   Woops\Tiff\File The TIFF file in which the tag is contained
      * @return  void
      */
-    public function __construct( Woops_Tiff_File $file )
+    public function __construct( File $file )
     {
         // Stores the TIFF file and header
         $this->_file   = $file;
@@ -100,11 +106,11 @@ abstract class Woops_Tiff_Tag extends Woops_Core_Object
     /**
      * Reads tag value(s) from the binary stream
      * 
-     * @param   Woops_Tiff_Binary_Stream    The binary stream
+     * @param   Woops\Tiff\Binary\Stream    The binary stream
      * @param   int                         The number of values
      * @return  void
      */
-    protected function _readValuesFromStream( $stream, $count )
+    protected function _readValuesFromStream( Binary\Stream $stream, $count )
     {
         // Checks the value type
         switch( $this->_valueType ) {
@@ -248,11 +254,11 @@ abstract class Woops_Tiff_Tag extends Woops_Core_Object
     /**
      * Process the raw data from a binary stream
      * 
-     * @param   Woops_Tiff_Binary_Stream    The binary stream
+     * @param   Woops\Tiff\Binary\Stream    The binary stream
      * @return  void
-     * @throws  Woops_Tiff_Tag_Exception    If the value type is invalid
+     * @throws  Woops\Tiff\Tag\Exception    If the value type is invalid
      */
-    public function processData( Woops_Tiff_Binary_Stream $stream )
+    public function processData( Binary\Stream $stream )
     {
         // Resets the value array
         $this->_values = array();
@@ -264,9 +270,9 @@ abstract class Woops_Tiff_Tag extends Woops_Core_Object
         if( !isset( self::$_types[ $this->_valueType ] ) ) {
             
             // Error - Invalid value type
-            throw new Woops_Tiff_Tag_Exception(
+            throw new Tag\Exception(
                 'Invalid value type (' . $this->_valueType . ')',
-                Woops_Tiff_Tag_Exception::EXCEPTION_INVALID_VALUE_TYPE
+                Tag\Exception::EXCEPTION_INVALID_VALUE_TYPE
             );
         }
         
@@ -287,13 +293,13 @@ abstract class Woops_Tiff_Tag extends Woops_Core_Object
             
             
             // Moves to the value offset
-            $stream->seek( $valueOffset, Woops_Tiff_Binary_Stream::SEEK_SET );
+            $stream->seek( $valueOffset, Binary\Stream::SEEK_SET );
             
             // Reads the value(s)
             $this->_readValuesFromStream( $stream, $valueCount );
             
             // Moves the stream to the end of the value offset
-            $stream->seek( $offset + 4, Woops_Tiff_Binary_Stream::SEEK_SET );
+            $stream->seek( $offset + 4, Binary\Stream::SEEK_SET );
             
         } else {
             
@@ -301,7 +307,7 @@ abstract class Woops_Tiff_Tag extends Woops_Core_Object
             $this->_readValuesFromStream( $stream, $valueCount );
             
             // Moves the stream to the end of the value
-            $stream->seek( $offset + 4, Woops_Tiff_Binary_Stream::SEEK_SET );
+            $stream->seek( $offset + 4, Binary\Stream::SEEK_SET );
         }
     }
     
@@ -330,7 +336,7 @@ abstract class Woops_Tiff_Tag extends Woops_Core_Object
      * 
      * @param   int                         The value index
      * @return  mixed                       The tag value
-     * @throws  Woops_Tiff_Tag_Exception    If the index does not exist
+     * @throws  Woops\Tiff\Tag\Exception    If the index does not exist
      */
     public function getValue( $index = 0 )
     {
@@ -341,9 +347,9 @@ abstract class Woops_Tiff_Tag extends Woops_Core_Object
         if( !isset( $this->_values[ $index ] ) ) {
             
             // Error - Unexisting index
-            throw new Woops_Tiff_Tag_Exception(
+            throw new Tag\Exception(
                 'Unexisting value index (' . $index . ')',
-                Woops_Tiff_Tag_Exception::EXCEPTION_INVALID_VALUE_INDEX
+                Tag\Exception::EXCEPTION_INVALID_VALUE_INDEX
             );
         }
         
@@ -366,7 +372,7 @@ abstract class Woops_Tiff_Tag extends Woops_Core_Object
      * 
      * @param   int                         The value type (one of the TYPE_XXX constant)
      * @return  void
-     * @throws  Woops_Tiff_Tag_Exception    If the value type is invalid
+     * @throws  Woops\Tiff\Tag\Exception    If the value type is invalid
      */
     public function setValueType( $type )
     {
@@ -377,9 +383,9 @@ abstract class Woops_Tiff_Tag extends Woops_Core_Object
         if( !isset( self::$_types[ $type ] ) ) {
             
             // Error - Invalid value type
-            throw new Woops_Tiff_Tag_Exception(
+            throw new Tag\Exception(
                 'Invalid value type (' . $type . ')',
-                Woops_Tiff_Tag_Exception::EXCEPTION_INVALID_VALUE_TYPE
+                Tag\Exception::EXCEPTION_INVALID_VALUE_TYPE
             );
         }
         

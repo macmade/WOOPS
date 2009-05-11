@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Xml;
+
 /**
  * XML writer class
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Xml
  */
-class Woops_Xml_Tag extends Woops_Core_Object implements ArrayAccess, Iterator
+class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * 
@@ -190,7 +196,7 @@ class Woops_Xml_Tag extends Woops_Core_Object implements ArrayAccess, Iterator
     /**
      * Returns the current tag (SPL Iterator method)
      * 
-     * @return  Woops_Xml_Tag   The current XML tag object
+     * @return  Woops\Xml\Tag   The current XML tag object
      */
     public function current()
     {
@@ -242,10 +248,10 @@ class Woops_Xml_Tag extends Woops_Core_Object implements ArrayAccess, Iterator
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str             = Woops_String_Utils::getInstance();
+        self::$_str             = \Woops\Helpers\StringUtilities::getInstance();
         
         // Gets the instance of the configuration object
-        self::$_conf            = Woops_Core_Config_Getter::getInstance();
+        self::$_conf            = Woops\Core\Config\Getter::getInstance();
         
         // Sets the XML formatting option
         self::$_formattedOutput = ( boolean )self::$_conf->getVar( 'xml', 'format' );
@@ -261,9 +267,9 @@ class Woops_Xml_Tag extends Woops_Core_Object implements ArrayAccess, Iterator
     {
         if( $this->_type === self::TYPE_DATA ) {
             
-            throw new Woops_Xml_Tag_Exception(
+            throw new Tag\Exception(
                 'Cannot add a node in the current tag as it already contains text data',
-                Woops_Xml_Tag_Exception::EXCEPTION_INVALID_TAG_TYPE
+                Tag\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         
@@ -365,13 +371,13 @@ class Woops_Xml_Tag extends Woops_Core_Object implements ArrayAccess, Iterator
     /**
      * 
      */
-    public function addChildNode( Woops_Xml_Tag $child )
+    public function addChildNode( Tag $child )
     {
         if( $this->_type === self::TYPE_DATA ) {
             
-            throw new Woops_Xml_Tag_Exception(
+            throw new Tag\Exception(
                 'Cannot add a node in the current tag as it already contains text data',
-                Woops_Xml_Tag_Exception::EXCEPTION_INVALID_TAG_TYPE
+                Tag\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         
@@ -401,9 +407,9 @@ class Woops_Xml_Tag extends Woops_Core_Object implements ArrayAccess, Iterator
     {
         if( $this->_type === self::TYPE_NODE ) {
             
-            throw new Woops_Xml_Tag_Exception(
+            throw new Tag\Exception(
                 'Cannot add text data in the current tag as it already contains nodes',
-                Woops_Xml_Tag_Exception::EXCEPTION_INVALID_TAG_TYPE
+                Tag\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         
@@ -419,9 +425,9 @@ class Woops_Xml_Tag extends Woops_Core_Object implements ArrayAccess, Iterator
     {
         if( $this->_type === self::TYPE_NODE ) {
             
-            throw new Woops_Xml_Tag_Exception(
+            throw new Tag\Exception(
                 'Cannot set text data in the current tag as it already contains nodes',
-                Woops_Xml_Tag_Exception::EXCEPTION_INVALID_TAG_TYPE
+                Tag\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
         }
         

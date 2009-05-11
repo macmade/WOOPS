@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core\Php\Error;
+
 /**
  * WOOPS PHP error exception class
  *
@@ -18,13 +24,16 @@
  * @version     1.0
  * @package     Woops.Core.Php.Error
  */
-class Woops_Core_Php_Error_Exception extends Woops_Core_Exception_Base
+class Exception extends \Woops\Core\Exception\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
+    /**
+     * The PHP error types
+     */
     const E_WARNING           = E_WARNING;
     const E_NOTICE            = E_NOTICE;
     const E_STRICT            = E_STRICT;
@@ -32,6 +41,6 @@ class Woops_Core_Php_Error_Exception extends Woops_Core_Exception_Base
     const E_USER_WARNING      = E_USER_WARNING;
     const E_USER_NOTICE       = E_USER_NOTICE;
     const E_RECOVERABLE_ERROR = E_RECOVERABLE_ERROR;
-    const E_DEPRECATED        = 0x2000; // The E_DEPRECATED constant is only available since PHP 5.3.0
-    const E_USER_DEPRECATED   = 0x4000; // The E_USER_DEPRECATED constant is only available since PHP 5.3.0
+    const E_DEPRECATED        = E_DEPRECATED;
+    const E_USER_DEPRECATED   = E_USER_DEPRECATED;
 }

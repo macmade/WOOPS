@@ -11,14 +11,20 @@
 
 # $Id: Exception.class.php 559 2009-03-04 17:18:24Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Flv\Binary\File\Stream;
+
 /**
- * Exception class for the Woops_Flv_Binary_File_Stream class
+ * Exception class for the Woops\Flv\Binary\File\Stream class
  * 
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Flv.Binary.File.Stream
  */
-final class Woops_Flv_Binary_File_Stream_Exception extends Woops_Core_Exception_Base
+final class Exception extends \Woops\Core\Exception\Base
 {
     /**
      * Error codes for the exceptions

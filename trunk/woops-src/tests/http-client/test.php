@@ -13,7 +13,7 @@
 
 // Includes the initialization script
 require_once(
-    dirname( __FILE__ )
+    __DIR__
   . DIRECTORY_SEPARATOR
   . '..'
   . DIRECTORY_SEPARATOR
@@ -22,12 +22,15 @@ require_once(
   . 'init.inc.php'
 );
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
 // Plain text content
 header( 'Content-Type: text/plain' );
 
 // Creates some cookies
-$FOO = new Woops_Http_Cookie( 'foo', 'WOOPS-test-cookie-1' );
-$BAR = new Woops_Http_Cookie( 'bar', 'WOOPS-test-cookie-2' );
+$FOO = new Woops\Http\Cookie( 'foo', 'WOOPS-test-cookie-1' );
+$BAR = new Woops\Http\Cookie( 'bar', 'WOOPS-test-cookie-2' );
 
 // Sets the cookies
 $FOO->set();

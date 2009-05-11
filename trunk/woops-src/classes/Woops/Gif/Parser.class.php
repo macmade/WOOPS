@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Gif;
+
 /**
  * GIF file parser
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Gif
  */
-class Woops_Gif_Parser extends Woops_Core_Object
+class Parser extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The identifiers of the GIF blocks
@@ -64,7 +70,7 @@ class Woops_Gif_Parser extends Woops_Core_Object
         $this->_filePath = $file;
         
         // Creates the binary stream
-        $this->_stream   = new Woops_Binary_File_Stream( $file );
+        $this->_stream   = new \Woops\Binary\File\Stream( $file );
         
         // Parses the file
         $this->_parseFile();
@@ -79,7 +85,7 @@ class Woops_Gif_Parser extends Woops_Core_Object
     protected function _getLogicalScreenDescriptor()
     {
         // Storage
-        $lsd                         = new stdClass();
+        $lsd                         = new \stdClass();
         
         // Gets the image dimensions
         $lsd->width                  = $this->_stream->littleEndianUnsignedShort();
@@ -125,7 +131,7 @@ class Woops_Gif_Parser extends Woops_Core_Object
         for( $i = 0; $i < $length; $i++ ) {
             
             // Storage
-            $table[ $i ]        = new stdClass();
+            $table[ $i ]        = new \stdClass();
             
             // Gets the color values
             $red                = $this->_stream->unsignedChar();
@@ -159,7 +165,7 @@ class Woops_Gif_Parser extends Woops_Core_Object
     protected function _getImageSeparator()
     {
         // Storage
-        $block = new stdClass();
+        $block = new \stdClass();
         
         // Gets the position
         $block->left                  = $this->_stream->littleEndianUnsignedShort();
@@ -216,13 +222,13 @@ class Woops_Gif_Parser extends Woops_Core_Object
         while( $blockSize !== 0x00 ) {
             
             // Storage
-            $block       = new stdClass();
+            $block       = new \stdClass();
             
             // Adds the block size
             $block->size = $blockSize;
             
             // For now, do not process or store the block data
-            $this->_stream->seek( $blockSize, Woops_Binary_File_Stream::SEEK_CUR );
+            $this->_stream->seek( $blockSize, \Woops\Binary\File\Stream::SEEK_CUR );
             
             // Adds the data block
             $data[]      = $block;
@@ -241,7 +247,7 @@ class Woops_Gif_Parser extends Woops_Core_Object
     protected function _getGraphicControlExtension()
     {
         // Storage
-        $block = new stdClass();
+        $block = new \stdClass();
         
         // Gets the block size
         $block->size                  = $this->_stream->unsignedChar();
@@ -277,7 +283,7 @@ class Woops_Gif_Parser extends Woops_Core_Object
     protected function _getCommentExtension()
     {
         // Storage
-        $block              = new stdClass();
+        $block              = new \stdClass();
         
         // Gets the block size
         $block->size        = $this->_stream->unsignedChar();
@@ -295,7 +301,7 @@ class Woops_Gif_Parser extends Woops_Core_Object
     protected function _getPlainTextExtension()
     {
         // Storage
-        $block                           = new stdClass();
+        $block                           = new \stdClass();
         
         // Gets the block size
         $block->size                     = $this->_stream->unsignedChar();
@@ -337,7 +343,7 @@ class Woops_Gif_Parser extends Woops_Core_Object
     protected function _getApplicationExtension()
     {
         // Storage
-        $block = new stdClass();
+        $block = new \stdClass();
         
         // Gets the block size
         $block->size                      = $this->_stream->unsignedChar();
@@ -364,14 +370,14 @@ class Woops_Gif_Parser extends Woops_Core_Object
         if( $this->_stream->read( 3 ) !== 'GIF' ) {
             
             // Wrong file type
-            throw new Woops_Gif_Parser_Exception(
+            throw new Parser\Exception(
                 'File ' . $this->_filePath . ' is not a GIF file.',
-                Woops_Gif_Parser_Exception::EXCEPTION_NOT_GIF
+                Parser\Exception::EXCEPTION_NOT_GIF
             );
         }
         
         // Storage
-        $infos                          = new stdClass();
+        $infos                          = new \stdClass();
         
         // Gets the GIF version
         $infos->version                 = $this->_stream->read( 3 );
@@ -406,7 +412,7 @@ class Woops_Gif_Parser extends Woops_Core_Object
     /**
      * 
      */
-    protected function _parseBlock( $id, stdClass $infos )
+    protected function _parseBlock( $id, \stdClass $infos )
     {
         // Checks the block identifier
         switch( $id ) {
@@ -422,7 +428,7 @@ class Woops_Gif_Parser extends Woops_Core_Object
                 }
                 
                 // Adds the storage object for the current image
-                $image                 = new stdClass();
+                $image                 = new \stdClass();
                 
                 // Gets the image separator block
                 $image->imageSeparator = $this->_getImageSeparator();
@@ -445,9 +451,9 @@ class Woops_Gif_Parser extends Woops_Core_Object
             default:
                 
                 // Invalid block identifier
-                throw new Woops_Gif_Parser_Exception(
+                throw new Parser\Exception(
                     'Invalid GIF block identifier: \'0x' . dechex( $id ) . '\'.',
-                    Woops_Gif_Parser_Exception::EXCEPTION_BAD_ID
+                    Parser\Exception::EXCEPTION_BAD_ID
                 );
                 break;
         }
@@ -456,7 +462,7 @@ class Woops_Gif_Parser extends Woops_Core_Object
     /**
      * 
      */
-    protected function _parseExtensionBlock( $id, stdClass $infos )
+    protected function _parseExtensionBlock( $id, \stdClass $infos )
     {
         // Checks the extension block identifier
         switch( $id ) {
@@ -521,9 +527,9 @@ class Woops_Gif_Parser extends Woops_Core_Object
             default:
                 
                 // Invalid sub block identifier
-                throw new Woops_Gif_Parser_Exception(
+                throw new Parser\Exception(
                     'Invalid GIF extension block identifier: \'0x' . dechex( $id ) . '\'.',
-                    Woops_Gif_Parser_Exception::EXCEPTION_BAD_EXT_ID
+                    Parser\Exception::EXCEPTION_BAD_EXT_ID
                 );
                 break;
         }

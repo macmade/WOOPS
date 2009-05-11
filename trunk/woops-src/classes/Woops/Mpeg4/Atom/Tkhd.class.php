@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4\Atom;
+
 /**
  * MPEG-4 TKHD atom
  * 
@@ -51,12 +57,12 @@
  * @version     1.0
  * @package     Woops.Mpeg4.Atom
  */
-final class Woops_Mpeg4_Atom_Tkhd extends Woops_Mpeg4_FullBox
+final class Tkhd extends \Woops\Mpeg4\FullBox
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The atom type
@@ -72,7 +78,7 @@ final class Woops_Mpeg4_Atom_Tkhd extends Woops_Mpeg4_FullBox
     protected function _processFlags( $rawFlags )
     {
         // Storage for the atom flags
-        $flags                   = new stdClass();
+        $flags                   = new \stdClass();
         
         // Process the atom flags
         $flags->track_enabled    = ( $rawFlags & 0x000001 ) ? true: false;
@@ -103,13 +109,13 @@ final class Woops_Mpeg4_Atom_Tkhd extends Woops_Mpeg4_FullBox
             $data->creation_time     = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
             $data->modification_time = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
             $data->track_ID          = $this->_stream->bigEndianUnsignedLong();
-            $this->_stream->seek( 4, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 4, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->duration          = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
-            $this->_stream->seek( 8, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 8, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->layer             = $this->_stream->bigEndianUnsignedShort();
             $data->alternate_group   = $this->_stream->bigEndianUnsignedShort();
             $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
-            $this->_stream->seek( 2, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 2, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->matrix            = $this->_stream->matrix();
             $data->width             = $this->_stream->bigEndianFixedPoint( 16, 16 );
             $data->height            = $this->_stream->bigEndianFixedPoint( 16, 16 );
@@ -120,13 +126,13 @@ final class Woops_Mpeg4_Atom_Tkhd extends Woops_Mpeg4_FullBox
             $data->creation_time     = $this->_stream->bigEndianUnsignedLong();
             $data->modification_time = $this->_stream->bigEndianUnsignedLong();
             $data->track_ID          = $this->_stream->bigEndianUnsignedLong();
-            $this->_stream->seek( 4, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 4, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->duration          = $this->_stream->bigEndianUnsignedLong();
-            $this->_stream->seek( 8, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 8, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->layer             = $this->_stream->bigEndianUnsignedShort();
             $data->alternate_group   = $this->_stream->bigEndianUnsignedShort();
             $data->volume            = $this->_stream->bigEndianFixedPoint( 8, 8 );
-            $this->_stream->seek( 2, Woops_Mpeg4_Binary_Stream::SEEK_CUR );
+            $this->_stream->seek( 2, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->matrix            = $this->_stream->matrix();
             $data->width             = $this->_stream->bigEndianFixedPoint( 16, 16 );
             $data->height            = $this->_stream->bigEndianFixedPoint( 16, 16 );

@@ -11,6 +11,12 @@
 
 # $Id$
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Mpeg4;
+
 /**
  * Abstract for the MPEG4 data atoms
  *
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Mpeg4
  */
-abstract class Woops_Mpeg4_DataAtom extends Woops_Mpeg4_Atom
+abstract class DataAtom extends Atom
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     abstract public function getProcessedData();
     
@@ -126,7 +132,7 @@ abstract class Woops_Mpeg4_DataAtom extends Woops_Mpeg4_Atom
     {
         $this->_data       = $data;
         $this->_dataLength = strlen( $data );
-        $this->_stream     = new Woops_Mpeg4_Binary_Stream( $data );
+        $this->_stream     = new Binary\Stream( $data );
         
         return true;
     }

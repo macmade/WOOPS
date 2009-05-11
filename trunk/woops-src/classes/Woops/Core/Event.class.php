@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Core;
+
 /**
  * Event object
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Core.Event
  */
-class Woops_Core_Event extends Woops_Core_Object
+class Event extends Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The event type
@@ -44,10 +50,10 @@ class Woops_Core_Event extends Woops_Core_Object
      * Class constructor
      * 
      * @param   int                 The event type
-     * @param   Woops_Core_Object   The target object
+     * @param   Woops\Core\Object   The target object
      * @return  void
      */
-    public function __construct( $type, Woops_Core_Object $target )
+    public function __construct( $type, Object $target )
     {
         $this->_type   = ( int )$type;
         $this->_target = $target;
@@ -66,7 +72,7 @@ class Woops_Core_Event extends Woops_Core_Object
     /**
      * Gets the event target object
      * 
-     * @return  Woops_Core_Object   The event target object
+     * @return  Woops\Core\Object   The event target object
      */
     public function getTarget()
     {

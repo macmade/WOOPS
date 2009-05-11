@@ -11,6 +11,12 @@
 
 # $Id: Parser.class.php 588 2009-03-07 11:52:36Z macmade $
 
+// File encoding
+declare( ENCODING = 'UTF-8' );
+
+// Internal namespace
+namespace Woops\Flv;
+
 /**
  * Abstract for the FLV tag classes
  * 
@@ -18,12 +24,12 @@
  * @version     1.0
  * @package     Woops.Flv
  */
-abstract class Woops_Flv_Tag extends Woops_Core_Object
+abstract class Tag extends \Woops\Core\Object
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
-    const PHP_COMPATIBLE = '5.2.0';
+    const PHP_COMPATIBLE = '5.3.0';
     
     /**
      * The FLV tag type
@@ -55,7 +61,7 @@ abstract class Woops_Flv_Tag extends Woops_Core_Object
      * 
      * @return  void
      */
-    public function processData( Woops_Flv_Binary_Stream $stream )
+    public function processData( Binary\Stream $stream )
     {
         $this->_dataSize          = $stream->u24Int();
         $this->_timestamp         = $stream->u24Int();
@@ -73,6 +79,9 @@ abstract class Woops_Flv_Tag extends Woops_Core_Object
         return $this->_type;
     }
     
+    /**
+     * 
+     */
     public function getDataSize()
     {
         return $this->_dataSize;
