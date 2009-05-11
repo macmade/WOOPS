@@ -62,26 +62,6 @@ abstract class Base extends \Woops\Core\Event\Dispatcher implements ObjectInterf
     /**
      * Gets the unique class instance
      * 
-     * This method can be used in child classes, if there is a need to
-     * redeclare the getInstance method, to get their unique instances. It will
-     * also allows them to check if the unqiue instance as already been created
-     * since this method will return NULL if the unique instance hasn't been
-     * created.
-     * 
-     * @return  mixed   The unique class instance, if it has already been created, otherwise NULL
-     */
-    protected static function _getInstance()
-    {
-        // Gets the name of the class for which to get the unique instance
-        $class = get_called_class();
-        
-        // Returns the unique instance if it exists
-        return ( isset( self::$_instances[ $class ] ) ) ? self::$_instances[ $class ] : NULL;
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
      * This method is used to get the unique instance of the class
      * (singleton). If no instance is available, it will create it.
      * 
@@ -95,6 +75,11 @@ abstract class Base extends \Woops\Core\Event\Dispatcher implements ObjectInterf
         
         // Checks if the unique instance has already been created
         if( !isset( self::$_instances[ $class ] ) ) {
+            
+            // Sets a boolean flag so the instance will be considered as existing
+            // This is required in order to avoid an endless loop during the
+            // initialization of some core classes, as they are inter-dependant.
+            self::$_instances[ $class ] = true;
             
             // Creates the unique instance
             self::$_instances[ $class ] = new $class();
