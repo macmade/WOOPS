@@ -679,7 +679,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         if( $reflection->isSingleton() ) {
             
             // Returns the singleton instance
-            return $reflection->getMethod( 'getInstance' )->invoke( array() );
+            return $className::getInstance();
             
         } else {
             
@@ -707,7 +707,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         if( $reflection->isMultiSingleton() ) {
             
             // Returns the singleton instance
-            return $reflection->getMethod( 'getInstance' )->invoke( array( $instanceName ) );
+            return $className::getInstance( $instanceName );
             
         } else {
             
