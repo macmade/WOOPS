@@ -82,9 +82,12 @@ if( $GETVARS && isset( $GETVARS[ 'className' ] ) ) {
                 $CLASSCODE = ( string )$OPT;
             }
             
+            // File extension for the cached class file
+            $CLASSEXT = ( Woops\Core\Config\Getter::getInstance()->getVar( 'aop', 'enable' ) ) ? '.aop.class.php' : '.class.php';
+            
             // Writes the class in the cache
             file_put_contents(
-                $CACHEDIR . str_replace( '\\', '.', $CLASSNAME ) . '.class.php',
+                $CACHEDIR . str_replace( '\\', '.', $CLASSNAME ) . $CLASSEXT,
                 $CLASSCODE
             );
             

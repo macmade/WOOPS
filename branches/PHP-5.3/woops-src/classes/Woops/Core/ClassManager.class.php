@@ -396,8 +396,11 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
      */
     private function _loadClass( $className, $moduleClass = false )
     {
+        // File extension for the cached class file
+        $classExt        = ( $this->_enableAop ) ? '.aop.class.php' : '.class.php';
+        
         // Path to the cached version of the class
-        $cachedClassPath = $this->_cacheDirectory . str_replace( '\\', '.', $className ) . '.class.php';
+        $cachedClassPath = $this->_cacheDirectory . str_replace( '\\', '.', $className ) . $classExt;
                 
         // Checks if the cache is enabled and if the class exists in the cache
         if( $this->_classCache && file_exists( $cachedClassPath ) && !defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) ) {

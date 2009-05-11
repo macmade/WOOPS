@@ -177,9 +177,12 @@ function createClassCache( $className )
         $classCode = ( string )$optimizer;
     }
     
+    // File extension for the cached class file
+    $classExt = ( $aop ) ? '.aop.class.php' : '.class.php';
+    
     // Writes the class in the cache
     file_put_contents(
-        $cacheDir . str_replace( '\\', '.', $className ) . '.class.php',
+        $cacheDir . str_replace( '\\', '.', $className ) . $classExt,
         $classCode
     );
 }
