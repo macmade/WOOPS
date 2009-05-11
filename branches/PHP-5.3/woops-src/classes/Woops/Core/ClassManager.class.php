@@ -22,9 +22,9 @@ namespace Woops\Core;
 // The WOOPS class manager can't auto-load them, since it's not available yet.
 // So they have to be included manually. This should be the last time we use
 // the require_once() function inside WOOPS.
-require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR . 'Singleton' ) . DIRECTORY_SEPARATOR . 'ObjectInterface.class.php' );
 require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR . 'Informations.class.php' );
 require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR . 'Object.class.php' );
+require_once( realpath( __DIR__ . DIRECTORY_SEPARATOR . 'Singleton' ) . DIRECTORY_SEPARATOR . 'ObjectInterface.class.php' );
 
 /**
  * WOOPS class manager
