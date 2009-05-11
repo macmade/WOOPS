@@ -128,11 +128,11 @@ abstract class Base extends \Exception
         if( is_object( $class ) ) {
             
             $code      = $class->getCode();
-            $reflector = \Woops\Core\Reflection\ClassReflector::getInstance( $class );
+            $reflector = \Woops\Core\Reflection::getClassReflector( $class );
             
         } else {
             
-            $reflector = \Woops\Core\Reflection\ClassReflector::getInstance( $class );
+            $reflector = \Woops\Core\Reflection::getClassReflector( $class );
         }
         
         $constants = array_flip( $reflector->getConstants() );

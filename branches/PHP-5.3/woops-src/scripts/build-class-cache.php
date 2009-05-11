@@ -66,7 +66,7 @@ if( $GETVARS && isset( $GETVARS[ 'className' ] ) ) {
             } else {
                 
                 // Creates a reflection object for the class
-                $REF       = Woops\Core\Reflection\ClassReflector::getInstance( $CLASSNAME );
+                $REF       = Woops\Core\Reflection::getClassReflector( $CLASSNAME );
                 
                 // Gets the PHP source code
                 $CLASSCODE = file_get_contents( $REF->getFileName() );

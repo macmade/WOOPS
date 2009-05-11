@@ -495,7 +495,7 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
         $methodCallback    = new \Woops\Core\Callback( array( $this, $method ) );
         
         // Creates a reflection object for the internal method
-        $ref               = \Woops\Core\Reflection\MethodReflector::getInstance( $this, $method );
+        $ref               = \Woops\Core\Reflection::getMethodReflector( $this, $method );
         
         // By default, the call on the join point internal method is allowed
         $valid             = true;
@@ -787,7 +787,7 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
                 
                 // Creates a reflection object for the class
                 // If no instance exist at the moment the advice is added, the automatic join points won't be declared, so we'll have to check it manually
-                $reflection = \Woops\Core\Reflection\ClassReflector::getInstance( $className );
+                $reflection = \Woops\Core\Reflection::getClassReflector( $className );
                 
                 // Name of the method
                 $methodName = $joinPoint . self::JOINPOINT_METHOD_SUFFIX;
@@ -908,7 +908,7 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
             }
             
             // Creates a reflection object for the current instance
-            $reflection = \Woops\Core\Reflection\ObjectReflector::getInstance( $this );
+            $reflection = \Woops\Core\Reflection::getObjectReflector( $this );
             
             // Gets all the public methods
             $methods    = $reflection->getMethods( \ReflectionMethod::IS_PUBLIC );

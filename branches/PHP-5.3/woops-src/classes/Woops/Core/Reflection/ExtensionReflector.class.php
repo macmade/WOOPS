@@ -18,13 +18,13 @@ declare( ENCODING = 'UTF-8' );
 namespace Woops\Core\Reflection;
 
 /**
- * WOOPS PHP error exception class
+ * Extension reflector
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Core.Reflection
  */
-final class ExtensionReflector extends Base
+class ExtensionReflector extends \Woops\Core\Reflection
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -34,12 +34,64 @@ final class ExtensionReflector extends Base
     /**
      * 
      */
-    public static function getInstance( $name )
+    protected $_hasFunctions = false;
+    
+    /**
+     * 
+     */
+    protected $_hasClasses   = false;
+    
+    /**
+     * 
+     */
+    protected $_functions    = array();
+    
+    /**
+     * 
+     */
+    protected $_classes      = array();
+    
+    /**
+     * 
+     */
+    public function getFunctions()
     {
-        return self::_getInstance(
-            __CLASS__,
-            '\ReflectionExtension',
-            array( $name )
-        );
+        if( !$this->_hasFunctions ) {
+            
+            $functions = $this->_reflector->getFunctions();
+            
+            foreach( $functions as $function ) {
+                
+                $this->_functions[ $function->getName() ] = FunctionReflector::getInstance(
+                    $function->getName()
+                );
+            }
+            
+            $this->_hasFunctions = true;
+        }
+        
+        return $this->_functions;
+    }
+    
+    /**
+     * 
+     */
+    public function getClasses()
+    {
+        if( !$this->_hasClasses ) {
+            
+            $classes = $this->_reflector->getClasses();
+            
+            foreach( $classes as $class ) {
+                
+                $this->_classes[ $class->getName() ] = ClassReflector::getInstance(
+                    $class->getName()
+                );
+            }
+            
+            $this->_hasClasses = true;
+        }
+        
+        return $this->_classes;
     }
 }

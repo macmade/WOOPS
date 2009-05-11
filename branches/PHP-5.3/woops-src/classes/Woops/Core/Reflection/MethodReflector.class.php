@@ -18,18 +18,28 @@ declare( ENCODING = 'UTF-8' );
 namespace Woops\Core\Reflection;
 
 /**
- * WOOPS PHP error exception class
+ * Method reflector
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Core.Reflection
  */
-final class MethodReflector extends Base
+class MethodReflector extends FunctionReflector
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
      */
     const PHP_COMPATIBLE = '5.3.0';
+    
+    /**
+     * 
+     */
+    protected $_hasDeclaringClass = false;
+    
+    /**
+     * 
+     */
+    protected $_declaringClass    = NULL;
     
     /**
      * 
@@ -44,12 +54,18 @@ final class MethodReflector extends Base
     /**
      * 
      */
-    public static function getInstance( $class, $name )
+    public function getDeclaringClass()
     {
-        return self::_getInstance(
-            __CLASS__,
-            '\ReflectionMethod',
-            array( $class, $name )
-        );
+        if( !$this->_hasDeclaringClass ) {
+            
+            $declaringClass        = $this->_reflector->getDeclaringClass();
+            $this->_declaringClass = ClassReflector::getInstance(
+                $declaringClass->getName()
+            );
+            
+            $this->_hasDeclaringClass = true;
+        }
+        
+        return $this->_declaringClass;
     }
 }

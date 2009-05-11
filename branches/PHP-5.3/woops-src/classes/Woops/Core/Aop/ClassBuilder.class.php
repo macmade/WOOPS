@@ -90,7 +90,7 @@ class ClassBuilder extends \Woops\Core\Object
         }
         
         // Gets a reflection class object
-        $reflection          = \Woops\Core\Reflection\ClassReflector::getInstance( $className );
+        $reflection          = \Woops\Core\Reflection::getClassReflector( $className );
         
         // Gets the path to the PHP file
         $filePath            = $reflection->getFileName();

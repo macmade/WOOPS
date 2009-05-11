@@ -66,13 +66,13 @@ class Callback extends Event\Dispatcher
         if( is_array( $this->_callback ) ) {
             
             // Checks if the callback returns a reference
-            $ref                     = Reflection\MethodReflector::getInstance( $callback[ 0 ], $callback[ 1 ] );
+            $ref                     = Reflection::getMethodReflector( $callback[ 0 ], $callback[ 1 ] );
             $this->_returnsReference = $ref->returnsReference();
             
         } else {
             
             // Checks if the callback returns a reference
-            $ref                     = Reflection\FunctionReflector::getInstance( $callback );
+            $ref                     = Reflection::getFunctionReflector( $callback );
             $this->_returnsReference = $ref->returnsReference();
         }
     }

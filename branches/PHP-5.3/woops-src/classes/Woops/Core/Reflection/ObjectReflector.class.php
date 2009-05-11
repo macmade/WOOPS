@@ -18,13 +18,13 @@ declare( ENCODING = 'UTF-8' );
 namespace Woops\Core\Reflection;
 
 /**
- * WOOPS PHP error exception class
+ * Object reflector
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
  * @package     Woops.Core.Reflection
  */
-final class ObjectReflector extends Base
+class ObjectReflector extends ClassReflector
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -37,40 +37,4 @@ final class ObjectReflector extends Base
     const IS_EXPLICIT_ABSTRACT = \ReflectionObject::IS_EXPLICIT_ABSTRACT;
     const IS_FINAL             = \ReflectionObject::IS_FINAL;
     const IS_IMPLICIT_ABSTRACT = \ReflectionObject::IS_IMPLICIT_ABSTRACT;
-    
-    /**
-     * 
-     */
-    public static function getInstance( $object )
-    {
-        return self::_getInstance(
-            __CLASS__,
-            '\ReflectionObject',
-            array( $object )
-        );
-    }
-    
-    /**
-     * 
-     */
-    public function isSingleton()
-    {
-        return $this->_reflector->implementsInterface( '\Woops\Core\Singleton\ObjectInterface' );
-    }
-    
-    /**
-     * 
-     */
-    public function isMultiSingleton()
-    {
-        return $this->_reflector->implementsInterface( '\Woops\Core\MultiSingleton\ObjectInterface' );
-    }
-    
-    /**
-     * 
-     */
-    public function isAopReady()
-    {
-        return $this->_reflector->isSubclassOf( '\Woops\Core\Aop\Advisor' );
-    }
 }

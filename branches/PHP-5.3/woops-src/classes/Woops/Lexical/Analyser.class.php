@@ -94,7 +94,7 @@ abstract class Analyser extends \Woops\Core\Object
      */
     private static function _initLexer( $class )
     {
-        $reflection   = \Woops\Core\Reflection\ClassReflector::getInstance( $class );
+        $reflection   = \Woops\Core\Reflection::getClassReflector( $class );
         $constants    = $reflection->getConstants();
         $staticProps  = $reflection->getStaticProperties();
         

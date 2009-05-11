@@ -673,7 +673,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
     public function getSingleton( $className )
     {
         // Creates a reflection object for the requested class
-        $reflection = \Woops\Core\Reflection\ClassReflector::getInstance( $className );
+        $reflection = Reflection::getClassReflector( $className );
         
         // Checks if the class is a singleton
         if( $reflection->isSingleton() ) {
@@ -701,7 +701,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
     public function getMultiSingleton( $className, $instanceName )
     {
         // Creates a reflection object for the requested class
-        $reflection = \Woops\Core\Reflection\ClassReflector::getInstance( $className );
+        $reflection = Reflection::getClassReflector( $className );
         
         // Checks if the class is a multi-singleton
         if( $reflection->isMultiSingleton() ) {
