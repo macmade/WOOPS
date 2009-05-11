@@ -150,7 +150,7 @@ function createClassCache( $className )
     }
     
     // Checks if AOP is enabled, and if the class is not an interface
-    if( $aop && substr( $className, -9 ) !== 'ObjectInterface' ) {
+    if( $aop && substr( $className, -15 ) !== 'ObjectInterface' ) {
         
         // Creates an AOP version of the class
         $aopBuilder = new Woops\Core\Aop\ClassBuilder( $className );
