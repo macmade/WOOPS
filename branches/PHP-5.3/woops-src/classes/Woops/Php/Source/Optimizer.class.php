@@ -293,7 +293,7 @@ class Optimizer extends \Woops\Core\Object
                     && !isset( self::$_superGlobals[ $token[ 1 ] ] )
                     && !isset( $funcGlobals[ $token[ 1 ] ] )
                     && $token[ 1 ] !== '$this'
-                    && ( !is_array( $lastToken ) || $lastToken[ 0 ] !== T_PAAMAYIM_NEKUDOTAYIM )
+                    && ( !is_array( $lastToken ) || ( $lastToken[ 0 ] !== T_PAAMAYIM_NEKUDOTAYIM || isset( $funcVars[ $token[ 1 ] ] ) ) )
                 ) {
                     // Has the variable been renamed already?
                     if( isset( $funcVars[ $token[ 1 ] ] ) ) {
@@ -320,21 +320,22 @@ class Optimizer extends \Woops\Core\Object
                     
                     // Finds all variables in the evaluated code
                     $matches = array();
-                    preg_match_all( '/[^:]*(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/', $token[ 1 ], $matches );
+                    preg_match_all( '/(.?.?)(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/', $token[ 1 ], $matches );
                     
                     // Checks if variables were found
                     if( is_array( $matches ) ) {
                         
                         // Sorts the variables
-                        arsort($matches[ 1 ]);
+                        arsort($matches[ 2 ]);
                         
                         // Process each variable
-                        foreach( $matches[ 1 ] as $var ) {
+                        foreach( $matches[ 2 ] as $key => $var ) {
                             
                             // May we rename the variable?
                             if( !isset( self::$_superGlobals[ $var ] )
                                 && !isset( $funcGlobals[ $var ] )
                                 && $var !== '$this'
+                                && ( $matches[ 1 ][ $key ] !== '::' || isset( $funcVars[ $var ] ) )
                             ) {
                                 
                                 // Has the variable been renamed already?
