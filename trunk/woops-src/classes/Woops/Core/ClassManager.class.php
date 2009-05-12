@@ -277,7 +277,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             }
             
             // Checks if the exception handler class exists
-            if( !class_exists( 'Woops\Core\Error\Handler' ) ) {
+            if( !class_exists( 'Woops\Core\Exception\Handler' ) ) {
                 
                 // Loads the exception handler class
                 // We are now able to deal with exceptions, even if the instantiation of the class manager is not complete
