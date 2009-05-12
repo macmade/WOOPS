@@ -43,7 +43,7 @@ namespace Woops\Core\Error;
  * @version     1.0
  * @package     Woops.Core.Error
  */
-final class Handler extends \Woops\Core\Object implements \Woops\Core\Singleton\ObjectInterface
+final class Handler extends \Woops\Core\Singleton\Base
 {
     /**
      * The minimum version of PHP required to run this class (checked by the WOOPS class manager)
@@ -51,64 +51,9 @@ final class Handler extends \Woops\Core\Object implements \Woops\Core\Singleton\
     const PHP_COMPATIBLE = '5.3.0RC2';
     
     /**
-     * The unique instance of the class (singleton)
-     */
-    private static $_instance = NULL;
-    
-    /**
      * 
      */
     private $_disabledErrors  = 0;
-    
-    /**
-     * Class constructor
-     * 
-     * The class constructor is private to avoid multiple instances of the
-     * class (singleton).
-     * 
-     * @return void
-     */
-    private function __construct()
-    {}
-    
-    /**
-     * Clones an instance of the class
-     * 
-     * A call to this method will produce an exception, as the class cannot
-     * be cloned (singleton).
-     * 
-     * @return  void
-     * @throws  Woops\Core\Singleton\Exception  Always, as the class cannot be cloned (singleton)
-     */
-    public function __clone()
-    {
-        throw new \Woops\Core\Singleton\Exception(
-            'Class ' . __CLASS__ . ' cannot be cloned',
-            \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
-        );
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops\Core\Error\Handler    The unique instance of the class
-     * @see     __construct
-     */
-    public static function getInstance()
-    {
-        // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
-            // Creates the unique instance
-            self::$_instance = new self();
-        }
-        
-        // Returns the unique instance
-        return self::$_instance;
-    }
     
     /**
      * 
