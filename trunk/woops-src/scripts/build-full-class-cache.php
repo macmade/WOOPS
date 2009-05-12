@@ -142,8 +142,11 @@ function createClassCache( $className )
         $optimize = $conf->getVar( 'classCache', 'optimize' );
     }
     
+    // File extension for the cached class file
+    $classExt = ( $aop ) ? '.aop.class.php' : '.class.php';
+    
     // Checks if the cached version already exists
-    if( file_exists( $cacheDir . str_replace( '\\', '.', $className ) . '.class.php' ) ) {
+    if( file_exists( $cacheDir . str_replace( '\\', '.', $className ) . $classExt ) ) {
         
         // Nothing to do, the cached version already exists
         return;
@@ -176,9 +179,6 @@ function createClassCache( $className )
         // Gets the optimized source code
         $classCode = ( string )$optimizer;
     }
-    
-    // File extension for the cached class file
-    $classExt = ( $aop ) ? '.aop.class.php' : '.class.php';
     
     // Writes the class in the cache
     file_put_contents(

@@ -37,6 +37,9 @@ if( $GETVARS && isset( $GETVARS[ 'className' ] ) ) {
     // Name and path of the class to build
     $CLASSNAME = $GETVARS[ 'className' ];
     
+    // File extension for the cached class file
+    $CLASSEXT = ( Woops\Core\Config\Getter::getInstance()->getVar( 'aop', 'enable' ) ) ? '.aop.class.php' : '.class.php';
+    
     // Path to the cache directory
     $CACHEDIR  = Woops\Core\Env\Getter::getInstance()->getPath( 'cache/classes/' );
     
@@ -46,7 +49,7 @@ if( $GETVARS && isset( $GETVARS[ 'className' ] ) ) {
         && $CACHEDIR
         && is_dir( $CACHEDIR )
         && is_writeable( $CACHEDIR )
-        && !file_exists( $CACHEDIR . str_replace( '\\', '.', $CLASSNAME ) )
+        && !file_exists( $CACHEDIR . str_replace( '\\', '.', $CLASSNAME . $CLASSEXT ) )
     ) {
         
         // We don't want any error here
@@ -81,9 +84,6 @@ if( $GETVARS && isset( $GETVARS[ 'className' ] ) ) {
                 // Gets the optimized source code
                 $CLASSCODE = ( string )$OPT;
             }
-            
-            // File extension for the cached class file
-            $CLASSEXT = ( Woops\Core\Config\Getter::getInstance()->getVar( 'aop', 'enable' ) ) ? '.aop.class.php' : '.class.php';
             
             // Writes the class in the cache
             file_put_contents(
