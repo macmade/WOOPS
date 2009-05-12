@@ -52,6 +52,11 @@ class NameSpaceReflector extends \Woops\Core\Reflection
     protected $_functions  = array();
     
     /**
+     * The sub namespaces
+     */
+    protected $_nameSpaces = array();
+    
+    /**
      * Gets the unique class instance
      * 
      * This method is used to get the unique instance of the class
@@ -75,6 +80,16 @@ class NameSpaceReflector extends \Woops\Core\Reflection
     }
     
     /**
+     * Gets the namespace name
+     * 
+     * @return  string  The namespace name
+     */
+    public function getName()
+    {
+        return substr( $this->_nameSpace, 0, -1 );
+    }
+    
+    /**
      * Gets all loaded classes belonging to the namespace
      * 
      * @return  array   An array with instances of Woops\Core\Reflection\ClassReflector
@@ -88,9 +103,9 @@ class NameSpaceReflector extends \Woops\Core\Reflection
         foreach( $classes as $className ) {
             
             // Checks if the class belongs to the namespace
-            if( strpos( $className, $this->_nameSpace ) === 0 ) {
+            if( strpos( $className, $this->_nameSpace ) === 0 || $this->_nameSpace === '\\' ) {
                 
-                    // Checks if the class is in a sub namespace
+                // Checks if the class is in a sub namespace
                 if( strpos( substr( $className, strlen( $this->_nameSpace ) ), '\\' ) ) {
                     
                     continue;
@@ -123,9 +138,9 @@ class NameSpaceReflector extends \Woops\Core\Reflection
         foreach( $interfaces as $interfaceName ) {
             
             // Checks if the interface belongs to the namespace
-            if( strpos( $interfaceName, $this->_nameSpace ) === 0 ) {
+            if( strpos( $interfaceName, $this->_nameSpace ) === 0 || $this->_nameSpace === '\\' ) {
                 
-                    // Checks if the interface is in a sub namespace
+                // Checks if the interface is in a sub namespace
                 if( strpos( substr( $interfaceName, strlen( $this->_nameSpace ) ), '\\' ) ) {
                     
                     continue;
@@ -161,7 +176,7 @@ class NameSpaceReflector extends \Woops\Core\Reflection
             foreach( $functions[ 'user' ] as $functionName ) {
                 
                 // Checks if the interface belongs to the namespace
-                if( stripos( $functionName, $this->_nameSpace ) === 0 ) {
+                if( stripos( $functionName, $this->_nameSpace ) === 0 || $this->_nameSpace === '\\' ) {
                     
                     // Checks if the function is in a sub namespace
                     if( strpos( substr( $functionName, strlen( $this->_nameSpace ) ), '\\' ) ) {
@@ -184,21 +199,98 @@ class NameSpaceReflector extends \Woops\Core\Reflection
     }
     
     /**
+     * Gets the sub namespaces
+     * 
+     * @return  array   An array with instances of Woops\Core\Reflection\NameSpaceReflector
+     */
+    public function getSubNameSpaces()
+    {
+        // Gets the defined classes, interfaces and functions
+        $classes    = get_declared_classes();
+        $interfaces = get_declared_interfaces();
+        $functions  = get_defined_functions();
+        $functions  = ( isset( $functions[ 'user' ] ) ) ? $functions[ 'user' ] : array();
+        
+        // Process each class
+        foreach( $classes as $className ) {
+            
+            // Checks if the class belongs to a sub namespace
+            if( ( strpos( $className, $this->_nameSpace ) === 0 || $this->_nameSpace === '\\' )
+                && strpos( substr( $className, strlen( $this->_nameSpace ) ), '\\' )
+            ) {
+                
+                // Name of the namespace
+                $ns = substr( $className, 0, strrpos( $className, '\\' ) );
+                
+                // Checks if we already have the namespace
+                if( !isset( $this->_nameSpaces[ $ns ] ) ) {
+                    
+                    // Gets the namespace reflector
+                    $this->_nameSpaces[ $ns ] = static::getInstance( $ns );
+                }
+            }
+        }
+        
+        // Process each interface
+        foreach( $interfaces as $interfaceName ) {
+            
+            // Checks if the interface belongs to a sub namespace
+            if( ( strpos( $interfaceName, $this->_nameSpace ) === 0 || $this->_nameSpace === '\\' )
+                && strpos( substr( $interfaceName, strlen( $this->_nameSpace ) ), '\\' )
+            ) {
+                
+                // Name of the namespace
+                $ns = substr( $interfaceName, 0, strrpos( $interfaceName, '\\' ) );
+                
+                // Checks if we already have the namespace
+                if( !isset( $this->_nameSpaces[ $ns ] ) ) {
+                    
+                    // Gets the namespace reflector
+                    $this->_nameSpaces[ $ns ] = static::getInstance( $ns );
+                }
+            }
+        }
+        
+        // Process each function
+        foreach( $functions as $functionName ) {
+            
+            // Checks if the function belongs to a sub namespace
+            if( ( strpos( $functionName, $this->_nameSpace ) === 0 || $this->_nameSpace === '\\' )
+                && strpos( substr( $functionName, strlen( $this->_nameSpace ) ), '\\' )
+            ) {
+                
+                // Name of the namespace
+                $ns = substr( $functionName, 0, strrpos( $functionName, '\\' ) );
+                
+                // Checks if we already have the namespace
+                if( !isset( $this->_nameSpaces[ $ns ] ) ) {
+                    
+                    // Gets the namespace reflector
+                    $this->_nameSpaces[ $ns ] = static::getInstance( $ns );
+                }
+            }
+        }
+        
+        // Returns the sub namespaces
+        return $this->_nameSpaces;
+    }
+    
+    /**
      * Checks if a class exists in the namespace
      * 
+     * @param   string  The relative class name
      * @return  boolean True if the class exists in the namespace, otherwise false
      */
-    public function classExists( $name )
+    public function hasClass( $name )
     {
         // Ensures we have a string value
         $name = ( string )$name;
         
-        // Checks for a leading backslash
-        if( substr( $name, 0, 1 ) === '\\' ) {
-            
-            // Removes the leading backslash
-            $name = substr( $name, 1 );
-        }
+        // Removes the leading backslash if present
+        $name = ( substr( $name, 0, 1 ) === '\\' ) ? substr( $name, 1 ) : $name;
+        
+        // Adds the namespace
+        $name = $this->_nameSpace . $name;
         
         // Updates the namespace classes
         $this->getClasses();
@@ -210,19 +302,19 @@ class NameSpaceReflector extends \Woops\Core\Reflection
     /**
      * Checks if a class exists in the namespace
      * 
+     * @param   string  The relative interface name
      * @return  boolean True if the class exists in the namespace, otherwise false
      */
-    public function interfaceExists( $name )
+    public function hasInterface( $name )
     {
         // Ensures we have a string value
         $name = ( string )$name;
         
-        // Checks for a leading backslash
-        if( substr( $name, 0, 1 ) === '\\' ) {
-            
-            // Removes the leading backslash
-            $name = substr( $name, 1 );
-        }
+        // Removes the leading backslash if present
+        $name = ( substr( $name, 0, 1 ) === '\\' ) ? substr( $name, 1 ) : $name;
+        
+        // Adds the namespace
+        $name = $this->_nameSpace . $name;
         
         // Updates the namespace interfaces
         $this->getInterfaces();
@@ -234,19 +326,19 @@ class NameSpaceReflector extends \Woops\Core\Reflection
     /**
      * Checks if a class exists in the namespace
      * 
+     * @param   string  The relative function name
      * @return  boolean True if the class exists in the namespace, otherwise false
      */
-    public function functionExists( $name )
+    public function hasFunction( $name )
     {
         // Ensures we have a string value
         $name = ( string )$name;
         
-        // Checks for a leading backslash
-        if( substr( $name, 0, 1 ) === '\\' ) {
-            
-            // Removes the leading backslash
-            $name = substr( $name, 1 );
-        }
+        // Removes the leading backslash if present
+        $name = ( substr( $name, 0, 1 ) === '\\' ) ? substr( $name, 1 ) : $name;
+        
+        // Adds the namespace
+        $name = $this->_nameSpace . $name;
         
         // Updates the namespace functions
         $this->getFunctions();
@@ -256,12 +348,26 @@ class NameSpaceReflector extends \Woops\Core\Reflection
     }
     
     /**
-     * Gets the namespace name
+     * Checks if a class exists in the namespace
      * 
-     * @return  string  The namespace name
+     * @param   string  The relative namespace name
+     * @return  boolean True if the class exists in the namespace, otherwise false
      */
-    public function getName()
+    public function hasSubNameSpace( $name )
     {
-        return $this->_nameSpace;
+        // Ensures we have a string value
+        $name = ( string )$name;
+        
+        // Removes the leading backslash if present
+        $name = ( substr( $name, 0, 1 ) === '\\' ) ? substr( $name, 1 ) : $name;
+        
+        // Adds the namespace
+        $name = $this->_nameSpace . $name;
+        
+        // Updates the sub namespaces
+        $this->getSubNameSpaces();
+        
+        // Returns true if the function exists in the namespace
+        return isset( $this->_nameSpaces[ $name ] );
     }
 }
