@@ -160,12 +160,20 @@ class ClassReflector extends \Woops\Core\Reflection
     {
         if( !isset( $this->_nameSpace ) ) {
             
-            $name = $this->getName();
+            $name = $this->_reflector->getName();
             $ns   = substr( $name, 0, strrpos( $name, '\\' ) );
             $this->_nameSpace = NameSpaceReflector::getInstance( $ns );
         }
         
         return $this->_nameSpace;
+    }
+    
+    /**
+     * 
+     */
+    public function isListenable()
+    {
+        return is_subclass_of( $this->_reflector->getName(), 'Woops\Core\Event\Dispatcher' );
     }
     
     /**
