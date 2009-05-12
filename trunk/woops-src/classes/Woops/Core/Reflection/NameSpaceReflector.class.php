@@ -90,6 +90,12 @@ class NameSpaceReflector extends \Woops\Core\Reflection
             // Checks if the class belongs to the namespace
             if( strpos( $className, $this->_nameSpace ) === 0 ) {
                 
+                    // Checks if the class is in a sub namespace
+                if( strpos( substr( $className, strlen( $this->_nameSpace ) ), '\\' ) ) {
+                    
+                    continue;
+                }
+                
                 // Checks if we already have the class
                 if( !isset( $this->_classes[ $className ] ) ) {
                     
@@ -118,6 +124,12 @@ class NameSpaceReflector extends \Woops\Core\Reflection
             
             // Checks if the interface belongs to the namespace
             if( strpos( $interfaceName, $this->_nameSpace ) === 0 ) {
+                
+                    // Checks if the interface is in a sub namespace
+                if( strpos( substr( $interfaceName, strlen( $this->_nameSpace ) ), '\\' ) ) {
+                    
+                    continue;
+                }
                 
                 // Checks if we already have the interface
                 if( !isset( $this->_interfaces[ $interfaceName ] ) ) {
@@ -150,6 +162,12 @@ class NameSpaceReflector extends \Woops\Core\Reflection
                 
                 // Checks if the interface belongs to the namespace
                 if( stripos( $functionName, $this->_nameSpace ) === 0 ) {
+                    
+                    // Checks if the function is in a sub namespace
+                    if( strpos( substr( $functionName, strlen( $this->_nameSpace ) ), '\\' ) ) {
+                        
+                        continue;
+                    }
                     
                     // Checks if we already have the interface
                     if( !isset( $this->_functions[ $functionName ] ) ) {
