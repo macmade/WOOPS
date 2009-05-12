@@ -268,60 +268,63 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             // Adds the WOOPS version to the HTTP headers
             header( 'X-WOOPS-VERSION: ' . self::WOOPS_VERSION . '-' . self::WOOPS_VERSION_SUFFIX );
             
-            // No exception allowed at the time, as the exception handler is not loaded yet
-            try {
+            // Checks if the error handler class exists
+            if( !class_exists( 'Woops\Core\Error\Handler' ) ) {
                 
-                // Gets the instance of the WOOPS environment
-                self::$_instance->_env              = \Woops\Core\Env\Getter::getInstance();
-                
-                // Gets the instance of the WOOPS module manager
-                self::$_instance->_modManager       = \Woops\Core\Module\Manager::getInstance();
-                
-                // Checks if we must use AOP classes
-                self::$_instance->_enableAop        = \Woops\Core\Config\Getter::getInstance()->getVar( 'aop', 'enable' );
-                
-                // If AOP is enabled, the class cache must also be enabled
-                if( self::$_instance->_enableAop ) {
-                    
-                    // Enables the class cache
-                    self::$_instance->_classCache = true;
-                    
-                } else {
-                    
-                    // Checks if we must use a class cache
-                    self::$_instance->_classCache = \Woops\Core\Config\Getter::getInstance()->getVar( 'classCache', 'enable' );
-                }
-                
-                // Checks if we must use cached classes
-                if( self::$_instance->_classCache ) {
-                    
-                    // Gets the class cache directory
-                    self::$_instance->_cacheDirectory = self::$_instance->_env->getPath( 'cache/classes/' );
-                    
-                    // Checks if the cache directory exist, and is writeable
-                    if( !self::$_instance->_cacheDirectory
-                        || !is_dir( self::$_instance->_cacheDirectory )
-                        || !is_writeable( self::$_instance->_cacheDirectory )
-                    ) {
-                        
-                        // Disables the AOP and the class cache
-                        // Maybe this should generate a fatal error, but in that
-                        // case, and if we are installing WOOPS, this could
-                        // generate a bad first impression...
-                        self::$_instance->_classCache = false;
-                        self::$_instance->_enableAop  = false;
-                        define( 'WOOPS_CLASS_CACHE_MODE_OFF', true );
-                    }
-                }
-                
-            } catch( Exception $e ) {
-                
-                // Loads the error and exception handler (otherwise a problem here won't be able to be reported)
+                // Loads the PHP error handler class
+                // We are now able to deal with PHP errors, even if the instantiation of the class manager is not complete
                 self::$_instance->_loadClass( 'Woops\Core\Error\Handler' );
-                self::$_instance->_loadClass( 'Woops\Core\Exception\Handler' );
+            }
+            
+            // Checks if the exception handler class exists
+            if( !class_exists( 'Woops\Core\Error\Handler' ) ) {
                 
-                // Throws the exception back
-                throw $e;
+                // Loads the exception handler class
+                // We are now able to deal with exceptions, even if the instantiation of the class manager is not complete
+                self::$_instance->_loadClass( 'Woops\Core\Exception\Handler' );
+            }
+            
+            // Gets the instance of the WOOPS environment
+            self::$_instance->_env              = \Woops\Core\Env\Getter::getInstance();
+            
+            // Gets the instance of the WOOPS module manager
+            self::$_instance->_modManager       = \Woops\Core\Module\Manager::getInstance();
+            
+            // Checks if we must use AOP classes
+            self::$_instance->_enableAop        = \Woops\Core\Config\Getter::getInstance()->getVar( 'aop', 'enable' );
+            
+            // If AOP is enabled, the class cache must also be enabled
+            if( self::$_instance->_enableAop ) {
+                
+                // Enables the class cache
+                self::$_instance->_classCache = true;
+                
+            } else {
+                
+                // Checks if we must use a class cache
+                self::$_instance->_classCache = \Woops\Core\Config\Getter::getInstance()->getVar( 'classCache', 'enable' );
+            }
+            
+            // Checks if we must use cached classes
+            if( self::$_instance->_classCache ) {
+                
+                // Gets the class cache directory
+                self::$_instance->_cacheDirectory = self::$_instance->_env->getPath( 'cache/classes/' );
+                
+                // Checks if the cache directory exist, and is writeable
+                if( !self::$_instance->_cacheDirectory
+                    || !is_dir( self::$_instance->_cacheDirectory )
+                    || !is_writeable( self::$_instance->_cacheDirectory )
+                ) {
+                    
+                    // Disables the AOP and the class cache
+                    // Maybe this should generate a fatal error, but in that
+                    // case, and if we are installing WOOPS, this could
+                    // generate a bad first impression...
+                    self::$_instance->_classCache = false;
+                    self::$_instance->_enableAop  = false;
+                    define( 'WOOPS_CLASS_CACHE_MODE_OFF', true );
+                }
             }
         }
         

@@ -69,6 +69,11 @@ class Getter extends \Woops\Core\Singleton\Base
     );
     
     /**
+     * The loaded WOOPS modules
+     */
+    protected $_loadedModules   = array();
+    
+    /**
      * Class constructor
      * 
      * The class constructor is private to avoid multiple instances of the
@@ -130,6 +135,28 @@ class Getter extends \Woops\Core\Singleton\Base
         
         // Sets the relative path to the WOOPS sources
         $this->_woopsVars[ 'web' ][ 'src' ]  = $this->_woopsVars[ 'web' ][ 'root' ] . self::WOOPS_SOURCE_DIRNAME . '/';
+        
+        // Gets the path to the WOOPS configuration file
+        // We are not using the Woops\Core\Config\Getter class as this will result in an endless loop between the constructors
+        $ini = $this->getPath( 'config/woops.ini.php' ) ?: $this->getSourcePath( 'config.ini.php' );
+        
+        // Parses the INI file
+        $conf = parse_ini_file( $ini, true );
+        
+        // Checks if we have loaded modules
+        if( isset( $conf[ 'modules' ][ 'loaded' ] ) ) {
+            
+            // Process each loaded modules
+            foreach( $conf[ 'modules' ][ 'loaded' ] as $module ) {
+                
+                // Stores the paths of the current module
+                // We are not using the Woops\Core\Module\Manager class as this will result in an endless loop between the constructors
+                $this->_loadedModules[ $module ] = array(
+                    'sys' => $this->getPath( 'modules/' . $module )    ?: $this->getSourcePath( 'modules/' . $module ),
+                    'web' => $this->getWebPath( 'modules/' . $module ) ?: $this->getSourceWebPath( 'modules/' . $module )
+                );
+            }
+        }
     }
     
     /**
@@ -142,31 +169,6 @@ class Getter extends \Woops\Core\Singleton\Base
     public function __get( $name )
     {
         return $this->getVar( $name );
-    }
-    
-    /**
-     * Gets the unique class instance
-     * 
-     * This method is used to get the unique instance of the class
-     * (singleton). If no instance is available, it will create it.
-     * 
-     * @return  Woops\Core\Env\Getter   The unique instance of the class
-     * @see     Woops\Core\Singleton\Base::getInstance
-     */
-    public static function getInstance()
-    {
-        // Gets the unique instance
-        $instance = parent::getInstance();
-        
-        // Checks if the unique instance has been created
-        if( !is_object( $instance->_modManager ) ) {
-            
-            // Gets the module manager instance
-            $instance->_modManager = \Woops\Core\Module\Manager::getInstance();
-        }
-        
-        // Returns the unique instance
-        return $instance;
     }
     
     /**
@@ -355,25 +357,17 @@ class Getter extends \Woops\Core\Singleton\Base
     {
         if( substr( $path, 0, 12 ) === 'woops-mod://' ) {
             
-            try {
+            $moduleName = substr( $path, 12, strpos( $path, '/', 12 ) - 12 );
+            
+            if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
                 
-                $moduleName = substr( $path, 12, strpos( $path, '/', 12 ) - 12 );
-                $modPath    = $this->_modManager->getModulePath( $moduleName );
-                $absPath    = $modPath . str_replace( '/', DIRECTORY_SEPARATOR, substr( $path, 13 + strlen( $moduleName ) ) );
-                
-                return ( file_exists( $absPath ) ) ? $absPath : false;
-                
-            } catch( \Woops\Core\Module\Manager\Exception $e ) {
-                
-                if( $e->getCode() === \Woops\Core\Module\Manager\Exception::EXCEPTION_MODULE_NOT_LOADED ) {
-                    
-                    return false;
-                    
-                } else {
-                    
-                    throw $e;
-                }
+                return false;
             }
+            
+            $modPath = $this->_loadedModules[ $moduleName ][ 'sys' ] . DIRECTORY_SEPARATOR;
+            $absPath = $modPath . str_replace( '/', DIRECTORY_SEPARATOR, substr( $path, 13 + strlen( $moduleName ) ) );
+            
+            return ( file_exists( $absPath ) ) ? $absPath : false;
             
         } else {
             
@@ -407,23 +401,15 @@ class Getter extends \Woops\Core\Singleton\Base
         
         if( substr( $path, 0, 12 ) === 'woops-mod://' ) {
             
-            try {
+            $moduleName = substr( $path, 12, strpos( $path, '/', 12 ) - 12 );
+            
+            if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
                 
-                $moduleName = substr( $path, 12, strpos( $path, '/', 12 ) - 12 );
-                $modPath    = $this->_modManager->getModuleRelativePath( $moduleName );
-                $webPath    = $modPath . substr( $path, 13 + strlen( $moduleName ) );
-                
-            } catch( \Woops\Core\Module\Manager\Exception $e ) {
-                
-                if( $e->getCode() === \Woops\Core\Module\Manager::EXCEPTION_MODULE_NOT_LOADED ) {
-                    
-                    return false;
-                    
-                } else {
-                    
-                    throw $e;
-                }
+                return false;
             }
+            
+            $modPath = $this->_loadedModules[ $moduleName ][ 'web' ] . '/';
+            $webPath = $modPath . substr( $path, 13 + strlen( $moduleName ) );
             
         } else {
             

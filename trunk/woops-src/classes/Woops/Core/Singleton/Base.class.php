@@ -76,11 +76,6 @@ abstract class Base extends \Woops\Core\Event\Dispatcher implements ObjectInterf
         // Checks if the unique instance has already been created
         if( !isset( self::$_instances[ $class ] ) ) {
             
-            // Sets a boolean flag so the instance will be considered as existing
-            // This is required in order to avoid an endless loop during the
-            // initialization of some core classes, as they are inter-dependant.
-            self::$_instances[ $class ] = true;
-            
             // Creates the unique instance
             self::$_instances[ $class ] = new $class();
             
