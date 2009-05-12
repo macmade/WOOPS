@@ -16,5 +16,5 @@ declare( ENCODING = 'UTF-8' );
 
 Woops\Database\Layer::getInstance()->registerDatabaseEngine(
     'pdo',
-    '\Woops\Mod\Pdo\Database\Engine'
+    'Woops\Mod\Pdo\Database\Engine'
 );

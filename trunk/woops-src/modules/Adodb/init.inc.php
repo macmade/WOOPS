@@ -16,6 +16,6 @@ declare( ENCODING = 'UTF-8' );
 
 Woops\Database\Layer::getInstance()->registerDatabaseEngine(
     'adodb',
-    '\Woops\Mod\Adodb\Database\Engine'
+    'Woops\Mod\Adodb\Database\Engine'
 );
 

@@ -16,14 +16,14 @@ declare( ENCODING = 'UTF-8' );
 
 Woops\Core\Module\Manager::getInstance()->registerBlockType(
     'cms',
-    '\Woops\Mod\Cms\Block'
+    'Woops\Mod\Cms\Block'
 );
 
 Woops\Xhtml\Parser::registerProcessingInstructionHandler(
     'woops-cms-block',
-    '\Woops\Mod\Cms\Block\ProcessingInstruction\Handler'
+    'Woops\Mod\Cms\Block\ProcessingInstruction\Handler'
 );
 
 Woops\Page\Engine::getInstance()->registerPageEngine(
-    '\Woops\Mod\Cms\Page\Engine'
+    'Woops\Mod\Cms\Page\Engine'
 );
