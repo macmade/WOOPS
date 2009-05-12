@@ -84,7 +84,7 @@ class Member extends \Woops\Core\Object
      * The extra field types, with their corresponding PHP class name
      */
     protected static $_extraFields = array(
-        0x7041 => '\Woops\Gzip\ExtraField\ApolloFileTypeInformation'
+        0x7041 => 'Woops\Gzip\ExtraField\ApolloFileTypeInformation'
     );
     
     /**

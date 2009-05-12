@@ -42,9 +42,9 @@ class File extends \Woops\Core\Object
      * The FLV tag types with their corresponding PHP classname
      */
     protected static $_types = array(
-        0x08 => '\Woops\Flv\Tag\Audio\Data',
-        0x09 => '\Woops\Flv\Tag\Video\Data',
-        0x12 => '\Woops\Flv\Tag\Script\Data'
+        0x08 => 'Woops\Flv\Tag\Audio\Data',
+        0x09 => 'Woops\Flv\Tag\Video\Data',
+        0x12 => 'Woops\Flv\Tag\Script\Data'
     );
     
     /**

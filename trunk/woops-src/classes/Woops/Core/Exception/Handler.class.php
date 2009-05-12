@@ -44,7 +44,7 @@ final class Handler extends \Woops\Core\Singleton\Base
      */
     private function _handleException( \Exception $e )
     {
-        if( !is_subclass_of( $e, '\Woops\Core\Exception\Base' ) ) {
+        if( !is_subclass_of( $e, 'Woops\Core\Exception\Base' ) ) {
             
             $e = new \Woops\Core\Php\Exception(
                 'Exception of type ' . get_class( $e ) . ': ' . $e->getMessage(),

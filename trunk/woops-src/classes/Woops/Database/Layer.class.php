@@ -128,13 +128,6 @@ class Layer extends \Woops\Core\Singleton\Base
             );
         }
         
-        // Checks for a leading backslash
-        if( substr( $class, 0, 1 ) !== '\\' ) {
-            
-            // Adds the leading backslash
-            $class = '\\' . $class;
-        }
-        
         // Checks for the engine class
         if( !class_exists( $class ) ) {
             

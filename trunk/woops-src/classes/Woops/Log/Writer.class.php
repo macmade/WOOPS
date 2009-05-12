@@ -142,13 +142,6 @@ class Writer extends \Woops\Core\Singleton\Base
      */
     public function registerLogWriter( $class, $types = 0x00FF )
     {
-        // Checks for a leading backslash
-        if( substr( $class, 0, 1 ) !== '\\' ) {
-            
-            // Adds the leading backslash
-            $class = '\\' . $class;
-        }
-        
         // Type correction
         $types = $types & self::LOG_TYPE_ALL;
         

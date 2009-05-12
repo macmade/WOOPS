@@ -153,7 +153,7 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function isSingleton()
     {
-        return $this->_reflector->implementsInterface( '\Woops\Core\Singleton\ObjectInterface' );
+        return $this->_reflector->implementsInterface( 'Woops\Core\Singleton\ObjectInterface' );
     }
     
     /**
@@ -161,7 +161,7 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function isMultiSingleton()
     {
-        return $this->_reflector->implementsInterface( '\Woops\Core\MultiSingleton\ObjectInterface' );
+        return $this->_reflector->implementsInterface( 'Woops\Core\MultiSingleton\ObjectInterface' );
     }
     
     /**
@@ -169,7 +169,7 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function isAopReady()
     {
-        return $this->_reflector->isSubclassOf( '\Woops\Core\Aop\Advisor' );
+        return $this->_reflector->isSubclassOf( 'Woops\Core\Aop\Advisor' );
     }
     
     /**

@@ -48,7 +48,7 @@ abstract class Dispatcher extends \Woops\Core\Object
         if( !class_exists( '\\' . $eventClass ) ) {
             
             // Generic event
-            $eventClass = '\Woops\Core\Event';
+            $eventClass = 'Woops\Core\Event';
         }
         
         // Dispatch the event object

@@ -56,13 +56,6 @@ class Engine extends \Woops\Core\Singleton\Base
      */
     public function registerPageEngine( $className )
     {
-        // Checks for a leading backslash
-        if( substr( $className, 0, 1 ) !== '\\' ) {
-            
-            // Adds the leading backslash
-            $className = '\\' . $className;
-        }
-        
         if( !class_exists( $className ) ) {
             
             throw new Engine\Exception(

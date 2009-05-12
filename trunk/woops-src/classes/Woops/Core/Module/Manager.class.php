@@ -332,7 +332,7 @@ final class Manager extends \Woops\Core\Singleton\Base
             );
         }
         
-        if( !is_subclass_of( $abstractClass, '\Woops\Core\Module\Block' ) ) {
+        if( !is_subclass_of( $abstractClass, 'Woops\Core\Module\Block' ) ) {
             
             throw new Manager\Exception(
                 'The abstract class \'' . $abstractClass . '\' for block type \'' . $type . '\' does not extends the \'Woops\Core\Module\Block\' abstract class',

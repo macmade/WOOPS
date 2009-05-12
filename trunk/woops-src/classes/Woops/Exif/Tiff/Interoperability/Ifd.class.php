@@ -40,7 +40,7 @@ class Ifd extends \Woops\Core\Object implements \Woops\Tiff\Ifd\ObjectInterface
      * The types of the EXIF Interoperability TIFF tags, with their corresponding PHP class
      */
     protected static $_types = array(
-        0x0001 => '\Woops\Exif\Tiff\Interoperability\Tag\InteroperabilityIndex'
+        0x0001 => 'Woops\Exif\Tiff\Interoperability\Tag\InteroperabilityIndex'
     );
     
     /**

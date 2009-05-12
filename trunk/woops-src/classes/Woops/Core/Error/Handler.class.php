@@ -71,7 +71,7 @@ final class Handler extends \Woops\Core\Singleton\Base
         if( !( $code & $this->_disabledErrors ) ) {
             
             throw new \Woops\Core\Php\Error\Exception(
-                \Woops\Core\Exception\Base::getExceptionString( '\Woops\Core\Php\Error\Exception', $code ) . ': ' . $message,
+                \Woops\Core\Exception\Base::getExceptionString( 'Woops\Core\Php\Error\Exception', $code ) . ': ' . $message,
                 $code
             );
         }
