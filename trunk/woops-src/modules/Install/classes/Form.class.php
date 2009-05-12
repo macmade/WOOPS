@@ -215,7 +215,7 @@ class Form extends \Woops\Core\Module\Base
         self::$_modules   = \Woops\Core\Module\Manager::getInstance()->getAvailableModules();
         
         // Gets the available timezones
-        self::$_timezones = \Woops\Helpers\TimeUtilities::getInstance()->getTimezones();
+        self::$_timezones = \Woops\Helper\TimeUtilities::getInstance()->getTimezones();
         
         // Gets the available languages
         self::$_languages = \Woops\Locale\Helper::getInstance()->getLanguages();
