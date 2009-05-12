@@ -34,7 +34,7 @@ class NameSpaceReflector extends \Woops\Core\Reflection
     /**
      * 
      */
-    protected $_nameSpace = '';
+    protected $_nameSpace  = '';
     
     /**
      * 
