@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- $Id: Block_Xhtml_SayHello.en.xml 195 2009-02-11 09:49:56Z macmade $  -->
+
+<woops-lang>
+	<labels>
+		<loginBoxTitle>WOOPS administration login</loginBoxTitle>
+		<loginBoxUsername>Username:</loginBoxUsername>
+		<loginBoxPassword>Password:</loginBoxPassword>
+		<loginBoxSubmit>Log in</loginBoxSubmit>
+		<loginVersion>WOOPS version %s</loginVersion>
+	</labels>
+</woops-lang>
