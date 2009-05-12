@@ -147,8 +147,8 @@ final class Getter extends \Woops\Core\Singleton\Base
         }
         
         //  Gets the prepend and append strings, if any
-        $prepend = ( ini_get( 'error_prepend_string' ) ) ? ini_get( 'error_prepend_string' ) : '';
-        $append  = ( ini_get( 'error_append_string' ) )  ? ini_get( 'error_append_string' )  : '';
+        $prepend = ini_get( 'error_prepend_string' ) ?: '';
+        $append  = ini_get( 'error_append_string' )  ?: '';
         
         
         // Displays the PHP style error message and aborts the script

@@ -118,7 +118,7 @@ class StringUtilities extends \Woops\Core\Singleton\Base
      */
     public function __get( $name )
     {
-        return ( $this->_asciiTable[ $name ] ) ? $this->_asciiTable[ $name ] : '';
+        return ( isset( $this->_asciiTable[ $name ] ) ) ? $this->_asciiTable[ $name ] : '';
     }
     
     /**
@@ -138,7 +138,7 @@ class StringUtilities extends \Woops\Core\Singleton\Base
         $repeat = ( isset( $args[ 0 ] ) ) ? ( int )$args[ 0 ] : 1;
         
         // Returns the ASCII character
-        return ( $this->_asciiTable[ $name ] ) ? str_repeat( $this->_asciiTable[ $name ], $repeat ) : '';
+        return ( isset( $this->_asciiTable[ $name ] ) ) ? str_repeat( $this->_asciiTable[ $name ], $repeat ) : '';
     }
     
     /**

@@ -239,8 +239,8 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         }
         
         //  Gets the prepend and append strings, if any
-        $prepend = ( ini_get( 'error_prepend_string' ) ) ? ini_get( 'error_prepend_string' ) : '';
-        $append  = ( ini_get( 'error_append_string' ) )  ? ini_get( 'error_append_string' )  : '';
+        $prepend = ini_get( 'error_prepend_string' ) ?: '';
+        $append  = ini_get( 'error_append_string' )  ?: '';
         
         
         // Displays the PHP style error message and aborts the script
@@ -569,7 +569,7 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         $host     = ( $ssl ) ? 'ssl://' . $host : $host;
         
         // Checks if the protocol is defined
-        $protocol = ( $protocol ) ? $protocol : 'HTTP/1.1';
+        $protocol = $protocol ?: 'HTTP/1.1';
         
         // Query string for the build script
         $query    = 'woops[classCache][className]=' . urlencode( $className );

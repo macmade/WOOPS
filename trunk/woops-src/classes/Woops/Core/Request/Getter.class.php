@@ -94,7 +94,7 @@ final class Getter extends \Woops\Core\Singleton\Base
      */
     public function getVar( $name, $order = '' )
     {
-        $order = ( $order ) ? $order : $this->_lookupOrder;
+        $order = $order ?: $this->_lookupOrder;
         $keys  = preg_split( '//', $order );
         
         foreach( $keys as $key ) {
@@ -113,7 +113,7 @@ final class Getter extends \Woops\Core\Singleton\Base
      */
     public function getWoopsVar( $name, $order = '' )
     {
-        $order = ( $order ) ? $order : $this->_lookupOrder;
+        $order = $order ?: $this->_lookupOrder;
         $keys  = preg_split( '//', $order );
         
         foreach( $keys as $key ) {
@@ -132,7 +132,7 @@ final class Getter extends \Woops\Core\Singleton\Base
      */
     public function varExists( $name, $order = '' )
     {
-        $order = ( $order ) ? $order : $this->_lookupOrder;
+        $order = $order ?: $this->_lookupOrder;
         $keys  = preg_split( '//', $order );
         
         foreach( $keys as $key ) {
@@ -151,7 +151,7 @@ final class Getter extends \Woops\Core\Singleton\Base
      */
     public function woopsVarExists( $name, $order = '' )
     {
-        $order = ( $order ) ? $order : $this->_lookupOrder;
+        $order = $order ?: $this->_lookupOrder;
         $keys  = preg_split( '//', $order );
         
         foreach( $keys as $key ) {
