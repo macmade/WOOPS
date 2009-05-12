@@ -138,7 +138,7 @@ class Woops_Check_Environment
         $version              = phpversion();
         $replace[ 'VERSION' ] = $version;
         
-        if( ( double )PHP_VERSION < 5.3 ) {
+        if( version_compare( PHP_VERSION, '5.3.0RC2', '<' ) ) {
             
             return 'ERROR';
         }
