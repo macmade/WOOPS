@@ -107,7 +107,7 @@ class Parser extends \Woops\Core\Object
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str       = \Woops\Helpers\StringUtilities::getInstance();
+        self::$_str       = \Woops\Helper\StringUtilities::getInstance();
         
         // Static variables are set
         self::$_hasStatic = true;

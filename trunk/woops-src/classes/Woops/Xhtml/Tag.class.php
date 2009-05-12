@@ -268,7 +268,7 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str             = \Woops\Helpers\StringUtilities::getInstance();
+        self::$_str             = \Woops\Helper\StringUtilities::getInstance();
         
         // Gets the instance of the configuration object
         self::$_conf            = \Woops\Core\Config\Getter::getInstance();

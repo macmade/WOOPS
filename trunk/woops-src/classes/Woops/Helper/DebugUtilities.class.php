@@ -15,7 +15,7 @@
 declare( ENCODING = 'UTF-8' );
 
 // Internal namespace
-namespace Woops\Helpers;
+namespace Woops\Helper;
 
 /**
  * Debug utilities

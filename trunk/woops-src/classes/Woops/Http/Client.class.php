@@ -334,10 +334,10 @@ class Client extends \Woops\Core\Event\Dispatcher
     private static function _setStaticVars()
     {
         // Gets the instance of the string utilities
-        self::$_str       = \Woops\Helpers\StringUtilities::getInstance();
+        self::$_str       = \Woops\Helper\StringUtilities::getInstance();
         
         // Gets the instance of the string utilities
-        self::$_array     = \Woops\Helpers\ArrayUtilities::getInstance();
+        self::$_array     = \Woops\Helper\ArrayUtilities::getInstance();
         
         // Gets the instance of the file types class
         self::$_fileTypes = \Woops\File\Types::getInstance();
