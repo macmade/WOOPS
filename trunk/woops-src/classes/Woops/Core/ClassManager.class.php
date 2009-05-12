@@ -356,6 +356,12 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             $instance = self::getInstance();
         }
         
+        // Special processing for the error and exception handlers, as they are included by the getInstance() method
+        if( $className === 'Woops\Core\Error\Handler' || $className === 'Woops\Core\Exception\Handler' ) {
+            
+            return true;
+        }
+        
         // Checks for a leading backslash
         if( substr( $className, 0, 1 ) === '\\' ) {
             
