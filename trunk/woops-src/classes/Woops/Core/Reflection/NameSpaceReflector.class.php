@@ -236,4 +236,14 @@ class NameSpaceReflector extends \Woops\Core\Reflection
         // Returns true if the function exists in the namespace
         return isset( $this->_functions[ $name ] );
     }
+    
+    /**
+     * Gets the namespace name
+     * 
+     * @return  string  The namespace name
+     */
+    public function getName()
+    {
+        return $this->_nameSpace;
+    }
 }
