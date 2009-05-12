@@ -36,42 +36,52 @@ abstract class Reflection extends \Woops\Core\MultiSIngleton\Base
      */
     final public function __call( $name, array $args )
     {
-        switch( count( $args ) ) {
+        if( is_object( $this->_reflector ) ) {
             
-            case 0:
+            switch( count( $args ) ) {
                 
-                return $this->_reflector->$name();
-                break;
+                case 0:
+                    
+                    return $this->_reflector->$name();
+                    break;
+                
+                case 1:
+                    
+                    return $this->_reflector->$name( $args[ 0 ] );
+                    break;
+                
+                case 2:
+                    
+                    return $this->_reflector->$name( $args[ 0 ], $args[ 1 ] );
+                    break;
+                
+                case 3:
+                    
+                    return $this->_reflector->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ] );
+                    break;
+                
+                case 4:
+                    
+                    return $this->_reflector->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ] );
+                    break;
+                
+                case 5:
+                    
+                    return $this->_reflector->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ] );
+                    break;
+                
+                default:
+                    
+                    return call_user_func_array( array( $this->_reflector, $name ), $args );
+                    break;
+            }
             
-            case 1:
-                
-                return $this->_reflector->$name( $args[ 0 ] );
-                break;
+        } else {
             
-            case 2:
-                
-                return $this->_reflector->$name( $args[ 0 ], $args[ 1 ] );
-                break;
-            
-            case 3:
-                
-                return $this->_reflector->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ] );
-                break;
-            
-            case 4:
-                
-                return $this->_reflector->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ] );
-                break;
-            
-            case 5:
-                
-                return $this->_reflector->$name( $args[ 0 ], $args[ 1 ], $args[ 2 ], $args[ 3 ], $args[ 4 ] );
-                break;
-            
-            default:
-                
-                return call_user_func_array( array( $this->_reflector, $name ), $args );
-                break;
+            throw new Reflection\Exception(
+                '',
+                Reflection\Exception::EXCEPTION_
+            );
         }
     }
     
@@ -148,38 +158,37 @@ abstract class Reflection extends \Woops\Core\MultiSIngleton\Base
                 
                 $reflectorClass = 'ReflectionProperty';
                 break;
-            
-            default:
-                
-                throw new Reflection\Exception(
-                    '',
-                    Reflection\Exception::EXCEPTION_
-                );
-                break;
         }
         
-        switch( count( $args ) ) {
+        if( isset( $reflectorClass ) ) {
             
-            case 1:
+            switch( count( $args ) ) {
                 
-                $reflector = new $reflectorClass( $args[ 0 ] );
-                break;
+                case 1:
+                    
+                    $reflector = new $reflectorClass( $args[ 0 ] );
+                    break;
+                
+                case 2:
+                    
+                    $reflector = new $reflectorClass( $args[ 0 ], $args[ 1 ] );
+                    break;
+                
+                default:
+                    
+                    throw new Reflection\Exception(
+                        '',
+                        Reflection\Exception::EXCEPTION_
+                    );
+                    break;
+            }
             
-            case 2:
-                
-                $reflector = new $reflectorClass( $args[ 0 ], $args[ 1 ] );
-                break;
+            return $reflector;
             
-            default:
-                
-                throw new Reflection\Exception(
-                    '',
-                    Reflection\Exception::EXCEPTION_
-                );
-                break;
+        } else {
+            
+            return false;
         }
-        
-        return $reflector;
     }
     
     /**
@@ -209,7 +218,7 @@ abstract class Reflection extends \Woops\Core\MultiSIngleton\Base
         
         $instance = parent::getInstance( $instanceName );
         
-        if( !is_object( $instance->_reflector ) ) {
+        if( !isset( $instance->_reflector ) ) {
             
             $instance->_reflector = self::_createReflectorObject( $class, $args );
         }
@@ -271,5 +280,13 @@ abstract class Reflection extends \Woops\Core\MultiSIngleton\Base
     public static function getPropertyReflector( $class, $name )
     {
         return Reflection\PropertyReflector::getInstance( $class, $name );
+    }
+    
+    /**
+     * 
+     */
+    public static function getNameSpaceReflector( $name )
+    {
+        return Reflection\NameSpaceReflector::getInstance( $name );
     }
 }
