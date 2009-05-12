@@ -54,6 +54,26 @@ class FunctionReflector extends \Woops\Core\Reflection
     /**
      * 
      */
+    protected $_nameSpace    = NULL;
+    
+    /**
+     * 
+     */
+    public function getNameSpace()
+    {
+        if( !isset( $this->_nameSpace ) ) {
+            
+            $name = $this->getName();
+            $ns   = substr( $name, 0, strrpos( $name, '\\' ) );
+            $this->_nameSpace = NameSpaceReflector::getInstance( $ns );
+        }
+        
+        return $this->_nameSpace;
+    }
+    
+    /**
+     * 
+     */
     public function getParameters()
     {
         if( !$this->_hasParameters ) {
