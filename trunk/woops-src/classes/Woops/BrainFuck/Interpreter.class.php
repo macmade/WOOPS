@@ -18,7 +18,7 @@ declare( ENCODING = 'UTF-8' );
 namespace Woops\BrainFuck;
 
 /**
- * Binary stream
+ * Brainfuck interpreter
  *
  * @author      Jean-David Gadina <macmade@eosgarden.com>
  * @version     1.0
