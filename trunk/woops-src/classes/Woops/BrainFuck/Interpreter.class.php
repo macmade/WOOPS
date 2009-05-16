@@ -74,8 +74,9 @@ class Interpreter extends \Woops\Core\Object
     /**
      * Interprets brainfuck code
      * 
-     * @param   string  The brainfuck code to interpret
+     * @param   string                  The brainfuck code to interpret
      * @return  void
+     * @throws  Interpreter\Exception   If an non-terminated loop is found
      */
     protected function _interpret( $code )
     {
@@ -162,7 +163,7 @@ class Interpreter extends \Woops\Core\Object
                     }
                     
                     // Moves to the end of the loop code
-                    $i = $endLoop;
+                    $i = $endLoop - 1;
                     break;
                 
                 case '.':
