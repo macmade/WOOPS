@@ -95,10 +95,10 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
     private function __construct()
     {
         // Gets the instance of the environment class
-        $this->_env            = Woops\Core\Env\Getter::getInstance();
+        $this->_env            = \Woops\Core\Env\Getter::getInstance();
         
         // Gets the instance of the error handler class
-        $this->_errorReporting = Woops\Core\Error\Handler::getInstance();
+        $this->_errorReporting = \Woops\Core\Error\Handler::getInstance();
         
         // Not sure ADODB is completely error free
         $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
