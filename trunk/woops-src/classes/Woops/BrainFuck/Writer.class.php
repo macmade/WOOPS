@@ -63,8 +63,8 @@ class Writer extends \Woops\Core\Object
         $str = ( string )$str;
         
         // Checks for a value
-        if( $str ) {
-            
+        if( $str )
+        {
             // Creates the brainfuck code
             $this->_createCode( $str );
         }
@@ -93,14 +93,14 @@ class Writer extends \Woops\Core\Object
         $this->_code = '++++++++++[';
         
         // Process each unique letter
-        foreach( $letters as $letter ) {
-            
+        foreach( $letters as $letter )
+        {
             // Rounded ASCII value
             $ascii = floor( ord( $letter ) / 10 );
             
             // Checks if we already have a stack value for this letter
-            if( !isset( $this->_chars[ $ascii ] ) ) {
-                
+            if( !isset( $this->_chars[ $ascii ] ) )
+            {
                 // Increments the stack pointer
                 $this->_index++;
                 
@@ -122,20 +122,20 @@ class Writer extends \Woops\Core\Object
         $this->_index = 0;
         
         // Process each letter of the input string
-        for( $i = 0; $i < $strLen; $i++ ) {
-            
+        for( $i = 0; $i < $strLen; $i++ )
+        {
             // Gets the ASCII value
             $charCode = ord( $str[ $i ] );
             $ascii    = floor( $charCode / 10 );
             
             // Checks if we need to move the stack pointer
-            if( $this->_chars[ $ascii ] > $this->_index ) {
-                
+            if( $this->_chars[ $ascii ] > $this->_index )
+            {
                 // Increases the stack pointer
                 $this->_code .= str_repeat( '>', $this->_chars[ $ascii ] - $this->_index );
-                
-            } elseif( $this->_chars[ $ascii ] < $this->_index ) {
-                
+            }
+            elseif( $this->_chars[ $ascii ] < $this->_index )
+            {
                 // Decreases the stack pointer
                 $this->_code .= str_repeat( '<', $this->_index - $this->_chars[ $ascii ] );
             }
@@ -144,13 +144,13 @@ class Writer extends \Woops\Core\Object
             $this->_index = $this->_chars[ $ascii ];
             
             // Checks if the current stack value must be changed
-            if( $charCode < $this->_stack[ $this->_index ] ) {
-                
+            if( $charCode < $this->_stack[ $this->_index ] )
+            {
                 // Decreases the stack value
                 $this->_code .= str_repeat( '-', $this->_stack[ $this->_index ] - $charCode );
-                
-            } elseif( $charCode > $this->_stack[ $this->_index ] ) {
-                
+            }
+            elseif( $charCode > $this->_stack[ $this->_index ] )
+            {
                 // Increments the stack value
                 $this->_code .= str_repeat( '+', $charCode - $this->_stack[ $this->_index ] );
             }

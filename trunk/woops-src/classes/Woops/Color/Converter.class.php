@@ -34,7 +34,7 @@ class Converter extends \Woops\Core\Singleton\Base
     /**
      * The instance of the number utilities class
      */
-    protected $_number          = NULL;
+    protected $_number = NULL;
     
     /**
      * Class constructor
@@ -74,7 +74,8 @@ class Converter extends \Woops\Core\Singleton\Base
         $B = $this->_number->inRange( $B, 0, 255 );
         
         // HSL colors storage
-        $colors = array(
+        $colors = array
+        (
             'H' => 0,   // Hue
             'S' => 0,   // Saturation
             'L' => 0,   // Luminance
@@ -96,22 +97,22 @@ class Converter extends \Woops\Core\Singleton\Base
         $colors[ 'L' ] = ( $max + $min ) / 2;
         
         // Check for chromatic data
-        if( $delta === 0 ) {
-            
+        if( $delta === 0 )
+        {
             // No chromatic data
             $colors[ 'H' ] = 0;
             $colors[ 'S' ] = 0;
-            
-        } else {
-            
+        }
+        else
+        {
             // Check luminance
-            if( $colors[ 'L' ] < 0.5 ) {
-                
+            if( $colors[ 'L' ] < 0.5 )
+            {
                 // Compute saturation
                 $colors[ 'S' ] = $delta / ( $max + $min );
-                
-            } else {
-                
+            }
+            else
+            {
                 // Compute saturation
                 $colors[ 'S' ] = $delta / ( 2 - $max - $min );
             }
@@ -122,30 +123,30 @@ class Converter extends \Woops\Core\Singleton\Base
             $B_delta = ( ( ( $max - $B ) / 6 ) + ( $delta / 2 ) ) / $delta;
             
             // Check RGB max value
-            if( $R === $max ) {
-                
+            if( $R === $max )
+            {
                 // Compute hue
                 $colors[ 'H' ] = $B_delta - $G_delta;
-                
-            } elseif( $G === $max ) {
-                
+            }
+            elseif( $G === $max )
+            {
                 // Compute hue
                 $colors[ 'H' ] = ( 1 / 3 ) + $R_delta - $B_delta;
-                
-            } elseif( $B === $max ) {
-                
+            }
+            elseif( $B === $max )
+            {
                 // Compute hue
                 $colors[ 'H' ] = ( 2 / 3 ) + $G_delta - $R_delta;
             }
             
             // Check hue
-            if( $colors[ 'H' ] < 0 ) {
-                
+            if( $colors[ 'H' ] < 0 )
+            {
                 // Increase hue
                 $colors[ 'H' ] += 1;
-                
-            } elseif( $colors[ 'H' ] > 1 ) {
-                
+            }
+            elseif( $colors[ 'H' ] > 1 )
+            {
                 // Decrease hue
                 $colors[ 'H' ] -= 1;
             }
@@ -157,11 +158,11 @@ class Converter extends \Woops\Core\Singleton\Base
         $colors[ 'L' ] = $colors[ 'L' ] * 100;  // Percentage
         
         // Round values?
-        if( $round ) {
-            
+        if( $round )
+        {
             // Process each value
-            foreach( $colors as $key => $value ) {
-                
+            foreach( $colors as $key => $value )
+            {
                 // Adds the value
                 $colors[ $key ] = round( $value );
             }
@@ -193,7 +194,8 @@ class Converter extends \Woops\Core\Singleton\Base
         $L = $this->_number->inRange( $L, 0, 100 );
         
         // RGB colors storage
-        $colors = array(
+        $colors = array
+        (
             'R' => 0,   // Red
             'G' => 0,   // Green
             'B' => 0,   // Blue
@@ -205,23 +207,23 @@ class Converter extends \Woops\Core\Singleton\Base
         $L = ( $L / 100 );
         
         // Check saturation
-        if( $S === 0 ) {
-            
+        if( $S === 0 )
+        {
             // No saturation
             $colors[ 'R' ] = $L * 255;
             $colors[ 'G' ] = $L * 255;
             $colors[ 'B' ] = $L * 255;
-        
-        } else {
-            
+        }
+        else
+        {
             // Check luminance
-            if( $L < 0.5 ) {
-                
+            if( $L < 0.5 )
+            {
                 // Computing variable #2
                 $c2 = $L * ( 1 + $S );
-                
-            } else {
-                
+            }
+            else
+            {
                 // Computing variable #2
                 $c2 = ( $L + $S ) - ( $S * $L );
             }
@@ -230,11 +232,11 @@ class Converter extends \Woops\Core\Singleton\Base
             $c1 = 2 * $L - $c2;
             
             // Process each RGB color
-            foreach( $colors as $key => $value ) {
-                
+            foreach( $colors as $key => $value )
+            {
                 // Create hue variable for specific RGB values
-                switch( $key ) {
-                    
+                switch( $key )
+                {
                     // Red
                     case 'R':
                         $vH = $H + ( 1 / 3 );
@@ -252,35 +254,36 @@ class Converter extends \Woops\Core\Singleton\Base
                 }
                 
                 // Adjust hue variable
-                if( $vH < 0 ) {
-                    
+                if( $vH < 0 )
+                {
                     // Increase hue
                     $vH += 1;
                     
-                } elseif( $vH > 1 ) {
-                    
+                }
+                elseif( $vH > 1 )
+                {
                     // Decrease hue
                     $vH -= 1;
                 }
                 
                 // Check hue
-                if( ( 6 * $vH ) < 1 ) {
-                    
+                if( ( 6 * $vH ) < 1 )
+                {
                     // Create color value
                     $colors[ $key ] = $c1 + ( $c2 - $c1 ) * 6 * $vH;
-                    
-                } elseif( ( 2 * $vH ) < 1 ) {
-                    
+                }
+                elseif( ( 2 * $vH ) < 1 )
+                {
                     // Create color value
                     $colors[ $key ] = $c2;
-                    
-                } elseif( ( 3 * $vH ) < 2 ) {
-                    
+                }
+                elseif( ( 3 * $vH ) < 2 )
+                {
                     // Create color value
                     $colors[ $key ] = $c1 + ( $c2 - $c1 ) * ( ( 2 / 3 ) - $vH ) * 6;
-                    
-                } else {
-                    
+                }
+                else
+                {
                     // Create color value
                     $colors[ $key ] = $c1;
                 }
@@ -293,11 +296,11 @@ class Converter extends \Woops\Core\Singleton\Base
         }
         
         // Round values?
-        if( $round ) {
-            
+        if( $round )
+        {
             // Process each value
-            foreach( $colors as $key => $value ) {
-                
+            foreach( $colors as $key => $value )
+            {
                 // Adds the value
                 $colors[ $key ] = round( $value );
             }
@@ -331,7 +334,8 @@ class Converter extends \Woops\Core\Singleton\Base
         $B = $this->_number->inRange( $B, 0, 255 );
         
         // HSV colors storage
-        $colors = array(
+        $colors = array
+        (
             'H' => 0,   // Hue
             'S' => 0,   // Saturation
             'V' => 0,   // Luminance
@@ -353,14 +357,14 @@ class Converter extends \Woops\Core\Singleton\Base
         $colors[ 'V' ] = $max;
         
         // Check for chromatic data
-        if( $delta === 0 ) {
-            
+        if( $delta === 0 )
+        {
             // No chromatic data
             $colors[ 'H' ] = 0;
             $colors[ 'S' ] = 0;
-            
-        } else {
-            
+        }
+        else
+        {
             // Compute saturation
             $colors[ 'S' ] = $delta / $max;
             
@@ -370,30 +374,30 @@ class Converter extends \Woops\Core\Singleton\Base
             $B_delta = ( ( ( $max - $B ) / 6 ) + ( $delta / 2 ) ) / $delta;
             
             // Check RGB max value
-            if( $R === $max ) {
-                
+            if( $R === $max )
+            {
                 // Compute hue
                 $colors[ 'H' ] = $B_delta - $G_delta;
-                
-            } elseif( $G === $max ) {
-                
+            }
+            elseif( $G === $max )
+            {
                 // Compute hue
                 $colors[ 'H' ] = ( 1 / 3 ) + $R_delta - $B_delta;
-                
-            } elseif( $B === $max ) {
-                
+            }
+            elseif( $B === $max )
+            {
                 // Compute hue
                 $colors[ 'H' ] = ( 2 / 3 ) + $G_delta - $R_delta;
             }
             
             // Check hue
-            if( $colors[ 'H' ] < 0 ) {
-                
+            if( $colors[ 'H' ] < 0 )
+            {
                 // Increase hue
                 $colors[ 'H' ] += 1;
-                
-            } elseif( $colors[ 'H' ] > 1 ) {
-                
+            }
+            elseif( $colors[ 'H' ] > 1 )
+            {
                 // Decrease hue
                 $colors[ 'H' ] -= 1;
             }
@@ -405,11 +409,11 @@ class Converter extends \Woops\Core\Singleton\Base
         $colors[ 'V' ] = $colors[ 'V' ] * 100;  // Percentage
         
         // Round values?
-        if( $round ) {
-            
+        if( $round )
+        {
             // Process each value
-            foreach( $colors as $key => $value ) {
-                
+            foreach( $colors as $key => $value )
+            {
                 // Adds the value
                 $colors[ $key ] = round( $value );
             }
@@ -441,7 +445,8 @@ class Converter extends \Woops\Core\Singleton\Base
         $V = $this->_number->inRange( $V, 0, 100 );
         
         // RGB colors storage
-        $colors = array(
+        $colors = array
+        (
             'R' => 0,   // Red
             'G' => 0,   // Green
             'B' => 0,   // Blue
@@ -453,15 +458,15 @@ class Converter extends \Woops\Core\Singleton\Base
         $V = ( $V / 100 );
         
         // Check saturation
-        if( $S === 0 ) {
-            
+        if( $S === 0 )
+        {
             // No saturation
             $colors[ 'R' ] = $V * 255;
             $colors[ 'G' ] = $V * 255;
             $colors[ 'B' ] = $V * 255;
-        
-        } else {
-            
+        }
+        else
+        {
             // Hue variables
             $vH = $H * 6;
             $iH = intval( $vH );
@@ -472,43 +477,44 @@ class Converter extends \Woops\Core\Singleton\Base
             $c3 = $V * ( 1 - $S * ( 1 - ( $vH - $iH ) ) );
             
             // Check hue integer value
-            if( $iH === 0 ) {
-                
+            if( $iH === 0 )
+            {
                 // Create RGB values
                 $vR = $V;
                 $vG = $c3;
                 $vB = $c1;
-                
-            } elseif( $iH === 1 ) {
-                
+            }
+            elseif( $iH === 1 )
+            {
                 // Create RGB values
                 $vR = $c2;
                 $vG = $V;
                 $vB = $c1;
-                
-            } elseif( $iH === 2 ) {
-                
+            }
+            elseif( $iH === 2 )
+            {
                 // Create RGB values
                 $vR = $c1;
                 $vG = $V;
                 $vB = $c3;
-                
-            } elseif( $iH === 3 ) {
-                
+            }
+            elseif( $iH === 3 )
+            {
                 // Create RGB values
                 $vR = $c1;
                 $vG = $c2;
                 $vB = $V;
                 
-            } elseif( $iH === 4 ) {
-                
+            }
+            elseif( $iH === 4 )
+            {
                 // Create RGB values
                 $vR = $c3;
                 $vG = $c1;
                 $vB = $V;
-                
-            } else {
-                
+            }
+            else
+            {
                 // Create RGB values
                 $vR = $V;
                 $vG = $c1;
@@ -522,11 +528,11 @@ class Converter extends \Woops\Core\Singleton\Base
         }
         
         // Round values?
-        if( $round ) {
-            
+        if( $round )
+        {
             // Process each value
-            foreach( $colors as $key => $value ) {
-                
+            foreach( $colors as $key => $value )
+            {
                 // Adds the value
                 $colors[ $key ] = round( $value );
             }
@@ -556,7 +562,8 @@ class Converter extends \Woops\Core\Singleton\Base
         $rgbColors = $this->hslToRgb( $H, $S, $L, $round );
         
         // Convert RGB to HSV
-        return $this->rgbToHsv(
+        return $this->rgbToHsv
+        (
             $rgbColors[ 'R' ],
             $rgbColors[ 'G' ],
             $rgbColors[ 'B' ],
@@ -585,7 +592,8 @@ class Converter extends \Woops\Core\Singleton\Base
         $rgbColors = $this->hsvToRgb( $H, $S, $V, $round );
         
         // Convert RGB to HSL
-        return $this->rgbToHsl(
+        return $this->rgbToHsl
+        (
             $rgbColors[ 'R' ],
             $rgbColors[ 'G' ],
             $rgbColors[ 'B' ],

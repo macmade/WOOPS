@@ -50,21 +50,21 @@ final class Dref extends \Woops\Mpeg4\FullBox
         $data->entry_count = $this->_stream->bigEndianUnsignedLong();
         $data->entries     = array();
         
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             $entryLength = $this->_stream->bigEndianUnsignedLong();
             $entryType   = $this->_stream->read( 4 );
             
-            if( $entryType === 'urn ' ) {
-                
+            if( $entryType === 'urn ' )
+            {
                 $entry = $this->_dataEntryUrnBox( $this->_stream->read( $entryLength - 8 ) );
-                
-            } elseif( $entryType === 'url ' ) {
-                
+            }
+            elseif( $entryType === 'url ' )
+            {
                 $entry = $this->_dataEntryUrlBox( $this->_stream->read( $entryLength - 8 ) );
-                
-            } else {
-                
+            }
+            else
+            {
                 $entry = new \stdClass();
             }
             
@@ -79,8 +79,8 @@ final class Dref extends \Woops\Mpeg4\FullBox
         $data       = $this->_dataEntryBox( $rawData );
         $data->type = 'urn ';
         
-        if( strlen( $rawData ) > 4 ) {
-            
+        if( strlen( $rawData ) > 4 )
+        {
             $sep            = strpos( $rawData, chr( 0 ) );
             $data->name     = substr( $rawData, 4, $sep - 4 );
             $data->location = substr( $rawData, $sep + 1, -1 );
@@ -94,8 +94,8 @@ final class Dref extends \Woops\Mpeg4\FullBox
         $data       = $this->_dataEntryBox( $rawData );
         $data->type = 'url ';
         
-        if( strlen( $rawData ) > 4 ) {
-            
+        if( strlen( $rawData ) > 4 )
+        {
             $data->location = substr( $rawData, 4 );
         }
         

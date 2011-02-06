@@ -66,7 +66,8 @@ class Time extends \Woops\Png\Chunk
         $data->second = $this->_stream->unsignedChar();
         
         // Creates a timestamp
-        $data->tstamp = mktime(
+        $data->tstamp = mktime
+        (
             $data->hour,
             $data->minute,
             $data->second,

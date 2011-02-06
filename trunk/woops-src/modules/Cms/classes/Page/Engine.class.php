@@ -58,9 +58,10 @@ class Engine extends \Woops\Page\Engine\Base
     {
         $path = self::$_env->getPath( self::$_pageGetter->getTemplate() );
         
-        if( !$path ) {
-            
-            throw new Engine\Exception(
+        if( !$path )
+        {
+            throw new Engine\Exception
+            (
                 'The template file for page ID ' . self::$_pageGetter->getPageId() . ' does not exist (' . self::$_pageGetter->getTemplate() . ')',
                 Engine\Exception::EXCEPTION_NO_TEMPLATE_FILE
             );
@@ -93,23 +94,23 @@ class Engine extends \Woops\Page\Engine\Base
         $head = $this->_template->getTag( 'head' );
         $body = $this->_page->getBody();
         
-        foreach( $this->_keepHead as $key => $value ) {
-            
-            if( $headPart = $head->getTag( $value[ 0 ], $value[ 1 ] ) ) {
-                
+        foreach( $this->_keepHead as $key => $value )
+        {
+            if( $headPart = $head->getTag( $value[ 0 ], $value[ 1 ] ) )
+            {
                 $this->_page->addHeadNode( $headPart );
             }
             
         }
         
-        foreach( $this->_template->getTag( 'body' ) as $bodyNode ) {
-            
-            if( is_object( $bodyNode ) ) {
-                
+        foreach( $this->_template->getTag( 'body' ) as $bodyNode )
+        {
+            if( is_object( $bodyNode ) )
+            {
                 $body->addChildNode( $bodyNode );
-                
-            } else {
-                
+            }
+            else
+            {
                 $body->addTextData( $bodyNode );
             }
         }

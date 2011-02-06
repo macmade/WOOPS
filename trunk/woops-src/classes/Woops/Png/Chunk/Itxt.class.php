@@ -70,13 +70,13 @@ class Itxt extends \Woops\Png\Chunk
         $data->translatedKeyword = $this->_stream->nullTerminatedString();
         
         // Checks the compression method
-        if( $data->compressionFlag && $data->compressionMethod === 0 ) {
-            
+        if( $data->compressionFlag && $data->compressionMethod === 0 )
+        {
             // Deflate
             $data->text = gzuncompress( $this->_stream->getRemainingData() );
-            
-        } else {
-            
+        }
+        else
+        {
             // No compression, or unrecognized compression method - Stores the raw data
             $data->text = $this->_stream->getRemainingData();
         }

@@ -50,8 +50,8 @@ final class Stsh extends \Woops\Mpeg4\FullBox
         $data->entry_count = $this->_stream->bigEndianUnsignedLong();
         $data->entries     = array();
         
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             $entry                         = new \stdClass();
             $entry->shadowed_sample_number = $this->_stream->bigEndianUnsignedLong();
             $entry->sync_sample_number     = $this->_stream->bigEndianUnsignedLong();

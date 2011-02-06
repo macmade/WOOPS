@@ -34,7 +34,8 @@ class TimeUtilities extends \Woops\Core\Singleton\Base
     /**
      * The available timezones
      */
-    protected $_timezones = array(
+    protected $_timezones = array
+    (
         'Africa/Abidjan'                   => true,
         'Africa/Accra'                     => true,
         'Africa/Addis_Ababa'               => true,
@@ -502,8 +503,8 @@ class TimeUtilities extends \Woops\Core\Singleton\Base
     public function calcAge( $tstamp, $curTime = false, $ageType = false )
     {
         // Process age types
-        switch( $ageType ) {
-            
+        switch( $ageType )
+        {
             // Seconds
             case 's':
                 $division = 1;
@@ -526,8 +527,8 @@ class TimeUtilities extends \Woops\Core\Singleton\Base
         }
         
         // Gets the current time, if none specified
-        if( !$currentTime ) {
-            
+        if( !$currentTime )
+        {
             $currentTime = time();
         }
         
@@ -560,8 +561,8 @@ class TimeUtilities extends \Woops\Core\Singleton\Base
         $firstDayNum = date( 'w', $firstDay );
         
         // Computes the first monday of the year and the week number for that day
-        switch( $firstDayNum ) {
-        
+        switch( $firstDayNum )
+        {
             // Sunday
             case 0:
                 

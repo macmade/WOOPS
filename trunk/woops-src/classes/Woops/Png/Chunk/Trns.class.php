@@ -65,8 +65,8 @@ class Trns extends \Woops\Png\Chunk
         $ihdrData = $ihdr->getProcessedData();
         
         // Checks the data length
-        switch( $ihdrData->colourType ) {
-            
+        switch( $ihdrData->colourType )
+        {
             // Greyscale
             case 0:
                 
@@ -90,8 +90,8 @@ class Trns extends \Woops\Png\Chunk
                 $data->alphasForPaletteIndexes = array();
                 
                 // Process the chunk data till the end
-                while( !$this->_stream->endOfStream() ) {
-                    
+                while( !$this->_stream->endOfStream() )
+                {
                     // Gets the alpha for the current palette index
                     $data->alphasForPaletteIndexes[] = $this->_stream->unsignedChar();
                 }

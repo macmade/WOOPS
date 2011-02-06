@@ -12,25 +12,27 @@
 # $Id$
 
 // Checks if we are running PHP 5
-if( ( double )PHP_VERSION >= 5 ) {
-    
+if( ( double )PHP_VERSION >= 5 )
+{
     // Sets the error reporting level to the highest possible value (PHP 5)
     error_reporting( E_ALL | E_STRICT );
     
     // Sets a dummy timezone, to prevent warnings if an error occurs before the configured timezone is set
     date_default_timezone_set( 'Europe/Zurich' );
     
-} else {
-    
+}
+else
+{
     // Sets the error reporting level to the highest possible value (PHP 4)
     error_reporting( E_ALL );
 }
 
 // Checks the PHP version required to use WOOPS
-if( version_compare( PHP_VERSION, '5.3.0RC2', '<' ) ) {
-    
+if( version_compare( PHP_VERSION, '5.3.0RC2', '<' ) )
+{
     // We are not running PHP 5.3 or greater
-    trigger_error(
+    trigger_error
+    (
         'PHP version 5.3.0RC2 is required to use WOOPS (actual version is ' . PHP_VERSION . ')',
         E_USER_ERROR
     );
@@ -43,25 +45,28 @@ if( version_compare( PHP_VERSION, '5.3.0RC2', '<' ) ) {
 declare( ENCODING = 'UTF-8' );
 
 // Checks for the SPL
-if( !function_exists( 'spl_autoload_register' ) ) {
-    
+if( !function_exists( 'spl_autoload_register' ) )
+{
     // The SPL is unavailable
-    throw new Exception(
+    throw new Exception
+    (
         'The SPL (Standard PHP Library) is required to use WOOPS'
     );
 }
 
 // Checks for the SimpleXMLElement class
-if( !class_exists( 'SimpleXMLElement' ) ) {
-    
+if( !class_exists( 'SimpleXMLElement' ) )
+{
     // SimpleXMLElement is unavailable
-    throw new Exception(
+    throw new Exception
+    (
         'The SimpleXMLElement class is required to use WOOPS'
     );
 }
 
 // Includes the WOOPS class manager
-require_once(
+require_once
+(
     __DIR__
   . DIRECTORY_SEPARATOR
   . 'classes'

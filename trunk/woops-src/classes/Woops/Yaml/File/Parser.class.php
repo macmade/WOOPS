@@ -40,20 +40,22 @@ class Parser extends \Woops\Yaml\Parser
     public function __construct( $path )
     {
         // Checks if the file exists
-        if( !file_exists( $path ) ) {
-            
+        if( !file_exists( $path ) )
+        {
             // The file does not exist
-            throw new Parser\Exception(
+            throw new Parser\Exception
+            (
                 'The requested file does not exist (path: ' . $path . ')',
                 Parser\Exception::EXCEPTION_NO_FILE
             );
         }
         
         // Checks if the file is readable
-        if( !file_exists( $path ) ) {
-            
+        if( !file_exists( $path ) )
+        {
             // The file is not readable
-            throw new Parser\Exception(
+            throw new Parser\Exception
+            (
                 'The requested file is not readable (path: ' . $path . ')',
                 Parser\Exception::EXCEPTION_FILE_NOT_READABLE
             );

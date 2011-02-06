@@ -58,8 +58,8 @@ abstract class Base extends \Exception
     public function __construct( $message, $code = 0 )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -77,8 +77,8 @@ abstract class Base extends \Exception
     public function __toString()
     {
         // Checks the debug state
-        if( self::$_debug ) {
-            
+        if( self::$_debug )
+        {
             // Prints the backtrace
             print $this->getInfos();
         }
@@ -125,13 +125,13 @@ abstract class Base extends \Exception
      */
     public static function getExceptionString( $class, $code = 0 )
     {
-        if( is_object( $class ) ) {
-            
+        if( is_object( $class ) )
+        {
             $code      = $class->getCode();
             $reflector = \Woops\Core\Reflection::getClassReflector( $class );
-            
-        } else {
-            
+        }
+        else
+        {
             $reflector = \Woops\Core\Reflection::getClassReflector( $class );
         }
         
@@ -188,16 +188,19 @@ abstract class Base extends \Exception
         $str        = '';
         
         // Checks the trace array
-        if( is_array( $traceArray ) ) {
-            
+        if( is_array( $traceArray ) )
+        {
             // Process each trace entry
-            foreach( $traceArray as $key => $value  ) {
-                
+            foreach( $traceArray as $key => $value  )
+            {
                 // Do not displays the backtrace for the error and exception handlers
-                if( isset( $value[ 'class' ] )
+                if
+                (
+                    isset( $value[ 'class' ] )
                     && ( ( $value[ 'class' ] === 'Woops\Core\Error\Handler'     && $value[ 'function' ] === '_handleError' )
                     ||   ( $value[ 'class' ] === 'Woops\Core\Exception\Handler' && $value[ 'function' ] === '_handleException' ) )
-                ) {
+                )
+                {
                     continue;
                 }
                 
@@ -210,13 +213,13 @@ abstract class Base extends \Exception
                 $code     = ( isset( $value[ 'file' ] ) && isset( $value[ 'line' ] ) ) ? $this->_traceInfo( 'Code:', $this->_getCode( $value[ 'file' ], $value[ 'line' ] ) )       : '';
                 
                 // Checks for arguments
-                if( isset( $value[ 'args' ] ) && is_array( $value[ 'args' ] ) && count( $value[ 'args' ] ) ) {
-                    
+                if( isset( $value[ 'args' ] ) && is_array( $value[ 'args' ] ) && count( $value[ 'args' ] ) )
+                {
                     // Gets the pased arguments
                     $args = $this->_traceInfo( 'Arguments:', $this->_getArgs( $value[ 'args' ] ) );
-                    
-                } else {
-                    
+                }
+                else
+                {
                     $args = '';
                 }
                 
@@ -239,51 +242,51 @@ abstract class Base extends \Exception
         $argsList = '';
         
         // Process each argument
-        foreach( $args as $argNum => $argValue ) {
-            
+        foreach( $args as $argNum => $argValue )
+        {
             // Checks the type of the argument
-            if( is_object( $argValue ) ) {
-                
+            if( is_object( $argValue ) )
+            {
                 // Object - Shows the class name 
                 $argType = 'Object: ' . get_class( $argValue );
-                
-            } elseif( is_array( $argValue ) ) {
-                
+            }
+            elseif( is_array( $argValue ) )
+            {
                 // Array - Shows the number of entry
                 $argType = 'Array: ' . count( $argValue );
-                
-            } elseif( is_bool( $argValue ) ) {
-                
+            }
+            elseif( is_bool( $argValue ) )
+            {
                 // Boolean - Shows the value
                 $argType = 'Boolean: ' . ( ( $argValue ) ? 'true' : 'false' );
-                
-            } elseif( is_int( $argValue ) ) {
-                
+            }
+            elseif( is_int( $argValue ) )
+            {
                 // Integer - Shows the value
                 $argType = 'Integer: ' . $argValue;
-                
-            } elseif( is_float( $argValue ) ) {
-                
+            }
+            elseif( is_float( $argValue ) )
+            {
                 // Float - Shows the value
                 $argType = 'Floating point: ' . $argValue;
-                
-            } elseif( is_resource( $argValue ) ) {
-                
+            }
+            elseif( is_resource( $argValue ) )
+            {
                 // Resource - Shows the resource type
                 $argType = 'Resource: ' . get_resource_type( $argValue );
-                
-            } elseif( is_null( $argValue ) ) {
-                
+            }
+            elseif( is_null( $argValue ) )
+            {
                 // NULL
                 $argType = 'Null';
-                
-            } elseif( is_string( $argValue ) ) {
-                
+            }
+            elseif( is_string( $argValue ) )
+            {
                 // String - Shows the value
                 $argType = ( strlen( $argValue ) > 128 ) ? 'String: ' . htmlspecialchars( substr( $argValue, 0, 128 ) ) . '[...]' : 'String: ' . htmlspecialchars( $argValue );
-                
-            } else {
-                
+            }
+            else
+            {
                 // Unknown
                 $argType = 'Other';
             }
@@ -309,14 +312,14 @@ abstract class Base extends \Exception
     protected function _getCode( $file, $line )
     {
         // Checks if the file exists (may not be a valid file path for eval() errors)
-        if( file_exists( $file ) ) {
-            
+        if( file_exists( $file ) )
+        {
             // Gets all the lines from the file
             $lines = file( $file );
             
             // Checks the lines array
-            if( is_array( $lines ) ) {
-                
+            if( is_array( $lines ) )
+            {
                 // Length of the last line
                 $lineLength = strlen( $line + 3 );
                 

@@ -82,30 +82,33 @@ class Parser extends \Woops\Core\Object
         $charset           = strtoupper( $charset );
         
         // Checks if the file exists
-        if( !file_exists( $file ) || !is_file( $file ) ) {
-            
+        if( !file_exists( $file ) || !is_file( $file ) )
+        {
             // The file does not exist
-            throw new Parser\Exception(
+            throw new Parser\Exception
+            (
                 'The specified XML file (\'' . $file . '\') does not exist',
                 Parser\Exception::EXCEPTION_NO_FILE
             );
         }
         
         // Checks if the file is readable
-        if( !is_readable( $file ) ) {
-            
+        if( !is_readable( $file ) )
+        {
             // Cannot read the file
-            throw new Parser\Exception(
+            throw new Parser\Exception
+            (
                 'The specified XML file (\'' . $file . '\') is not readable',
                 Parser\Exception::EXCEPTION_FILE_NOT_READABLE
             );
         }
         
         // Checks if the charset is supported
-        if( !isset( self::$_charsets[ $charset ] ) ) {
-            
+        if( !isset( self::$_charsets[ $charset ] ) )
+        {
             // Unsupported charset
-            throw new Parser\Exception(
+            throw new Parser\Exception
+            (
                 'The specified charset (' . $charset . ') is not supported',
                 Parser\Exception::EXCEPTION_INVALID_CHARSET
             );
@@ -133,20 +136,21 @@ class Parser extends \Woops\Core\Object
         xml_set_default_handler( $this->_parser, '_defaultHandler' );
         
         // Tries to open a file handler
-        if( ( $fileHandler = fopen( $file, 'r' ) ) ) {
-            
+        if( ( $fileHandler = fopen( $file, 'r' ) ) )
+        {
             // Reads data from the file
-            while( $data = fread( $fileHandler, 4096 ) ) {
-                
+            while( $data = fread( $fileHandler, 4096 ) )
+            {
                 // Tries to parse the data
-                if( !xml_parse( $this->_parser, $data, feof( $fileHandler ) ) ) {
-                    
+                if( !xml_parse( $this->_parser, $data, feof( $fileHandler ) ) )
+                {
                     // Gets the error string and line number
                     $errorString = xml_error_string(xml_get_error_code( $this->_parser ) );
                     $errorLine   = xml_get_current_line_number( $this->_parser );
                     
                     // Throws an exception, as we have an XML error
-                    throw new Parser\Exception(
+                    throw new Parser\Exception
+                    (
                         'XML parser error: ' . $errorString . ' at line number ' . $errorLine,
                         Parser\Exception::EXCEPTION_XML_PARSER_ERROR
                     );
@@ -166,17 +170,19 @@ class Parser extends \Woops\Core\Object
      */
     public static function registerProcessingInstructionHandler( $name, $className )
     {
-        if( isset( self::$_piHandlers[ $name ] ) ) {
-            
-            throw new Parser\Exception(
+        if( isset( self::$_piHandlers[ $name ] ) )
+        {
+            throw new Parser\Exception
+            (
                 'The processing instruction \'' . $name . '\' is already registered',
                 Parser\Exception::EXCEPTION_PI_EXISTS
             );
         }
         
-        if( !class_exists( $className ) ) {
-            
-            throw new Parser\Exception(
+        if( !class_exists( $className ) )
+        {
+            throw new Parser\Exception
+            (
                 'Cannot register unexisting class \'' . $className . '\' as a processing instruction handler',
                 Parser\Exception::EXCEPTION_NO_PI_CLASS
             );
@@ -184,11 +190,14 @@ class Parser extends \Woops\Core\Object
         
         $interfaces = class_implements( $className );
         
-        if( !is_array( $interfaces )
+        if
+        (
+               !is_array( $interfaces )
             || !isset( $interfaces[ 'Woops\Xhtml\ProcessingInstruction\Handler\ObjectInterface' ] )
-        ) {
-            
-            throw new Parser\Exception(
+        )
+        {
+            throw new Parser\Exception
+            (
                 'The class \'' . $className . '\' is not a valid processing instruction handler, since it does not implement the \'Woops\Xhtml\ProcessingInstruction\Handler\ObjectInterface\' interface',
                 Parser\Exception::EXCEPTION_INVALID_PI_CLASS
             );
@@ -202,25 +211,28 @@ class Parser extends \Woops\Core\Object
      */
     protected function _startElementHandler( $parser, $name, $attribs )
     {
-        if( !is_object( $this->_xhtml ) ) {
-            
+        if( !is_object( $this->_xhtml ) )
+        {
             $this->_xhtml          = new Tag( $name );
             $this->_currentElement = $this->_xhtml;
-            
-        } else {
-            
+        }
+        else
+        {
             $this->_currentElement = $this->_currentElement->$name;
         }
         
-        foreach( $attribs as $key => $value ) {
-            
-            if( $this->_pathPrefix
+        foreach( $attribs as $key => $value )
+        {
+            if
+            (
+                   $this->_pathPrefix
                 && ( $key === 'src' || $key === 'href' )
                 && substr( $value, 0, 1 ) !== '/'
                 && substr( $value, 0, 1 ) !== '#'
                 && substr( $value, 0, 7 ) !== 'http://'
                 && substr( $value, 0, 7 ) !== 'mailto:'
-            ) {
+            )
+            {
                 
                 $value = $this->_pathPrefix . $value;
             }
@@ -242,8 +254,8 @@ class Parser extends \Woops\Core\Object
      */
     protected function _characterDataHandler( $parser, $data )
     {
-        if( trim( $data ) !== '' ) {
-            
+        if( trim( $data ) !== '' )
+        {
             $this->_currentElement->addTextData( $data );
         }
     }
@@ -253,8 +265,8 @@ class Parser extends \Woops\Core\Object
      */
     protected function _processingInstructionHandler( $parser, $name, $data )
     {
-        if( isset( self::$_piHandlers[ $name ] ) ) {
-            
+        if( isset( self::$_piHandlers[ $name ] ) )
+        {
             $handlerClass = self::$_piHandlers[ $name ];
             $handler      = new $handlerClass();
             
@@ -266,23 +278,22 @@ class Parser extends \Woops\Core\Object
             
             $options      = new \stdClass();
             
-            for( $i = 0; $i < $piParamsLength; $i += 2 ) {
-                
-                if( isset( $piParams[ $i + 1 ] ) ) {
-                    
+            for( $i = 0; $i < $piParamsLength; $i += 2 )
+            {
+                if( isset( $piParams[ $i + 1 ] ) )
+                {
                     $options->$piParams[ $i ] = $piParams[ $i + 1 ];
-                    
                 }
             }
             
-            $result       = $handler->process( $options );
+            $result = $handler->process( $options );
             
-            if( is_object( $result ) && $result instanceof Tag ) {
-                
+            if( is_object( $result ) && $result instanceof Tag )
+            {
                 $this->_currentElement->addChildNode( $result );
-                
-            } else {
-                
+            }
+            else
+            {
                 $this->_currentElement->addTextData( $result );
             }
         }
@@ -293,8 +304,8 @@ class Parser extends \Woops\Core\Object
      */
     protected function _defaultHandler( $parser, $data )
     {
-        if( substr( $data, 0, 4 ) === '<!--' && $this->_currentElement ) {
-            
+        if( substr( $data, 0, 4 ) === '<!--' && $this->_currentElement )
+        {
             $this->_currentElement->comment( substr( $data, 4, -3 ) );
         }
     }

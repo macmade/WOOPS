@@ -23,8 +23,10 @@ class Woops_Check_Environment
     
     var $hasWarnings = false;
     
-    var $checks      = array(
-        'phpVersion' => array(
+    var $checks      = array
+    (
+        'phpVersion' => array
+        (
             'title'   => 'PHP version',
             'status'  => '',
             'success' => 'The running PHP version (<strong>{VERSION}</strong>) is able to run WOOPS.',
@@ -32,7 +34,8 @@ class Woops_Check_Environment
             'error'   => 'The running PHP version (<strong>{VERSION}</strong>) is too low. The minimal required version is <strong>5.3.0</strong>.',
             'replace' => array()
         ),
-        'zendCompat'  => array(
+        'zendCompat'  => array
+        (
             'title'   => 'Zend Engine 1 compatibility',
             'status'  => '',
             'success' => 'The compatibility mode with Zend Engine 1 (PHP 4) is disabled.',
@@ -40,15 +43,17 @@ class Woops_Check_Environment
             'error'   => 'The compatibility mode with Zend Engine 1 (PHP 4) is enabled.<br /><br />WOOPS cannot run with this setting turned on, as this will change the behavior of the object model. Please disable it.',
             'replace' => array()
         ),
-        'errorReporting' => array(
+        'errorReporting' => array
+        (
             'title'   => 'Error reporting level',
             'status'  => '',
             'success' => 'The error reporting level is set to the maximum value.',
-            'warning' => 'The error reporting level is too low.<br /><br />WOOPS sets the error reporting level at it\'s maximum value (E_ALL | E_STRICT, which is 8191). As every PHP error (even a simple notice) will result as a fatal error, when using WOOPS, please ensure this is not a problem for you.<br /><br />The current error reporting level is <strong>{LEVEL}</strong>.',
+            'warning' => 'The error reporting level is too low.<br /><br />WOOPS sets the error reporting level at it\'s maximum value (E_ALL | E_STRICT, which is 32767). As every PHP error (even a simple notice) will result as a fatal error, when using WOOPS, please ensure this is not a problem for you.<br /><br />The current error reporting level is <strong>{LEVEL}</strong>.',
             'error'   => '',
             'replace' => array()
         ),
-        'spl' => array(
+        'spl' => array
+        (
             'title'   => 'SPL - Standard PHP Library',
             'status'  => '',
             'success' => 'The SPL classes and functions are available.',
@@ -56,7 +61,8 @@ class Woops_Check_Environment
             'error'   => 'The SPL classes and functions are not available on your PHP installation.<br /><br />Please compile PHP with the SPL support.',
             'replace' => array()
         ),
-        'reflection' => array(
+        'reflection' => array
+        (
             'title'   => 'Reflection',
             'status'  => '',
             'success' => 'The reflection classes are available.',
@@ -64,7 +70,8 @@ class Woops_Check_Environment
             'error'   => 'The reflection classes are not available on your PHP installation.<br /><br />Please compile PHP with the reflection support.',
             'replace' => array()
         ),
-        'simpleXml' => array(
+        'simpleXml' => array
+        (
             'title'   => 'Simple XML',
             'status'  => '',
             'success' => 'The Simple XML classes and functions are available.',
@@ -72,7 +79,8 @@ class Woops_Check_Environment
             'error'   => 'The Simple XML classes and functions are not available on your PHP installation.<br /><br />Please compile PHP with the Simple XML support.',
             'replace' => array()
         ),
-        'pdo' => array(
+        'pdo' => array
+        (
             'title'   => 'PDO - PHP Data Object',
             'status'  => '',
             'success' => 'The PDO class is available.<br /><br />Available drivers are: <strong>{DRIVERS}</strong>.',
@@ -80,7 +88,8 @@ class Woops_Check_Environment
             'error'   => '',
             'replace' => array()
         ),
-        'fsockOpen' => array(
+        'fsockOpen' => array
+        (
             'title'   => 'Socket connection',
             'status'  => '',
             'success' => 'The PHP fsockopen() function is available.',
@@ -92,18 +101,18 @@ class Woops_Check_Environment
     
     function Woops_Check_Environment()
     {
-        foreach( $this->checks as $key => $value ) {
-            
+        foreach( $this->checks as $key => $value )
+        {
             $checkMethod                      = 'check' . ucfirst( $key );
             $status                           = $this->$checkMethod( $this->checks[ $key ][ 'replace' ] );
             $this->checks[ $key ][ 'status' ] = $status;
             
-            if( $status === 'ERROR' ) {
-                
+            if( $status === 'ERROR' )
+            {
                 $this->hasErrors = true;
-                
-            } elseif( $status === 'WARNING' ) {
-                
+            }
+            elseif( $status === 'WARNING' )
+            {
                 $this->hasWarnings = true;
             }
         }
@@ -113,13 +122,13 @@ class Woops_Check_Environment
     {
         $out = array();
         
-        foreach( $this->checks as $key => $value ) {
-            
+        foreach( $this->checks as $key => $value )
+        {
             $status  = $value[ 'status' ];
             $message = $value[ strtolower( $status ) ];
             
-            foreach( $value[ 'replace' ] as $pattern => $replace ) {
-                
+            foreach( $value[ 'replace' ] as $pattern => $replace )
+            {
                 $message = str_replace( '{' . $pattern . '}', $replace, $message );
             }
             
@@ -138,8 +147,8 @@ class Woops_Check_Environment
         $version              = phpversion();
         $replace[ 'VERSION' ] = $version;
         
-        if( version_compare( PHP_VERSION, '5.3.0RC2', '<' ) ) {
-            
+        if( version_compare( PHP_VERSION, '5.3.0RC2', '<' ) )
+        {
             return 'ERROR';
         }
         
@@ -156,8 +165,8 @@ class Woops_Check_Environment
         $reporting          = error_reporting();
         $replace[ 'LEVEL' ] = $reporting;
         
-        if( defined( 'E_STRICT' ) && $reporting == ( E_ALL | E_STRICT ) ) {
-            
+        if( defined( 'E_STRICT' ) && $reporting >= ( E_ALL | E_STRICT ) )
+        {
             return 'SUCCESS';
         }
         
@@ -181,8 +190,8 @@ class Woops_Check_Environment
     
     function checkPdo( &$replace )
     {
-        if( class_exists( 'PDO' ) ) {
-            
+        if( class_exists( 'PDO' ) )
+        {
             $replace[ 'DRIVERS' ] = implode( ', ', pdo_drivers() );
             
             return 'SUCCESS';

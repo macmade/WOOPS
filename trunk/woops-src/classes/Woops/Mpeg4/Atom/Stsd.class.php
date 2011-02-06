@@ -136,8 +136,8 @@ final class Stsd extends \Woops\Mpeg4\FullBox
         $data->entry_count = $this->_stream->bigEndianUnsignedLong();
         
         // Checks for the HDLR atom
-        if( !isset( $this->_parent->_parent->_parent->hdlr ) ) {
-            
+        if( !isset( $this->_parent->_parent->_parent->hdlr ) )
+        {
             // No HDLR atom
             return $data;
         }
@@ -149,21 +149,21 @@ final class Stsd extends \Woops\Mpeg4\FullBox
         $data->entries     = array();
         
         // Process each entry
-        for( $i = 0; $i < $data->entry_count; $i++ ) {
-            
+        for( $i = 0; $i < $data->entry_count; $i++ )
+        {
             // Checks the handler type
-            if( $hdlr->handler_type === 'soun' ) {
-                
+            if( $hdlr->handler_type === 'soun' )
+            {
                 // Returns the atom processed data (audio entry)
                 $data->entries[] = $this->_audioSampleEntry();
-                
-            } elseif( $hdlr->handler_type === 'vide' ) {
-                
+            }
+            elseif( $hdlr->handler_type === 'vide' )
+            {
                 // Returns the atom processed data (visual entry)
                 $data->entries[] = $this->_visualSampleEntry();
-                
-            } elseif( $hdlr->handler_type === 'hint' ) {
-                
+            }
+            elseif( $hdlr->handler_type === 'hint' )
+            {
                 $data->entries = $this->_hintSampleEntries();
             }
         }
@@ -233,14 +233,14 @@ final class Stsd extends \Woops\Mpeg4\FullBox
         
         $compressorNameLength = $this->_stream->bigEndianUnsignedLong();
         
-        if( $compressorNameLength > 0 ) {
-            
+        if( $compressorNameLength > 0 )
+        {
             $data->compressorname = $this->_stream->read( $compressorNameLength );
             
             $this->_stream->seek( 31 - strlen( $data->compressorname ), \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
-            
-        } else {
-            
+        }
+        else
+        {
             $data->compressorname = '';
         }
         
@@ -270,8 +270,8 @@ final class Stsd extends \Woops\Mpeg4\FullBox
         
         $data->data = array();
         
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             $data->data[] = $this->_stream->unsignedChar();
         }
         

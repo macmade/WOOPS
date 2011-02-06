@@ -88,8 +88,8 @@ class Helper extends \Woops\Core\Singleton\Base
      */
     public function start()
     {
-        if( !$this->_started ) {
-            
+        if( !$this->_started )
+        {
             session_id( self::SESSION_ID );
             session_start();
             $this->_started = true;
@@ -101,8 +101,8 @@ class Helper extends \Woops\Core\Singleton\Base
      */
     public function close()
     {
-        if( $this->_started ) {
-            
+        if( $this->_started )
+        {
             session_write_close();
             $this->_started = false;
             $_SESSION = array();
@@ -114,8 +114,8 @@ class Helper extends \Woops\Core\Singleton\Base
      */
     public function destroy()
     {
-        if( $this->_started ) {
-            
+        if( $this->_started )
+        {
             session_destroy();
             $this->_started = false;
             $_SESSION = array();
@@ -129,12 +129,12 @@ class Helper extends \Woops\Core\Singleton\Base
     {
         $this->start();
         
-        if( isset( $_SESSION[ $key ] ) ) {
-            
+        if( isset( $_SESSION[ $key ] ) )
+        {
             return $_SESSION[ $key ];
-            
-        } else {
-            
+        }
+        else
+        {
             return false;
         }
         

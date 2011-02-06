@@ -50,8 +50,8 @@ final class Stsc extends \Woops\Mpeg4\FullBox
         $data->entry_count = $this->_stream->bigEndianUnsignedLong();
         $data->entries     = array();
         
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             $entry                           = new \stdClass();
             $entry->first_chunk              = $this->_stream->bigEndianUnsignedLong();
             $entry->samples_per_chunk        = $this->_stream->bigEndianUnsignedLong();

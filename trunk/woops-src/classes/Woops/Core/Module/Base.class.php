@@ -102,8 +102,8 @@ abstract class Base extends \Woops\Core\Aop\Advisor
         parent::__construct();
         
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -113,8 +113,8 @@ abstract class Base extends \Woops\Core\Aop\Advisor
         $this->_modPath    = self::$_modManager->getModulePath( $this->_modName );
         $this->_modRelPath = self::$_modManager->getModuleRelativePath( $this->_modName );
         
-        try {
-            
+        try
+        {
             $this->_lang       = \Woops\Core\Lang\Getter::getInstance(
                 $this->_modPath
               . 'lang'
@@ -122,15 +122,15 @@ abstract class Base extends \Woops\Core\Aop\Advisor
               . str_replace( 'Woops\Mod\\' . $this->_modName . '\\', '', $this->_modClass )
               . '.'
             );
-            
-        } catch( \Woops\Core\Lang\Getter\Exception $e ) {
-            
-            if( $e->getCode() === \Woops\Core\Lang\Getter\Exception::EXCEPTION_NO_LANG_FILE ) {
-                
+        }
+        catch( \Woops\Core\Lang\Getter\Exception $e )
+        {
+            if( $e->getCode() === \Woops\Core\Lang\Getter\Exception::EXCEPTION_NO_LANG_FILE )
+            {
                 $this->_lang = \Woops\Core\Lang\Getter::getDefaultInstance();
-                
-            } else {
-                
+            }
+            else
+            {
                 throw $e;
             }
         }
@@ -159,8 +159,8 @@ abstract class Base extends \Woops\Core\Aop\Advisor
      */
     protected function _getModuleVar( $name )
     {
-        if( isset( self::$_moduleVariables[ $this->_modName ][ $name ] ) ) {
-            
+        if( isset( self::$_moduleVariables[ $this->_modName ][ $name ] ) )
+        {
             return self::$_moduleVariables[ $this->_modName ][ $name ];
         }
         

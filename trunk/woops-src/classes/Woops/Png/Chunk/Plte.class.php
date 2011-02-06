@@ -56,8 +56,8 @@ class Plte extends \Woops\Png\Chunk
         $data->palette = array();
         
         // Process each color
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             // Storage
             $color        = new \stdClass();
             

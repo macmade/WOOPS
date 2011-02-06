@@ -12,7 +12,8 @@
 # $Id$
 
 // Includes the initialization script
-require_once(
+require_once
+(
     __DIR__
   . DIRECTORY_SEPARATOR
   . '..'
@@ -40,18 +41,22 @@ $URL    = ( ( $ENV->HTTPS ) ? 'https://' : 'http://' )
 $CLIENT = new Woops\Http\Client( $URL );
 
 // Adds some POST data
-$CLIENT->addPostData(
+$CLIENT->addPostData
+(
     'test',
-    array(
+    array
+    (
         'foo' => true,
-        'bar' => array(
+        'bar' => array
+        (
             'fooBar' => true
         )
     )
 );
 
 // Uploads a file
-$CLIENT->addFile(
+$CLIENT->addFile
+(
     'someFile',
     $ENV->getPath( 'woops-mod://Cms/resources/templates/woops-default/lixado.png' )
 );

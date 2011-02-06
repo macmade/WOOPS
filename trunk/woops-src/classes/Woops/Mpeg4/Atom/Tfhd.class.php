@@ -92,33 +92,33 @@ final class Tfhd extends \Woops\Mpeg4\FullBox
         $data->track_ID = $this->_stream->bigEndianUnsignedLong();
         
         // Checks for the base data offset
-        if( $data->flags->base_data_offset_present ) {
-            
+        if( $data->flags->base_data_offset_present )
+        {
             // Base data offset
             $data->base_data_offset = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
         }
         
         // Checks for the sample description index
-        if( $data->flags->sample_description_index_present ) {
-            
+        if( $data->flags->sample_description_index_present )
+        {
             // Sample description index
             $data->sample_description_index = $this->_stream->bigEndianUnsignedLong();
         }
         
         // Checks for the default sample duration
-        if( $data->flags->default_sample_duration_present ) {
-            
+        if( $data->flags->default_sample_duration_present )
+        {
             // Default sample duration
             $data->default_sample_duration = $this->_stream->bigEndianUnsignedLong();
         }
         
-        if( $data->flags->default_sample_size_present ) {
-            
+        if( $data->flags->default_sample_size_present )
+        {
             $data->default_sample_size = $this->_stream->bigEndianUnsignedLong();
         }
         
-        if( $data->flags->default_sample_flags_present ) {
-            
+        if( $data->flags->default_sample_flags_present )
+        {
             $data->default_sample_flags = $this->_stream->bigEndianUnsignedLong();
         }
         

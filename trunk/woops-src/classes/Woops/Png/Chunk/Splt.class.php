@@ -64,8 +64,8 @@ class Splt extends \Woops\Png\Chunk
         $data->entries     = array();
         
         // Checks the sample depth
-        if( $data->sampleDepth === 8 ) {
-            
+        if( $data->sampleDepth === 8 )
+        {
             // 8 bit depth - Palette entries are 6 bytes
             $entrySize        = 6;
             
@@ -74,9 +74,9 @@ class Splt extends \Woops\Png\Chunk
             
             // Method to get the values in the palette entries
             $entryValueMethod = 'unsignedChar';
-            
-        } elseif( $data->sampleDepth === 16 ) {
-            
+        }
+        elseif( $data->sampleDepth === 16 )
+        {
             // 16 bit depth - Palette entries are 10 bytes
             $entrySize = 10;
             
@@ -85,17 +85,16 @@ class Splt extends \Woops\Png\Chunk
             
             // Method to get the values in the palette entries
             $entryValueMethod = 'bigEndianUnsignedShort';
-            
-            
-        } else {
-            
+        }
+        else
+        {
             // Invalid depth - Do not process the palette entries
             return $data;
         }
         
         // Process each palette entry
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             // Storage for the current entry
             $entry = new \stdClass();
             

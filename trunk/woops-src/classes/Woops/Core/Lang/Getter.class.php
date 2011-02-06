@@ -90,8 +90,8 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\MultiSingle
         $this->_instanceName = $path;
         
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -100,28 +100,30 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\MultiSingle
                   . self::$_language
                   . '.xml';
         
-        if( !file_exists( $langFile ) ) {
-            
+        if( !file_exists( $langFile ) )
+        {
             $langFile = $path
                       . self::$_defaultLanguage
                       . '.xml';
         }
         
-        if( !file_exists( $langFile ) ) {
-            
-            throw new Getter\Exception(
+        if( !file_exists( $langFile ) )
+        {
+            throw new Getter\Exception
+            (
                 'The lang file does not exist (path: ' . $langFile . ')',
                 Getter\Exception::EXCEPTION_NO_LANG_FILE
             );
         }
         
-        try {
-            
+        try
+        {
             $this->_labels = simplexml_load_file( $langFile );
-            
-        } catch( Exception $e ) {
-            
-            throw new Getter\Exception(
+        }
+        catch( Exception $e )
+        {
+            throw new Getter\Exception
+            (
                 $e->getMessage(),
                 Getter\Exception::EXCEPTION_BAD_XML
             );
@@ -139,7 +141,8 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\MultiSingle
      */
     public function __clone()
     {
-        throw new \Woops\Core\Singleton\Exception(
+        throw new \Woops\Core\Singleton\Exception
+        (
             'Class ' . __CLASS__ . ' cannot be cloned',
             \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
@@ -185,15 +188,15 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\MultiSingle
     public static function getInstance( $path )
     {
         // Checks if the default instance already exist
-        if( !self::$_nbInstances ) {
-            
+        if( !self::$_nbInstances )
+        {
             // Creates the default instance
             self::_createDefaultInstance();
         }
         
         // Creates the required instance if it does not exists
-        if( !isset( self::$_instances[ $path ] ) ) {
-            
+        if( !isset( self::$_instances[ $path ] ) )
+        {
             // Registers the current instance
             $instance                  = new self( $path );
             self::$_instances[ $path ] = $instance;
@@ -210,8 +213,8 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\MultiSingle
     public static function getDefaultInstance()
     {
         // Checks if the default instance already exist
-        if( !self::$_nbInstances ) {
-            
+        if( !self::$_nbInstances )
+        {
             // Creates the default instance
             self::_createDefaultInstance();
         }
@@ -226,7 +229,6 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\MultiSingle
     public static function setDefaultLanguage( $language )
     {
         $oldLanguage            = self::$_defaultLanguage;
-        
         self::$_defaultLanguage = $language;
         
         return $oldLanguage;
@@ -245,13 +247,13 @@ final class Getter extends \Woops\Core\Object implements \Woops\Core\MultiSingle
      */
     public function getLabel( $name )
     {
-        if( isset( $this->_labels->labels->$name ) ) {
-            
+        if( isset( $this->_labels->labels->$name ) )
+        {
             return ( string )$this->_labels->labels->$name;
         }
         
-        if( isset( self::$_instances[ self::$_defaultInstanceName ]->_labels->labels->$name ) ) {
-            
+        if( isset( self::$_instances[ self::$_defaultInstanceName ]->_labels->labels->$name ) )
+        {
             return ( string )self::$_instances[ self::$_defaultInstanceName ]->_labels->labels->$name;
         }
         

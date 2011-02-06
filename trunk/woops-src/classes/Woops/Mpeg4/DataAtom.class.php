@@ -44,16 +44,16 @@ abstract class DataAtom extends Atom
     public function __toString()
     {
         // Checks if the atom is final
-        if( $this->_final ) {
-            
+        if( $this->_final )
+        {
             // Length is set to 0
             $length = pack( 'N', 0 );
             
             // Returns the whole atom
             return $length . $this->_type . $this->_data;
-            
-        } elseif( $this->_extended ) {
-            
+        }
+        elseif( $this->_extended )
+        {
             // The atom has an extended length
             $length = $this->_dataLength + 16;
             
@@ -64,9 +64,9 @@ abstract class DataAtom extends Atom
             
             // Returns the whole atom
             return  pack( 'N', 1 ) . $this->_type . $length . $this->_data;
-            
-        } else {
-            
+        }
+        else
+        {
             // Computes the atom length
             $length = pack( 'N', $this->_dataLength + 8 );
             
@@ -82,16 +82,16 @@ abstract class DataAtom extends Atom
     
     public function getLength()
     {
-        if( $this->_final ) {
-            
+        if( $this->_final )
+        {
             return 1;
-            
-        } elseif( $this->_extended ) {
-            
+        }
+        elseif( $this->_extended )
+        {
             return $this->_dataLength + 16;
-            
-        } else {
-            
+        }
+        else
+        {
             return $this->_dataLength + 8;
         }
     }
@@ -103,8 +103,8 @@ abstract class DataAtom extends Atom
     
     public function getHexData( $chunkSplit = 0, $sep = ' ' )
     {
-        if( $chunkSplit ) {
-            
+        if( $chunkSplit )
+        {
             return chunk_split( bin2hex( $this->_data ), ( int )$chunkSplit, ( string )$sep );
         }
         
@@ -115,13 +115,13 @@ abstract class DataAtom extends Atom
     {
         $bin = '';
         
-        for( $i = 0; $i < $this->_dataLength; $i++  ) {
-            
+        for( $i = 0; $i < $this->_dataLength; $i++  )
+        {
             $bin .= str_pad( decbin( ord( substr( $this->_data, $i, 1 ) ) ), 8, 0, STR_PAD_LEFT );
         }
         
-        if( $chunkSplit ) {
-            
+        if( $chunkSplit )
+        {
             return chunk_split( $bin, ( int )$chunkSplit, ( string )$sep );
         }
         

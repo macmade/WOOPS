@@ -49,7 +49,8 @@ class StringUtilities extends \Woops\Core\Singleton\Base
     /**
      * The name of the ASCII control characters
      */
-    protected $_asciiName       = array(
+    protected $_asciiName       = array
+    (
         'NUL', 'SOH', 'STX', 'ETX', 'EOT', 'ENQ', 'ACK', 'BEL', 'BS',  'TAB',
         'LF',  'VT',  'FF',  'CR',  'SO',  'SI',  'DLE', 'DC1', 'DC2', 'DC3',
         'DC4', 'NAK', 'SYN', 'ETB', 'CAN', 'EM',  'SUB', 'ESC', 'FS',  'GS',
@@ -67,8 +68,8 @@ class StringUtilities extends \Woops\Core\Singleton\Base
     protected function __construct()
     {
         // Process each ASCII control character
-        for( $i = 0; $i < 33; $i++ ) {
-            
+        for( $i = 0; $i < 33; $i++ )
+        {
             // Stores the character
             $this->_asciiTable[ $this->_asciiName[ $i ] ] = chr( $i );
         }
@@ -77,14 +78,14 @@ class StringUtilities extends \Woops\Core\Singleton\Base
         $this->_asciiTable[ 'NL' ] = $this->_asciiTable[ 'LF' ];
         
         // Checks if a random generator device is available
-        if( file_exists( '/dev/urandom' ) && is_readable( '/dev/urandom' ) ) {
-            
+        if( file_exists( '/dev/urandom' ) && is_readable( '/dev/urandom' ) )
+        {
             // Creates a file handle to the random generator device
             $this->_hasRandomDevice = true;
             $this->_randomDevice    = fopen( '/dev/urandom', 'rb' );
-            
-        } elseif( file_exists( '/dev/random' ) && is_readable( '/dev/random' ) ) {
-            
+        }
+        elseif( file_exists( '/dev/random' ) && is_readable( '/dev/random' ) )
+        {
             // Creates a file handle to the random generator device
             $this->_hasRandomDevice = true;
             $this->_randomDevice    = fopen( '/dev/random', 'rb' );
@@ -99,8 +100,8 @@ class StringUtilities extends \Woops\Core\Singleton\Base
     public function __destruct()
     {
         // Checks if the random device was available on construct time
-        if( $this->_hasRandomDevice ) {
-            
+        if( $this->_hasRandomDevice )
+        {
             // Closes the file handle
             fclose( $this->_randomDevice );
         }
@@ -172,19 +173,19 @@ class StringUtilities extends \Woops\Core\Singleton\Base
     public function uniqueId()
     {
         // Checks if the random generator device is available
-        if( $this->_hasRandomDevice ) {
-            
+        if( $this->_hasRandomDevice )
+        {
             // Gets 16 random bytes
             $randomBits = fread( $this->_randomDevice, 16 );
-            
-        } else {
-            
+        }
+        else
+        {
             // No, we'll have to generates the bytes by ourselves
             $randomBits = '';
             
             // We want 16 bytes
-            for( $i = 0; $i < 16; $i++ ) {
-                
+            for( $i = 0; $i < 16; $i++ )
+            {
                 // Generates a random byte
                 $randomBits = chr( mt_rand( 0, 0xFF ) );
             }
@@ -198,7 +199,8 @@ class StringUtilities extends \Woops\Core\Singleton\Base
         $node                    = bin2hex( substr( $randomBits, 10, 6 ) );
         
         // Puts all the parts together
-        $uid = sprintf(
+        $uid = sprintf
+        (
             '%08s-%04s-%04x-%04x-%012s',
             $timeLow,
             $timeMid,
@@ -238,28 +240,31 @@ class StringUtilities extends \Woops\Core\Singleton\Base
     public function unifyLineBreaks( $text, $stripNull = true )
     {
         // Strip ASCII null character?
-        if( $stripNull ) {
-            
+        if( $stripNull )
+        {
             // Erases ASCII null characters
             $text = str_replace( $this->_asciiTable[ 'NUL' ], '', $text );
         }
         
         // DOS CR + LF (u000D + u000A / chr(13) + chr( 10 ))
-        $text = str_replace(
+        $text = str_replace
+        (
             $this->_asciiTable[ 'CR' ] . $this->_asciiTable[ 'LF' ],
             $this->_asciiTable[ 'LF' ],
             $text
         );
         
         // LF + CR (u000A + u000D / chr( 10 ) + chr(13))
-        $text = str_replace(    
+        $text = str_replace
+        (
             $this->_asciiTable[ 'LF' ] . $this->_asciiTable[ 'CR' ],
             $this->_asciiTable[ 'LF' ],
             $text
         );
         
         // Macintosh CR (u000D / chr(13))
-        $text = str_replace(
+        $text = str_replace
+        (
             $this->_asciiTable[ 'CR' ],
             $this->_asciiTable[ 'LF' ],
             $text
@@ -286,8 +291,8 @@ class StringUtilities extends \Woops\Core\Singleton\Base
         $list = new \Woops\Xhtml\Tag( $listType );
         
         // Process each list item
-        foreach( $items as $item ) {
-            
+        foreach( $items as $item )
+        {
             // Adds the list item to the list tag
             $list->li = trim( $item );
         }
@@ -314,33 +319,33 @@ class StringUtilities extends \Woops\Core\Singleton\Base
     function crop( $str, $chars, $endString = '...', $cropToSpace = true, $stripTags = true )
     {
         // Checks the string length
-        if( strlen( $str ) < $chars ) {
-            
+        if( strlen( $str ) < $chars )
+        {
             // Returns the string
             return $str;
         }
         
         // Remove HTML tags?
-        if( $stripTags ) {
-            
+        if( $stripTags )
+        {
             // Removes all tags
             $str = strip_tags( $str );
         }
         
         // Checks the string length
-        if( strlen( $str ) < $chars ) {
-            
+        if( strlen( $str ) < $chars )
+        {
             // Returns the string
             return $str;
-            
-        } else {
-            
+        }
+        else
+        {
             // Substring
             $str = substr( $str, 0, $chars );
             
             // Crops only after a word?
-            if( $cropToSpace && strstr( $str, ' ' ) ) {
-                
+            if( $cropToSpace && strstr( $str, ' ' ) )
+            {
                 // Position of the last space
                 $cropPos = strrpos( $str, ' ' );
                 

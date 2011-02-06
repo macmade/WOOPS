@@ -50,7 +50,8 @@ class Weight extends Base
     /**
      * The conversion operations for each unit from the default type
      */
-    protected $_types = array(
+    protected $_types = array
+    (
         'GRAM'         => array(),
         'KILOGRAM'     => array(),
         'LONG_TON'     => array(),

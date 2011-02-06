@@ -58,8 +58,8 @@ class Track extends \Woops\Midi\Chunk
         $endOffset = $offset + $this->_dataSize;
         
         // Process the chunk's data
-        while( $offset < $endOffset ) {
-            
+        while( $offset < $endOffset )
+        {
             // Creates a new track event and stores it
             $trackEvent           = new \Woops\Midi\Track\Event();
             $this->_trackEvents[] = $trackEvent;

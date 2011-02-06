@@ -100,49 +100,49 @@ final class Trun extends \Woops\Mpeg4\FullBox
         $data->samples      = array();
         
         // Checks for the data offset
-        if( $data->flags->data_offset_present ) {
-            
+        if( $data->flags->data_offset_present )
+        {
             // Data offset
             $data->data_offset = $this->_stream->bigEndianUnsignedLong();
         }
         
         // Checks for the first sample flags
-        if( $data->flags->first_sample_flags_present ) {
-            
+        if( $data->flags->first_sample_flags_present )
+        {
             // First sample flags
             $data->first_sample_flags = $this->_stream->bigEndianUnsignedLong();
         }
         
         // Process each sample
-        for( $i = 0; $i < $data->sample_count; $i++ ) {
-            
+        for( $i = 0; $i < $data->sample_count; $i++ )
+        {
             // Storage for the current sample
             $sample = new \stdClass();
             
             // Checks for the sample duration
-            if( $data->flags->sample_duration_present ) {
-                
+            if( $data->flags->sample_duration_present )
+            {
                 // Sample duration
                 $sample->sample_duration = $this->_stream->bigEndianUnsignedLong();
             }
             
             // Checks for the sample size
-            if( $data->flags->sample_size_present ) {
-                
+            if( $data->flags->sample_size_present )
+            {
                 // Sample size
                 $sample->sample_size = $this->_stream->bigEndianUnsignedLong();
             }
             
             // Checks for the sample flags
-            if( $data->flags->sample_flags_present ) {
-                
+            if( $data->flags->sample_flags_present )
+            {
                 // Sample flags
                 $sample->sample_flags = $this->_stream->bigEndianUnsignedLong();
             }
             
             // Checks for the sample composition tome offset
-            if( $data->flags->sample_composition_time_offsets_present ) {
-                
+            if( $data->flags->sample_composition_time_offsets_present )
+            {
                 // Sample composition tome offset
                 $sample->sample_composition_time_offsets = $this->_stream->bigEndianUnsignedLong();
             }

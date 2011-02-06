@@ -75,8 +75,8 @@ abstract class Base extends \Woops\Core\Aop\Advisor
         parent::__construct();
         
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }

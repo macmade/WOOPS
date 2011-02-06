@@ -14,7 +14,8 @@
 // File encoding
 declare( ENCODING = 'UTF-8' );
 
-Woops\Core\Module\Manager::getInstance()->registerBlock(
+Woops\Core\Module\Manager::getInstance()->registerBlock
+(
     'cms',
     $moduleName,
     'SayHello',

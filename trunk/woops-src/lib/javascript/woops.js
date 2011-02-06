@@ -34,8 +34,8 @@ var woops = null;
     woops = function woops()
     {
         // Checks if the unique instance already exists
-        if( _instance ) {
-            
+        if( _instance )
+        {
             // Returns the unique instance
             return _instance;
         }
@@ -57,13 +57,13 @@ var woops = null;
         this.registerModuleClass = function( moduleName, moduleClass )
         {
             // Checks if the module class is registered
-            if( _moduleClasses[ moduleName ] === undefined ) {
-                
+            if( _moduleClasses[ moduleName ] === undefined )
+            {
                 // No - Creates a new instance, and stores it
                 _moduleClasses[ moduleName ] = new moduleClass();
-                
-            } else {
-                
+            }
+            else
+            {
                 // Error - A class for this module is already registered
                 throw new Error( 'Module \'' + moduleName + '\' has already been registered.' );
             }
@@ -79,14 +79,14 @@ var woops = null;
         this.getModule = function( moduleName )
         {
             // Checks if the module class is registered
-            if( _moduleClasses[ moduleName ] === undefined ) {
-                
+            if( _moduleClasses[ moduleName ] === undefined )
+            {
                 // No, throws an error
                 // Maybe this should return an empty object instead of throwing an error
                 throw new Error( 'Module \'' + moduleName + '\' has not been registered yet.' );
-                
-            } else {
-                
+            }
+            else
+            {
                 // Returns the instance of the module class
                 return _moduleClasses[ moduleName ];
             }
@@ -104,8 +104,8 @@ var woops = null;
     woops.getInstance = function ()
     {
         // Checks if the unique instance already exists
-        if ( _instance === null ) {
-            
+        if ( _instance === null )
+        {
             // No, creates the unique instance
             _instance = new woops();
         }

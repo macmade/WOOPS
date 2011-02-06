@@ -52,7 +52,8 @@ final class Helper extends \Woops\Core\Object
     /**
      * The available language tags, with their available variants
      */
-    protected $_languages     = array(
+    protected $_languages     = array
+    (
         'aa'  => array(),   // Afar
         'ab'  => array(),   // Abkhazian
         'ace' => array(),   // Achinese
@@ -60,7 +61,8 @@ final class Helper extends \Woops\Core\Object
         'ada' => array(),   // Adangme
         'ady' => array(),   // Adyghe
         'ae'  => array(),   // Avestan
-        'af'  => array(     // Afrikaans
+        'af'  => array      // Afrikaans
+        (
             'ZA' => true
         ),
         'afa' => array(),   // Afro-Asiatic (Other)
@@ -71,14 +73,16 @@ final class Helper extends \Woops\Core\Object
         'ale' => array(),   // Aleut
         'alg' => array(),   // Algonquian languages
         'alt' => array(),   // Southern Altai
-        'am'  => array(     // Amharic
+        'am'  => array      // Amharic
+        (
             'ET' => true
         ),
         'an'  => array(),   // Aragonese
         'ang' => array(),   // English, Old (ca. 450-1100)
         'anp' => array(),   // Angika
         'apa' => array(),   // Apache languages
-        'ar'  => array(     // Arabic
+        'ar'  => array      // Arabic
+        (
             'AE' => true,
             'BH' => true,
             'DZ' => true,
@@ -110,7 +114,8 @@ final class Helper extends \Woops\Core\Object
         'av'  => array(),   // Avaric
         'awa' => array(),   // Awadhi
         'ay'  => array(),   // Aymara
-        'az'  => array(     // Azerbaijani
+        'az'  => array      // Azerbaijani
+        (
             'AZ' => true
         ),
         'ba'  => array(),   // Bashkir
@@ -120,13 +125,15 @@ final class Helper extends \Woops\Core\Object
         'ban' => array(),   // Balinese
         'bas' => array(),   // Basa
         'bat' => array(),   // Baltic (Other)
-        'be'  => array(     // Belarusian
+        'be'  => array      // Belarusian
+        (
             'BY' => true
         ),
         'bej' => array(),   // Beja
         'bem' => array(),   // Bemba
         'ber' => array(),   // Berber (Other)
-        'bg'  => array(     // Bulgarian
+        'bg'  => array      // Bulgarian
+        (
             'BG' => true
         ),
         'bh'  => array(),   // Bihari
@@ -136,7 +143,8 @@ final class Helper extends \Woops\Core\Object
         'bin' => array(),   // Bini
         'bla' => array(),   // Siksika
         'bm'  => array(),   // Bambara
-        'bn'  => array(     // Bengali
+        'bn'  => array      // Bengali
+        (
             'IN' => true
         ),
         'bnt' => array(),   // Bantu (Other)
@@ -148,7 +156,8 @@ final class Helper extends \Woops\Core\Object
         'bua' => array(),   // Buriat
         'bug' => array(),   // Buginese
         'byn' => array(),   // Blin
-        'ca'  => array(     // Catalan
+        'ca'  => array      // Catalan
+        (
             'ES' => true
         ),
         'cad' => array(),   // Caddo
@@ -177,7 +186,8 @@ final class Helper extends \Woops\Core\Object
         'cr'  => array(),   // Cree
         'crh' => array(),   // Crimean Tatar
         'crp' => array(),   // Creoles and pidgins (Other)
-        'cs'  => array(     // Czech
+        'cs'  => array      // Czech
+        (
             'CZ' => true
         ),
         'csb' => array(),   // Kashubian
@@ -185,13 +195,15 @@ final class Helper extends \Woops\Core\Object
         'cus' => array(),   // Cushitic (Other)
         'cv'  => array(),   // Chuvash
         'cy'  => array(),   // Welsh
-        'da'  => array(     // Danish
+        'da'  => array      // Danish
+        (
             'DK' => true
         ),
         'dak' => array(),   // Dakota
         'dar' => array(),   // Dargwa
         'day' => array(),   // Land Dayak languages
-        'de'  => array(     // German
+        'de'  => array      // German
+        (
             'AT' => true,
             'BE' => true,
             'CH' => true,
@@ -215,11 +227,13 @@ final class Helper extends \Woops\Core\Object
         'efi' => array(),   // Efik
         'egy' => array(),   // Egyptian (Ancient)
         'eka' => array(),   // Ekajuk
-        'el'  => array(     // Greek, Modern (1453-)
+        'el'  => array      // Greek, Modern (1453-)
+        (
             'GR' => true
         ),
         'elx' => array(),   // Elamite
-        'en'  => array(     // English
+        'en'  => array      // English
+        (
             'AS'       => true,
             'AU'       => true,
             'BE'       => true,
@@ -248,7 +262,8 @@ final class Helper extends \Woops\Core\Object
         ),
         'enm' => array(),   // English, Middle (1100-1500)
         'eo'  => array(),   // Esperanto
-        'es'  => array(     // Spanish
+        'es'  => array      // Spanish
+        (
             'AR' => true,
             'BO' => true,
             'CL' => true,
@@ -270,30 +285,36 @@ final class Helper extends \Woops\Core\Object
             'UY' => true,
             'VE' => true
         ),
-        'et'  => array(     // Estonian
+        'et'  => array      // Estonian
+        (
             'EE' => true
         ),
-        'eu'  => array(     // Basque
+        'eu'  => array      // Basque
+        (
             'ES' => true
         ),
         'ewo' => array(),   // Ewondo
-        'fa'  => array(     // Persian
+        'fa'  => array      // Persian
+        (
             'IR' => true
         ),
         'fan' => array(),   // Fang
         'fat' => array(),   // Fanti
         'ff'  => array(),   // Fulah
-        'fi'  => array(     // Finnish
+        'fi'  => array      // Finnish
+        (
             'FI' => true
         ),
         'fil' => array(),   // Filipino
         'fiu' => array(),   // Finno-Ugrian (Other)
         'fj'  => array(),   // Fijian
-        'fo'  => array(     // Faroese
+        'fo'  => array      // Faroese
+        (
             'FO' => true
         ),
         'fon' => array(),   // Fon
-        'fr'  => array(     // French
+        'fr'  => array      // French
+        (
             'BE' => true,
             'CA' => true,
             'CH' => true,
@@ -307,7 +328,8 @@ final class Helper extends \Woops\Core\Object
         'frs' => array(),   // Eastern Frisian
         'fur' => array(),   // Friulian
         'fy'  => array(),   // Western Frisian
-        'ga'  => array(     // Irish
+        'ga'  => array      // Irish
+        (
             'IE' => true
         ),
         'gaa' => array(),   // Ga
@@ -317,7 +339,8 @@ final class Helper extends \Woops\Core\Object
         'gem' => array(),   // Germanic (Other)
         'gez' => array(),   // Geez
         'gil' => array(),   // Gilbertese
-        'gl'  => array(     // Galician
+        'gl'  => array      // Galician
+        (
             'ES' => true
         ),
         'gmh' => array(),   // German, Middle High (ca. 1050-1500)
@@ -329,20 +352,24 @@ final class Helper extends \Woops\Core\Object
         'grb' => array(),   // Grebo
         'grc' => array(),   // Greek, Ancient (to 1453)
         'gsw' => array(),   // Swiss German
-        'gu'  => array(     // Gujarati
+        'gu'  => array      // Gujarati
+        (
             'IN' => true
         ),
-        'gv'  => array(     // Manx
+        'gv'  => array      // Manx
+        (
             'GB' => true
         ),
         'gwi' => array(),   // Gwich'in
         'ha'  => array(),   // Hausa
         'hai' => array(),   // Haida
         'haw' => array(),   // Hawaiian
-        'he'  => array(     // Hebrew
+        'he'  => array      // Hebrew
+        (
             'IL' => true
         ),
-        'hi'  => array(     // Hindi
+        'hi'  => array      // Hindi
+        (
             'IN' => true
         ),
         'hil' => array(),   // Hiligaynon
@@ -350,14 +377,16 @@ final class Helper extends \Woops\Core\Object
         'hit' => array(),   // Hittite
         'hmn' => array(),   // Hmong
         'ho'  => array(),   // Hiri Motu
-        'hr'  => array(     // Croatian
+        'hr'  => array      // Croatian
+        (
             'HR' => true
         ),
         'hsb' => array(),   // Upper Sorbian
         'ht'  => array(),   // Haitian
         'hu'  => array(),   // Hungarian
         'hup' => array(),   // Hupa
-        'hy'  => array(     // Armenian
+        'hy'  => array      // Armenian
+        (
             'HU'         => true,
             'AM'         => true,
             'AM_REVISED' => true
@@ -365,7 +394,8 @@ final class Helper extends \Woops\Core\Object
         'hz'  => array(),   // Herero
         'ia'  => array(),   // Interlingua (International Auxiliary Language Association)
         'iba' => array(),   // Iban
-        'id'  => array(     // Indonesian
+        'id'  => array      // Indonesian
+        (
             'ID' => true
         ),
         'ie'  => array(),   // Interlingue
@@ -380,22 +410,26 @@ final class Helper extends \Woops\Core\Object
         'io'  => array(),   // Ido
         'ira' => array(),   // Iranian (Other)
         'iro' => array(),   // Iroquoian languages
-        'is'  => array(     // Icelandic
+        'is'  => array      // Icelandic
+        (
             'IS' => true
         ),
-        'it'  => array(     // Italian
+        'it'  => array      // Italian
+        (
             'CH' => true,
             'IT' => true
         ),
         'iu'  => array(),   // Inuktitut
-        'ja'  => array(     // Japanese
+        'ja'  => array      // Japanese
+        (
             'JP' => true
         ),
         'jbo' => array(),   // Lojban
         'jpr' => array(),   // Judeo-Persian
         'jrb' => array(),   // Judeo-Arabic
         'jv'  => array(),   // Javanese
-        'ka'  => array(     // Georgian
+        'ka'  => array      // Georgian
+        (
             'GE' => true
         ),
         'kaa' => array(),   // Kara-Kalpak
@@ -411,18 +445,22 @@ final class Helper extends \Woops\Core\Object
         'kho' => array(),   // Khotanese
         'ki'  => array(),   // Kikuyu
         'kj'  => array(),   // Kuanyama
-        'kk'  => array(     // Kazakh
+        'kk'  => array      // Kazakh
+        (
             'KZ' => true
         ),
-        'kl'  => array(     // Kalaallisut
+        'kl'  => array      // Kalaallisut
+        (
             'GL' => true
         ),
         'km'  => array(),   // Central Khmer
         'kmb' => array(),   // Kimbundu
-        'kn'  => array(     // Kannada
+        'kn'  => array      // Kannada
+        (
             'IN' => true
         ),
-        'ko'  => array(     // Korean
+        'ko'  => array      // Korean
+        (
             'KR' => true
         ),
         'kok' => array(),   // Konkani
@@ -438,10 +476,12 @@ final class Helper extends \Woops\Core\Object
         'kum' => array(),   // Kumyk
         'kut' => array(),   // Kutenai
         'kv'  => array(),   // Komi
-        'kw'  => array(     // Cornish
+        'kw'  => array      // Cornish
+        (
             'GB' => true
         ),
-        'ky'  => array(     // Kyrgyz
+        'ky'  => array      // Kyrgyz
+        (
             'KG' => true
         ),
         'la'  => array(),   // Latin
@@ -456,7 +496,8 @@ final class Helper extends \Woops\Core\Object
         'lo'  => array(),   // Lao
         'lol' => array(),   // Mongo
         'loz' => array(),   // Lozi
-        'lt'  => array(     // Lithuanian
+        'lt'  => array      // Lithuanian
+        (
             'LT' => true
         ),
         'lu'  => array(),   // Luba-Katanga
@@ -465,7 +506,8 @@ final class Helper extends \Woops\Core\Object
         'lun' => array(),   // Lunda
         'luo' => array(),   // Luo (Kenya and Tanzania)
         'lus' => array(),   // Lushai
-        'lv'  => array(     // Latvian
+        'lv'  => array      // Latvian
+        (
             'LV' => true
         ),
         'mad' => array(),   // Madurese
@@ -485,12 +527,14 @@ final class Helper extends \Woops\Core\Object
         'mic' => array(),   // Mi'kmaq
         'min' => array(),   // Minangkabau
         'mis' => array(),   // Miscellaneous languages
-        'mk'  => array(     // Macedonian
+        'mk'  => array      // Macedonian
+        (
             'MK' => true
         ),
         'mkh' => array(),   // Mon-Khmer (Other)
         'ml'  => array(),   // Malayalam
-        'mn'  => array(     // Mongolian
+        'mn'  => array      // Mongolian
+        (
             'MN' => true
         ),
         'mnc' => array(),   // Manchu
@@ -499,14 +543,17 @@ final class Helper extends \Woops\Core\Object
         'mo'  => array(),   // Moldavian
         'moh' => array(),   // Mohawk
         'mos' => array(),   // Mossi
-        'mr'  => array(     // Marathi
+        'mr'  => array      // Marathi
+        (
             'IN' => true
         ),
-        'ms'  => array(     // Malay
+        'ms'  => array      // Malay
+        (
             'BN' => true,
             'MY' => true
         ),
-        'mt'  => array(     // Maltese
+        'mt'  => array      // Maltese
+        (
             'MT' => true
         ),
         'mul' => array(),   // Multiple languages
@@ -521,7 +568,8 @@ final class Helper extends \Woops\Core\Object
         'nah' => array(),   // Nahuatl languages
         'nai' => array(),   // North American Indian
         'nap' => array(),   // Neapolitan
-        'nb'  => array(     // Norwegian Bokmål
+        'nb'  => array      // Norwegian Bokmål
+        (
             'NO' => true
         ),
         'nd'  => array(),   // Ndebele, North
@@ -532,14 +580,17 @@ final class Helper extends \Woops\Core\Object
         'nia' => array(),   // Nias
         'nic' => array(),   // Niger-Kordofanian (Other)
         'niu' => array(),   // Niuean
-        'nl'  => array(     // Dutch
+        'nl'  => array      // Dutch
+        (
             'BE' => true,
             'NL' => true
         ),
-        'nn'  => array(     // Norwegian Nynorsk
+        'nn'  => array      // Norwegian Nynorsk
+        (
             'NO' => true
         ),
-        'no'  => array(     // Norwegian
+        'no'  => array      // Norwegian
+        (
             'NO' => true,
             'NO_NY' => true
         ),
@@ -558,7 +609,8 @@ final class Helper extends \Woops\Core\Object
         'nzi' => array(),   // Nzima
         'oc'  => array(),   // Occitan (post 1500)
         'oj'  => array(),   // Ojibwa
-        'om'  => array(     // Oromo
+        'om'  => array      // Oromo
+        (
             'ET' => true,
             'KE' => true
         ),
@@ -567,7 +619,8 @@ final class Helper extends \Woops\Core\Object
         'osa' => array(),   // Osage
         'ota' => array(),   // Turkish, Ottoman (1500-1928)
         'oto' => array(),   // Otomian languages
-        'pa'  => array(     // Panjabi
+        'pa'  => array      // Panjabi
+        (
             'IN' => true
         ),
         'paa' => array(),   // Papuan (Other)
@@ -580,14 +633,16 @@ final class Helper extends \Woops\Core\Object
         'phi' => array(),   // Philippine (Other)
         'phn' => array(),   // Phoenician
         'pi'  => array(),   // Pali
-        'pl'  => array(     // Polish
+        'pl'  => array      // Polish
+        (
             'PL' => true
         ),
         'pon' => array(),   // Pohnpeian
         'pra' => array(),   // Prakrit languages
         'pro' => array(),   // Provençal, Old (to 1500)
         'ps'  => array(),   // Pushto
-        'pt'  => array(     // Portuguese
+        'pt'  => array      // Portuguese
+        (
             'BR' => true,
             'PT' => true
         ),
@@ -597,18 +652,21 @@ final class Helper extends \Woops\Core\Object
         'rar' => array(),   // Rarotongan
         'rm'  => array(),   // Romansh
         'rn'  => array(),   // Rundi
-        'ro'  => array(     // Romanian
+        'ro'  => array      // Romanian
+        (
             'RO' => true
         ),
         'roa' => array(),   // Romance (Other)
         'rom' => array(),   // Romany
-        'ru'  => array(     // Russian
+        'ru'  => array      // Russian
+        (
             'RU' => true,
             'UA' => true
         ),
         'rup' => array(),   // Aromanian
         'rw'  => array(),   // Kinyarwanda
-        'sa'  => array(     // Sanskrit
+        'sa'  => array      // Sanskrit
+        (
             'IN' => true
         ),
         'sad' => array(),   // Sandawe
@@ -633,10 +691,12 @@ final class Helper extends \Woops\Core\Object
         'sid' => array(),   // Sidamo
         'sio' => array(),   // Siouan languages
         'sit' => array(),   // Sino-Tibetan (Other)
-        'sk'  => array(     // Slovak
+        'sk'  => array      // Slovak
+        (
             'SK' => true
         ),
-        'sl'  => array(     // Slovenian
+        'sl'  => array      // Slovenian
+        (
             'SI' => true
         ),
         'sla' => array(),   // Slavic (Other)
@@ -648,7 +708,8 @@ final class Helper extends \Woops\Core\Object
         'sms' => array(),   // Skolt Sami
         'sn'  => array(),   // Shona
         'snk' => array(),   // Soninke
-        'so'  => array(     // Somali
+        'so'  => array      // Somali
+        (
             'DJ' => true,
             'ET' => true,
             'KE' => true,
@@ -656,10 +717,12 @@ final class Helper extends \Woops\Core\Object
         ),
         'sog' => array(),   // Sogdian
         'son' => array(),   // Songhai languages
-        'sq'  => array(     // Albanian
+        'sq'  => array      // Albanian
+        (
             'AL' => true
         ),
-        'sr'  => array(     // Serbian
+        'sr'  => array      // Serbian
+        (
             'YU' => true
         ),
         'srn' => array(),   // Sranan Tongo
@@ -671,27 +734,32 @@ final class Helper extends \Woops\Core\Object
         'suk' => array(),   // Sukuma
         'sus' => array(),   // Susu
         'sux' => array(),   // Sumerian
-        'sv'  => array(     // Swedish
+        'sv'  => array      // Swedish
+        (
             'FI' => true,
             'SE' => true
         ),
-        'sw'  => array(     // Swahili
+        'sw'  => array      // Swahili
+        (
             'KE' => true,
             'TZ' => true
         ),
         'syr' => array(),   // Syriac
-        'ta'  => array(     // Tamil
+        'ta'  => array      // Tamil
+        (
             'IN' => true
         ),
         'tai' => array(),   // Tai (Other)
-        'te'  => array(     // Telugu
+        'te'  => array      // Telugu
+        (
             'IN' => true
         ),
         'tem' => array(),   // Timne
         'ter' => array(),   // Tereno
         'tet' => array(),   // Tetum
         'tg'  => array(),   // Tajik
-        'th'  => array(     // Thai
+        'th'  => array      // Thai
+        (
             'TH' => true
         ),
         'ti'  => array(),   // Tigrinya
@@ -707,12 +775,14 @@ final class Helper extends \Woops\Core\Object
         'to'  => array(),   // Tonga (Tonga Islands)
         'tog' => array(),   // Tonga (Nyasa)
         'tpi' => array(),   // Tok Pisin
-        'tr'  => array(     // Turkish
+        'tr'  => array      // Turkish
+        (
             'TR' => true
         ),
         'ts'  => array(),   // Tsonga
         'tsi' => array(),   // Tsimshian
-        'tt'  => array(     // Tatar
+        'tt'  => array      // Tatar
+        (
             'RU' => true
         ),
         'tum' => array(),   // Tumbuka
@@ -725,20 +795,24 @@ final class Helper extends \Woops\Core\Object
         'udm' => array(),   // Udmurt
         'ug'  => array(),   // Uighur
         'uga' => array(),   // Ugaritic
-        'uk'  => array(     // Ukrainian
+        'uk'  => array      // Ukrainian
+        (
             'UA' => true
         ),
         'umb' => array(),   // Umbundu
         'und' => array(),   // Undetermined
-        'ur'  => array(     // Urdu
+        'ur'  => array      // Urdu
+        (
             'PK' => true
         ),
-        'uz'  => array(     // Uzbek
+        'uz'  => array      // Uzbek
+        (
             'UZ' => true
         ),
         'vai' => array(),   // Vai
         've'  => array(),   // Venda
-        'vi'  => array(     // Vietnamese
+        'vi'  => array      // Vietnamese
+        (
             'VN' => true
         ),
         'vo'  => array(),   // Volapük
@@ -760,7 +834,8 @@ final class Helper extends \Woops\Core\Object
         'za'  => array(),   // Zhuang
         'zap' => array(),   // Zapotec
         'zen' => array(),   // Zenaga
-        'zh'  => array(     // Chinese
+        'zh'  => array      // Chinese
+        (
             'CN' => true,
             'HK' => true,
             'MO' => true,
@@ -796,7 +871,8 @@ final class Helper extends \Woops\Core\Object
      */
     public function __clone()
     {
-        throw new \Woops\Core\Singleton\Exception(
+        throw new \Woops\Core\Singleton\Exception
+        (
             'Class ' . __CLASS__ . ' cannot be cloned',
             \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
@@ -814,8 +890,8 @@ final class Helper extends \Woops\Core\Object
     public static function getInstance()
     {
         // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
+        if( !is_object( self::$_instance ) )
+        {
             // Creates the unique instance
             self::$_instance = new self();
         }
@@ -833,8 +909,8 @@ final class Helper extends \Woops\Core\Object
     public function isValid( $locale )
     {
         // Checks if we have a variant
-        if( $sub = strpos( $locale, '_' ) ) {
-            
+        if( $sub = strpos( $locale, '_' ) )
+        {
             // Language code
             $lang    = substr( $locale, 0, $sub );
             

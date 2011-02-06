@@ -64,8 +64,8 @@ abstract class Object extends Informations
     final public function getObjectHash()
     {
         // Checks if the object's hash has already been computed
-        if( !$this->_hash ) {
-            
+        if( !$this->_hash )
+        {
             // Computes the object's hash
             $this->_hash = spl_object_hash( $this );
         }

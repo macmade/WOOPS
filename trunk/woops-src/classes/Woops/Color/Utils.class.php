@@ -67,8 +67,8 @@ class Utils extends \Woops\Core\Object
     public function __construct( $method = self::METHOD_RGB )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -106,18 +106,18 @@ class Utils extends \Woops\Core\Object
         $method = ( int )$method;
         
         // Checks the color method
-        if( $method === self::METHOD_HSV ) {
-            
+        if( $method === self::METHOD_HSV )
+        {
             // Hue Saturation Value
             $this->_colorMethod = self::METHOD_HSV;
-            
-        } elseif( $method === self::METHOD_HSV ) {
-            
+        }
+        elseif( $method === self::METHOD_HSV )
+        {
             // Hue Saturation Luminosity
             $this->_colorMethod = self::METHOD_HSL;
-            
-        } else {
-            
+        }
+        else
+        {
             // Default - Red Green Blue
             $this->_colorMethod = self::METHOD_RGB;
         }
@@ -142,8 +142,8 @@ class Utils extends \Woops\Core\Object
     public function createHexColor( $v1, $v2, $v3, $uppercase = false )
     {
         // Check color creation method
-        if( $this->_colorMethod === self::METHOD_HSL ) {
-            
+        if( $this->_colorMethod === self::METHOD_HSL )
+        {
             // Convert colors
             $colors = self::$_converter->hslToRgb( $v1, $v2, $v3 );
             
@@ -151,9 +151,9 @@ class Utils extends \Woops\Core\Object
             $v1 = $colors[ 'R' ];
             $v2 = $colors[ 'G' ];
             $v3 = $colors[ 'B' ];
-            
-        } elseif( $this->_colorMethod === self::METHOD_HSV ) {
-            
+        }
+        elseif( $this->_colorMethod === self::METHOD_HSV )
+        {
             // Convert colors
             $colors = self::$_converter->hsvToRgb( $v1, $v2, $v3 );
             
@@ -206,15 +206,15 @@ class Utils extends \Woops\Core\Object
         $color = ( substr( $color, 0, 1 ) === '#' ) ? substr( $color, 1, strlen( $color ) ) : $color;
         
         // Check color length (3 or 6)
-        if( strlen( $color ) === 3 ) {
-            
+        if( strlen( $color ) === 3 )
+        {
             // Extract RGB values from the hexadecimal color
             $R = hexdec( substr( $color, 0, 1 ) );
             $G = hexdec( substr( $color, 1, 1 ) );
             $B = hexdec( substr( $color, 2, 1 ) );
-            
-        } elseif( strlen( $color ) === 6 ) {
-            
+        }
+        elseif( strlen( $color ) === 6 )
+        {
             // Extract RGB values from the hexadecimal color
             $R = hexdec( substr( $color, 0, 2 ) );
             $G = hexdec( substr( $color, 2, 2 ) );
@@ -222,36 +222,40 @@ class Utils extends \Woops\Core\Object
         }
         
         // Check modification method
-        if( $this->_colorMethod === self::METHOD_HSL ) {
-            
+        if( $this->_colorMethod === self::METHOD_HSL )
+        {
             // Convert colors
             $colors = self::$_converter->rgbToHsl( $R, $G, $B );
             
             // Create modified color
-            return $this->createHexColor(
+            return $this->createHexColor
+            (
                 $colors[ 'H' ] + $v1,
                 $colors[ 'S' ] + $v2,
                 $colors[ 'L' ] + $v3,
                 $uppercase
             );
-            
-        } elseif( $this->_colorMethod === self::METHOD_HSV ) {
+        }
+        elseif( $this->_colorMethod === self::METHOD_HSV )
+        {
             
             // Convert colors
             $colors = self::$_converter->rgbToHsv( $R,$G,$B );
             
             // Create modified color
-            return $this->createHexColor(
+            return $this->createHexColor
+            (
                 $colors[ 'H' ] + $v1,
                 $colors[ 'S' ] + $v2,
                 $colors[ 'V' ] + $v3,
                 $uppercase
             );
-            
-        } else {
-            
+        }
+        else
+        {
             // Create modified color
-            return $this->createHexColor(
+            return $this->createHexColor
+            (
                 $R + $v1,
                 $G + $v2,
                 $B + $v3,

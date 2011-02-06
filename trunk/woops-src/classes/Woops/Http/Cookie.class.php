@@ -101,36 +101,36 @@ class Cookie extends \Woops\Core\Object
         $cookie = $this->_name . '=' . urlencode( $this->_value ) . ';';
         
         // Checks for an expiration date
-        if( $this->_expires ) {
-            
+        if( $this->_expires )
+        {
             // Adds the expiration date (as in RFC-2822)
             $cookie .= ' expires=' . date( 'r', $this->_expires ) . ';';
         }
         
         // Checks for a path
-        if( $this->_path ) {
-            
+        if( $this->_path )
+        {
             // Adds the path
             $cookie .= ' path=' . $this->_path . ';';
         }
         
         // Checks for a domain
-        if( $this->_domain ) {
-            
+        if( $this->_domain )
+        {
             // Adds the domain
             $cookie .= ' domain=' . $this->_domain . ';';
         }
         
         // Checks if the cookie is secure
-        if( $this->_secure ) {
-            
+        if( $this->_secure )
+        {
             // Adds the secure option
             $cookie .= ' secure;';
         }
         
         // Checks if the cookie is available only through the HTTP protocol
-        if( $this->_httpOnly ) {
-            
+        if( $this->_httpOnly )
+        {
             // Adds the HTTP only option
             $cookie .= ' HttpOnly;';
         }
@@ -152,10 +152,11 @@ class Cookie extends \Woops\Core\Object
         $equal = strpos( $str, '=' );
         
         // Checks for the '=' character
-        if( !$equal ) {
-            
+        if( !$equal )
+        {
             // Invalid cookie - No '=' character
-            throw new Cookie\Exception(
+            throw new Cookie\Exception
+            (
                 'Invalid cookie: \'' . $str . '\'',
                 Cookie\Exception::EXCEPTION_BAD_COOKIE
             );
@@ -177,27 +178,27 @@ class Cookie extends \Woops\Core\Object
         $cookie  = new self( $name, $value );
         
         // Process each part
-        foreach( $parts as $part ) {
-            
+        foreach( $parts as $part )
+        {
             // Position of the '=' character
             $equal = strpos( $part, '=' );
             
             // Checks for the '=' character
-            if( !$equal ) {
-                
+            if( !$equal )
+            {
                 // Option without a value
                 $name = trim( $part );
-                
-            } else {
-                
+            }
+            else
+            {
                 // Gets the name and the value of the option
                 $name  = trim( substr( $part, 0, $equal ) );
                 $value = trim( substr( $part, $equal + 1 ) );
             }
             
             // Checks the option name
-            switch( $name ) {
-                
+            switch( $name )
+            {
                 // Expiration date
                 case 'expires';
                     
@@ -254,7 +255,8 @@ class Cookie extends \Woops\Core\Object
      */
     public function set()
     {
-        return setcookie(
+        return setcookie
+        (
             $this->_name,
             $this->_value,
             $this->_expires,

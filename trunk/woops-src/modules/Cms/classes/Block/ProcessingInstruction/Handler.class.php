@@ -49,8 +49,8 @@ class Handler extends \Woops\Core\Object implements \Woops\Xhtml\ProcessingInstr
     public function __construct()
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -80,34 +80,35 @@ class Handler extends \Woops\Core\Object implements \Woops\Xhtml\ProcessingInstr
         
         $content->comment( 'Start of CMS block: ' . $options->name );
         
-        try {
-            
+        try
+        {
             $block        = self::$_modManager->getBlock( 'cms', $options->name );
-            
             $blockOptions = clone( $options );
             
             unset( $blockOptions->name );
             
             $block->getBlockContent( $content, $blockOptions );
-            
-        } catch( \Woops\Core\Module\Manager\Exception $e ) {
-            
+        }
+        catch( \Woops\Core\Module\Manager\Exception $e )
+        {
             $code = $e->getCode();
             
-            if(    $code === \Woops\Core\Module\Manager\Exception::EXCEPTION_NO_BLOCK
+            if
+            (
+                   $code === \Woops\Core\Module\Manager\Exception::EXCEPTION_NO_BLOCK
                 || $code === \Woops\Core\Module\Manager\Exception::EXCEPTION_NO_BLOCK_TYPE
                 || $code === \Woops\Core\Module\Manager\Exception::EXCEPTION_MODULE_NOT_LOADED
-            ) {
-                
+            )
+            {
                 $error            = $content->div->strong;
                 $error[ 'style' ] = 'color: #FF0000;';
                 
                 $error->addTextData( '[BLOCK ERROR: ' . $options->name . ']' );
                 
                 $content->div     = $e->getMessage();
-                
-            } else {
-                
+            }
+            else
+            {
                 throw $e;
             }
         }

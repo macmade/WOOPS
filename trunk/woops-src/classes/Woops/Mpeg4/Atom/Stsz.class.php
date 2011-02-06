@@ -51,10 +51,10 @@ final class Stsz extends \Woops\Mpeg4\FullBox
         $data->entry_count = $this->_stream->bigEndianUnsignedLong();
         $data->entries     = array();
         
-        if( $data->sample_size === 0 ) {
-            
-            while( !$this->_stream->endOfStream() ) {
-                
+        if( $data->sample_size === 0 )
+        {
+            while( !$this->_stream->endOfStream() )
+            {
                 $entry             = new \stdClass();
                 $entry->entry_size = $this->_stream->bigEndianUnsignedLong();
                 $data->entries[]   = $entry;

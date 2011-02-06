@@ -62,8 +62,8 @@ class Section extends \Woops\Ini\File
         $section = '[' . $this->_name . ']';
         
         // Process each item
-        foreach( $this->_items as $name => $object ) {
-            
+        foreach( $this->_items as $name => $object )
+        {
             // Adds the current item
             $section .= self::$_str->NL . ( string )$object;
         }
@@ -81,7 +81,8 @@ class Section extends \Woops\Ini\File
      */
     public function newSectionItem( $name )
     {
-        throw new Section\Exception(
+        throw new Section\Exception
+        (
             'An INI section cannot contains another section',
             Section\Exception::EXCEPTION_NESTED_SECTION
         );
@@ -96,7 +97,8 @@ class Section extends \Woops\Ini\File
      */
     public function addSectionItem( Section $section )
     {
-        throw new Section\Exception(
+        throw new Section\Exception
+        (
             'An INI section cannot contains another section',
             Section\Exception::EXCEPTION_NESTED_SECTION
         );

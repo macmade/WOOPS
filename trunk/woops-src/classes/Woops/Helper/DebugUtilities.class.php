@@ -54,40 +54,40 @@ class DebugUtilities extends \Woops\Core\Object
         $type = 'unknown';
         
         // Checks the variable type
-        if( is_object( $var ) ) {
-            
+        if( is_object( $var ) )
+        {
             $type = 'object';
-            
-        } elseif( is_resource( $var ) ) {
-            
+        }
+        elseif( is_resource( $var ) )
+        {
             $type = 'resource';
-            
-        } elseif( is_array( $var ) ) {
-            
+        }
+        elseif( is_array( $var ) )
+        {
             $type = 'array';
-            
-        } elseif( is_string( $var ) ) {
-            
+        }
+        elseif( is_string( $var ) )
+        {
             $type = 'string';
-            
-        } elseif( is_int( $var ) ) {
-            
+        }
+        elseif( is_int( $var ) )
+        {
             $type = 'int';
-            
-        } elseif( is_link( $var ) ) {
-            
+        }
+        elseif( is_link( $var ) )
+        {
             $type = 'link';
-            
-        } elseif( is_float( $var ) ) {
-            
+        }
+        elseif( is_float( $var ) )
+        {
             $type = 'float';
-            
-        } elseif( is_null( $var ) ) {
-            
+        }
+        elseif( is_null( $var ) )
+        {
             $type = 'null';
-            
-        } elseif( is_bool( $var ) ) {
-            
+        }
+        elseif( is_bool( $var ) )
+        {
             $type = 'boolean';
         }
         
@@ -123,8 +123,8 @@ class DebugUtilities extends \Woops\Core\Object
         $container->comment( 'PHP array debug - end' );
         
         // Process each value of the array
-        foreach( $array as $key => &$value ) {
-            
+        foreach( $array as $key => &$value )
+        {
             // Gets the variable type
             $varType = static::_getVarType( $value );
             
@@ -147,32 +147,32 @@ class DebugUtilities extends \Woops\Core\Object
             $label->addTextData( $key );
             
             // Checks the value type
-            if( is_array( $value ) ) {
-                
+            if( is_array( $value ) )
+            {
                 // Displays a sub-array
                 $dataCol->addChildNode( static::printArray( $value, true ) );
-                
-            } elseif( is_object( $value ) ) {
-                
+            }
+            elseif( is_object( $value ) )
+            {
                 // Displays an object
                 $dataCol->div->pre = print_r( $value, true );
-                
-            } elseif( is_bool( $value ) ) {
-                
+            }
+            elseif( is_bool( $value ) )
+            {
                 // Boolean value
                 $value = ( $value ) ? 'true' : 'false';
                 $dataCol->addTextData( $value );
-                
-            } else {
-                
+            }
+            else
+            {
                 // Other kind of data
                 $dataCol->addTextData( $value );
             }
         }
         
         // Checks if we have to return the array representation
-        if( $return ) {
-            
+        if( $return )
+        {
             // Returns the XHTML tag object
             return $container;
         }
@@ -226,31 +226,31 @@ class DebugUtilities extends \Woops\Core\Object
         $dataDiv[ 'style' ] = $commonStyle . 'background-color: #FFFFFF; border: solid 1px #D3E7F4; margin: 2px; padding: 2px;';
         
         // Checks the variable type
-        if( is_array( $var ) ) {
-            
+        if( is_array( $var ) )
+        {
             // Displays an array
             $dataDiv->addChildNode( static::printArray( $var, true ) );
-            
-        } elseif( is_object( $var ) ) {
-            
+        }
+        elseif( is_object( $var ) )
+        {
             // Displays an object
             $dataDiv->pre = print_r( $var, true );
-            
-        } elseif( is_bool( $var ) ) {
-            
+        }
+        elseif( is_bool( $var ) )
+        {
             // Boolean value
             $value = ( $var ) ? 'true' : 'false';
             $dataDiv->addTextData( $value );
-            
-        } else {
-            
+        }
+        else
+        {
             // Other kind of data
             $dataDiv->addTextData( $var );
         }
         
         // Checks if we have to return the variable representation
-        if( $return ) {
-            
+        if( $return )
+        {
             // Returns the XHTML tag object
             return $container;
         }

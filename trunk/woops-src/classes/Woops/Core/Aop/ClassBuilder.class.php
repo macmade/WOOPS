@@ -73,17 +73,18 @@ class ClassBuilder extends \Woops\Core\Object
     public function __construct( $className )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
         
         // Checks if the class exists
-        if( !class_exists( $className ) ) {
-            
+        if( !class_exists( $className ) )
+        {
             // Error - No such class
-            throw new ClassBuilder\Exception(
+            throw new ClassBuilder\Exception
+            (
                 'The class ' . $className . ' does not exist',
                 ClassBuilder\Exception::EXCEPTION_NO_CLASS
             );
@@ -99,17 +100,18 @@ class ClassBuilder extends \Woops\Core\Object
         $this->_classCode    = file_get_contents( $filePath );
         
         // Checks if the class is a subclass of the AOP advisor class
-        if( $reflection->isAopReady() ) {
-            
+        if( $reflection->isAopReady() )
+        {
             // Adds the AOP method suffix to all the public methods
-            $this->_classAopCode = preg_replace(
+            $this->_classAopCode = preg_replace
+            (
                 self::PUBLIC_METHODS_REGEXP,
                 '\1\2' . \Woops\Core\Aop\Advisor::JOINPOINT_METHOD_SUFFIX,
                 $this->_classCode
             );
-            
-        } else {
-            
+        }
+        else
+        {
             // Nothing to do, the class does not have AOP features
             $this->_classAopCode = $this->_classCode;
         }

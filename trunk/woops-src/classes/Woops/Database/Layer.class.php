@@ -89,11 +89,11 @@ class Layer extends \Woops\Core\Singleton\Base
     public function __destruct()
     {
         // Process each database engine
-        foreach( $this->_engines as $key => $value ) {
-            
+        foreach( $this->_engines as $key => $value )
+        {
             // Checks if the engine is connected
-            if( isset( $this->_connectedEngines[ $key ] ) ) {
-                
+            if( isset( $this->_connectedEngines[ $key ] ) )
+            {
                 // Dispatch the event to the listeners
                 $this->dispatchEventObject( new Layer\Event( Layer\Event::EVENT_ENGINE_DISCONNECT, $value ) );
                 
@@ -119,20 +119,22 @@ class Layer extends \Woops\Core\Singleton\Base
     public function registerDatabaseEngine( $name, $class )
     {
         // Checks for an engine with the same name
-        if( isset( $this->_engines[ $name ] ) ) {
-            
+        if( isset( $this->_engines[ $name ] ) )
+        {
             // Engine already registered
-            throw new Layer\Exception(
+            throw new Layer\Exception
+            (
                 'The engine \'' . $name . '\' is already registered',
                 Layer\Exception::EXCEPTION_ENGINE_EXISTS
             );
         }
         
         // Checks for the engine class
-        if( !class_exists( $class ) ) {
-            
+        if( !class_exists( $class ) )
+        {
             // The engine class does not exist
-            throw new Layer\Exception(
+            throw new Layer\Exception
+            (
                 'Cannot register unexisting class \'' . $class . '\' as a database engine',
                 Layer\Exception::EXCEPTION_NO_ENGINE
             );
@@ -142,10 +144,11 @@ class Layer extends \Woops\Core\Singleton\Base
         $interfaces = class_implements( $class );
         
         // Checks if the engine class implements the database engine interface
-        if( !isset( $interfaces[ 'Woops\Database\Engine\ObjectInterface' ] ) ) {
-            
+        if( !isset( $interfaces[ 'Woops\Database\Engine\ObjectInterface' ] ) )
+        {
             // Invalid class
-            throw new Layer\Exception(
+            throw new Layer\Exception
+            (
                 'Cannot register class \'' . $class . '\' as a database engine, since it does not implements the \'Woops\Database\Engine\ObjectInterface\' interface',
                 Layer\Exception::EXCEPTION_INVALID_ENGINE_CLASS
             );
@@ -159,7 +162,14 @@ class Layer extends \Woops\Core\Singleton\Base
         $this->_drivers[ $name ]     = $this->_engines[ $name ]->getAvailableDrivers();
         
         // Dispatch the event to the listeners
-        $this->dispatchEventObject( new Layer\Event( Layer\Event::EVENT_ENGINE_REGISTER, $this->_engines[ $name ] ) );
+        $this->dispatchEventObject
+        (
+            new Layer\Event
+            (
+                Layer\Event::EVENT_ENGINE_REGISTER,
+                $this->_engines[ $name ]
+            )
+        );
     }
     
     /**
@@ -175,17 +185,18 @@ class Layer extends \Woops\Core\Singleton\Base
     public function getEngine( $name = '' )
     {
         // Checks for an engine name
-        if( !$name ) {
-            
+        if( !$name )
+        {
             // Gets the default engine
             $name = $this->_defaultEngine;
         }
         
         // Checks if the engine exists
-        if( !isset( $this->_engines[ $name ] ) ) {
-            
+        if( !isset( $this->_engines[ $name ] ) )
+        {
             // The requested engine is not registered
-            throw new Layer\Exception(
+            throw new Layer\Exception
+            (
                 'The engine \'' . $name . '\' is not a registered database engine',
                 Layer\Exception::EXCEPTION_NO_ENGINE
             );
@@ -201,8 +212,8 @@ class Layer extends \Woops\Core\Singleton\Base
         static $tablePrefix;
         
         // Gets the configuration variables if needed
-        if( !$driver ) {
-            
+        if( !$driver )
+        {
             // Sets the default connection infos
             $driver      = $this->_conf->getVar( 'database', 'driver' );
             $host        = $this->_conf->getVar( 'database', 'host' );
@@ -220,10 +231,11 @@ class Layer extends \Woops\Core\Singleton\Base
             $tablePrefix = ( $tablePrefix ) ? ( string )$tablePrefix : '';
             
             // Checks the mandatory setting
-            if( !$driver || !$host || !$database ) {
-                
+            if( !$driver || !$host || !$database )
+            {
                 // Error - Invalid configuration
-                throw new Layer\Exception(
+                throw new Layer\Exception
+                (
                     'The database settings are not properly configured',
                     Layer\Exception::EXCEPTION_BAD_CONFIGURATION
                 );
@@ -231,18 +243,19 @@ class Layer extends \Woops\Core\Singleton\Base
         }
         
         // Checks if the requested engine supports the database driver we are using
-        if( !isset( $this->_drivers[ $name ][ $driver ] ) ) {
-            
+        if( !isset( $this->_drivers[ $name ][ $driver ] ) )
+        {
             // Error - The engine does not supports the database driver
-            throw new Layer\Exception(
+            throw new Layer\Exception
+            (
                 'The engine \'' . $name . '\' does not support the driver \'' . $driver . '\'',
                 Layer\Exception::EXCEPTION_DRIVER_NOT_SUPPORTED
             );
         }
         
         // Checks if the engine is connected or not
-        if( !isset( $this->_connectedEngines[ $name ] ) ) {
-            
+        if( !isset( $this->_connectedEngines[ $name ] ) )
+        {
             // Loads the engine
             $this->_engines[ $name ]->load( $driver, $host, $port, $database, $tablePrefix );
             
@@ -276,17 +289,18 @@ class Layer extends \Woops\Core\Singleton\Base
     public function getEngineClass( $name = '' )
     {
         // Checks for an engine name
-        if( !$name ) {
-            
+        if( !$name )
+        {
             // Gets the default engine
             $name = $this->_defaultEngine;
         }
         
         // Checks if the engine exists
-        if( !isset( $this->_engines[ $name ] ) ) {
-            
+        if( !isset( $this->_engines[ $name ] ) )
+        {
             // The requested engine is not registered
-            throw new Layer\Exception(
+            throw new Layer\Exception
+            (
                 'The engine \'' . $name . '\' is not a registered database engine',
                 Layer\Exception::EXCEPTION_NO_ENGINE
             );

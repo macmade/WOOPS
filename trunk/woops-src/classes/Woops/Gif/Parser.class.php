@@ -128,8 +128,8 @@ class Parser extends \Woops\Core\Object
         $length = pow( 2, $size + 1 );
         
         // Process the global color table
-        for( $i = 0; $i < $length; $i++ ) {
-            
+        for( $i = 0; $i < $length; $i++ )
+        {
             // Storage
             $table[ $i ]        = new \stdClass();
             
@@ -191,8 +191,8 @@ class Parser extends \Woops\Core\Object
         $block->sizeOfLocalColorTable = ( $packedFields & 0x07 );       // Mask is 0000 0111
         
         // Checks if the local color table flag is set
-        if( $block->localColorTableFlag ) {
-            
+        if( $block->localColorTableFlag )
+        {
             // Local color table follows - Gets its values
             $block->localColorTable   = $this->_getColorTable( $block->sizeOfLocalColorTable  );
         }
@@ -219,8 +219,8 @@ class Parser extends \Woops\Core\Object
         $blockSize     = $this->_stream->unsignedChar();
         
         // Process the data blocks until the end of the parent block
-        while( $blockSize !== 0x00 ) {
-            
+        while( $blockSize !== 0x00 )
+        {
             // Storage
             $block       = new \stdClass();
             
@@ -367,10 +367,11 @@ class Parser extends \Woops\Core\Object
     protected function _parseFile()
     {
         // Checks the GIF signature
-        if( $this->_stream->read( 3 ) !== 'GIF' ) {
-            
+        if( $this->_stream->read( 3 ) !== 'GIF' )
+        {
             // Wrong file type
-            throw new Parser\Exception(
+            throw new Parser\Exception
+            (
                 'File ' . $this->_filePath . ' is not a GIF file.',
                 Parser\Exception::EXCEPTION_NOT_GIF
             );
@@ -386,8 +387,8 @@ class Parser extends \Woops\Core\Object
         $infos->logicalScreenDescriptor = $this->_getLogicalScreenDescriptor();
         
         // Checks if the global color table flag is set
-        if( $infos->logicalScreenDescriptor->globalColorTableFlag ) {
-            
+        if( $infos->logicalScreenDescriptor->globalColorTableFlag )
+        {
             // Global color table follows - Gets its values
             $infos->globalColorTable    = $this->_getColorTable( $infos->logicalScreenDescriptor->sizeOfGlobalColorTable );
         }
@@ -396,8 +397,8 @@ class Parser extends \Woops\Core\Object
         $blockId = $this->_stream->unsignedChar();
         
         // Process the blocks until the trailer (0x3b) is reached
-        while( $blockId !== self::TRAILER ) {
-            
+        while( $blockId !== self::TRAILER )
+        {
             // Parses the block
             $this->_parseBlock( $blockId, $infos );
             
@@ -415,14 +416,14 @@ class Parser extends \Woops\Core\Object
     protected function _parseBlock( $id, \stdClass $infos )
     {
         // Checks the block identifier
-        switch( $id ) {
-            
+        switch( $id )
+        {
             // Image descriptor block
             case self::IMAGE_DESCRIPTOR :
                 
                 // Checks if the storage array exists
-                if( !isset( $infos->images ) ) {
-                    
+                if( !isset( $infos->images ) )
+                {
                     // Creates the storage array
                     $infos->images = array();
                 }
@@ -451,7 +452,8 @@ class Parser extends \Woops\Core\Object
             default:
                 
                 // Invalid block identifier
-                throw new Parser\Exception(
+                throw new Parser\Exception
+                (
                     'Invalid GIF block identifier: \'0x' . dechex( $id ) . '\'.',
                     Parser\Exception::EXCEPTION_BAD_ID
                 );
@@ -465,14 +467,14 @@ class Parser extends \Woops\Core\Object
     protected function _parseExtensionBlock( $id, \stdClass $infos )
     {
         // Checks the extension block identifier
-        switch( $id ) {
-            
+        switch( $id ) 
+        {
             // Graphic control extension block
             case self::EXTENSION_GRAPHIC_CONTROL:
                 
                 // Checks if the storage array exists
-                if( !isset( $infos->graphicControlExtension ) ) {
-                    
+                if( !isset( $infos->graphicControlExtension ) )
+                {
                     // Creates the storage array
                     $infos->graphicControlExtension = array();
                 }
@@ -485,8 +487,8 @@ class Parser extends \Woops\Core\Object
             case self::EXTENSION_COMMENT:
                 
                 // Checks if the storage array exists
-                if( !isset( $infos->commentExtension ) ) {
-                    
+                if( !isset( $infos->commentExtension ) )
+                {
                     // Creates the storage array
                     $infos->commentExtension = array();
                 }
@@ -499,8 +501,8 @@ class Parser extends \Woops\Core\Object
             case self::EXTENSION_PLAIN_TEXT:
                 
                 // Checks if the storage array exists
-                if( !isset( $infos->plainTextExtension ) ) {
-                    
+                if( !isset( $infos->plainTextExtension ) )
+                {
                     // Creates the storage array
                     $infos->plainTextExtension = array();
                 }
@@ -513,8 +515,8 @@ class Parser extends \Woops\Core\Object
             case self::EXTENSION_APPLICATION:
                 
                 // Checks if the storage array exists
-                if( !isset( $infos->applicationExtension ) ) {
-                    
+                if( !isset( $infos->applicationExtension ) )
+                {
                     // Creates the storage array
                     $infos->applicationExtension = array();
                 }
@@ -527,7 +529,8 @@ class Parser extends \Woops\Core\Object
             default:
                 
                 // Invalid sub block identifier
-                throw new Parser\Exception(
+                throw new Parser\Exception
+                (
                     'Invalid GIF extension block identifier: \'0x' . dechex( $id ) . '\'.',
                     Parser\Exception::EXCEPTION_BAD_EXT_ID
                 );

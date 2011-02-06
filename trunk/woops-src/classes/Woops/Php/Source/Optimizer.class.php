@@ -39,7 +39,8 @@ class Optimizer extends \Woops\Core\Object
     /**
      * The names of the PHP superglobal variables
      */
-    protected static $_superGlobals = array(
+    protected static $_superGlobals = array
+    (
         '$_COOKIE'  => true,
         '$_ENV'     => true,
         '$_FILES'   => true,
@@ -54,7 +55,8 @@ class Optimizer extends \Woops\Core\Object
     /**
      * The allowed characters for the generation of variable names
      */
-    protected static $_varNameChars = array(
+    protected static $_varNameChars = array
+    (
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
         'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -241,32 +243,32 @@ class Optimizer extends \Woops\Core\Object
         $tokenCount  = 0;
         
         // Process each token
-        foreach( $tokens as $key => $token ) {
-            
+        foreach( $tokens as $key => $token )
+        {
             // Checks if the token is an array
-            if( is_array( $token ) ) {
-                
+            if( is_array( $token ) )
+            {
                 // Checks if we are declaring an abstract function
-                if( $token[ 0 ] === T_ABSTRACT ) {
-                    
+                if( $token[ 0 ] === T_ABSTRACT )
+                {
                     $inAbstract = true;
                 }
                 
                 // Nothing to do for abstract classes
-                if( $inAbstract && $token[ 0 ] === T_CLASS ) {
-                    
+                if( $inAbstract && $token[ 0 ] === T_CLASS )
+                {
                     $inAbstract = false;
                 }
                 
                 // Checks if we are declaring code that will be evaluated
-                if( $token[ 0 ] === T_EVAL ) {
-                    
+                if( $token[ 0 ] === T_EVAL )
+                {
                     $inEval = true;
                 }
                 
                 // Checks if we are declaring a function
-                if( $token[ 0 ] === T_FUNCTION ) {
-                    
+                if( $token[ 0 ] === T_FUNCTION )
+                {
                     $inFunc      = true;
                     $funcGlobals = array();
                     $funcVars    = array();
@@ -274,19 +276,21 @@ class Optimizer extends \Woops\Core\Object
                 }
                 
                 // Checks if we are declaring global variables inside a function
-                if( $inFunc && $token[ 0 ] === T_GLOBAL ) {
-                    
+                if( $inFunc && $token[ 0 ] === T_GLOBAL )
+                {
                     $inGlobal = true;
                 }
                 
                 // Checks if we are declaring a global variable
-                if( $inGlobal && $token[ 0 ] === T_VARIABLE ) {
-                    
+                if( $inGlobal && $token[ 0 ] === T_VARIABLE )
+                {
                     $funcGlobals[ $token[ 1 ] ] = true;
                 }
                 
                 // Checks if we are using a variable, and if it's local, so we can rename it
-                if( $renameVariables
+                if
+                (
+                       $renameVariables
                     && $inFunc
                     && !$inGlobal
                     && $token[ 0 ] === T_VARIABLE
@@ -294,15 +298,16 @@ class Optimizer extends \Woops\Core\Object
                     && !isset( $funcGlobals[ $token[ 1 ] ] )
                     && $token[ 1 ] !== '$this'
                     && ( !is_array( $lastToken ) || ( $lastToken[ 0 ] !== T_PAAMAYIM_NEKUDOTAYIM || isset( $funcVars[ $token[ 1 ] ] ) ) )
-                ) {
+                )
+                {
                     // Has the variable been renamed already?
-                    if( isset( $funcVars[ $token[ 1 ] ] ) ) {
-                        
+                    if( isset( $funcVars[ $token[ 1 ] ] ) )
+                    {
                         // Yes, gets the sort name
                         $token[ 1 ] = $funcVars[ $token[ 1 ] ];
-                        
-                    } else {
-                        
+                    }
+                    else
+                    {
                         // No, generates a new name, and stores it
                         $varName                 = $this->_generateVarName( $varCount );
                         $funcVars[ $token[ 1 ] ] = '$' . $varName;
@@ -312,40 +317,44 @@ class Optimizer extends \Woops\Core\Object
                 }
                 
                 // Checks if we are declaring code that has to be evaluated
-                if( $renameVariables
+                if
+                (
+                       $renameVariables
                     && $inFunc
                     && $inEval
                     && $token[ 0 ] === T_CONSTANT_ENCAPSED_STRING
-                ) {
-                    
+                )
+                {
                     // Finds all variables in the evaluated code
                     $matches = array();
                     preg_match_all( '/(.?.?)(\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/', $token[ 1 ], $matches );
                     
                     // Checks if variables were found
-                    if( is_array( $matches ) ) {
-                        
+                    if( is_array( $matches ) )
+                    {
                         // Sorts the variables
                         arsort($matches[ 2 ]);
                         
                         // Process each variable
-                        foreach( $matches[ 2 ] as $key => $var ) {
-                            
+                        foreach( $matches[ 2 ] as $key => $var )
+                        {
                             // May we rename the variable?
-                            if( !isset( self::$_superGlobals[ $var ] )
+                            if
+                            (
+                                   !isset( self::$_superGlobals[ $var ] )
                                 && !isset( $funcGlobals[ $var ] )
                                 && $var !== '$this'
                                 && ( $matches[ 1 ][ $key ] !== '::' || isset( $funcVars[ $var ] ) )
-                            ) {
-                                
+                            )
+                            {
                                 // Has the variable been renamed already?
-                                if( isset( $funcVars[ $var ] ) ) {
-                                    
+                                if( isset( $funcVars[ $var ] ) )
+                                {
                                     // Yes, gets the sort name
                                     $token[ 1 ] = str_replace( $var, $funcVars[ $var ], $token[ 1 ] );
-                                    
-                                } else {
-                                    
+                                }
+                                else
+                                {
                                     // No, generates a new name, and stores it
                                     $varName                 = $this->_generateVarName( $varCount );
                                     $funcVars[ $token[ 1 ] ] = '$' . $varName;
@@ -358,153 +367,182 @@ class Optimizer extends \Woops\Core\Object
                 }
                 
                 // Checks if we are inside a double quoted string and using a variable
-                if( $inString && $token[ 0 ] === T_VARIABLE ) {
-                    
+                if( $inString && $token[ 0 ] === T_VARIABLE )
+                {
                     // Checks if the variable is the first element of the double quoted string
-                    if( !is_array( $lastToken ) && $lastToken === '\'' ) {
-                        
+                    if( !is_array( $lastToken ) && $lastToken === '\'' )
+                    {
                         // Removes the start of the string, and adds the variable with concatenation
                         array_pop( $codeLines );
                         $tokenCount--;
                         $token[ 1 ] = $token[ 1 ] . ' . \'';
-                        
-                    } else {
-                        
+                    }
+                    else
+                    {
                         // Use concatenation
                         $token[ 1 ] = '\' . ' . $token[ 1 ] . ' . \'';
                     }
                 }
                 
                 // Do not process comments or whitespace
-                if( $token[ 0 ] === T_COMMENT
+                if
+                (
+                       $token[ 0 ] === T_COMMENT
                     || $token[ 0 ] === T_DOC_COMMENT
-                ) {
+                )
+                {
                     continue;
                 }
                 
                 // Do not keep a whitespace if the last token wasn't a PHP token
-                if( $token[ 0 ] === T_WHITESPACE
+                if
+                (
+                       $token[ 0 ] === T_WHITESPACE
                     && !is_array( $lastToken )
-                ) {
+                )
+                {
                     continue;
                 }
                 
                 // PHP open tag normalization
-                if( $token[ 0 ] === T_OPEN_TAG ) {
-                    
+                if( $token[ 0 ] === T_OPEN_TAG )
+                {
                     // Ensures we are not using ASP tags, nor short tags, and removes un-needed whitespaces
                     $token[ 1 ] = '<?php ';
                 }
                 
                 // PHP open tag with echo normalization
-                if( $token[ 0 ] === T_OPEN_TAG_WITH_ECHO ) {
-                    
+                if( $token[ 0 ] === T_OPEN_TAG_WITH_ECHO )
+                {
                     // Adds a normalized PHP tag, and adds a call to the echo() function
                     $token[ 1 ] = '<?php echo ';
                 }
                 
                 // Converts all numbers to their decimal value
-                if( $token[ 0 ] === T_LNUMBER ) {
-                    
+                if( $token[ 0 ] === T_LNUMBER )
+                {
                     // Detects hexadecimal or octal notations
-                    if( substr( $token[ 1 ], 0, 2 ) === '0x' ) {
-                        
+                    if( substr( $token[ 1 ], 0, 2 ) === '0x' )
+                    {
                         // Hexadecimal
                         $token[ 1 ] = hexdec( $token[ 1 ] );
-                        
-                    } elseif( substr( $token[ 1 ], 0, 1 ) === '0' ) {
-                        
+                    }
+                    elseif( substr( $token[ 1 ], 0, 1 ) === '0' )
+                    {
                         // Octal
                         $token[ 1 ] = octdec( $token[ 1 ] );
                     }
                 }
                 
                 // Do not keep a whitespace after a string
-                if( $token[ 0 ] === T_WHITESPACE
+                if
+                (
+                       $token[ 0 ] === T_WHITESPACE
                     && is_array( $lastToken )
                     && $lastToken[ 0 ] === T_CONSTANT_ENCAPSED_STRING
-                ) {
+                )
+                {
                     continue;
                 }
                 
                 // Removes whitespace before a string
-                if( $token[ 0 ] === T_CONSTANT_ENCAPSED_STRING
+                if
+                (
+                       $token[ 0 ] === T_CONSTANT_ENCAPSED_STRING
                     && is_array( $lastToken )
                     && $lastToken[ 0 ] === T_WHITESPACE
-                ) {
+                )
+                {
                     array_pop( $codeLines );
                     $tokenCount--;
                 }
                 
                 // Do not keep a whitespace after the PHP open tag
-                if( $token[ 0 ] === T_WHITESPACE
+                if
+                (
+                       $token[ 0 ] === T_WHITESPACE
                     && is_array( $lastToken )
                     && ( $lastToken[ 0 ] === T_OPEN_TAG
                     ||   $lastToken[ 0 ] === T_OPEN_TAG_WITH_ECHO )
-                ) {
+                )
+                {
                     continue;
                 }
                 
                 // Removes whitespace before the PHP close tag
-                if( $token[ 0 ] === T_CLOSE_TAG
+                if
+                (
+                       $token[ 0 ] === T_CLOSE_TAG
                     && is_array( $lastToken )
                     && $lastToken[ 0 ] === T_WHITESPACE
-                ) {
+                )
+                {
                     array_pop( $codeLines );
                     $tokenCount--;
                 }
                 
                 // Do not keep a whitespace after the PHP assignation and comparison tokens
-                if( $token[ 0 ] === T_WHITESPACE
+                if
+                (
+                       $token[ 0 ] === T_WHITESPACE
                     && is_array( $lastToken )
-                    && ( $lastToken[ 0 ] === T_AND_EQUAL
-                    ||   $lastToken[ 0 ] === T_CONCAT_EQUAL
-                    ||   $lastToken[ 0 ] === T_DIV_EQUAL
-                    ||   $lastToken[ 0 ] === T_IS_EQUAL
-                    ||   $lastToken[ 0 ] === T_IS_GREATER_OR_EQUAL
-                    ||   $lastToken[ 0 ] === T_IS_NOT_EQUAL
-                    ||   $lastToken[ 0 ] === T_IS_SMALLER_OR_EQUAL
-                    ||   $lastToken[ 0 ] === T_MINUS_EQUAL
-                    ||   $lastToken[ 0 ] === T_MOD_EQUAL
-                    ||   $lastToken[ 0 ] === T_MUL_EQUAL
-                    ||   $lastToken[ 0 ] === T_OR_EQUAL
-                    ||   $lastToken[ 0 ] === T_PLUS_EQUAL
-                    ||   $lastToken[ 0 ] === T_SL_EQUAL
-                    ||   $lastToken[ 0 ] === T_SR_EQUAL
-                    ||   $lastToken[ 0 ] === T_XOR_EQUAL
-                    ||   $lastToken[ 0 ] === T_DOUBLE_ARROW
-                    ||   $lastToken[ 0 ] === T_BOOLEAN_AND
-                    ||   $lastToken[ 0 ] === T_BOOLEAN_OR
-                    ||   $lastToken[ 0 ] === T_IS_IDENTICAL
-                    ||   $lastToken[ 0 ] === T_IS_NOT_IDENTICAL )
-                ) {
+                    &&
+                    (
+                           $lastToken[ 0 ] === T_AND_EQUAL
+                        || $lastToken[ 0 ] === T_CONCAT_EQUAL
+                        || $lastToken[ 0 ] === T_DIV_EQUAL
+                        || $lastToken[ 0 ] === T_IS_EQUAL
+                        || $lastToken[ 0 ] === T_IS_GREATER_OR_EQUAL
+                        || $lastToken[ 0 ] === T_IS_NOT_EQUAL
+                        || $lastToken[ 0 ] === T_IS_SMALLER_OR_EQUAL
+                        || $lastToken[ 0 ] === T_MINUS_EQUAL
+                        || $lastToken[ 0 ] === T_MOD_EQUAL
+                        || $lastToken[ 0 ] === T_MUL_EQUAL
+                        || $lastToken[ 0 ] === T_OR_EQUAL
+                        || $lastToken[ 0 ] === T_PLUS_EQUAL
+                        || $lastToken[ 0 ] === T_SL_EQUAL
+                        || $lastToken[ 0 ] === T_SR_EQUAL
+                        || $lastToken[ 0 ] === T_XOR_EQUAL
+                        || $lastToken[ 0 ] === T_DOUBLE_ARROW
+                        || $lastToken[ 0 ] === T_BOOLEAN_AND
+                        || $lastToken[ 0 ] === T_BOOLEAN_OR
+                        || $lastToken[ 0 ] === T_IS_IDENTICAL
+                        || $lastToken[ 0 ] === T_IS_NOT_IDENTICAL
+                    )
+                )
+                {
                     continue;
                 }
                 
                 // Removes whitespace before the PHP assignation and comparison tokens
-                if( is_array( $lastToken )
+                if
+                (
+                       is_array( $lastToken )
                     && $lastToken[ 0 ] === T_WHITESPACE
-                    && ( $token[ 0 ] === T_AND_EQUAL
-                    ||   $token[ 0 ] === T_CONCAT_EQUAL
-                    ||   $token[ 0 ] === T_DIV_EQUAL
-                    ||   $token[ 0 ] === T_IS_EQUAL
-                    ||   $token[ 0 ] === T_IS_GREATER_OR_EQUAL
-                    ||   $token[ 0 ] === T_IS_NOT_EQUAL
-                    ||   $token[ 0 ] === T_IS_SMALLER_OR_EQUAL
-                    ||   $token[ 0 ] === T_MINUS_EQUAL
-                    ||   $token[ 0 ] === T_MOD_EQUAL
-                    ||   $token[ 0 ] === T_MUL_EQUAL
-                    ||   $token[ 0 ] === T_OR_EQUAL
-                    ||   $token[ 0 ] === T_PLUS_EQUAL
-                    ||   $token[ 0 ] === T_SL_EQUAL
-                    ||   $token[ 0 ] === T_SR_EQUAL
-                    ||   $token[ 0 ] === T_XOR_EQUAL
-                    ||   $token[ 0 ] === T_DOUBLE_ARROW
-                    ||   $token[ 0 ] === T_BOOLEAN_AND
-                    ||   $token[ 0 ] === T_BOOLEAN_OR
-                    ||   $token[ 0 ] === T_IS_IDENTICAL
-                    ||   $token[ 0 ] === T_IS_NOT_IDENTICAL )
-                ) {
+                    &&
+                    (
+                           $token[ 0 ] === T_AND_EQUAL
+                        || $token[ 0 ] === T_CONCAT_EQUAL
+                        || $token[ 0 ] === T_DIV_EQUAL
+                        || $token[ 0 ] === T_IS_EQUAL
+                        || $token[ 0 ] === T_IS_GREATER_OR_EQUAL
+                        || $token[ 0 ] === T_IS_NOT_EQUAL
+                        || $token[ 0 ] === T_IS_SMALLER_OR_EQUAL
+                        || $token[ 0 ] === T_MINUS_EQUAL
+                        || $token[ 0 ] === T_MOD_EQUAL
+                        || $token[ 0 ] === T_MUL_EQUAL
+                        || $token[ 0 ] === T_OR_EQUAL
+                        || $token[ 0 ] === T_PLUS_EQUAL
+                        || $token[ 0 ] === T_SL_EQUAL
+                        || $token[ 0 ] === T_SR_EQUAL
+                        || $token[ 0 ] === T_XOR_EQUAL
+                        || $token[ 0 ] === T_DOUBLE_ARROW
+                        || $token[ 0 ] === T_BOOLEAN_AND
+                        || $token[ 0 ] === T_BOOLEAN_OR
+                        || $token[ 0 ] === T_IS_IDENTICAL
+                        || $token[ 0 ] === T_IS_NOT_IDENTICAL )
+                )
+                {
                     array_pop( $codeLines );
                     $tokenCount--;
                 }
@@ -513,52 +551,55 @@ class Optimizer extends \Woops\Core\Object
                 $codeLines[] = $token[ 1 ];
                 
                 // Removes spaces on a cast
-                if( $token[ 0 ] === T_ARRAY_CAST
+                if
+                (
+                       $token[ 0 ] === T_ARRAY_CAST
                     || $token[ 0 ] === T_BOOL_CAST
                     || $token[ 0 ] === T_DOUBLE_CAST
                     || $token[ 0 ] === T_INT_CAST
                     || $token[ 0 ] === T_OBJECT_CAST
                     || $token[ 0 ] === T_STRING_CAST
                     || $token[ 0 ] === T_UNSET_CAST
-                ) {
+                )
+                {
                     $token[ 1 ] = str_replace( ' ', '', $token[ 1 ] );
                 }
-                
-            } else {
-                
+            }
+            else
+            {
                 // Checks for the end of the global variables declaration
-                if( $inGlobal && $token === ';' ) {
-                    
+                if( $inGlobal && $token === ';' )
+                {
                     $inGlobal = false;
                 }
                 
                 // Checks for the end of the eval() declaration
-                if( $inEval && $token === ';' ) {
-                    
+                if( $inEval && $token === ';' )
+                {
                     $inEval = false;
                 }
                 
                 // Checks for the end of an abstract function declaration
-                if( $inAbstract && $inFunc && $token === ';' ) {
-                    
+                if( $inAbstract && $inFunc && $token === ';' )
+                {
                     $inAbstract = false;
                     $inFunc     = false;
                 }
                 
                 // If inside a function, detect the start of a code block
-                if( $inFunc && $token === '{' ) {
-                    
+                if( $inFunc && $token === '{' )
+                {
                     $level++;
                 }
                 
                 // If inside a function, detect the start of a code block
-                if( $inFunc && $token === '}' ) {
-                    
+                if( $inFunc && $token === '}' )
+                {
                     $level--;
                     
                     // Checks the code block level
-                    if( $level === 0 ) {
-                        
+                    if( $level === 0 )
+                    {
                         // End of the current function
                         $inFunc = false;
                         $level  = 0;
@@ -566,17 +607,17 @@ class Optimizer extends \Woops\Core\Object
                 }
                 
                 // Checks if we are in a double quoted string declaration
-                if( $token === '"' ) {
-                    
+                if( $token === '"' )
+                {
                     // Replaces by a single quote
                     $token = '\'';
                     
                     // Beginning or end of the double quoted string?
-                    if( $inString ) {
-                        
+                    if( $inString )
+                    {
                         // Checks if the last token was a variable inside the string
-                        if( is_array( $lastToken ) && $lastToken[ 0 ] === T_VARIABLE ) {
-                            
+                        if( is_array( $lastToken ) && $lastToken[ 0 ] === T_VARIABLE )
+                        {
                             // Removes the last concatenation
                             $codeLines[ $tokenCount - 1 ] = substr( $codeLines[ $tokenCount - 1 ], 0, -4 );
                             $token                  = '';
@@ -584,45 +625,51 @@ class Optimizer extends \Woops\Core\Object
                         
                         // End of the string
                         $inString = false;
-                        
-                    } else {
-                        
+                    }
+                    else
+                    {
                         // Beginning of the string
                         $inString = true;
                     }
                 }
                 
                 // Removes whitespace before some characters
-                if( is_array( $lastToken )
+                if
+                (
+                    is_array( $lastToken )
                     && $lastToken[ 0 ] === T_WHITESPACE
-                    && ( $token === '.'
-                    ||   $token === '=' 
-                    ||   $token === '{' 
-                    ||   $token === '}' 
-                    ||   $token === '(' 
-                    ||   $token === ')' 
-                    ||   $token === '[' 
-                    ||   $token === ']' 
-                    ||   $token === '|' 
-                    ||   $token === '&' 
-                    ||   $token === '~' 
-                    ||   $token === '^' 
-                    ||   $token === '?' 
-                    ||   $token === ':' 
-                    ||   $token === ';' 
-                    ||   $token === '+' 
-                    ||   $token === '-' 
-                    ||   $token === '/' 
-                    ||   $token === '%' 
-                    ||   $token === '>' 
-                    ||   $token === '<' 
-                    ||   $token === '>>'
-                    ||   $token === '<<'
-                    ||   $token === '++'
-                    ||   $token === '--'
-                    ||   $token === '!'
-                    ||   $token === ',' )
-                ) {
+                    &&
+                    (
+                           $token === '.'
+                        || $token === '=' 
+                        || $token === '{' 
+                        || $token === '}' 
+                        || $token === '(' 
+                        || $token === ')' 
+                        || $token === '[' 
+                        || $token === ']' 
+                        || $token === '|' 
+                        || $token === '&' 
+                        || $token === '~' 
+                        || $token === '^' 
+                        || $token === '?' 
+                        || $token === ':' 
+                        || $token === ';' 
+                        || $token === '+' 
+                        || $token === '-' 
+                        || $token === '/' 
+                        || $token === '%' 
+                        || $token === '>' 
+                        || $token === '<' 
+                        || $token === '>>'
+                        || $token === '<<'
+                        || $token === '++'
+                        || $token === '--'
+                        || $token === '!'
+                        || $token === ','
+                    )
+                )
+                {
                     array_pop( $codeLines );
                     $tokenCount--;
                 }
@@ -661,13 +708,13 @@ class Optimizer extends \Woops\Core\Object
     protected function _generateVarName( $int )
     {
         // Checks if we'll have to use more that a character
-        if( $int < 52 ) {
-            
+        if( $int < 52 )
+        {
             // Single character
             return self::$_varNameChars[ $int % 52 ];
-            
-        } else {
-            
+        }
+        else
+        {
             // Multiple characters
             return $this->_generateVarName( ( $int / 52 ) - 1 ) . self::$_varNameChars[ $int % 52 ];
         }

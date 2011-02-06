@@ -38,8 +38,8 @@ final class Trak extends \Woops\Mpeg4\ContainerAtom
     
     public function validChildType( $type )
     {
-        switch( $type ) {
-            
+        switch( $type )
+        {
             case 'tkhd':
                 
                 return true;

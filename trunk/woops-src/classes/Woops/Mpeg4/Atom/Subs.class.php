@@ -102,8 +102,8 @@ final class Subs extends \Woops\Mpeg4\FullBox
         $data->entries     = array();
         
         // Process each entry
-        for( $i = 0; $i < $data->entry_count; $i++ ) {
-            
+        for( $i = 0; $i < $data->entry_count; $i++ )
+        {
             // Storage for the current entry
             $entry                  = new \stdClass();
             
@@ -113,22 +113,22 @@ final class Subs extends \Woops\Mpeg4\FullBox
             $entry->subsamples      = array();
             
             // Checks for subsamples
-            if( $entry->subsample_count > 0 ) {
-                
+            if( $entry->subsample_count > 0 )
+            {
                 // Process each subsample
-                for( $j = 0; $j < $subsample_count; $j++ ) {
-                    
+                for( $j = 0; $j < $subsample_count; $j++ )
+                {
                     // Storage for the current subsample
                     $subSample = new \stdClass();
                     
                     // Checks the atom version
-                    if( $data->version === 1 ) {
-                        
+                    if( $data->version === 1 )
+                    {
                         // Size of the subsample
                         $subSample->subsample_size = $this->_stream->bigEndianUnsignedLong();
-                        
-                    } else {
-                        
+                    }
+                    else
+                    {
                         // Size of the subsample
                         $subSample->subsample_size = $this->_stream->bigEndianUnsignedShort();
                     }

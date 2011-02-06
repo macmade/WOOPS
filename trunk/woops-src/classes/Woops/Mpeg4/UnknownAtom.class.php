@@ -47,7 +47,7 @@ final class UnknownAtom extends DataAtom
     public function __construct( $type )
     {
         // Sets the atom type
-        $this->_type =substr( $type, 0, 4 );
+        $this->_type = substr( $type, 0, 4 );
     }
     
     /**

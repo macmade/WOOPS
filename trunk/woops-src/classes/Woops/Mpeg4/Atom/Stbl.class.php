@@ -38,8 +38,8 @@ final class Stbl extends \Woops\Mpeg4\ContainerAtom
     
     public function validChildType( $type )
     {
-        switch( $type ) {
-            
+        switch( $type )
+        {
             case 'stsd':
                 
                 return true;

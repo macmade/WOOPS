@@ -100,8 +100,8 @@ final class Iloc extends \Woops\Mpeg4\FullBox
         $data->items            = array();
         
         // Process each item
-        for( $i = 0; $i < $data->item_count; $i++ ) {
-            
+        for( $i = 0; $i < $data->item_count; $i++ )
+        {
             // Storage for the current item
             $item = new \stdClass();
             

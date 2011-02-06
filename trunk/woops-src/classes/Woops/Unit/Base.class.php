@@ -75,12 +75,12 @@ abstract class Base extends \Woops\Core\Object
      */
     public function __call( $name, array $args = array() )
     {
-        if( substr( $name, 0, 2 ) === 'as' ) {
-            
+        if( substr( $name, 0, 2 ) === 'as' )
+        {
             $type = strtoupper( preg_replace( '/(.)([A-Z])/', '\1_\2', substr( $name, 2 ) ) );
-            
-        } else {
-            
+        }
+        else
+        {
             $type = $this->_defaultType;
         }
         
@@ -95,9 +95,10 @@ abstract class Base extends \Woops\Core\Object
         $unitClass = get_class( $unit );
         $thisClass = get_class( $this );
         
-        if( $unitClass !== $thisClass ) {
-            
-            throw new Base\Exception(
+        if( $unitClass !== $thisClass )
+        {
+            throw new Base\Exception
+            (
                 'Cannot compare a \'' . $unitClass . '\' unit with a \'' . $thisClass . '\' unit',
                 Base\Exception::EXCEPTION_INVALID_UNIT
             );
@@ -109,15 +110,15 @@ abstract class Base extends \Woops\Core\Object
      */
     public function _convertTo( $value, $type )
     {
-        foreach( $this->_types[ $type ] as $operation ) {
-            
-            if( !is_array( $operation ) ) {
-                
+        foreach( $this->_types[ $type ] as $operation )
+        {
+            if( !is_array( $operation ) )
+            {
                 continue;
             }
             
-            switch( $operation[ 0 ] ) {
-                
+            switch( $operation[ 0 ] )
+            {
                 case '+':
                     
                     $value += $operation[ 1 ];
@@ -154,15 +155,15 @@ abstract class Base extends \Woops\Core\Object
     {
         $operations = array_reverse( $this->_types[ $type ] );
         
-        foreach( $operations as $operation ) {
-            
-            if( !is_array( $operation ) ) {
-                
+        foreach( $operations as $operation )
+        {
+            if( !is_array( $operation ) )
+            {
                 continue;
             }
             
-            switch( $operation[ 0 ] ) {
-                
+            switch( $operation[ 0 ] )
+            {
                 case '+':
                     
                     $value -= $operation[ 1 ];
@@ -197,15 +198,16 @@ abstract class Base extends \Woops\Core\Object
      */
     public function setValue( $value, $type = false )
     {
-        if( !$type ) {
-            
+        if( !$type )
+        {
             $this->_value = $value;
-            
-        } else {
-        
-            if( !isset( $this->_types[ $type ] ) ) {
-                
-                throw new Base\Exception(
+        }
+        else
+        {
+            if( !isset( $this->_types[ $type ] ) )
+            {
+                throw new Base\Exception
+                (
                     'Invalid unit type (' . $type . ')',
                     Base\Exception::EXCEPTION_INVALID_TYPE
                 );
@@ -220,14 +222,15 @@ abstract class Base extends \Woops\Core\Object
      */
     public function getValue( $type = false, $round = 2 )
     {
-        if( !$type ) {
-            
+        if( !$type )
+        {
             return $this->_value;
         }
         
-        if( !isset( $this->_types[ $type ] ) ) {
-            
-            throw new Base\Exception(
+        if( !isset( $this->_types[ $type ] ) )
+        {
+            throw new Base\Exception
+            (
                 'Invalid unit type (' . $type . ')',
                 Base\Exception::EXCEPTION_INVALID_TYPE
             );

@@ -62,8 +62,8 @@ class Hist extends \Woops\Png\Chunk
         $data->frequency = array();
         
         // Process each frequency
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             // Adds the current frequency
             $data->frequency[] = $this->_stream->bigEndianUnsignedShort();
         }

@@ -83,8 +83,8 @@ abstract class Analyser extends \Woops\Core\Object
     {
         $this->_lexer = get_class( $this );
         
-        if( !isset( self::$_lexers[ $this->_lexer ] ) ) {
-            
+        if( !isset( self::$_lexers[ $this->_lexer ] ) )
+        {
             self::_initLexer( $this->_lexer );
         }
     }
@@ -98,9 +98,10 @@ abstract class Analyser extends \Woops\Core\Object
         $constants    = $reflection->getConstants();
         $staticProps  = $reflection->getStaticProperties();
         
-        if( !isset( $staticProps[ '_tokens' ] ) ) {
-            
-            throw new Analyser\Exception(
+        if( !isset( $staticProps[ '_tokens' ] ) )
+        {
+            throw new Analyser\Exception
+            (
                 '',
                 Analyser\Exception::EXCEPTION_NO_TOKENS
             );
@@ -112,11 +113,12 @@ abstract class Analyser extends \Woops\Core\Object
         self::$_tokensByValues[ $class ] = array();
         self::$_tokensByChar[ $class ]   = array();
         
-        foreach( $staticProps[ '_tokens' ] as $name => $str ) {
-            
-            if( !isset( $constants[ $name ] ) ) {
-                
-                throw new Analyser\Exception(
+        foreach( $staticProps[ '_tokens' ] as $name => $str )
+        {
+            if( !isset( $constants[ $name ] ) )
+            {
+                throw new Analyser\Exception
+                (
                     '',
                     Analyser\Exception::EXCEPTION_NO_TOKEN_CONSTANT
                 );
@@ -124,9 +126,10 @@ abstract class Analyser extends \Woops\Core\Object
             
             $code = $constants[ $name ];
             
-            if( isset( self::$_tokensByCode[ $class ][ $code ] ) ) {
-                
-                throw new Analyser\Exception(
+            if( isset( self::$_tokensByCode[ $class ][ $code ] ) )
+            {
+                throw new Analyser\Exception
+                (
                     '',
                     Analyser\Exception::EXCEPTION_DUPLICATE_TOKEN_CODE
                 );
@@ -139,10 +142,10 @@ abstract class Analyser extends \Woops\Core\Object
             $strLen  =  strlen( $str );
             $storage =& self::$_tokensByChar[ $class ];
             
-            for( $i = 0; $i < $strLen; $i++ ) {
-                
-                if( !isset( $storage[ $str[ $i ] ] ) ) {
-                    
+            for( $i = 0; $i < $strLen; $i++ )
+            {
+                if( !isset( $storage[ $str[ $i ] ] ) )
+                {
                     $storage[ $str[ $i ] ] = array();
                 }
                 
@@ -156,8 +159,8 @@ abstract class Analyser extends \Woops\Core\Object
      */
     protected function _readChar()
     {
-        if( $this->_dataOffset >= $this->_dataLength ) {
-            
+        if( $this->_dataOffset >= $this->_dataLength )
+        {
             return false;
         }
         
@@ -183,47 +186,48 @@ abstract class Analyser extends \Woops\Core\Object
         $byCode            =& self::$_tokensByCode[   $this->_lexer ];
         $byValue           =& self::$_tokensByValues[ $this->_lexer ];
         
-        while( ( $char = $this->_readChar() ) !== false ) {
-            
-            if( isset( $byChar[ $char ] ) ) {
-                
+        while( ( $char = $this->_readChar() ) !== false )
+        {
+            if( isset( $byChar[ $char ] ) )
+            {
                 $charPos = $byChar[ $char ];
                 $token   = $char;
                 
-                while( ( $nextChar = $this->_readChar() ) !== false && isset( $charPos[ $nextChar ] ) ) {
-                    
+                while( ( $nextChar = $this->_readChar() ) !== false && isset( $charPos[ $nextChar ] ) )
+                {
                     $token  .=  $nextChar;
                     $charPos =& $charPos[ $nextChar ];
                 }
                 
-                if( isset( $byValue[ $token ] ) ) {
-                     
-                    $tokens[] = array(
+                if( isset( $byValue[ $token ] ) )
+                {
+                    $tokens[] = array
+                    (
                         $token,
                         $byValue[ $token ],
                         $byCode[ $byValue[ $token ] ]
                     );
                     
                     $tokenCount++;
-                    
-                } elseif( $tokenCount && !is_array( $lastToken ) ) {
-                    
+                }
+                elseif( $tokenCount && !is_array( $lastToken ) )
+                {
                     $tokens[ $tokenCount - 1 ] .= $char;
-                    
-                } else {
-                    
+                }
+                else
+                {
                     $tokens[] = $token;
                     $tokenCount++;
                 }
                 
                 $this->_dataOffset--;
-                
-            } elseif( $tokenCount && !is_array( $lastToken ) ) {
-                
+            }
+            elseif( $tokenCount && !is_array( $lastToken ) )
+            {
                 $tokens[ $tokenCount - 1 ] .= $char;
-                
-            } else {
-                
+            }
+            else
+            {
                 $tokens[] = $char;
                 $tokenCount++;
             }

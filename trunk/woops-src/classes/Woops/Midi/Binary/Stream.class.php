@@ -42,8 +42,8 @@ class Stream extends \Woops\Binary\Stream
         // Storage for the result
         $result = $char;
         
-        while( $char & 0x80 ) {
-            
+        while( $char & 0x80 )
+        {
             $char   = $this->unsignedChar();
             $result = ( $result << 8 ) | $char;
         }

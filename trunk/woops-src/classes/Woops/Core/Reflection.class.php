@@ -36,10 +36,10 @@ abstract class Reflection extends \Woops\Core\MultiSIngleton\Base
      */
     final public function __call( $name, array $args )
     {
-        if( is_object( $this->_reflector ) ) {
-            
-            switch( count( $args ) ) {
-                
+        if( is_object( $this->_reflector ) )
+        {
+            switch( count( $args ) )
+            {
                 case 0:
                     
                     return $this->_reflector->$name();
@@ -75,9 +75,9 @@ abstract class Reflection extends \Woops\Core\MultiSIngleton\Base
                     return call_user_func_array( array( $this->_reflector, $name ), $args );
                     break;
             }
-            
-        } else {
-            
+        }
+        else
+        {
             throw new Reflection\Exception(
                 '',
                 Reflection\Exception::EXCEPTION_
@@ -122,8 +122,8 @@ abstract class Reflection extends \Woops\Core\MultiSIngleton\Base
      */
     private static function _createReflectorObject( $class, array $args )
     {
-        switch( $class ) {
-            
+        switch( $class )
+        {
             case 'Woops\Core\Reflection\ClassReflector':
                 
                 $reflectorClass = 'ReflectionClass';
@@ -160,10 +160,10 @@ abstract class Reflection extends \Woops\Core\MultiSIngleton\Base
                 break;
         }
         
-        if( isset( $reflectorClass ) ) {
-            
-            switch( count( $args ) ) {
-                
+        if( isset( $reflectorClass ) )
+        {
+            switch( count( $args ) )
+            {
                 case 1:
                     
                     $reflector = new $reflectorClass( $args[ 0 ] );
@@ -184,9 +184,9 @@ abstract class Reflection extends \Woops\Core\MultiSIngleton\Base
             }
             
             return $reflector;
-            
-        } else {
-            
+        }
+        else
+        {
             return false;
         }
     }
@@ -206,20 +206,20 @@ abstract class Reflection extends \Woops\Core\MultiSIngleton\Base
         $args  = func_get_args();
         $class = get_called_class();
         
-        if( isset( $args[ 0 ] ) && is_object( $args[ 0 ] ) ) {
-            
+        if( isset( $args[ 0 ] ) && is_object( $args[ 0 ] ) )
+        {
             $hash         = spl_object_hash( $args[ 0 ] );
             $instanceName = ( isset( $args[ 1 ] ) ) ? $hash . '::' . $args[ 1 ] : $hash;
-            
-        } else {
-            
+        }
+        else
+        {
             $instanceName = implode( '::', $args );
         }
         
         $instance = parent::getInstance( $instanceName );
         
-        if( !isset( $instance->_reflector ) ) {
-            
+        if( !isset( $instance->_reflector ) )
+        {
             $instance->_reflector = self::_createReflectorObject( $class, $args );
         }
         

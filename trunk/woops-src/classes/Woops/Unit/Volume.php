@@ -52,7 +52,8 @@ class Volume extends Base
     /**
      * The conversion operations for each unit from the default type
      */
-    protected $_types = array(
+    protected $_types = array
+    (
         'CUBIC_FEET'      => array(),
         'CUBIC_METER'     => array(),
         'DRAM'            => array(),

@@ -49,7 +49,8 @@ class Power extends Base
     /**
      * The conversion operations for each unit from the default type
      */
-    protected $_types = array(
+    protected $_types = array
+    (
         'BTUS_PER_MINUTE'        => array(),
         'FOOT_PER_POUNDS_MINUTE' => array(),
         'FOOT_PER_POUNDS_SECOND' => array(),

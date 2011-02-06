@@ -65,8 +65,8 @@ class Bkgd extends \Woops\Png\Chunk
         $ihdrData = $ihdr->getProcessedData();
         
         // Checks the data length
-        switch( $ihdrData->colourType ) {
-            
+        switch( $ihdrData->colourType )
+        {
             // Greyscale
             case 0:
                 

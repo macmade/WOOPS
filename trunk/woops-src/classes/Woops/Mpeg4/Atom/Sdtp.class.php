@@ -80,8 +80,8 @@ final class Sdtp extends \Woops\Mpeg4\FullBox
         $data->entries = array();
         
         // Checks for the STSZ atom
-        if( !isset( $this->_parent->stsz ) ) {
-                    
+        if( !isset( $this->_parent->stsz ) )
+        {
             // Return the processed data
             return $data;
         }
@@ -90,8 +90,8 @@ final class Sdtp extends \Woops\Mpeg4\FullBox
         $stsz = $this->_parent->stsz->getProcessedData();
         
         // Process each sample
-        for( $i = 0; $i < $stsz->entry_count; $i++ ) {
-            
+        for( $i = 0; $i < $stsz->entry_count; $i++ )
+        {
             // Gets the raw data for the current entry
             $entryData = $this->_stream->unsignedChar();
             

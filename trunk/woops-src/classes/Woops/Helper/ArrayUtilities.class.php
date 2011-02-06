@@ -44,16 +44,16 @@ class ArrayUtilities extends \Woops\Core\Singleton\Base
         $list = new \Woops\Xhtml\Tag( $listType );
         
         // Process each list item
-        foreach( $array as $item ) {
-            
+        foreach( $array as $item )
+        {
             // Checks if the current item is an array
-            if( is_array( $item ) ) {
-                
+            if( is_array( $item ) )
+            {
                 // Creates a sub-list
                 $list->li->addChild( $this->arrayToList( $item, $listType ) );
-                
-            } else {
-                
+            }
+            else
+            {
                 // Adds the list item to the list tag
                 $list->li = trim( $item );
             }
@@ -98,26 +98,26 @@ class ArrayUtilities extends \Woops\Core\Singleton\Base
         $items = array();
         
         // Process each item
-        foreach( $array as $key => $value ) {
-            
+        foreach( $array as $key => $value )
+        {
             // Key for the current item
             $curKey = ( $prefix ) ? $prefix . '[' . $key . ']' : $key;
             
             // Checks if we have a sub-array
-            if( is_array( $value ) ) {
-                
+            if( is_array( $value ) )
+            {
                 // Gets the sub-values
                 $subValues = $this->flatten( $value, $curKey );
                 
                 // Process each sub-values
-                foreach( $subValues as $subKey => $subValue ) {
-                    
+                foreach( $subValues as $subKey => $subValue )
+                {
                     // Adds the current sub-value
                     $items[ $subKey ] = $subValue;
                 }
-                
-            } else {
-                
+            }
+            else
+            {
                 // Adds the current value
                 $items[ $curKey ] = $value;
             }

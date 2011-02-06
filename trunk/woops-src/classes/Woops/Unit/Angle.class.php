@@ -51,7 +51,8 @@ class Angle extends Base
     /**
      * The conversion operations for each unit from the default type
      */
-    protected $_types = array(
+    protected $_types = array
+    (
         'DEGREE' => array(),
         'MINUTE' => array( array( '/', 60 ) ),
         'SECOND' => array( array( '/', 3600 ) ),

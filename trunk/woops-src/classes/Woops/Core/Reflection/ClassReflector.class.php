@@ -158,8 +158,8 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function getNameSpace()
     {
-        if( !isset( $this->_nameSpace ) ) {
-            
+        if( !isset( $this->_nameSpace ) )
+        {
             $name = $this->_reflector->getName();
             $ns   = substr( $name, 0, strrpos( $name, '\\' ) );
             $this->_nameSpace = NameSpaceReflector::getInstance( $ns );
@@ -205,44 +205,44 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function getMethod( $name )
     {
-        if( !isset( $this->_methods[ $name ] ) ) {
-            
+        if( !isset( $this->_methods[ $name ] ) )
+        {
             $method     = $this->_reflector->getMethod( $name );
-            
-            $reflection = MethodReflector::getInstance(
+            $reflection = MethodReflector::getInstance
+            (
                 $this->_reflector->getName(),
                 $name
             );
             
             $this->_methods[ $name ] = $reflection;
                 
-            if( $reflection->isAbstract() ) {
-                
+            if( $reflection->isAbstract() )
+            {
                 $this->_abstractMethods[ $name ] = $reflection;
             }
             
-            if( $reflection->isFinal() ) {
-                
+            if( $reflection->isFinal() )
+            {
                 $this->_finalMethods[ $name ] = $reflection;
             }
             
-            if( $reflection->isPrivate() ) {
-                
+            if( $reflection->isPrivate() )
+            {
                 $this->_privateMethods[ $name ] = $reflection;
             }
             
-            if( $reflection->isProtected() ) {
-                
+            if( $reflection->isProtected() )
+            {
                 $this->_protectedMethods[ $name ] = $reflection;
             }
             
-            if( $reflection->isPublic() ) {
-                
+            if( $reflection->isPublic() )
+            {
                 $this->_publicMethods[ $name ] = $reflection;
             }
             
-            if( $reflection->isStatic() ) {
-                
+            if( $reflection->isStatic() )
+            {
                 $this->_staticMethods[ $name ] = $reflection;
             }
         }
@@ -255,51 +255,52 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function getMethods( $filter = 0 )
     {
-        if( !$this->_hasMethods ) {
-            
+        if( !$this->_hasMethods )
+        {
             $methods = $this->_reflector->getMethods();
             
-            foreach( $methods as $method ) {
-                
+            foreach( $methods as $method )
+            {
                 $methodName = $method->getName();
                 $className  = $this->_reflector->getName();
                 
-                if( !isset( $this->_methods[ $methodName ] ) ) {
-                    
-                    $reflection = MethodReflector::getInstance(
+                if( !isset( $this->_methods[ $methodName ] ) )
+                {
+                    $reflection = MethodReflector::getInstance
+                    (
                         $className,
                         $methodName
                     );
                     
                     $this->_methods[ $methodName ] = $reflection;
                 
-                    if( $reflection->isAbstract() ) {
-                        
+                    if( $reflection->isAbstract() )
+                    {
                         $this->_abstractMethods[ $methodName ] = $reflection;
                     }
                     
-                    if( $reflection->isFinal() ) {
-                        
+                    if( $reflection->isFinal() )
+                    {
                         $this->_finalMethods[ $methodName ] = $reflection;
                     }
                     
-                    if( $reflection->isPrivate() ) {
-                        
+                    if( $reflection->isPrivate() )
+                    {
                         $this->_privateMethods[ $methodName ] = $reflection;
                     }
                     
-                    if( $reflection->isProtected() ) {
-                        
+                    if( $reflection->isProtected() )
+                    {
                         $this->_protectedMethods[ $methodName ] = $reflection;
                     }
                     
-                    if( $reflection->isPublic() ) {
-                        
+                    if( $reflection->isPublic() )
+                    {
                         $this->_publicMethods[ $methodName ] = $reflection;
                     }
                     
-                    if( $reflection->isStatic() ) {
-                        
+                    if( $reflection->isStatic() )
+                    {
                         $this->_staticMethods[ $methodName ] = $reflection;
                     }
                 }
@@ -308,40 +309,40 @@ class ClassReflector extends \Woops\Core\Reflection
             $this->_hasMethods = true;
         }
         
-        if( !$filter ) {
-            
+        if( !$filter )
+        {
             return $this->_methods;
         }
         
         $methods = array();
         
-        if( $filter & \ReflectionMethod::IS_ABSTRACT ) {
-            
+        if( $filter & \ReflectionMethod::IS_ABSTRACT )
+        {
             $methods = array_merge( $this->_abstractMethods, $methods );
         }
         
-        if( $filter & \ReflectionMethod::IS_FINAL ) {
-            
+        if( $filter & \ReflectionMethod::IS_FINAL )
+        {
             $methods = array_merge( $this->_finalMethods, $methods );
         }
         
-        if( $filter & \ReflectionMethod::IS_PRIVATE ) {
-            
+        if( $filter & \ReflectionMethod::IS_PRIVATE )
+        {
             $methods = array_merge( $this->_privateMethods, $methods );
         }
         
-        if( $filter & \ReflectionMethod::IS_PROTECTED ) {
-            
+        if( $filter & \ReflectionMethod::IS_PROTECTED )
+        {
             $methods = array_merge( $this->_protectedMethods, $methods );
         }
         
-        if( $filter & \ReflectionMethod::IS_PUBLIC ) {
-            
+        if( $filter & \ReflectionMethod::IS_PUBLIC )
+        {
             $methods = array_merge( $this->_publicMethods, $methods );
         }
         
-        if( $filter & \ReflectionMethod::IS_STATIC ) {
-            
+        if( $filter & \ReflectionMethod::IS_STATIC )
+        {
             $methods = array_merge( $this->_staticMethods, $methods );
         }
         
@@ -355,19 +356,20 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function getConstructor()
     {
-        if( !$this->_hasConstructor ) {
-            
+        if( !$this->_hasConstructor )
+        {
             $constructor = $this->_reflector->getConstructor();
             
-            if( $constructor ) {
-                
-                $this->_constructor = MethodReflector::getInstance(
+            if( $constructor )
+            {
+                $this->_constructor = MethodReflector::getInstance
+                (
                     $constructor->getDeclaringClass()->getName(),
                     $constructor->getName()
                 );
-                
-            } else {
-                
+            }
+            else
+            {
                 $this->_constructor = $constructor;
             }
             
@@ -382,13 +384,14 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function getInterfaces()
     {
-        if( !$this->_hasInterfaces ) {
-            
+        if( !$this->_hasInterfaces )
+        {
             $interfaces = $this->_reflector->getInterfaces();
             
-            foreach( $interfaces as $interface ) {
-                
-                $this->_interfaces[ $interface->getName() ] = ClassReflector::getInstance(
+            foreach( $interfaces as $interface )
+            {
+                $this->_interfaces[ $interface->getName() ] = ClassReflector::getInstance
+                (
                     $interface->getName()
                 );
             }
@@ -404,34 +407,34 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function getProperty( $name )
     {
-        if( !isset( $this->_properties[ $name ] ) ) {
-            
+        if( !isset( $this->_properties[ $name ] ) )
+        {
             $property   = $this->_reflector->getProperty( $name );
-            
-            $reflection = PropertyReflector::getInstance(
+            $reflection = PropertyReflector::getInstance
+            (
                 $this->_reflector->getName(),
                 $name
             );
             
             $this->_properties[ $name ] = $reflection;
             
-            if( $reflection->isPrivate() ) {
-                
+            if( $reflection->isPrivate() )
+            {
                 $this->_privateProperties[ $name ] = $reflection;
             }
             
-            if( $reflection->isProtected() ) {
-                
+            if( $reflection->isProtected() )
+            {
                 $this->_protectedProperties[ $name ] = $reflection;
             }
             
-            if( $reflection->isPublic() ) {
-                
+            if( $reflection->isPublic() )
+            {
                 $this->_publicProperties[ $name ] = $reflection;
             }
             
-            if( $reflection->isStatic() ) {
-                
+            if( $reflection->isStatic() )
+            {
                 $this->_staticProperties[ $name ] = $reflection;
             }
         }
@@ -444,41 +447,42 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function getProperties( $filter = 0 )
     {
-        if( !$this->_hasProperties ) {
-            
+        if( !$this->_hasProperties )
+        {
             $properties = $this->_reflector->getProperties();
             
-            foreach( $properties as $property ) {
-                
+            foreach( $properties as $property )
+            {
                 $propertyName = $property->getName();
                 $className    = $this->_reflector->getName();
                 
-                if( !isset( $this->_methods[ $propertyName ] ) ) {
-                    
-                    $reflection = PropertyReflector::getInstance(
+                if( !isset( $this->_methods[ $propertyName ] ) )
+                {
+                    $reflection = PropertyReflector::getInstance
+                    (
                         $className,
                         $propertyName
                     );
                     
                     $this->_properties[ $propertyName ] = $reflection;
                     
-                    if( $reflection->isPrivate() ) {
-                        
+                    if( $reflection->isPrivate() )
+                    {
                         $this->_privateProperties[ $propertyName ] = $reflection;
                     }
                     
-                    if( $reflection->isProtected() ) {
-                        
+                    if( $reflection->isProtected() )
+                    {
                         $this->_protectedProperties[ $propertyName ] = $reflection;
                     }
                     
-                    if( $reflection->isPublic() ) {
-                        
+                    if( $reflection->isPublic() )
+                    {
                         $this->_publicProperties[ $propertyName ] = $reflection;
                     }
                     
-                    if( $reflection->isStatic() ) {
-                        
+                    if( $reflection->isStatic() )
+                    {
                         $this->_staticProperties[ $propertyName ] = $reflection;
                     }
                 }
@@ -487,30 +491,30 @@ class ClassReflector extends \Woops\Core\Reflection
             $this->_hasProperties = true;
         }
         
-        if( !$filter ) {
-            
+        if( !$filter )
+        {
             return $this->_properties;
         }
         
         $properties = array();
         
-        if( $filter & \ReflectionProperty::IS_PRIVATE ) {
-            
+        if( $filter & \ReflectionProperty::IS_PRIVATE )
+        {
             $properties = array_merge( $this->_privateProperties, $properties );
         }
         
-        if( $filter & \ReflectionProperty::IS_PROTECTED ) {
-            
+        if( $filter & \ReflectionProperty::IS_PROTECTED )
+        {
             $properties = array_merge( $this->_protectedProperties, $properties );
         }
         
-        if( $filter & \ReflectionProperty::IS_PUBLIC ) {
-            
+        if( $filter & \ReflectionProperty::IS_PUBLIC )
+        {
             $properties = array_merge( $this->_publicProperties, $properties );
         }
         
-        if( $filter & \ReflectionProperty::IS_STATIC ) {
-            
+        if( $filter & \ReflectionProperty::IS_STATIC )
+        {
             $properties = array_merge( $this->_staticProperties, $properties );
         }
         
@@ -524,18 +528,19 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function getParentClass()
     {
-        if( !$this->_hasParentClass ) {
-            
+        if( !$this->_hasParentClass )
+        {
             $parentClass = $this->_reflector->getParentClass();
             
-            if( $parentClass ) {
-                
-                $this->_parentClass = ClassReflector::getInstance(
+            if( $parentClass )
+            {
+                $this->_parentClass = ClassReflector::getInstance
+                (
                     $parentClass->getName()
                 );
-                
-            } else {
-                
+            }
+            else
+            {
                 $this->_parentClass = $parentClass;
             }
             
@@ -550,12 +555,12 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function isSubclassOf( $class )
     {
-        if( is_object( $class ) && $class instanceof self ) {
-            
+        if( is_object( $class ) && $class instanceof self )
+        {
             return $this->_reflector->isSubclassOf( $class->_reflector );
-            
-        } else {
-            
+        }
+        else
+        {
             return $this->_reflector->isSubclassOf( $class );
         }
     }
@@ -565,18 +570,19 @@ class ClassReflector extends \Woops\Core\Reflection
      */
     public function getExtension()
     {
-        if( !$this->_hasExtension ) {
-            
+        if( !$this->_hasExtension )
+        {
             $extension = $this->_reflector->getExtension();
             
-            if( $extension ) {
-                
-                $this->_extension = ExtensionReflector::getInstance(
+            if( $extension )
+            {
+                $this->_extension = ExtensionReflector::getInstance
+                (
                     $extension->getName()
                 );
-                
-            } else {
-                
+            }
+            else
+            {
                 $this->_extension = $extension;
             }
             

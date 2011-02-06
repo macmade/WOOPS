@@ -86,24 +86,27 @@ final class Manager extends \Woops\Core\Singleton\Base
         $this->_conf = \Woops\Core\Config\Getter::getInstance();
         $this->_env  = \Woops\Core\Env\Getter::getInstance();
         
-        $this->_registerModuleDirectory(
+        $this->_registerModuleDirectory
+        (
             $this->_env->getSourcePath( 'modules/' ),
             $this->_env->getSourceWebPath( 'modules/' )
         );
-        $this->_registerModuleDirectory(
+        $this->_registerModuleDirectory
+        (
             $this->_env->getPath( 'modules/' ),
             $this->_env->getWebPath( 'modules/' )
         );
         
         $loadedModules = $this->_conf->getVar( 'modules', 'loaded' );
         
-        if( is_array( $loadedModules ) ) {
-            
-            foreach( $loadedModules as $moduleName ) {
-                
-                if( !isset( $this->_modules[ $moduleName ] ) ) {
-                    
-                    throw new Manager\Exception(
+        if( is_array( $loadedModules ) )
+        {
+            foreach( $loadedModules as $moduleName )
+            {
+                if( !isset( $this->_modules[ $moduleName ] ) )
+                {
+                    throw new Manager\Exception
+                    (
                         'The module \'' . $moduleName . '\' does not exist',
                        Manager\Exception::EXCEPTION_NO_MODULE
                     );
@@ -112,8 +115,8 @@ final class Manager extends \Woops\Core\Singleton\Base
                 $this->_loadedModules[ $moduleName ] = false;
             }
             
-            foreach( $this->_loadedModules as $moduleName => $void ) {
-                
+            foreach( $this->_loadedModules as $moduleName => $void )
+            {
                 $this->_loadModuleInfos( $moduleName );
             }
         }
@@ -124,9 +127,10 @@ final class Manager extends \Woops\Core\Singleton\Base
      */
     protected function _registerModuleDirectory( $path, $relPath )
     {
-        if( !file_exists( $path ) && !is_dir( $path ) ) {
-            
-            throw new Manager\Exception(
+        if( !file_exists( $path ) && !is_dir( $path ) )
+        {
+            throw new Manager\Exception
+            (
                 'The specified modules directory does not exist (path: ' . $path . ')',
                 Manager\Exception::EXCEPTION_NO_DIRECTORY
             );
@@ -137,24 +141,25 @@ final class Manager extends \Woops\Core\Singleton\Base
         $dirIterator = new \DirectoryIterator( $path );
         
         // Process each directory
-        foreach( $dirIterator as $file ) {
-            
+        foreach( $dirIterator as $file )
+        {
             // Checks if the file is a directory
-            if( !$file->isDir() ) {
-                
+            if( !$file->isDir() )
+            {
                 // File - Process the next file
                 continue;
             }
             
             // Checks if the directory is hidden
-            if( substr( $file, 0, 1 ) === '.' ) {
-                
+            if( substr( $file, 0, 1 ) === '.' )
+            {
                 // Hidden - Process the next file
                 continue;
             }
             
             // Stores the directory name, with it's full path
-            $this->_modules[ ( string )$file ] = array(
+            $this->_modules[ ( string )$file ] = array
+            (
                 $file->getPathName() . DIRECTORY_SEPARATOR,
                 $relPath . $file->getFileName() . '/'
             );
@@ -168,26 +173,27 @@ final class Manager extends \Woops\Core\Singleton\Base
     {
         $infoFile = $this->_modules[ $moduleName ][ 0 ] . 'infos.xml';
         
-        if( file_exists( $infoFile ) ) {
-            
-            try {
-                
+        if( file_exists( $infoFile ) )
+        {
+            try
+            {
                 $infos = simplexml_load_file( $infoFile );
                 
-                if( isset( $infos->dependancies ) ) {
-                    
-                    foreach( $infos->dependancies->children() as $key => $value ) {
-                        
-                        if( !isset( $this->_moduleDeps[ $moduleName ] ) ) {
-                            
+                if( isset( $infos->dependancies ) )
+                {
+                    foreach( $infos->dependancies->children() as $key => $value )
+                    {
+                        if( !isset( $this->_moduleDeps[ $moduleName ] ) )
+                        {
                             $this->_moduleDeps[ $moduleName ] = array();
                         }
                         
                         $this->_moduleDeps[ $moduleName ][ $key ] = true;
                         
-                        if( !isset( $this->_loadedModules[ $key ] ) ) {
-                            
-                            throw new Manager\Exception(
+                        if( !isset( $this->_loadedModules[ $key ] ) )
+                        {
+                            throw new Manager\Exception
+                            (
                                 'The module \'' . $moduleName . '\' has a dependancy to the module \'' . $key . '\' which is not loaded',
                                 Manager\Exception::EXCEPTION_MODULE_NOT_LOADED
                             );
@@ -195,14 +201,16 @@ final class Manager extends \Woops\Core\Singleton\Base
                     }
                 }
                 
-                if( isset( $infos->priority ) ) {
-                    
+                if( isset( $infos->priority ) )
+                {
                     $this->_priorityModules[ $moduleName ] = true;
                 }
+            }
+            catch( Exception $e )
+            {
                 
-            } catch( Exception $e ) {
-                
-                throw new Manager\Exception(
+                throw new Manager\Exception
+                (
                     $e->getMessage(),
                     Manager\Exception::EXCEPTION_BAD_XML
                 );
@@ -215,18 +223,18 @@ final class Manager extends \Woops\Core\Singleton\Base
      */
     protected function _initModule( $moduleName )
     {
-        if( isset( $this->_moduleDeps[ $moduleName ] ) ) {
-            
-            foreach( $this->_moduleDeps[ $moduleName ] as $depsName => $void ) {
-                
+        if( isset( $this->_moduleDeps[ $moduleName ] ) )
+        {
+            foreach( $this->_moduleDeps[ $moduleName ] as $depsName => $void )
+            {
                 $this->_initModule( $depsName );
             }
         }
         
         $modPath = $this->_modules[ $moduleName ][ 0 ];
         
-        if( file_exists( $modPath . 'init.inc.php' ) ) {
-            
+        if( file_exists( $modPath . 'init.inc.php' ) )
+        {
             require_once( $modPath . 'init.inc.php' );
         }
         
@@ -238,16 +246,16 @@ final class Manager extends \Woops\Core\Singleton\Base
      */
     public function initModules()
     {
-        foreach( $this->_priorityModules as $moduleName => $void ) {
-            
-            if( $this->_loadedModules[ $moduleName ] === false ) {
-                
+        foreach( $this->_priorityModules as $moduleName => $void )
+        {
+            if( $this->_loadedModules[ $moduleName ] === false )
+            {
                 $this->_initModule( $moduleName );
             }
         }
         
-        foreach( $this->_loadedModules as $moduleName => &$inited ) {
-            
+        foreach( $this->_loadedModules as $moduleName => &$inited )
+        {
             if( $inited === false ) {
                 
                 $this->_initModule( $moduleName );
@@ -276,9 +284,10 @@ final class Manager extends \Woops\Core\Singleton\Base
      */
     public function getModulePath( $moduleName )
     {
-        if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
-            
-            throw new Manager\Exception(
+        if( !isset( $this->_loadedModules[ $moduleName ] ) )
+        {
+            throw new Manager\Exception
+            (
                 'The module \'' . $moduleName . '\' is not loaded',
                 Manager\Exception::EXCEPTION_MODULE_NOT_LOADED
             );
@@ -292,9 +301,10 @@ final class Manager extends \Woops\Core\Singleton\Base
      */
     public function getModuleRelativePath( $moduleName )
     {
-        if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
-            
-            throw new Manager\Exception(
+        if( !isset( $this->_loadedModules[ $moduleName ] ) )
+        {
+            throw new Manager\Exception
+            (
                 'The module \'' . $moduleName . '\' is not loaded',
                 Manager\Exception::EXCEPTION_MODULE_NOT_LOADED
             );
@@ -316,25 +326,28 @@ final class Manager extends \Woops\Core\Singleton\Base
      */
     public function registerBlockType( $type, $abstractClass )
     {
-        if( isset( $this->_blockTypes[ $type ] ) ) {
-            
-            throw new Manager\Exception(
+        if( isset( $this->_blockTypes[ $type ] ) )
+        {
+            throw new Manager\Exception
+            (
                 'The block type \'' . $type . '\' is already registered',
                 Manager\Exception::EXCEPTION_BLOCK_TYPE_EXISTS
             );
         }
         
-        if( !class_exists( $abstractClass ) ) {
-            
-            throw new Manager\Exception(
+        if( !class_exists( $abstractClass ) )
+        {
+            throw new Manager\Exception
+            (
                 'Cannot register the block type \'' . $type . '\' because it\'s abstract class (\'' . $abstractClass . '\') does not exist',
                 Manager\Exception::EXCEPTION_NO_BLOCK_ABSTRACT
             );
         }
         
-        if( !is_subclass_of( $abstractClass, 'Woops\Core\Module\Block' ) ) {
-            
-            throw new Manager\Exception(
+        if( !is_subclass_of( $abstractClass, 'Woops\Core\Module\Block' ) )
+        {
+            throw new Manager\Exception
+            (
                 'The abstract class \'' . $abstractClass . '\' for block type \'' . $type . '\' does not extends the \'Woops\Core\Module\Block\' abstract class',
                 Manager\Exception::EXCEPTION_INVALID_BLOCK_ABSTRACT
             );
@@ -349,9 +362,10 @@ final class Manager extends \Woops\Core\Singleton\Base
      */
     public function registerBlock( $type, $moduleName, $name, $blockClass )
     {
-        if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
-            
-            throw new Manager\Exception(
+        if( !isset( $this->_loadedModules[ $moduleName ] ) )
+        {
+            throw new Manager\Exception
+            (
                 'The module \'' . $moduleName . '\' is not loaded',
                 Manager\Exception::EXCEPTION_MODULE_NOT_LOADED
             );
@@ -359,33 +373,37 @@ final class Manager extends \Woops\Core\Singleton\Base
         
         $blockName  = $moduleName . '.' . $name;
         
-        if( !isset( $this->_blockTypes[ $type ] ) ) {
-            
-            throw new Manager\Exception(
+        if( !isset( $this->_blockTypes[ $type ] ) )
+        {
+            throw new Manager\Exception
+            (
                 'Cannot register the block \'' . $blockName . '\' because it\'s its type (\'' . $type . '\') is not a registered block type',
                 Manager\Exception::EXCEPTION_NO_BLOCK_TYPE
             );
         }
         
-        if( isset( $this->_blocks[ $type ][ $blockName ] ) ) {
-            
-            throw new Manager\Exception(
+        if( isset( $this->_blocks[ $type ][ $blockName ] ) )
+        {
+            throw new Manager\Exception
+            (
                 'The block \'' . $blockName . '\' is already registered for type \'' . $type . '\'',
                 Manager\Exception::EXCEPTION_BLOCK_EXISTS
             );
         }
         
-        if( !class_exists( $blockClass ) ) {
-            
-            throw new Manager\Exception(
+        if( !class_exists( $blockClass ) )
+        {
+            throw new Manager\Exception
+            (
                 'The class \'' . $blockClass . '\' for block \'' . $blockName . '\' of type \'' . $type . '\' does not exist',
                 Manager\Exception::EXCEPTION_NO_BLOCK_CLASS
             );
         }
         
-        if( !is_subclass_of( $blockClass, $this->_blockTypes[ $type ] ) ) {
-            
-            throw new Manager\Exception(
+        if( !is_subclass_of( $blockClass, $this->_blockTypes[ $type ] ) )
+        {
+            throw new Manager\Exception
+            (
                 'The class \'' . $blockClass . '\' for block \'' . $blockName . '\' of type \'' . $type . '\' does not extends its type abstract class (' . $this->_blockTypes[ $type ] . ')',
                 Manager\Exception::EXCEPTION_INVALID_BLOCK_CLASS
             );
@@ -401,25 +419,28 @@ final class Manager extends \Woops\Core\Singleton\Base
     {
         $moduleName = substr( $name, 0, strpos( $name, '.' ) );
         
-        if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
-            
-            throw new Manager\Exception(
+        if( !isset( $this->_loadedModules[ $moduleName ] ) )
+        {
+            throw new Manager\Exception
+            (
                 'The module \'' . $moduleName . '\' is not loaded',
                 Manager\Exception::EXCEPTION_MODULE_NOT_LOADED
             );
         }
         
-        if( !isset( $this->_blockTypes[ $type ] ) ) {
-            
-            throw new Manager\Exception(
+        if( !isset( $this->_blockTypes[ $type ] ) )
+        {
+            throw new Manager\Exception
+            (
                 'Cannot get the block \'' . $name . '\' because it\'s its type (\'' . $type . '\') is not a registered block type',
                 Manager\Exception::EXCEPTION_NO_BLOCK_TYPE
             );
         }
         
-        if( !isset( $this->_blocks[ $type ][ $name ] ) ) {
-            
-            throw new Manager\Exception(
+        if( !isset( $this->_blocks[ $type ][ $name ] ) )
+        {
+            throw new Manager\Exception
+            (
                 'The block \'' . $name . '\' of type \'' . $type . '\' does not exist',
                 Manager\Exception::EXCEPTION_NO_BLOCK
             );

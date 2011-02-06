@@ -78,8 +78,8 @@ final class Mvhd extends \Woops\Mpeg4\FullBox
         
         $data = parent::getProcessedData();
         
-        if( $data->version === 1 ) {
-            
+        if( $data->version === 1 )
+        {
             $data->creation_time     = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
             $data->modification_time = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
             $data->timescale         = $this->_stream->bigEndianUnsignedLong();
@@ -90,9 +90,9 @@ final class Mvhd extends \Woops\Mpeg4\FullBox
             $data->matrix            = $this->_stream->matrix();
             $this->_stream->seek( 24, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->next_track_ID     = $this->_stream->bigEndianUnsignedLong();
-            
-        } else {
-            
+        }
+        else
+        {
             $data->creation_time     = $this->_stream->bigEndianUnsignedLong();
             $data->modification_time = $this->_stream->bigEndianUnsignedLong();
             $data->timescale         = $this->_stream->bigEndianUnsignedLong();

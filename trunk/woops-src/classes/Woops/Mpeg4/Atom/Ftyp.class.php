@@ -46,8 +46,8 @@ final class Ftyp extends \Woops\Mpeg4\DataAtom
         $data->minor_version     = $this->_stream->bigEndianUnsignedLong();
         $data->compatible_brands = array();
         
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             $data->compatible_brands[] = $this->_stream->read( 4 );
         }
         

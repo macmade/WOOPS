@@ -107,8 +107,8 @@ class Form extends \Woops\Core\Module\Base
         parent::__construct();
         
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -133,8 +133,8 @@ class Form extends \Woops\Core\Module\Base
         // Current installation step
         $step = $this->_getModuleVar( 'install-step' );
         
-        switch( $step ) {
-            
+        switch( $step )
+        {
             // Welcome
             case false:
                 
@@ -250,8 +250,8 @@ class Form extends \Woops\Core\Module\Base
         $process->addTextData( $this->_lang->process );
         
         // Process each step
-        for( $i = 1; $i < $steps + 1; $i++ ) {
-            
+        for( $i = 1; $i < $steps + 1; $i++ )
+        {
             // Adds the item div
             $item = $list->li->div;
             
@@ -262,8 +262,8 @@ class Form extends \Woops\Core\Module\Base
             $stepStatus = '_step' . $i;
             
             // Checks if the step is completed
-            if( $this->$stepStatus ) {
-                
+            if( $this->$stepStatus )
+            {
                 // Adds the CSS class for the completed step
                 $item[ 'class' ] = 'completed';
             }
@@ -281,7 +281,8 @@ class Form extends \Woops\Core\Module\Base
         $about                 = $this->_content->div;
         $about[ 'class' ]      = 'box-infos';
         $about->h4             = $this->_lang->aboutTitle;
-        $about->div            = sprintf(
+        $about->div            = sprintf
+        (
             $this->_lang->aboutText,
             '<a href="' . self::$_env->getSourceWebPath( 'scripts/install-check/' ) . '">',
             '</a>'
@@ -323,8 +324,8 @@ class Form extends \Woops\Core\Module\Base
     protected function _installStep1()
     {
         // Has the form been submitted?
-        if( $this->_getModuleVar( 'submit-write' ) ) {
-            
+        if( $this->_getModuleVar( 'submit-write' ) )
+        {
             // Step is complete
             $this->_step1 = true;
             
@@ -351,9 +352,9 @@ class Form extends \Woops\Core\Module\Base
             $submit[ 'class' ]    = 'submit-step';
             $submit[ 'name' ]     = 'woops[mod][Install][submit]';
             $submit[ 'value' ]    = $this->_lang->submitStep2;
-            
-        } else {
-            
+        }
+        else
+        {
             // Removes the database section, as it will be configured later
             unset( $this->_iniValues[ 'database' ] );
             
@@ -412,14 +413,14 @@ class Form extends \Woops\Core\Module\Base
         $loaded->addValue( 'Install' );
         
         // Checks if we have modules to activate
-        if( isset( $modules[ 'loaded' ] ) && is_array( $modules[ 'loaded' ] ) ) {
-            
+        if( isset( $modules[ 'loaded' ] ) && is_array( $modules[ 'loaded' ] ) )
+        {
             // Process each module that needs to be activated
-            foreach( $modules[ 'loaded' ] as $modName ) {
-                
+            foreach( $modules[ 'loaded' ] as $modName )
+            {
                 // Checks if the module is available
-                if( isset( self::$_modules[ $modName ] ) ) {
-                    
+                if( isset( self::$_modules[ $modName ] ) )
+                {
                     // Adds the current module to the loaded modules' list
                     $loaded->addValue( $modName );
                 }
@@ -427,7 +428,8 @@ class Form extends \Woops\Core\Module\Base
         }
         
         // Writes the INI file to the config directory
-        $iniFile->toFile(
+        $iniFile->toFile
+        (
             'woops.ini.php',
             self::$_env->getPath( 'config' ),
             true
@@ -436,15 +438,15 @@ class Form extends \Woops\Core\Module\Base
     protected function _installStep2()
     {
         // Checks if database engines are availables
-        if( !count( self::$_engines ) ) {
-            
+        if( !count( self::$_engines ) )
+        {
             $error            = $this->_content->div;
             $error[ 'class' ] = 'box-error';
             $error->h4        = $this->_lang->engineErrorTitle;
             $error->div       = $this->_lang->engineErrorText;
-            
-        } elseif( $this->_getModuleVar( 'submit-write' ) ) {
-            
+        }
+        elseif( $this->_getModuleVar( 'submit-write' ) )
+        {
             // Writes the INI file
             $this->_writeEngineConfiguration();
             
@@ -471,13 +473,16 @@ class Form extends \Woops\Core\Module\Base
             $submit[ 'class' ]    = 'submit-step';
             $submit[ 'name' ]     = 'woops[mod][Install][submit]';
             $submit[ 'value' ]    = $this->_lang->submitStep3;
-        
-        } else {
-            
+        }
+        else
+        {
             // Creates the configuration form (with only the database engine setting)
-            $this->_createForm(
-                array(
-                    'database' => array(
+            $this->_createForm
+            (
+                array
+                (
+                    'database' => array
+                    (
                         'engine' => $this->_iniValues[ 'database' ][ 'engine' ]
                     )
                 )
@@ -504,7 +509,8 @@ class Form extends \Woops\Core\Module\Base
         $database->newValueItem( 'engine', $vars[ 'engine' ] );
         
         // Writes the INI file to the config directory
-        $iniFile->toFile(
+        $iniFile->toFile
+        (
             'woops.ini.php',
             self::$_env->getPath( 'config' ),
             true
@@ -528,38 +534,38 @@ class Form extends \Woops\Core\Module\Base
         $this->_drivers = $engine->getAvailableDrivers();
         
         // Checks if database drivers are available
-        if( !count( $this->_drivers ) ) {
-            
+        if( !count( $this->_drivers ) )
+        {
             $error            = $this->_content->div;
             $error[ 'class' ] = 'box-error';
             $error->h4        = $this->_lang->driverErrorTitle;
             $error->div       = $this->_lang->driverErrorText;
-            
-        } else {
-            
+        }
+        else
+        {
             // Storage for the error messages
             $errors = array();
             
             // Has the form been submitted?
-            if( $this->_getModuleVar( 'submit-write' ) ) {
-                
+            if( $this->_getModuleVar( 'submit-write' ) )
+            {
                 // Checks for errors in the submitted values
                 $errors = $this->_checkInstallStep3();
                 
                 // If no errors, we can check the database connection
-                if( !count( $errors ) ) {
-                    
+                if( !count( $errors ) )
+                {
                     // Tries to connect to the database
-                    if( $databaseError = $this->_checkDatabaseConnection() ) {
-                        
+                    if( $databaseError = $this->_checkDatabaseConnection() )
+                    {
                         // Error connecting to the database
                         $errorBox            = $this->_content->div;
                         $errorBox[ 'class' ] = 'box-error';
                         $errorBox->h4        = $this->_lang->errorDatabaseConnection;
                         $errorBox->div       = $databaseError;
-                        
-                    } else {
-                        
+                    }
+                    else
+                    {
                         // Writes the INI file
                         $this->_writeDatabaseConfiguration();
                         
@@ -594,8 +600,8 @@ class Form extends \Woops\Core\Module\Base
             }
             
             // Checks if we have error messages to display
-            if( count( $errors ) ) {
-                
+            if( count( $errors ) )
+            {
                 // Creates the error box
                 $errorBox            = $this->_content->div;
                 $errorBox[ 'class' ] = 'box-error';
@@ -603,8 +609,8 @@ class Form extends \Woops\Core\Module\Base
                 $errorList           = $errorBox->ul;
                 
                 // Process each error message
-                foreach( $errors as $message ) {
-                    
+                foreach( $errors as $message )
+                {
                     // Adds the error message
                     $errorList->li = $message;
                 }
@@ -640,22 +646,22 @@ class Form extends \Woops\Core\Module\Base
         $database = $this->_getModuleVar( 'database' );
         
         // Host must be specified
-        if( !isset( $database[ 'host' ] ) || !$database[ 'host' ] ) {
-            
+        if( !isset( $database[ 'host' ] ) || !$database[ 'host' ] )
+        {
             // No host
             $errors[] = $this->_lang->errorDatabaseHostRequired;
         }
         
         // Port must be numeric, if sepcified
-        if( isset( $database[ 'port' ] ) && $database[ 'port' ] && !is_numeric( $database[ 'port' ] ) ) {
-            
+        if( isset( $database[ 'port' ] ) && $database[ 'port' ] && !is_numeric( $database[ 'port' ] ) )
+        {
             // Port not numeric
             $errors[] = $this->_lang->errorDatabasePortNotNumeric;
         }
         
         // Database name must be specified
-        if( !isset( $database[ 'database' ] ) || !$database[ 'database' ] ) {
-            
+        if( !isset( $database[ 'database' ] ) || !$database[ 'database' ] )
+        {
             // No database name
             $errors[] = $this->_lang->errorDatabaseNameRequired;
         }
@@ -681,8 +687,8 @@ class Form extends \Woops\Core\Module\Base
         $engine         = \Woops\Core\ClassManager::getInstance()->getSingleton( $engineClass );
         
         // We don't want any error here, we are just testing the database settings
-        try {
-            
+        try
+        {
             // Database settings
             $driver   = $database[ 'driver' ];
             $host     = $database[ 'host' ];
@@ -695,9 +701,9 @@ class Form extends \Woops\Core\Module\Base
             // Loads and connect the engine - If this fail, we'll should get an exception
             $engine->load( $driver, $host, $port, $name, $prefix );
             $engine->connect( $user, $password );
-            
-        } catch( \Exception $e ) {
-            
+        }
+        catch( \Exception $e )
+        {
             // Returns the error message
             return $e->getMessage();
         }
@@ -742,7 +748,8 @@ class Form extends \Woops\Core\Module\Base
         $dbSection->newValueItem( 'tablePrefix', $tablePrefix );
         
         // Writes the INI file to the config directory
-        $iniFile->toFile(
+        $iniFile->toFile
+        (
             'woops.ini.php',
             self::$_env->getPath( 'config' ),
             true
@@ -765,49 +772,49 @@ class Form extends \Woops\Core\Module\Base
         $errors = array();
         
         // Has the form been submitted?
-        if( $this->_getModuleVar( 'submit-import' ) ) {
-            
+        if( $this->_getModuleVar( 'submit-import' ) )
+        {
             // Gets the incoming data
             $dropTables   = $this->_getModuleVar( 'drop' );
             $createTables = $this->_getModuleVar( 'create' );
             $importTables = $this->_getModuleVar( 'import' );
             
             // Checks if we have tables to drop
-            if( is_array( $dropTables ) && count( $dropTables ) ) {
-                
+            if( is_array( $dropTables ) && count( $dropTables ) )
+            {
                 // Tries to drop the selected tables
-                if( $error = $this->_databaseQuery( $dropTables, $dropFile, 'DROP TABLE IF EXISTS ' ) ) {
-                    
+                if( $error = $this->_databaseQuery( $dropTables, $dropFile, 'DROP TABLE IF EXISTS ' ) )
+                {
                     // We've got an error message - Stores it
                     $errors[] = $error;
                 }
             }
             
             // Checks if we have tables to create
-            if( is_array( $createTables ) && count( $createTables ) ) {
-                
+            if( is_array( $createTables ) && count( $createTables ) )
+            {
                 // Tries to create the selected tables
-                if( $error = $this->_databaseQuery( $createTables, $createFile, 'CREATE TABLE IF NOT EXISTS ' ) ) {
-                    
+                if( $error = $this->_databaseQuery( $createTables, $createFile, 'CREATE TABLE IF NOT EXISTS ' ) )
+                {
                     // We've got an error message - Stores it
                     $errors[] = $error;
                 }
             }
             
             // Checks if we have tables to import
-            if( is_array( $importTables ) && count( $importTables ) ) {
-                
+            if( is_array( $importTables ) && count( $importTables ) )
+            {
                 // Tries to import the selected tables
-                if( $error = $this->_databaseQuery( $importTables, $importFile, 'INSERT INTO ' ) ) {
-                    
+                if( $error = $this->_databaseQuery( $importTables, $importFile, 'INSERT INTO ' ) )
+                {
                     // We've got an error message - Stores it
                     $errors[] = $error;
                 }
             }
             
             // Checks if we have error messages to display
-            if( count( $errors ) ) {
-                
+            if( count( $errors ) )
+            {
                 // Creates the error box
                 $errorBox            = $this->_content->div;
                 $errorBox[ 'class' ] = 'box-error';
@@ -815,14 +822,14 @@ class Form extends \Woops\Core\Module\Base
                 $errorList           = $errorBox->ul;
                 
                 // Process each error message
-                foreach( $errors as $message ) {
-                    
+                foreach( $errors as $message )
+                {
                     // Adds the error message
                     $errorList->li = $message;
                 }
-                
-            } else {
-                
+            }
+            else
+            {
                 // Step is complete
                 $this->_step4 = true;
                 
@@ -884,23 +891,25 @@ class Form extends \Woops\Core\Module\Base
         $matches = array();
         
         // Finds all table names
-        $tables  = preg_match_all(
+        $tables  = preg_match_all
+        (
             '/^\s*' . $detectPrefix . '`([^`]+)`/m',
             $file,
             $matches
         );
         
         // Checks for matches
-        if( isset( $matches[ 1 ] ) && is_array( $matches[ 1 ] ) && count( $matches[ 1 ] ) ) {
-            
+        if( isset( $matches[ 1 ] ) && is_array( $matches[ 1 ] ) && count( $matches[ 1 ] ) )
+        {
             // Removes duplicates
             $matches[ 1 ] = array_flip( $matches[ 1 ] );
             
             // Process each table name
-            foreach( $matches[ 1 ] as $tableName => $void ) {
-                
+            foreach( $matches[ 1 ] as $tableName => $void )
+            {
                 // Real name of the table
-                $tableName = str_replace(
+                $tableName = str_replace
+                (
                     '{$PREFIX}',
                     self::$_conf->getVar( 'database', 'tablePrefix' ),
                     $tableName
@@ -940,13 +949,15 @@ class Form extends \Woops\Core\Module\Base
     protected function _databaseQuery( array $tableNames, $filePath, $detectPrefix )
     {
         // Tags to replace
-        $tags = array(
+        $tags = array
+        (
             '/{\$PREFIX}/',
             '/{\$DEFAULT_LANGUAGE}/'
         );
         
         // Replacement values
-        $replace = array(
+        $replace = array
+        (
             self::$_conf->getVar( 'database', 'tablePrefix' ),
             self::$_conf->getVar( 'lang', 'defaultLanguage' )
         );
@@ -970,26 +981,26 @@ class Form extends \Woops\Core\Module\Base
         $queryCount  = 0;
         
         // Process each line
-        foreach( $lines as $line ) {
-            
+        foreach( $lines as $line )
+        {
             // Removes unneeded whitespace
             $line = trim( $line );
             
             // Are we in a multiline SQL statement?
-            if( $inStatement ) {
-                
+            if( $inStatement )
+            {
                 // Yes, adds the current line to the query
                 $queries[ $queryCount - 1 ] .= $line . self::$_str->NL;
                 
                 // Does the current line end the multiline SQL statement?
-                if( substr( $line, -1 ) === ';' ) {
-                    
+                if( substr( $line, -1 ) === ';' )
+                {
                     // Yes, resets the flag
                     $inStatement = false;
                 }
-                
-            } else {
-                
+            }
+            else
+            {
                 // Storage
                 $matches = array();
                 
@@ -997,14 +1008,14 @@ class Form extends \Woops\Core\Module\Base
                 preg_match( '/^' . $detectPrefix . '`([^`]+)`/', $line, $matches );
                 
                 // Checks if we have an instruction
-                if( isset( $matches[ 1 ] ) && !is_array( $matches[ 1 ] ) && isset( $tableNames[ $matches[ 1 ] ] ) ) {
-                    
+                if( isset( $matches[ 1 ] ) && !is_array( $matches[ 1 ] ) && isset( $tableNames[ $matches[ 1 ] ] ) )
+                {
                     // Yes, adds the current line to the query
                     $queries[] = $line . self::$_str->NL;
                     
                     // Checks if the statement is ended
-                    if( substr( $line, -1 ) !== ';' ) {
-                        
+                    if( substr( $line, -1 ) !== ';' )
+                    {
                         // No, we are now in a multiline SQL statement
                         $inStatement = true;
                     }
@@ -1016,34 +1027,34 @@ class Form extends \Woops\Core\Module\Base
         }
         
         // We don't want any errors here
-        try {
-            
+        try
+        {
             // Database engine object
             static $engine;
             
             // Have we already the instance of the database engine
-            if( !is_object( $engine ) ) {
-                
+            if( !is_object( $engine ) )
+            {
                 // Gets the database engine
                 $engine = \Woops\Database\Layer::getInstance()->getEngine();
             }
             
             // Process each query
-            foreach( $queries as $query ) {
-                
+            foreach( $queries as $query )
+            {
                 // Executes the query
                 $res = $engine->query( $query );
                 
                 // Checks the query result
-                if( !$res ) {
-                    
+                if( !$res )
+                {
                     // No result, returns the error message
                     return $engine->errorMessage();
                 }
             }
-            
-        } catch( \Exception $e ) {
-            
+        }
+        catch( \Exception $e )
+        {
             // Returns the exception message
             return $e->getMessage();
         }
@@ -1071,8 +1082,8 @@ class Form extends \Woops\Core\Module\Base
     protected function _createForm( array $ini )
     {
         // Process each section of the INI file
-        foreach( $ini as $section => $items ) {
-            
+        foreach( $ini as $section => $items )
+        {
             // Section container
             $container               = $this->_content->div;
             $container[ 'class' ]    = 'form-elements';
@@ -1120,14 +1131,14 @@ class Form extends \Woops\Core\Module\Base
         $class      = 'left';
         
         // Process each item in the current section
-        foreach( $items as $name => $item ) {
-            
+        foreach( $items as $name => $item )
+        {
             // Creates the container
             $itemContainer            = $container->div;
             
             // Checks if the element must float or not
-            if( $itemsCount > 1 && ( $counter < $itemsCount - 1 || $class === 'right' ) ) {
-                
+            if( $itemsCount > 1 && ( $counter < $itemsCount - 1 || $class === 'right' ) )
+            {
                 // Adds a CSS class (left or right)
                 $itemContainer[ 'class' ] = $class;
             }
@@ -1138,8 +1149,8 @@ class Form extends \Woops\Core\Module\Base
             $box->h4                  = $this->_lang->getLabel( $section . '-' . $name );
             
             // Do we have a title comment in the INI file?
-            if( isset( $item[ 'comments' ][ 'title' ] ) ) {
-                
+            if( isset( $item[ 'comments' ][ 'title' ] ) )
+            {
                 // Adds the title
                 $title            = $box->div;
                 $title[ 'class' ] = 'title';
@@ -1147,8 +1158,8 @@ class Form extends \Woops\Core\Module\Base
             }
             
             // Do we have a description comment in the INI file?
-            if( isset( $item[ 'comments' ][ 'description' ] ) ) {
-                
+            if( isset( $item[ 'comments' ][ 'description' ] ) )
+            {
                 // Adds the description
                 $title            = $box->div;
                 $title[ 'class' ] = 'description';
@@ -1160,33 +1171,33 @@ class Form extends \Woops\Core\Module\Base
             $formElement[ 'class' ] = 'form-element';
             
             // Special processing for some items
-            if( $section === 'modules' && $name === 'loaded' ) {
-                
+            if( $section === 'modules' && $name === 'loaded' )
+            {
                 // List of the modules
                 $this->_createModuleList( $section, $name, $item, $formElement );
-                
-            } elseif( $section === 'time' && $name === 'timezone' ) {
-                
+            }
+            elseif( $section === 'time' && $name === 'timezone' )
+            {
                 // List of the timezones
                 $this->_createTimezoneList( $section, $name, $item, $formElement );
-                
-            } elseif( $section === 'lang' && $name === 'defaultLanguage' ) {
-                
+            }
+            elseif( $section === 'lang' && $name === 'defaultLanguage' )
+            {
                 // List of the languages
                 $this->_createLanguageList( $section, $name, $item, $formElement );
-                
-            } elseif( $section === 'database' && $name === 'engine' ) {
-                
+            }
+            elseif( $section === 'database' && $name === 'engine' )
+            {
                 // List of the database engines
                 $this->_createDatabaseEngineList( $section, $name, $item, $formElement );
-                
-            } elseif( $section === 'database' && $name === 'driver' ) {
-                
+            }
+            elseif( $section === 'database' && $name === 'driver' )
+            {
                 // List of the database drivers
                 $this->_createDatabaseDriverList( $section, $name, $item, $formElement );
-                
-            } else {
-                
+            }
+            else
+            {
                 // Normal form item
                 $this->_createFormItem( $section, $name, $item, $formElement );
             }
@@ -1195,17 +1206,17 @@ class Form extends \Woops\Core\Module\Base
             $counter++;
             
             // Checks the element class
-            if( $class === 'right' ) {
-                
+            if( $class === 'right' )
+            {
                 // Adds a clearer div
                 $clearer            = $container->div;
                 $clearer[ 'class' ] = 'clearer';
                 
                 // Next element will be placed on the left
                 $class = 'left';
-                
-            } else {
-                
+            }
+            else
+            {
                 // Next element will be placed on the right
                 $class = 'right';
             }
@@ -1224,8 +1235,8 @@ class Form extends \Woops\Core\Module\Base
     protected function _createModuleList( $section, $itemName, array $item, \Woops\Xhtml\Tag $container )
     {
         // Process each module
-        foreach( self::$_modules as $modName => $modPath ) {
-            
+        foreach( self::$_modules as $modName => $modPath )
+        {
             // Creates the container
             $module            = $container->div;
             $module[ 'class' ] = 'module';
@@ -1243,39 +1254,37 @@ class Form extends \Woops\Core\Module\Base
             $label->addTextData( $modName );
             
             // The Adodb module is selected by default if PDO is not available
-            if( $modName === 'Adodb' && !class_exists( '\PDO' ) ) {
-                
+            if( $modName === 'Adodb' && !class_exists( '\PDO' ) )
+            {
                 // Checks the checkbox
                 $check[ 'checked' ] = 'checked';
             }
             
             // The Pdo module is selected by default if PDO is available
-            if( $modName === 'Pdo' && class_exists( '\PDO' ) ) {
-                
+            if( $modName === 'Pdo' && class_exists( '\PDO' ) )
+            {
                 // Checks the checkbox
                 $check[ 'checked' ] = 'checked';
             }
             
             // The Pdo module should not be accessible if the PDO class does not exist
-            if( $modName === 'Pdo' && !class_exists( '\PDO' ) ) {
-                
+            if( $modName === 'Pdo' && !class_exists( '\PDO' ) )
+            {
                 // Disables the checkbox for the "Pdo" module
                 $check[ 'disabled' ] = 'disabled';
             }
             
-            
-            
             // Checks if the module must be selected by default
-            if( in_array( $modName, $item[ 'value' ] ) ) {
-                
+            if( in_array( $modName, $item[ 'value' ] ) )
+            {
                 // Checks the checkbox
                 $check[ 'checked' ] = 'checked';
                 $module[ 'class' ] = 'module-loaded';
             }
             
             // The "Install" module must not be unloaded
-            if( $modName === 'Install' ) {
-                
+            if( $modName === 'Install' )
+            {
                 // Disables the checkbox for the "Install" module
                 $check[ 'disabled' ] = 'disabled';
             }
@@ -1298,16 +1307,16 @@ class Form extends \Woops\Core\Module\Base
         $select[ 'name' ] = 'woops[mod][Install][' . $section . '][' . $itemName . ']';
         
         // Process each timezone
-        foreach( self::$_timezones as $key => $value ) {
-            
+        foreach( self::$_timezones as $key => $value )
+        {
             // Adds the current timezone
             $option            = $select->option;
             $option[ 'value' ] = $key;
             $option->addTextData( $key );
             
             // Checks if the timezone must be selected
-            if( $key === $item[ 'value' ] ) {
-                
+            if( $key === $item[ 'value' ] )
+            {
                 // Selects the option
                 $option[ 'selected' ] = 'selected';
             }
@@ -1330,16 +1339,16 @@ class Form extends \Woops\Core\Module\Base
         $select[ 'name' ] = 'woops[mod][Install][' . $section . '][' . $itemName . ']';
         
         // Process each language
-        foreach( self::$_languages as $key => $value ) {
-            
+        foreach( self::$_languages as $key => $value )
+        {
             // Adds the current language
             $option            = $select->option;
             $option[ 'value' ] = $key;
             $option->addTextData( $key );
             
             // Checks if the language must be selected
-            if( $key === $item[ 'value' ] ) {
-                
+            if( $key === $item[ 'value' ] )
+            {
                 // Selects the option
                 $option[ 'selected' ] = 'selected';
             }
@@ -1362,16 +1371,16 @@ class Form extends \Woops\Core\Module\Base
         $select[ 'name' ] = 'woops[mod][Install][' . $section . '][' . $itemName . ']';
         
         // Process each engine
-        foreach( self::$_engines as $key => $value ) {
-            
+        foreach( self::$_engines as $key => $value )
+        {
             // Adds the current engine
             $option            = $select->option;
             $option[ 'value' ] = $key;
             $option->addTextData( $key );
             
             // Checks if the engine must be selected
-            if( $key === $item[ 'value' ] ) {
-                
+            if( $key === $item[ 'value' ] )
+            {
                 // Selects the option
                 $option[ 'selected' ] = 'selected';
             }
@@ -1398,28 +1407,28 @@ class Form extends \Woops\Core\Module\Base
         $postValue = false;
         
         // Chekcs if a correct driver has been submitted
-        if( $postData && isset( $postData[ $itemName ] ) ) {
-            
+        if( $postData && isset( $postData[ $itemName ] ) )
+        {
             // Sets the driver name
             $postValue = $postData[ $itemName ];
         }
         
         // Process each driver
-        foreach( $this->_drivers as $key => $value ) {
-            
+        foreach( $this->_drivers as $key => $value )
+        {
             // Adds the current driver
             $option            = $select->option;
             $option[ 'value' ] = $key;
             $option->addTextData( $key );
             
             // Checks if the driver must be selected
-            if( $postValue !== false && $key === $postValue ) {
-                
+            if( $postValue !== false && $key === $postValue )
+            {
                 // Selects the option
                 $option[ 'selected' ] = 'selected';
-                
-            } elseif( $postValue === false && $key === $item[ 'value' ] ) {
-                
+            }
+            elseif( $postValue === false && $key === $item[ 'value' ] )
+            {
                 // Selects the option
                 $option[ 'selected' ] = 'selected';
             }
@@ -1445,26 +1454,26 @@ class Form extends \Woops\Core\Module\Base
         $postValue = false;
         
         // Checks if data was submitted
-        if( $postData && isset( $postData[ $itemName ] ) ) {
-            
+        if( $postData && isset( $postData[ $itemName ] ) )
+        {
             // Sets the submitted data
             $postValue = $postData[ $itemName ];
         }
         
         // Checks the type
-        switch( $type ) {
-            
+        switch( $type )
+        {
             // String value - Text input
             case 'string':
                 
                 // Checks for a value to add
-                if( $postValue === false ) {
-                    
+                if( $postValue === false )
+                {
                     // Adds the value form the INI file
                     $value = ( is_array( $item[ 'value' ] ) ) ? implode( ', ', $item[ 'value' ] ) : $item[ 'value' ];
-                    
-                } else {
-                    
+                }
+                else
+                {
                     // Adds the value from the incoming data
                     $value = $postValue;
                 }
@@ -1500,13 +1509,13 @@ class Form extends \Woops\Core\Module\Base
                 $input[ 'name' ]  = 'woops[mod][Install][' . $section . '][' . $itemName . ']';
                 
                 // Checks if the checkbox must be checked by default
-                if( $postValue !== false && $postValue ) {
-                    
+                if( $postValue !== false && $postValue )
+                {
                     // Checkbox is checked
                     $input[ 'checked' ] = 'checked';
-                    
-                } elseif( $postValue === false && $item[ 'value' ] ) {
-                    
+                }
+                elseif( $postValue === false && $item[ 'value' ] )
+                {
                     // Checkbox is checked
                     $input[ 'checked' ] = 'checked';
                 }
@@ -1520,32 +1529,32 @@ class Form extends \Woops\Core\Module\Base
                 $select[ 'name' ] = 'woops[mod][Install][' . $section . '][' . $itemName . ']';
                 
                 // Checks if the element is required or not
-                if( !isset( $item[ 'comments' ][ 'required' ] ) ) {
-                    
+                if( !isset( $item[ 'comments' ][ 'required' ] ) )
+                {
                     // Adds an empty option
                     $option            = $select->option;
                     $option[ 'value' ] = '';
                 }
                 
                 // Checks if we have options to display
-                if( isset( $item[ 'comments' ][ 'options' ] ) ) {
-                    
+                if( isset( $item[ 'comments' ][ 'options' ] ) )
+                {
                     // Process each option
-                    foreach( $item[ 'comments' ][ 'options' ] as $key => $value ) {
-                        
+                    foreach( $item[ 'comments' ][ 'options' ] as $key => $value )
+                    {
                         // Creates the option tag
                         $option            = $select->option;
                         $option[ 'value' ] = $value;
                         $option->addTextData( $value );
                         
                         // Checks if the option must be selected
-                        if( $postValue !== false && $value === $postValue ) {
-                            
+                        if( $postValue !== false && $value === $postValue )
+                        {
                             // Selects the current option
                             $option[ 'selected' ] = 'selected';
-                            
-                        } elseif( $postValue === false && $value === $item[ 'value' ] ) {
-                            
+                        }
+                        elseif( $postValue === false && $value === $item[ 'value' ] )
+                        {
                             // Selects the current option
                             $option[ 'selected' ] = 'selected';
                         }

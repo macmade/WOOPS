@@ -54,18 +54,18 @@ class Value extends \Woops\Core\Object
         $this->_name = ( string )$name;
         
         // Checks the value
-        if( $value === true ) {
-            
+        if( $value === true )
+        {
             // Boolean
             $this->_value = 'On';
-            
-        } elseif( $value === false ) {
-            
+        }
+        elseif( $value === false )
+        {
             // Boolean
             $this->_value = 'Off';
-            
-        } else {
-            
+        }
+        else
+        {
             // Stores the value
             $this->_value = ( string )$value;
         }
@@ -111,18 +111,18 @@ class Value extends \Woops\Core\Object
     public function setValue( $value )
     {
         // Checks the value
-        if( $value === true ) {
-            
+        if( $value === true )
+        {
             // Boolean
             $this->_value = 'On';
-            
-        } elseif( $value === false ) {
-            
+        }
+        elseif( $value === false )
+        {
             // Boolean
             $this->_value = 'Off';
-            
-        } else {
-            
+        }
+        else
+        {
             // Stores the value
             $this->_value = ( string )$value;
         }

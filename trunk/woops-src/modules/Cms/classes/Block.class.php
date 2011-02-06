@@ -64,8 +64,10 @@ abstract class Block extends \Woops\Core\Module\Block
     /**
      * The dependancies for the jQuery plugins
      */
-    private static $_jQueryPluginsDeps       = array(
-        'accordion' => array(
+    private static $_jQueryPluginsDeps       = array
+    (
+        'accordion' => array
+        (
             'dimensions'
         )
     );
@@ -96,8 +98,8 @@ abstract class Block extends \Woops\Core\Module\Block
         parent::__construct();
         
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -124,8 +126,8 @@ abstract class Block extends \Woops\Core\Module\Block
      */
     private function _addJs( $path )
     {
-        if( $webPath = self::$_env->getSourceWebPath( $path ) ) {
-            
+        if( $webPath = self::$_env->getSourceWebPath( $path ) )
+        {
             self::$_page->addJavaScriptSource( $webPath, false, 'utf-8' );
         }
     }
@@ -138,8 +140,8 @@ abstract class Block extends \Woops\Core\Module\Block
     protected function _includeJQuery()
     {
         // Only includes the script once
-        if( self::$_hasJQuery === false ) {
-            
+        if( self::$_hasJQuery === false )
+        {
             // Adds the JS script
             $this->_addJs( 'deps/javascript/jquery/jquery.js' );
             
@@ -156,8 +158,8 @@ abstract class Block extends \Woops\Core\Module\Block
     protected function _includeJQueryUi()
     {
         // Only includes the script once
-        if( self::$_hasJQueryUi === false ) {
-            
+        if( self::$_hasJQueryUi === false )
+        {
             // Adds the JS script
             $this->_addJs( 'deps/javascript/jquery-ui/jquery-ui.js' );
             
@@ -185,8 +187,8 @@ abstract class Block extends \Woops\Core\Module\Block
     protected function _includeWebtoolkitScript( $script )
     {
         // Only includes the script once
-        if( !isset( self::$_webtoolkitLoadedScripts[ $script ] ) ) {
-            
+        if( !isset( self::$_webtoolkitLoadedScripts[ $script ] ) )
+        {
             // Adds the JS script
             $this->_addJs( 'deps/javascript/webtoolkit/' . $script .'.js' );
             
@@ -208,14 +210,14 @@ abstract class Block extends \Woops\Core\Module\Block
     protected function _includeJQueryPlugin( $plugin )
     {
         // Only includes the script once
-        if( !isset( self::$_jQueryLoadedPlugins[ $plugin ] ) ) {
-            
+        if( !isset( self::$_jQueryLoadedPlugins[ $plugin ] ) )
+        {
             // Checks for dependancies
-            if( isset( self::$_jQueryPluginsDeps[ $plugin ] ) ) {
-                
+            if( isset( self::$_jQueryPluginsDeps[ $plugin ] ) )
+            {
                 // Process each dependancy
-                foreach( self::$_jQueryPluginsDeps[ $plugin ] as $deps ) {
-                    
+                foreach( self::$_jQueryPluginsDeps[ $plugin ] as $deps )
+                {
                     // Includes the plugin
                     $this->_includeJQueryPlugin( $deps );
                 }

@@ -38,8 +38,8 @@ final class Meta extends \Woops\Mpeg4\ContainerAtom
     
     public function validChildType( $type )
     {
-        switch( $type ) {
-            
+        switch( $type )
+        {
             case 'hdlr':
                 
                 return true;

@@ -82,10 +82,9 @@ class Parser extends \Woops\Core\Object
         $this->_stream->seek( $header->getDataOffset() + 4, Binary\File\Stream::SEEK_SET );
         
         // Process the FLV body
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             $type         = $this->_stream->unsignedChar();
-            
             $tag          = $this->_file->newTag( $type );
             
             $tag->processData( $this->_stream );

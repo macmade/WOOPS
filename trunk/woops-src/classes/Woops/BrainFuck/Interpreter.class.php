@@ -81,17 +81,17 @@ class Interpreter extends \Woops\Core\Object
     protected function _interpret( $code )
     {
         // Gets the code length
-        $length            = strlen( $code );
+        $length = strlen( $code );
         
         // Process each character
-        for( $i = 0; $i < $length; $i++ ) {
-            
+        for( $i = 0; $i < $length; $i++ )
+        {
             // Gets the current character
             $char = $code[ $i ];
             
             // Checks the character
-            switch( $char ) {
-                
+            switch( $char )
+            {
                 // Incrementation
                 case '+':
                     
@@ -113,8 +113,8 @@ class Interpreter extends \Woops\Core\Object
                     $this->_index++;
                     
                     // Checks if the stack cell exists
-                    if( !isset( $this->_stack[ $this->_index ] ) ) {
-                        
+                    if( !isset( $this->_stack[ $this->_index ] ) )
+                    {
                         // Creates the stack cell
                         $this->_stack[ $this->_index ] = 0;
                     }
@@ -127,8 +127,8 @@ class Interpreter extends \Woops\Core\Object
                     $this->_index--;
                     
                     // Checks if the stack cell exists
-                    if( !isset( $this->_stack[ $this->_index ] ) ) {
-                        
+                    if( !isset( $this->_stack[ $this->_index ] ) )
+                    {
                         // Creates the stack cell
                         $this->_stack[ $this->_index ] = 0;
                     }
@@ -137,13 +137,14 @@ class Interpreter extends \Woops\Core\Object
                 case '[':
                     
                     // Position of the end loop character
-                    $endLoop = ( strpos( $code, ']', $i ) + 1);
+                    $endLoop = ( strpos( $code, ']', $i ) + 1 );
                     
                     // Checks if we have an end loop character
-                    if( $endLoop === false ) {
-                        
+                    if( $endLoop === false )
+                    {
                         // Error - No end of loop
-                        throw new Interpreter\Exception(
+                        throw new Interpreter\Exception
+                        (
                             'Brainfuck loop without an end',
                             Interpreter\Exception::EXCEPTION_NO_END_OF_LOOP
                         );
@@ -156,8 +157,8 @@ class Interpreter extends \Woops\Core\Object
                     $index    = $this->_index;
                     
                     // Loops until 0
-                    while( $this->_stack[ $index ] !== 0 ) {
-                        
+                    while( $this->_stack[ $index ] !== 0 )
+                    {
                         // Interprets the loop code
                         $this->_interpret( $loopCode );
                     }

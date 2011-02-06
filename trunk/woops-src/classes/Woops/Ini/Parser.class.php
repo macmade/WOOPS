@@ -66,27 +66,29 @@ class Parser extends \Woops\Core\Object
     public function __construct( $path )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
         
         // Checks if the file exists
-        if( !file_exists( $path ) ) {
-            
+        if( !file_exists( $path ) )
+        {
             // Error - The file does not exists
-            throw new Parser\Exception(
+            throw new Parser\Exception
+            (
                 'The INI file does not exists (path: ' . $path . ')',
                 Parser\Exception::EXCEPTION_NO_FILE
             );
         }
         
         // Checks if the file is readable
-        if( !is_readable( $path ) ) {
-            
+        if( !is_readable( $path ) )
+        {
             // Error - The file is not readable
-            throw new Parser\Exception(
+            throw new Parser\Exception
+            (
                 'The INI file is not readable (path: ' . $path . ')',
                 Parser\Exception::EXCEPTION_FILE_NOT_READABLE
             );
@@ -134,28 +136,28 @@ class Parser extends \Woops\Core\Object
         $this->_ini = new File();
         
         // Process each line of the file
-        foreach( $lines as &$line ) {
-            
+        foreach( $lines as &$line )
+        {
             // Storage for the matches (preg_match)
             $matches = array();
             
             // Checks if the current line is a blank one
-            if( !trim( $line ) ) {
-                
+            if( !trim( $line ) )
+            {
                 // Resets the comments storage array
                 $comments = array();
             }
             
             // Checks if the current line defines is a comment
-            if( preg_match( '/^\s*;\s*(.*)$/', $line, $matches ) ) {
-                
+            if( preg_match( '/^\s*;\s*(.*)$/', $line, $matches ) )
+            {
                 // Stores the current comment
                 $comments[] = trim( $matches[ 1 ] );
             }
             
             // Checks if the current line defines a section
-            if( preg_match( '/^\s*\[([^\]]+)\]/', $line, $matches ) ) {
-                
+            if( preg_match( '/^\s*\[([^\]]+)\]/', $line, $matches ) )
+            {
                 // Name of the section
                 $section                   = $matches[ 1 ];
                 
@@ -170,38 +172,39 @@ class Parser extends \Woops\Core\Object
             }
             
             // Checks if the current lines defines a value
-            if( preg_match( '/^\s*([^;=\s]+)\s*=\s+([^;\s]+)/', $line, $matches ) ) {
-                
+            if( preg_match( '/^\s*([^;=\s]+)\s*=\s+([^;\s]+)/', $line, $matches ) )
+            {
                 // Gets the variable name and its value
                 $key   = $matches[ 1 ];
                 $value = $matches[ 2 ];
                 
                 // Support for 'On'/'Off' values, which will be convert to boolean values
-                if( $value === 'Off' ) {
-                    
+                if( $value === 'Off' )
+                {
                     // Off - Converts to false
                     $value = false;
-                    
-                } elseif( $value === 'On' ) {
-                    
+                }
+                elseif( $value === 'On' )
+                {
                     // Off - Converts to true
                     $value = true;
                 }
                 
                 // Checks if we are in a section or not
-                if( $section ) {
-                    
+                if( $section )
+                {
                     // Checks if the variable name represents an array
-                    if( substr( $key, -2 ) === '[]' ) {
-                        
+                    if( substr( $key, -2 ) === '[]' )
+                    {
                         // Gets only the variable name, without the '[]'
                         $key = substr( $key, 0, -2 );
                         
                         // Checks if a value has already been added for that variable
-                        if( !isset( $this->_values[ $section ][ $key ] ) ) {
-                            
+                        if( !isset( $this->_values[ $section ][ $key ] ) )
+                        {
                             // Creates the storage array
-                            $this->_values[ $section ][ $key ] = array(
+                            $this->_values[ $section ][ $key ] = array
+                            (
                                 'value'    => array(),
                                 'comments' => $this->_processComments( $comments )
                             );
@@ -216,11 +219,12 @@ class Parser extends \Woops\Core\Object
                         // Adds the variable value
                         $this->_values[ $section ][ $key ][ 'value' ][] = $value;
                         $this->_ini->getItem( $section )->getItem( $key )->addValue( $value );
-                        
-                    } else {
-                        
+                    }
+                    else
+                    {
                         // Adds the variable value
-                        $this->_values[ $section ][ $key ] = array(
+                        $this->_values[ $section ][ $key ] = array
+                        (
                             'value'    => $value,
                             'comments' => $this->_processComments( $comments )
                         );
@@ -231,20 +235,21 @@ class Parser extends \Woops\Core\Object
                         // Resets the comments
                         $comments = array();
                     }
-                    
-                } else {
-                    
+                }
+                else
+                {
                     // Checks if the variable name represents an array
-                    if( substr( $key, -2 ) === '[]' ) {
-                        
+                    if( substr( $key, -2 ) === '[]' )
+                    {
                         // Gets only the variable name, without the '[]'
                         $key = substr( $key, 0, -2 );
                         
                         // Checks if a value has already been added for that variable
-                        if( !isset( $this->_values[ $key ] ) ) {
-                            
+                        if( !isset( $this->_values[ $key ] ) )
+                        {
                             // Creates the storage array
-                            $this->_values[ $key ] = array(
+                            $this->_values[ $key ] = array
+                            (
                                 'value'    => array(),
                                 'comments' => $this->_processComments( $comments )
                             );
@@ -259,11 +264,12 @@ class Parser extends \Woops\Core\Object
                         // Adds the variable value
                         $this->_values[ $key ][ 'value' ][] = $value;
                         $this->_ini->getItem( $key )->addValue( $value );
-                        
-                    } else {
-                        
+                    }
+                    else
+                    {
                         // Adds the variable value
-                        $this->_values[ $key ] = array(
+                        $this->_values[ $key ] = array
+                        (
                             'value'    => $value,
                             'comments' => $this->_processComments( $comments )
                         );
@@ -291,32 +297,32 @@ class Parser extends \Woops\Core\Object
         $comments = array();
         
         // Process each comment line
-        foreach( $rawComments as $comment ) {
-            
+        foreach( $rawComments as $comment )
+        {
             // Checks if we are reading a JavaDoc-like instruction or a normal comment
-            if( substr( $comment, 0, 1 ) !== '@' ) {
-                
+            if( substr( $comment, 0, 1 ) !== '@' )
+            {
                 // Checks if the comment has to be interpreted as a title, or description (which can be multiline)
-                if( !isset( $comments[ 'title' ] ) ) {
-                    
+                if( !isset( $comments[ 'title' ] ) )
+                {
                     // Adds the title
                     $comments[ 'title' ] = $comment;
                     
-                } elseif( !isset( $comments[ 'description' ] ) ) {
-                    
+                } elseif( !isset( $comments[ 'description' ] ) )
+                {
                     // Starts the description
                     $comments[ 'description' ] = $comment;
-                    
-                } else {
-                    
+                }
+                else
+                {
                     // Checks if we must add a new line character
-                    if( substr( $comments[ 'description' ], -1 ) === '.' ) {
-                        
+                    if( substr( $comments[ 'description' ], -1 ) === '.' )
+                    {
                         // Adds the current line to the existing description
                         $comments[ 'description' ] .= self::$_str->NL . $comment;
-                        
-                    } else {
-                        
+                    }
+                    else
+                    {
                         // Adds the current line to the existing description
                         $comments[ 'description' ] .= ' ' . $comment;
                     }
@@ -327,25 +333,25 @@ class Parser extends \Woops\Core\Object
             }
             
             // Checks if we are reading a @type instruction
-            if( substr( $comment, 0, 5 ) == '@type' ) {
-                
+            if( substr( $comment, 0, 5 ) == '@type' )
+            {
                 // Sets the type
                 $comments[ 'type' ] = trim( substr( $comment, 5 ) );
             }
             
             // Checks if we are reading a @required instruction
-            if( substr( $comment, 0, 9 ) == '@required' ) {
-                
+            if( substr( $comment, 0, 9 ) == '@required' )
+            {
                 // Sets the required state
                 $comments[ 'required' ] = true;
             }
             
             // Checks if we are reading an @option instruction
-            if( substr( $comment, 0, 7 ) == '@option' ) {
-                
+            if( substr( $comment, 0, 7 ) == '@option' )
+            {
                 // Checks if options were already added or not
-                if( !isset( $comments[ 'options' ] ) ) {
-                    
+                if( !isset( $comments[ 'options' ] ) )
+                {
                     // Creates the storage array for the options
                     $comments[ 'options' ] = array();
                 }

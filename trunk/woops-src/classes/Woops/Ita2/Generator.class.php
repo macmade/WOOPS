@@ -150,9 +150,10 @@ class Generator extends \Woops\Core\Object
      */
     public function __construct( $str )
     {
-        if( !function_exists( 'imagecreatetruecolor' ) ) {
-            
-            throw new Generator\Exception(
+        if( !function_exists( 'imagecreatetruecolor' ) )
+        {
+            throw new Generator\Exception
+            (
                 'GD is not available',
                 Generator\Exception::EXCEPTION_NO_GD
             );
@@ -162,17 +163,17 @@ class Generator extends \Woops\Core\Object
         $strLen = strlen( $str );
         $mode   = 0x00;
         
-        for( $i = 0; $i < $strLen; $i++ ) {
-            
+        for( $i = 0; $i < $strLen; $i++ )
+        {
             $char = ord( $str[ $i ] );
             
-            if( !isset( self::$_chars[ $char ] ) ) {
-                
+            if( !isset( self::$_chars[ $char ] ) )
+            {
                 continue;
             }
             
-            if( self::$_chars[ $char ][ 1 ] !== 0x00 && $mode !== self::$_chars[ $char ][ 1 ] ) {
-                
+            if( self::$_chars[ $char ][ 1 ] !== 0x00 && $mode !== self::$_chars[ $char ][ 1 ] )
+            {
                 $this->_charValues[] = self::$_chars[ $char ][ 1 ];
                 $mode                = self::$_chars[ $char ][ 1 ];
             }
@@ -248,9 +249,10 @@ class Generator extends \Woops\Core\Object
         imagefilltoborder( $im, 0, 0, $bg, $bg );
         imagerectangle( $im, 0, 0, $width - 1, $height - 1, $border );
         
-        foreach( $this->_charValues as $key => $value ) {
-            
-            imagefilledellipse(
+        foreach( $this->_charValues as $key => $value )
+        {
+            imagefilledellipse
+            (
                 $im,
                 ( ( $this->_dotSize + $this->_dotMargin )  * $key ) + $this->_dotSize,
                 ( ( $this->_dotSize + $this->_dotMargin )  * 2 ) + $this->_dotSize,
@@ -259,9 +261,10 @@ class Generator extends \Woops\Core\Object
                 $fg
             );
             
-            if( 0x01 & $value ) {
-                
-                imagefilledellipse(
+            if( 0x01 & $value )
+            {
+                imagefilledellipse
+                (
                     $im,
                     ( ( $this->_dotSize + $this->_dotMargin )  * $key ) + $this->_dotSize,
                     $this->_dotSize,
@@ -271,9 +274,10 @@ class Generator extends \Woops\Core\Object
                 );
             }
             
-            if( 0x02 & $value ) {
-                
-                imagefilledellipse(
+            if( 0x02 & $value )
+            {
+                imagefilledellipse
+                (
                     $im,
                     ( ( $this->_dotSize + $this->_dotMargin )  * $key ) + $this->_dotSize,
                     ( ( $this->_dotSize + $this->_dotMargin )  * 1 ) + $this->_dotSize,
@@ -283,9 +287,10 @@ class Generator extends \Woops\Core\Object
                 );
             }
             
-            if( 0x04 & $value ) {
-                
-                imagefilledellipse(
+            if( 0x04 & $value )
+            {
+                imagefilledellipse
+                (
                     $im,
                     ( ( $this->_dotSize + $this->_dotMargin )  * $key ) + $this->_dotSize,
                     ( ( $this->_dotSize + $this->_dotMargin )  * 3 ) + $this->_dotSize,
@@ -295,9 +300,10 @@ class Generator extends \Woops\Core\Object
                 );
             }
             
-            if( 0x08 & $value ) {
-                
-                imagefilledellipse(
+            if( 0x08 & $value )
+            {
+                imagefilledellipse
+                (
                     $im,
                     ( ( $this->_dotSize + $this->_dotMargin )  * $key ) + $this->_dotSize,
                     ( ( $this->_dotSize + $this->_dotMargin )  * 4 ) + $this->_dotSize,
@@ -307,9 +313,10 @@ class Generator extends \Woops\Core\Object
                 );
             }
             
-            if( 0x10 & $value ) {
-                
-                imagefilledellipse(
+            if( 0x10 & $value )
+            {
+                imagefilledellipse
+                (
                     $im,
                     ( ( $this->_dotSize + $this->_dotMargin )  * $key ) + $this->_dotSize,
                     ( ( $this->_dotSize + $this->_dotMargin )  * 5 ) + $this->_dotSize,

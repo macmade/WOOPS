@@ -188,9 +188,10 @@ class Header extends \Woops\Core\Object
         
         $signature               = $stream->bigEndianUnsignedLong();
         
-        if( $signature !== self::ICC_SIGNATURE ) {
-            
-            throw new Header\Exception(
+        if( $signature !== self::ICC_SIGNATURE )
+        {
+            throw new Header\Exception
+            (
                 'Invalid ICC signature (' . $signature . ')',
                 Header\Exception::EXCEPTION_BAD_SIGNATURE
             );

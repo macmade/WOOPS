@@ -68,22 +68,22 @@ final class Getter extends \Woops\Core\Singleton\Base
         $confFile  = $this->_env->getPath( 'config/woops.ini.php' );
         
         // Checks if the file exists
-        if( !$confFile ) {
-            
+        if( !$confFile )
+        {
             // Gets the path to the default WOOPS configuration file
             $confFile  = $this->_env->getSourcePath( 'config.ini.php' );
         }
         
         // Checks if the file exists
-        if( !$confFile ) {
-            
+        if( !$confFile )
+        {
             // Error - No configuration file
             self::_error( 'The WOOPS configuration file does not exist' );
         }
         
         // Checks if the file is readable
-        if( !is_readable( $confFile ) ) {
-            
+        if( !is_readable( $confFile ) )
+        {
             // Error - The configuration file is not readable
             self::_error( 'The WOOPS configuration file is not readable' );
         }
@@ -135,13 +135,13 @@ final class Getter extends \Woops\Core\Singleton\Base
                  . '</b>';
         
         // Checks if HTML error must be turned off
-        if( !@ini_get( 'html_errors' ) ) {
-            
+        if( !@ini_get( 'html_errors' ) )
+        {
             // Removes all HTML tags
             $error = chr( 10 ) . strip_tags( $error );
-            
-        } else {
-            
+        }
+        else
+        {
             // Adds a line break before the error, as PHP does
             $error = '<br />' . $error;
         }
@@ -169,13 +169,14 @@ final class Getter extends \Woops\Core\Singleton\Base
         $modConf = \Woops\Core\Module\Manager::getInstance()->getModulePath( $name ) . 'config.ini.php';
         
         // Checks if the file exists
-        if( file_exists( $modConf ) ) {
-            
+        if( file_exists( $modConf ) )
+        {
             // Checks if the file is readable
-            if( !is_readable( $modConf ) ) {
-                
+            if( !is_readable( $modConf ) )
+            {
                 // Error - The configuration file is not readable
-                throw new Getter\Exception(
+                throw new Getter\Exception
+                (
                     'The WOOPS configuration file for module \'' . $name . '\' is not readable',
                     Getter\Exception::EXCEPTION_CONFIG_FILE_NOT_READABLE
                 );
@@ -186,8 +187,8 @@ final class Getter extends \Woops\Core\Singleton\Base
         }
         
         // Checks if the file was parsed
-        if( !is_array( $this->_modConf[ $name ] ) ) {
-            
+        if( !is_array( $this->_modConf[ $name ] ) )
+        {
             // No - Creates an empty array
             $this->_modConf[ $name ] = array();
         }
@@ -230,8 +231,8 @@ final class Getter extends \Woops\Core\Singleton\Base
      */
     public function getModuleVar( $name, $section, $key )
     {
-        if( !isset( $this->_modConf[ $name ] ) ) {
-            
+        if( !isset( $this->_modConf[ $name ] ) )
+        {
             $this->_loadModuleConf( $name );
         }
         

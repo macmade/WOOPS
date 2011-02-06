@@ -14,16 +14,19 @@
 // File encoding
 declare( ENCODING = 'UTF-8' );
 
-Woops\Core\Module\Manager::getInstance()->registerBlockType(
+Woops\Core\Module\Manager::getInstance()->registerBlockType
+(
     'cms',
     'Woops\Mod\Cms\Block'
 );
 
-Woops\Xhtml\Parser::registerProcessingInstructionHandler(
+Woops\Xhtml\Parser::registerProcessingInstructionHandler
+(
     'woops-cms-block',
     'Woops\Mod\Cms\Block\ProcessingInstruction\Handler'
 );
 
-Woops\Page\Engine::getInstance()->registerPageEngine(
+Woops\Page\Engine::getInstance()->registerPageEngine
+(
     'Woops\Mod\Cms\Page\Engine'
 );

@@ -59,8 +59,8 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
     public function __construct()
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -78,11 +78,11 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
         $counter = 0;
         
         // Process each items
-        foreach( $this->_items as $name => $object ) {
-            
+        foreach( $this->_items as $name => $object )
+        {
             // Checks if the current object is a section
-            if( $object instanceof Item\Section && $counter > 0 ) {
-                
+            if( $object instanceof Item\Section && $counter > 0 )
+            {
                 // Adds a blank line
                 $file .= self::$_str->NL;
             }
@@ -276,24 +276,24 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
         $ini = array();
         
         // Process each items
-        foreach( $this->_items as $name => $object ) {
-            
+        foreach( $this->_items as $name => $object )
+        {
             // Gets the item name
             $name = $object->getName();
             
             // Checks the kind of item
-            if( $object instanceof Item\Value ) {
-                
+            if( $object instanceof Item\Value )
+            {
                 // Normal value
                 $ini[ $name ] = $object->getValue();
-                
-            } elseif( $object instanceof Item\Section ) {
-                
+            }
+            elseif( $object instanceof Item\Section )
+            {
                 // Section
                 $ini[ $name ] = $object->toArray();
-                
-            } elseif( $object instanceof Item\ArrayValue ) {
-                
+            }
+            elseif( $object instanceof Item\ArrayValue )
+            {
                 // Array
                 $ini[ $name ] = array();
                 
@@ -301,8 +301,8 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
                 $values       = $object->getValues();
                 
                 // Process each value
-                foreach( $values as $value ) {
-                    
+                foreach( $values as $value )
+                {
                     // Stores the value
                     $ini[ $name ][] = $value->getValue();
                 }
@@ -331,8 +331,8 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
     public function toFile( $fileName, $filePath, $phpExit = false )
     {
         // Checks if the path ends with a directory separator
-        if( substr( $filePath, 0, -1 ) !== DIRECTORY_SEPARATOR ) {
-            
+        if( substr( $filePath, 0, -1 ) !== DIRECTORY_SEPARATOR )
+        {
             // Adds the directory separator to the end of the path
             $filePath .= DIRECTORY_SEPARATOR;
         }
@@ -341,55 +341,59 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
         $fullPath = $filePath . $fileName;
         
         // Checks if the directory exists
-        if( !file_exists( $filePath ) || !is_dir( $filePath ) ) {
-            
+        if( !file_exists( $filePath ) || !is_dir( $filePath ) )
+        {
             // Error - No such directory
-            throw new File\Exception(
+            throw new File\Exception
+            (
                 'The directory does not exist (path: ' . $fullPath . ')',
                 File\Exception::EXCEPTION_NO_DIR
             );
         }
         
         // If the file does not exist, checks if the directory is writeable
-        if( !file_exists( $fullPath ) && !is_writeable( $filePath ) ) {
-            
+        if( !file_exists( $fullPath ) && !is_writeable( $filePath ) )
+        {
             // Error - Directory not writeable
-            throw new File\Exception(
+            throw new File\Exception
+            (
                 'The directory is not writeable (path: ' . $filePath . ')',
                 File\Exception::EXCEPTION_DIR_NOT_WRITEABLE
             );
         }
         
         // If the file exists, checks if it is writeable
-        if( file_exists( $fullPath ) && !is_writeable( $fullPath ) ) {
-            
+        if( file_exists( $fullPath ) && !is_writeable( $fullPath ) )
+        {
             // Error - The file is not writeable
-            throw new File\Exception(
+            throw new File\Exception
+            (
                 'The file is not writeable (path: ' . $fullPath . ')',
                 File\Exception::EXCEPTION_FILE_NOT_WRITEABLE
             );
         }
         
         // Checks if the file must be secured
-        if( $phpExit ) {
-            
+        if( $phpExit )
+        {
             // INI file content
             $content = '; WOOPS configuration file <?php exit(); ?>'
                      . self::$_str->NL
                      . self::$_str->NL
                      . ( string )$this;
-            
-        } else {
-            
+        }
+        else
+        {
             // INI file content
             $content = ( string )$this;
         }
         
         // Tries to write the file
-        if( !file_put_contents( $fullPath, $content ) ) {
-            
+        if( !file_put_contents( $fullPath, $content ) )
+        {
             // Error - Cannot write the file
-            throw new File\Exception(
+            throw new File\Exception
+            (
                 'Cannot write the ini file (path: ' . $fullPath . ')',
                 File\Exception::EXCEPTION_WRITE_ERROR
             );

@@ -44,7 +44,8 @@ class Getter extends \Woops\Core\Singleton\Base
     /**
      * An array with references to $_SERVER and $_ENV
      */
-    protected $_envVars         = array(
+    protected $_envVars         = array
+    (
         '_SERVER' => array(),
         '_ENV'    => array()
     );
@@ -57,14 +58,17 @@ class Getter extends \Woops\Core\Singleton\Base
     /**
      * The WOOPS variables
      */
-    protected $_woopsVars       = array(
-        'sys' => array(
-            'root'   => '',
-            'src'    => ''
+    protected $_woopsVars       = array
+    (
+        'sys' => array
+        (
+            'root' => '',
+            'src'  => ''
         ),
-        'web' => array(
-            'root'   => '',
-            'src'    => ''
+        'web' => array
+        (
+            'root' => '',
+            'src'  => ''
         )
     );
     
@@ -95,7 +99,8 @@ class Getter extends \Woops\Core\Singleton\Base
         $realScriptFileDir            = realpath( $scriptFileDir );
         
         // Gets the absolute path to the WOOPS sources (here we are in classes/Woops/Core/Env/)
-        $sourceAbsPath = realpath(
+        $sourceAbsPath = realpath
+        (
             __DIR__
           . DIRECTORY_SEPARATOR
           . '..'
@@ -108,16 +113,16 @@ class Getter extends \Woops\Core\Singleton\Base
         ) . DIRECTORY_SEPARATOR;
         
         // Checks if the current script is inside the WOOPS sources
-        if( strpos( $realScriptFileDir, $sourceAbsPath ) === 0 ) {
-            
+        if( strpos( $realScriptFileDir, $sourceAbsPath ) === 0 )
+        {
             $offset = strlen( self::WOOPS_SOURCE_DIRNAME . DIRECTORY_SEPARATOR . str_replace( $sourceAbsPath, '', $realScriptFileDir ) );
             
             // The WOOPS root is in the parent directory
             $this->_woopsVars[ 'sys' ][ 'root' ] = substr( $scriptFileDir, 0, -$offset );
             $this->_woopsVars[ 'web' ][ 'root' ] = substr( $scriptDir, 0, -$offset );
-            
-        } else {
-            
+        }
+        else
+        {
             // The WOOPS root is in the same directory
             $this->_woopsVars[ 'sys' ][ 'root' ] = $scriptFileDir . DIRECTORY_SEPARATOR;
             $this->_woopsVars[ 'web' ][ 'root' ] = str_replace( DIRECTORY_SEPARATOR, '/', $scriptDir );
@@ -127,8 +132,8 @@ class Getter extends \Woops\Core\Singleton\Base
         $this->_woopsVars[ 'sys' ][ 'src' ]  = $this->_woopsVars[ 'sys' ][ 'root' ] . self::WOOPS_SOURCE_DIRNAME . DIRECTORY_SEPARATOR;
         
         // Adds a trailing slash to the relative path of the WOOPS root (this may be needed if we are using user home dirs)
-        if( substr( $this->_woopsVars[ 'web' ][ 'root' ], -1 ) !== '/' ) {
-            
+        if( substr( $this->_woopsVars[ 'web' ][ 'root' ], -1 ) !== '/' )
+        {
             // Adds the trailing slash
             $this->_woopsVars[ 'web' ][ 'root' ] .= '/';
         }
@@ -144,14 +149,15 @@ class Getter extends \Woops\Core\Singleton\Base
         $conf = parse_ini_file( $ini, true );
         
         // Checks if we have loaded modules
-        if( isset( $conf[ 'modules' ][ 'loaded' ] ) ) {
-            
+        if( isset( $conf[ 'modules' ][ 'loaded' ] ) )
+        {
             // Process each loaded modules
-            foreach( $conf[ 'modules' ][ 'loaded' ] as $module ) {
-                
+            foreach( $conf[ 'modules' ][ 'loaded' ] as $module )
+            {
                 // Stores the paths of the current module
                 // We are not using the Woops\Core\Module\Manager class as this will result in an endless loop between the constructors
-                $this->_loadedModules[ $module ] = array(
+                $this->_loadedModules[ $module ] = array
+                (
                     'sys' => $this->getPath( 'modules/' . $module )    ?: $this->getSourcePath( 'modules/' . $module ),
                     'web' => $this->getWebPath( 'modules/' . $module ) ?: $this->getSourceWebPath( 'modules/' . $module )
                 );
@@ -184,8 +190,8 @@ class Getter extends \Woops\Core\Singleton\Base
     {
         $result = false;
         
-        switch ( $var ) {
-            
+        switch ( $var )
+        {
             case 'PHP_SAPI_NAME':
                 
                 $this->_serverVars[ $var ] = php_sapi_name();
@@ -196,30 +202,30 @@ class Getter extends \Woops\Core\Singleton\Base
                 
                 $sapi = $this->getVar( 'PHP_SAPI_NAME' );
                 
-                if( $this->getVar( 'ORIG_PATH_INFO' ) ) {
-                    
+                if( $this->getVar( 'ORIG_PATH_INFO' ) )
+                {
                     $this->_serverVars[ 'ORIG_PATH_INFO' ];
-                    
-                } else {
-                    
+                }
+                else
+                {
                     $this->getVar( 'PATH_INFO' );
                 }
                 
                 // Check SAPI
-                if( ( $sapi === 'cgi' || $sapi === 'cgi-fcgi' ) && $pathInfo ) {
-                    
+                if( ( $sapi === 'cgi' || $sapi === 'cgi-fcgi' ) && $pathInfo )
+                {
                     $scriptName = $pathInfo;
-                    
-                } elseif( $this->getVar( 'ORIG_SCRIPT_NAME' ) ) {
-                    
+                }
+                elseif( $this->getVar( 'ORIG_SCRIPT_NAME' ) )
+                {
                     $scriptName = $this->_serverVars[ 'ORIG_SCRIPT_NAME' ];
-                    
-                } elseif( isset( $this->_envVars[ $lookup ][ 'SCRIPT_NAME' ] ) ) {
-                    
+                }
+                elseif( isset( $this->_envVars[ $lookup ][ 'SCRIPT_NAME' ] ) )
+                {
                     $scriptName = $this->_envVars[ $lookup ][ 'SCRIPT_NAME' ];
-                    
-                } else {
-                    
+                }
+                else
+                {
                     $scriptName = NULL;
                 }
                 
@@ -235,30 +241,30 @@ class Getter extends \Woops\Core\Singleton\Base
                 
                 $sapi = $this->getVar( 'PHP_SAPI_NAME' );
                 
-                if( $this->getVar( 'ORIG_PATH_TRANSLATED' ) ) {
-                    
+                if( $this->getVar( 'ORIG_PATH_TRANSLATED' ) )
+                {
                     $pathTranslated = $this->_serverVars[ 'ORIG_PATH_TRANSLATED' ];
-                    
-                } else {
-                    
+                }
+                else
+                {
                     $pathTranslated = $this->getVar( 'PATH_TRANSLATED' );
                 }
                 
                 // Check SAPI
-                if( ( $sapi === 'cgi' || $sapi === 'cgi-fcgi' || $sapi === 'isapi' ) && $pathTranslated ) {
-                    
+                if( ( $sapi === 'cgi' || $sapi === 'cgi-fcgi' || $sapi === 'isapi' ) && $pathTranslated )
+                {
                     $scriptFileName = $pathTranslated;
-                    
-                } elseif( $this->getVar( 'ORIG_SCRIPT_FILENAME' ) ) {
-                    
+                }
+                elseif( $this->getVar( 'ORIG_SCRIPT_FILENAME' ) )
+                {
                     $scriptFileName = $this->_serverVars[ 'ORIG_SCRIPT_FILENAME' ];
-                    
-                } elseif( isset( $this->_envVars[ $lookup ][ 'SCRIPT_FILENAME' ] ) ) {
-                    
+                }
+                elseif( isset( $this->_envVars[ $lookup ][ 'SCRIPT_FILENAME' ] ) )
+                {
                     $scriptFileName = $this->_envVars[ $lookup ][ 'SCRIPT_FILENAME' ];
-                    
-                } else {
-                    
+                }
+                else
+                {
                     $scriptFileName = NULL;
                 }
                 
@@ -277,25 +283,24 @@ class Getter extends \Woops\Core\Singleton\Base
                 
             case 'REQUEST_URI':
                 
-                if( isset( $this->_envVars[ $lookup ][ 'REQUEST_URI' ] ) ) {
-                    
+                if( isset( $this->_envVars[ $lookup ][ 'REQUEST_URI' ] ) )
+                {
                     $requestUri = $this->_envVars[ $lookup ][ 'REQUEST_URI' ];
-                    
-                } elseif( $this->getVar( 'SCRIPT_NAME' ) ) {
-                    
-                    if( $this->getVar( 'QUERY_STRING' ) ) {
-                        
+                }
+                elseif( $this->getVar( 'SCRIPT_NAME' ) )
+                {
+                    if( $this->getVar( 'QUERY_STRING' ) )
+                    {
                         $requestUri  = $this->_serverVars[ 'SCRIPT_NAME' ];
-                        
                         $requestUri .= '?' . $this->_serverVars[ 'QUERY_STRING' ];
-                        
-                    } else {
-                        
+                    }
+                    else
+                    {
                         $requestUri = $this->_serverVars[ 'SCRIPT_NAME' ];
                     }
-                    
-                } else {
-                    
+                }
+                else
+                {
                     $requestUri = NULL;
                 }
                 
@@ -309,24 +314,25 @@ class Getter extends \Woops\Core\Singleton\Base
                 $scriptName                = $this->getVar( 'SCRIPT_NAME' );
                 $scriptFileName            = $this->getVar( 'SCRIPT_FILENAME' );
                 
-                if( substr( $scriptName, 0, 2 ) === '/~' ) {
-                    
+                if( substr( $scriptName, 0, 2 ) === '/~' )
+                {
                     $secondSlashPos            = strpos( $scriptName, '/', 1 );
                     $webPart                   = substr( $scriptName, $secondSlashPos );
                     $this->_serverVars[ $var ] = str_replace( str_replace( '/', DIRECTORY_SEPARATOR, $webPart ), '', $scriptFileName );
-                    
-                } else {
-                    
+                }
+                else
+                {
                     $this->_serverVars[ $var ] = str_replace( str_replace( '/', DIRECTORY_SEPARATOR, $scriptName ), '', $scriptFileName );
                 }
+                
                 $result = true;
                 break;
             
             case 'PHP_SELF':
                 
                 // Check for PHP_SELF variable in ${ $lookup }
-                if( isset( $this->_envVars[ $lookup ][ $var ] ) ) {
-                    
+                if( isset( $this->_envVars[ $lookup ][ $var ] ) )
+                {
                     // Removes double slashes (could happen with PHP CGI under Apache on Windows)
                     $phpSelf = str_replace( '//', '/', $this->_envVars[ $lookup ][ $var ] );
                     
@@ -339,8 +345,8 @@ class Getter extends \Woops\Core\Singleton\Base
             default:
                 
                 // Check for requested variable in ${ $lookup }
-                if( isset( $this->_envVars[ $lookup ][ $var ] ) ) {
-                    
+                if( isset( $this->_envVars[ $lookup ][ $var ] ) )
+                {
                     $this->_serverVars[ $var ] = $this->_envVars[ $lookup ][ $var ];
                     $result                    = true;
                 }
@@ -355,12 +361,12 @@ class Getter extends \Woops\Core\Singleton\Base
      */
     public function getPath( $path )
     {
-        if( substr( $path, 0, 12 ) === 'woops-mod://' ) {
-            
+        if( substr( $path, 0, 12 ) === 'woops-mod://' )
+        {
             $moduleName = substr( $path, 12, strpos( $path, '/', 12 ) - 12 );
             
-            if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
-                
+            if( !isset( $this->_loadedModules[ $moduleName ] ) )
+            {
                 return false;
             }
             
@@ -368,9 +374,9 @@ class Getter extends \Woops\Core\Singleton\Base
             $absPath = $modPath . str_replace( '/', DIRECTORY_SEPARATOR, substr( $path, 13 + strlen( $moduleName ) ) );
             
             return ( file_exists( $absPath ) ) ? $absPath : false;
-            
-        } else {
-            
+        }
+        else
+        {
             $absPath = $this->_woopsVars[ 'sys' ][ 'root' ]
                      . str_replace( '/', DIRECTORY_SEPARATOR, $path );
             
@@ -394,25 +400,25 @@ class Getter extends \Woops\Core\Singleton\Base
      */
     public function getWebPath( $path )
     {
-        if( !$this->getPath( $path ) ) {
-            
+        if( !$this->getPath( $path ) )
+        {
             return false;
         }
         
-        if( substr( $path, 0, 12 ) === 'woops-mod://' ) {
-            
+        if( substr( $path, 0, 12 ) === 'woops-mod://' )
+        {
             $moduleName = substr( $path, 12, strpos( $path, '/', 12 ) - 12 );
             
-            if( !isset( $this->_loadedModules[ $moduleName ] ) ) {
-                
+            if( !isset( $this->_loadedModules[ $moduleName ] ) )
+            {
                 return false;
             }
             
             $modPath = $this->_loadedModules[ $moduleName ][ 'web' ] . '/';
             $webPath = $modPath . substr( $path, 13 + strlen( $moduleName ) );
-            
-        } else {
-            
+        }
+        else
+        {
             $webPath = $this->_woopsVars[ 'web' ][ 'root' ] . $path;
         }
         
@@ -448,18 +454,18 @@ class Getter extends \Woops\Core\Singleton\Base
         $var = ( string )$var;
         
         // Checks if the varaible exists, or if it has to be processed
-        if( isset( $this->_serverVars[ $var ] ) ) {
-            
+        if( isset( $this->_serverVars[ $var ] ) )
+        {
             // Returns the existing variable
             return $this->_serverVars[ $var ];
-            
-        } elseif( $this->_setServerVar( $var, '_SERVER' ) ) {
-            
+        }
+        elseif( $this->_setServerVar( $var, '_SERVER' ) )
+        {
             // Looks in $_SERVER
             return $this->_serverVars[ $var ];
-            
-        } elseif( $this->_setServerVar( $var, '_ENV' ) ) {
-            
+        }
+        elseif( $this->_setServerVar( $var, '_ENV' ) )
+        {
             // Looks in $_ENV
             return $this->_serverVars[ $var ];
         }

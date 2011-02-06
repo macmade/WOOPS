@@ -99,7 +99,8 @@ class Client extends \Woops\Core\Event\Dispatcher
     /**
      * The available HTTP request methods
      */
-    protected static $_requestMethods   = array(
+    protected static $_requestMethods   = array
+    (
         'CONNECT' => true,
         'DELETE'  => true,
         'GET'     => true,
@@ -113,7 +114,8 @@ class Client extends \Woops\Core\Event\Dispatcher
     /**
      * The available HTTP authentication types
      */
-    protected static $_authTypes        = array(
+    protected static $_authTypes        = array
+    (
         'NONE'   => true,
         'BASIC'  => true
     );
@@ -121,7 +123,8 @@ class Client extends \Woops\Core\Event\Dispatcher
     /**
      * The available HTTP protocol versions
      */
-    protected static $_protocolVersions = array(
+    protected static $_protocolVersions = array
+    (
         '1.0' => true,
         '1.1' => true
     );
@@ -241,14 +244,15 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function __construct( $uri, $method = self::METHOD_GET )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
         
         // Sets the user-agent
-        $this->setUserAgent(
+        $this->setUserAgent
+        (
             'WOOPS/'
           . self::WOOPS_VERSION
           . '-'
@@ -256,23 +260,23 @@ class Client extends \Woops\Core\Event\Dispatcher
         );
         
         // Checks if the GZ functions are available
-        if( function_exists( 'gzinflate' ) && function_exists( 'gzuncompress' ) ) {
-            
+        if( function_exists( 'gzinflate' ) && function_exists( 'gzuncompress' ) )
+        {
             // Sets the 'Accept-Encoding' header
             $this->addHeader( 'Accept-Encoding', 'gzip,deflate' );
-            
-        } elseif( function_exists( 'gzinflate' ) ) {
-            
+        }
+        elseif( function_exists( 'gzinflate' ) )
+        {
             // Sets the 'Accept-Encoding' header
             $this->addHeader( 'Accept-Encoding', 'gzip' );
-            
-        } elseif( function_exists( 'gzuncompress' ) ) {
-            
+        }
+        elseif( function_exists( 'gzuncompress' ) )
+        {
             // Sets the 'Accept-Encoding' header
             $this->addHeader( 'Accept-Encoding', 'deflate' );
-            
-        } else {
-            
+        }
+        else
+        {
             // Sets the 'Accept-Encoding' header
             $this->addHeader( 'Accept-Encoding', 'identity' );
         }
@@ -285,36 +289,36 @@ class Client extends \Woops\Core\Event\Dispatcher
         $charset   = self::$_env->HTTP_ACCEPT_CHARSET;
         
         // Checks for a specific protocol
-        if( $protocol && substr( $protocol, 0, 5 ) === 'HTTP/' ) {
-            
+        if( $protocol && substr( $protocol, 0, 5 ) === 'HTTP/' )
+        {
             // Sets the protocol version
             $this->setProtocolVersion( substr( $protocol, 5 ) );
         }
         
         // Checks for a accept option
-        if( $accept ) {
-            
+        if( $accept )
+        {
             // Sets the accept header
             $this->addHeader( 'Accept', $accept );
         }
         
         // Checks for a language option
-        if( $language ) {
-            
+        if( $language )
+        {
             // Sets the language header
             $this->addHeader( 'Language', $language );
         }
         
         // Checks for a encoding option
-        if( $encoding ) {
-            
+        if( $encoding )
+        {
             // Sets the encoding header
             $this->addHeader( 'Encoding', $encoding );
         }
         
         // Checks for a charset option
-        if( $charset ) {
-            
+        if( $charset )
+        {
             // Sets the charset header
             $this->addHeader( 'Charset', $charset );
         }
@@ -371,8 +375,8 @@ class Client extends \Woops\Core\Event\Dispatcher
                           . self::$_CRLF;
         
         // Adds the host name, if we are in HTTP 1.1
-        if( $this->_protocolVersion === 1.1 ) {
-            
+        if( $this->_protocolVersion === 1.1 )
+        {
             $request .= 'Host: ' . $this->_uri->getHost() . self::$_CRLF;
         }
         
@@ -380,8 +384,8 @@ class Client extends \Woops\Core\Event\Dispatcher
         $request .= 'User-Agent: ' . $this->_userAgent . self::$_CRLF;
         
         // Checks for the 'Keep-Alive' parameter
-        if( $this->_keepAlive ) {
-            
+        if( $this->_keepAlive )
+        {
             // Adds the 'Keep-Alive' header
             $request .= 'Keep-Alive: ' . $this->_keepAlive . self::$_CRLF;
         }
@@ -390,15 +394,15 @@ class Client extends \Woops\Core\Event\Dispatcher
         $request .= 'Connection: ' . $this->_connection . self::$_CRLF;
         
         // Checks if we have cookies
-        if( count( $this->_cookies ) ) {
-            
+        if( count( $this->_cookies ) )
+        {
             // Adds the cookie header
             $request .= 'Cookie: ' . implode( ';', array_keys( $this->_cookies ) );
         }
         
         // Checks for an authentication type
-        if( $this->_authType && $this->_authType !== 'NONE' ) {
-            
+        if( $this->_authType && $this->_authType !== 'NONE' )
+        {
             // Adds the authorization header
             $request .= 'Authorization: '
                      .  $this->_createAuthenticationHeader
@@ -406,20 +410,20 @@ class Client extends \Woops\Core\Event\Dispatcher
         }
         
         // Checks if we have a content type
-        if( $this->_encType && $this->_encType === self::ENCTYPE_MULTIPART_FORM_DATA ) {
-            
+        if( $this->_encType && $this->_encType === self::ENCTYPE_MULTIPART_FORM_DATA )
+        {
             // Adds the content type header, with the multipart boundary
             $request .= 'Content-Type: ' . $this->_encType . '; boundary=' . self::$_boundary . self::$_CRLF;
-            
-        } elseif( $this->_encType ) {
-            
+        }
+        elseif( $this->_encType )
+        {
             // Adds the content type header
             $request .= 'Content-Type: ' . $this->_encType . self::$_CRLF;
         }
         
         // Adds the headers
-        foreach( $this->_headers as $key => $value ) {
-            
+        foreach( $this->_headers as $key => $value )
+        {
             // Adds the header
             $request .= $key . ': ' . $value . self::$_CRLF;
         }
@@ -436,27 +440,27 @@ class Client extends \Woops\Core\Event\Dispatcher
     protected function _buildRequestBody()
     {
         // Do we have raw data?
-        if( $this->_rawData ) {
-            
+        if( $this->_rawData )
+        {
             // Returns the raw data
             return $this->_rawData;
         }
         
         // Do we have POST data?
-        if( !count( $this->_postData ) ) {
-            
+        if( !count( $this->_postData ) )
+        {
             // Nothing to send
             return '';
         }
         
         // Checks the encoding type
-        if( $this->_encType === self::ENCTYPE_FORM_URL_ENCODED ) {
-            
+        if( $this->_encType === self::ENCTYPE_FORM_URL_ENCODED )
+        {
             // URL encode the POST data
             return http_build_query( $this->_postData, '', '&' );
-            
-        } elseif( $this->_encType === self::ENCTYPE_MULTIPART_FORM_DATA ) {
-            
+        }
+        elseif( $this->_encType === self::ENCTYPE_MULTIPART_FORM_DATA )
+        {
             // Gets the flat list of the POST data
             $postData = self::$_array->flatten( $this->_postData );
             
@@ -464,15 +468,15 @@ class Client extends \Woops\Core\Event\Dispatcher
             $body = '';
             
             // Process each item of the POST data
-            foreach( $postData as $key => $value ) {
-                
+            foreach( $postData as $key => $value )
+            {
                 // Encodes the current item as multipart
                 $body .= $this->_encodeAsMultipart( $key, $value );
             }
             
             // Process each file to upload
-            foreach( $this->_files as $name => $infos ) {
-                
+            foreach( $this->_files as $name => $infos )
+            {
                 $body .= $this->_encodeFileAsMultipart( $name, basename( $infos[ 0 ] ), $infos[ 1 ], $infos[ 2 ]  );
             }
             
@@ -552,8 +556,8 @@ class Client extends \Woops\Core\Event\Dispatcher
     protected function _createAuthenticationHeader()
     {
         // Checks the autentication type
-        if( $this->_authType === self::AUTH_BASIC ) {
-            
+        if( $this->_authType === self::AUTH_BASIC )
+        {
             // Username and password are encoded in base 64
             return 'Basic ' . base64_encode( $this->_authUser . ':' . $this->_authPassword );
         }
@@ -569,10 +573,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function setUri( $uri )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -596,10 +601,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function setRequestMethod( $method )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -609,10 +615,11 @@ class Client extends \Woops\Core\Event\Dispatcher
         $method = strtoupper( $method );
         
         // Checks if the request method is valid
-        if( !isset( self::$_requestMethods[ $method ] ) ) {
-            
+        if( !isset( self::$_requestMethods[ $method ] ) )
+        {
             // Invalid request method
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'Invalid HTTP request method (' . $method . ')',
                 Client\Exception::EXCEPTION_INVALID_REQUEST_METHOD
             );
@@ -622,8 +629,8 @@ class Client extends \Woops\Core\Event\Dispatcher
         $this->_requestMethod = $method;
         
         // Checks if we have an encoding type, for POST method
-        if( $method === self::METHOD_POST && !$this->_encType ) {
-            
+        if( $method === self::METHOD_POST && !$this->_encType )
+        {
             // Sets the encoding type
             $this->setEncodingType( self::ENCTYPE_FORM_URL_ENCODED );
         }
@@ -653,10 +660,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function setAuthentication( $type, $username, $password )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -666,10 +674,11 @@ class Client extends \Woops\Core\Event\Dispatcher
         $type = strtoupper( $type );
         
         // Checks if the request method is valid
-        if( !isset( self::$_authTypes[ $type ] ) ) {
-            
+        if( !isset( self::$_authTypes[ $type ] ) )
+        {
             // Invalid request method
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'Invalid HTTP authentication type (' . $type . ')',
                 Client\Exception::EXCEPTION_INVALID_AUTH_TYPE
             );
@@ -692,10 +701,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function setProtocolVersion( $version )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -705,10 +715,11 @@ class Client extends \Woops\Core\Event\Dispatcher
         $version = ( float )$version;
         
         // Checks if the request method is valid
-        if( !isset( self::$_protocolVersions[ ( string )$version ] ) ) {
-            
+        if( !isset( self::$_protocolVersions[ ( string )$version ] ) )
+        {
             // Invalid request method
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'Invalid HTTP protocol version (' . $version . ')',
                 Client\Exception::EXCEPTION_INVALID_PROTOCOL_VERSION
             );
@@ -728,10 +739,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function setTimeout( $value )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -751,10 +763,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function setConnectionType( $value )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -774,10 +787,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function setUserAgent( $value )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -801,10 +815,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function setKeepAlive( $value )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -827,29 +842,30 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function addCookie( $cookie )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
         // Checks if the passed argument is a cookie object
-        if( is_object( $cookie ) && $cookie instanceof Cookie ) {
-            
+        if( is_object( $cookie ) && $cookie instanceof Cookie )
+        {
             // Stores the cookie object
             $this->_cookies[ $cookie->getName() ] = $cookie;
-            
-        } else {
-            
+        }
+        else
+        {
             // Gets the cookies
             $cookies = explode( ';', $cookie );
             
             // Process each cookie
-            foreach( $cookies as $cookie ) {
-                
+            foreach( $cookies as $cookie )
+            {
                 // Creates a new cookie object
                 $cookie = Cookie::createCookieObject( $cookie );
                 
@@ -871,10 +887,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function addHeader( $name, $value )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -885,8 +902,8 @@ class Client extends \Woops\Core\Event\Dispatcher
         $value = trim( $value );
         
         // Checks the header name
-        switch( $name ) {
-            
+        switch( $name )
+        {
             // User agent
             case 'User-Agent':
                 
@@ -933,8 +950,8 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function addHeaders( array $headers )
     {
         // Process each header
-        foreach( $headers as $key => $value ) {
-            
+        foreach( $headers as $key => $value )
+        {
             // Adds the current header
             $this->addHeader( $key, $value );
         }
@@ -956,18 +973,19 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function setRawData( $data, $encoding = '' )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
         // Do we have an encoding?
-        if( $encoding ) {
-            
+        if( $encoding )
+        {
             // Sets the encoding
             $this->setEncodingType( $encoding );
         }
@@ -987,10 +1005,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function addPostData( $name, $value )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -1003,20 +1022,20 @@ class Client extends \Woops\Core\Event\Dispatcher
         $name = ( string )$name;
         
         // Checks if the value is an array
-        if( is_array( $value ) ) {
-            
+        if( is_array( $value ) )
+        {
             // Does the storage place already exists?
-            if( !isset( $this->_postData[ $name ] ) || !is_array( $this->_postData[ $name ] ) ) {
-                
+            if( !isset( $this->_postData[ $name ] ) || !is_array( $this->_postData[ $name ] ) )
+            {
                 // Creates the storage array
                 $this->_postData[ $name ] = array();
             }
             
             // Adds the new data
             $this->_postData[ $name ] = array_merge_recursive( $this->_postData[ $name ], $value );
-            
-        } else {
-            
+        }
+        else
+        {
             // Adds the data
             $this->_postData[ $name ] = $value;
         }
@@ -1035,30 +1054,33 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function addFile( $name, $path )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
         }
         
         // Checks if the file exists
-        if( !file_exists( $path ) ) {
-            
+        if( !file_exists( $path ) )
+        {
             // The file does not exist
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'No such file (' . $path . ')',
                 Client\Exception::EXCEPTION_NO_FILE
             );
         }
         
         // Checks if the file is readable
-        if( !file_exists( $path ) ) {
-            
+        if( !file_exists( $path ) )
+        {
             // The file is not readable
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'Unreadable file (' . $path . ')',
                 Client\Exception::EXCEPTION_FILE_NOT_READABLE
             );
@@ -1071,14 +1093,15 @@ class Client extends \Woops\Core\Event\Dispatcher
         $mimeType = self::$_fileTypes->getMimeType( $path );
         
         // Checks for a mime-type
-        if( !$mimeType ) {
-            
+        if( !$mimeType )
+        {
             // Default is octet-stream
             $mimeType = 'application/octet-stream';
         }
         
         // Stores the file name
-        $this->_files[ $name ] = array(
+        $this->_files[ $name ] = array
+        (
             $path,
             $mimeType,
             file_get_contents( $path )
@@ -1094,18 +1117,19 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function getResponse()
     {
         // Checks the connect flag
-        if( !$this->_connected ) {
-            
+        if( !$this->_connected )
+        {
             // No connection
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has not been established yet',
                 Client\Exception::EXCEPTION_NOT_CONNECTED
             );
         }
         
         // Checks if the reponse object already exist
-        if( !is_object( $this->_response ) ) {
-            
+        if( !is_object( $this->_response ) )
+        {
             // Creates the response object
             $this->_response = Response::createResponseObject( $this->_socket );
         }
@@ -1123,10 +1147,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function connect()
     {
         // Checks if the fsockopen() function is available
-        if( !function_exists( 'fsockopen' ) ) {
-            
+        if( !function_exists( 'fsockopen' ) )
+        {
             // Error - No fsockopen()
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The PHP function fsockopen() is not available',
                 Client\Exception::EXCEPTION_NO_FSOCKOPEN
             );
@@ -1136,7 +1161,8 @@ class Client extends \Woops\Core\Event\Dispatcher
         $this->dispatchEvent( Client\Event::EVENT_CONNECT );
         
         // Creates a socket
-        $this->_socket = fsockopen(
+        $this->_socket = fsockopen
+        (
             $this->_uri->getHost(),
             $this->_uri->getPort(),
             $this->_errNo,
@@ -1145,8 +1171,8 @@ class Client extends \Woops\Core\Event\Dispatcher
         );
         
         // Checks for the socket
-        if( !$this->_socket ) {
-            
+        if( !$this->_socket )
+        {
             // Connection error
             return false;
         }
@@ -1155,8 +1181,8 @@ class Client extends \Woops\Core\Event\Dispatcher
         $this->_connected = true;
         
         // Checks if we have files to upload
-        if( $this->_requestMethod === self::METHOD_POST && count( $this->_files ) ) {
-            
+        if( $this->_requestMethod === self::METHOD_POST && count( $this->_files ) )
+        {
             // Sets the encoding type to multipart
             $this->setEncodingType( self::ENCTYPE_MULTIPART_FORM_DATA );
         }
@@ -1165,11 +1191,11 @@ class Client extends \Woops\Core\Event\Dispatcher
         fwrite( $this->_socket, $this->_buildRequestHeaders() );
         
         // Creates the request body if necessary
-        $body    = ( $this->_requestMethod === self::METHOD_POST || $this->_requestMethod === self::METHOD_PUT ) ? $this->_buildRequestBody() : '';
+        $body = ( $this->_requestMethod === self::METHOD_POST || $this->_requestMethod === self::METHOD_PUT ) ? $this->_buildRequestBody() : '';
         
         // Do we have a body?
-        if( $body ) {
-            
+        if( $body )
+        {
             // Adds the content-length header
             fwrite( $this->_socket, 'Content-Length: ' . strlen( $body ) . self::$_CRLF );
             
@@ -1178,9 +1204,9 @@ class Client extends \Woops\Core\Event\Dispatcher
             
             // Writes the request body in the socket
             fwrite( $this->_socket, $body );
-            
-        } else {
-            
+        }
+        else
+        {
             // End of the headers
             fwrite( $this->_socket, self::$_CRLF );
         }
@@ -1422,10 +1448,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function removeHeader( $name )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -1444,10 +1471,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function removeHeaders()
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -1467,10 +1495,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function removeCookie( $name )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -1489,10 +1518,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function removeCookies()
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -1512,10 +1542,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function removeFile( $name )
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );
@@ -1534,10 +1565,11 @@ class Client extends \Woops\Core\Event\Dispatcher
     public function removeFiles()
     {
         // Checks the connect flag
-        if( $this->_connected ) {
-            
+        if( $this->_connected )
+        {
             // Connection has been established
-            throw new Client\Exception(
+            throw new Client\Exception
+            (
                 'The connection has already been established',
                 Client\Exception::EXCEPTION_CONNECTED
             );

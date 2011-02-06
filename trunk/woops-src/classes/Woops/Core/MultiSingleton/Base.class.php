@@ -58,7 +58,8 @@ abstract class Base extends \Woops\Core\Event\Dispatcher implements ObjectInterf
      */
     public function __clone()
     {
-        throw new Exception(
+        throw new Exception
+        (
             'Class ' . get_class( $this ) . ' cannot be cloned',
             Exception::EXCEPTION_CLONE
         );
@@ -83,11 +84,11 @@ abstract class Base extends \Woops\Core\Event\Dispatcher implements ObjectInterf
         $class = get_called_class();
         
         // Checks if the unique instance has already been created
-        if( !isset( self::$_instances[ $class ][ $instanceName ] ) ) {
-            
+        if( !isset( self::$_instances[ $class ][ $instanceName ] ) )
+        {
             // Checks if the instances array exists for the called class
-            if( !isset( self::$_instances[ $class ] ) ) {
-                
+            if( !isset( self::$_instances[ $class ] ) )
+            {
                 // Creates the class instances array
                 self::$_instances[ $class ] = array();
             }
@@ -97,8 +98,10 @@ abstract class Base extends \Woops\Core\Event\Dispatcher implements ObjectInterf
             self::$_instances[ $class ][ $instanceName ]->_instanceName = $instanceName;
             
             // Dispatch the event to the listeners
-            self::$_instances[ $class ][ $instanceName ]->dispatchEventObject(
-                new Event(
+            self::$_instances[ $class ][ $instanceName ]->dispatchEventObject
+            (
+                new Event
+                (
                     Event::EVENT_CONSTRUCT,
                     self::$_instances[ $class ][ $instanceName ]
                 )

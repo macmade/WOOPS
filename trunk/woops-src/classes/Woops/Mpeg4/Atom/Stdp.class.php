@@ -79,8 +79,8 @@ final class Stdp extends \Woops\Mpeg4\FullBox
         $data->priorities = array();
         
         // Checks for the STSZ atom
-        if( !isset( $this->_parent->stsz ) ) {
-                    
+        if( !isset( $this->_parent->stsz ) )
+        {
             // Return the processed data
             return $data;
         }
@@ -89,8 +89,8 @@ final class Stdp extends \Woops\Mpeg4\FullBox
         $stsz = $this->_parent->stsz->getProcessedData();
         
         // Process each priority
-        for( $i = 0; $i < $stsz->sample_count; $i++ ) {
-            
+        for( $i = 0; $i < $stsz->sample_count; $i++ )
+        {
             // Stores the current priority
             $data->priorities[] = $this->_stream->bigEndianUnsignedShort();
         }

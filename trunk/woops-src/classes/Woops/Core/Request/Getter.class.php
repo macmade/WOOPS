@@ -34,12 +34,13 @@ final class Getter extends \Woops\Core\Singleton\Base
     /**
      * The global lookup order
      */
-    protected $_lookupOrder     = 'GPCS';
+    protected $_lookupOrder = 'GPCS';
     
     /**
      * An array with references to $_GET, $_POST, $_COOKIE and $_SESSION
      */
-    protected $_requestVars     = array(
+    protected $_requestVars = array
+    (
         'G' => array(),
         'P' => array(),
         'C' => array(),
@@ -86,6 +87,7 @@ final class Getter extends \Woops\Core\Singleton\Base
     {
         $oldValue           = $this->_lookupOrder;
         $this->_lookupOrder = ( string )$lookupOrder;
+        
         return $oldValue;
     }
     
@@ -97,10 +99,10 @@ final class Getter extends \Woops\Core\Singleton\Base
         $order = $order ?: $this->_lookupOrder;
         $keys  = preg_split( '//', $order );
         
-        foreach( $keys as $key ) {
-            
-            if( isset( $this->_requestVars[ $key ][ $name ] ) ) {
-                
+        foreach( $keys as $key )
+        {
+            if( isset( $this->_requestVars[ $key ][ $name ] ) )
+            {
                 return $this->_requestVars[ $key ][ $name ];
             }
         }
@@ -116,10 +118,10 @@ final class Getter extends \Woops\Core\Singleton\Base
         $order = $order ?: $this->_lookupOrder;
         $keys  = preg_split( '//', $order );
         
-        foreach( $keys as $key ) {
-            
-            if( isset( $this->_requestVars[ $key ][ 'woops' ][ $name ] ) ) {
-                
+        foreach( $keys as $key )
+        {
+            if( isset( $this->_requestVars[ $key ][ 'woops' ][ $name ] ) )
+            {
                 return $this->_requestVars[ $key ][ 'woops' ][ $name ];
             }
         }
@@ -135,10 +137,10 @@ final class Getter extends \Woops\Core\Singleton\Base
         $order = $order ?: $this->_lookupOrder;
         $keys  = preg_split( '//', $order );
         
-        foreach( $keys as $key ) {
-            
-            if( isset( $this->_requestVars[ $key ][ $name ] ) ) {
-                
+        foreach( $keys as $key )
+        {
+            if( isset( $this->_requestVars[ $key ][ $name ] ) )
+            {
                 return true;
             }
         }
@@ -154,10 +156,10 @@ final class Getter extends \Woops\Core\Singleton\Base
         $order = $order ?: $this->_lookupOrder;
         $keys  = preg_split( '//', $order );
         
-        foreach( $keys as $key ) {
-            
-            if( isset( $this->_requestVars[ $key ][ 'woops' ][ $name ] ) ) {
-                
+        foreach( $keys as $key )
+        {
+            if( isset( $this->_requestVars[ $key ][ 'woops' ][ $name ] ) )
+            {
                 return true;
             }
         }

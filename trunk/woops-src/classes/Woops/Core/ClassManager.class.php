@@ -105,8 +105,8 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
     private function __construct()
     {
         // Checks the PHP version required to run this class
-        if( version_compare( PHP_VERSION, static::PHP_COMPATIBLE, '<' ) ) {
-            
+        if( version_compare( PHP_VERSION, static::PHP_COMPATIBLE, '<' ) )
+        {
             // Error message
             $errorMsg = 'Class '
                       . __CLASS__
@@ -147,11 +147,11 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
                                                                         . 'ObjectInterface.class.php';
         
         // Process each directory
-        foreach( $dirIterator as $file ) {
-            
+        foreach( $dirIterator as $file )
+        {
             // Checks if the file is a PHP class file
-            if( substr( $file, strlen( $file ) - 10 ) === '.class.php' ) {
-                
+            if( substr( $file, strlen( $file ) - 10 ) === '.class.php' )
+            {
                 // Stores the file name, with it's full path
                 $this->_packages[ ( string )$file ] = $file->getPathName();
                 
@@ -160,15 +160,15 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             }
             
             // Checks if the file is a directory
-            if( !$file->isDir() ) {
-                
+            if( !$file->isDir() )
+            {
                 // File - Process the next file
                 continue;
             }
             
             // Checks if the directory is hidden
-            if( substr( $file, 0, 1 ) === '.' ) {
-                
+            if( substr( $file, 0, 1 ) === '.' )
+            {
                 // Hidden - Process the next file
                 continue;
             }
@@ -189,7 +189,8 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
      */
     public function __clone()
     {
-        throw new \Woops\Core\Singleton\Exception(
+        throw new \Woops\Core\Singleton\Exception
+        (
             'Class ' . __CLASS__ . ' cannot be cloned',
             \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
@@ -227,13 +228,13 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
                  . '</b>';
         
         // Checks if HTML error must be turned off
-        if( !@ini_get( 'html_errors' ) ) {
-            
+        if( !@ini_get( 'html_errors' ) )
+        {
             // Removes all HTML tags
             $error = chr( 10 ) . strip_tags( $error );
-            
-        } else {
-            
+        }
+        else
+        {
             // Adds a line break before the error, as PHP does
             $error = '<br />' . $error;
         }
@@ -260,8 +261,8 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
     public static function getInstance()
     {
         // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
+        if( !is_object( self::$_instance ) )
+        {
             // Creates the unique instance
             self::$_instance = new self();
             
@@ -269,16 +270,16 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             header( 'X-WOOPS-VERSION: ' . self::WOOPS_VERSION . '-' . self::WOOPS_VERSION_SUFFIX );
             
             // Checks if the error handler class exists
-            if( !class_exists( 'Woops\Core\Error\Handler' ) ) {
-                
+            if( !class_exists( 'Woops\Core\Error\Handler' ) )
+            {
                 // Loads the PHP error handler class
                 // We are now able to deal with PHP errors, even if the instantiation of the class manager is not complete
                 self::$_instance->_loadClass( 'Woops\Core\Error\Handler' );
             }
             
             // Checks if the exception handler class exists
-            if( !class_exists( 'Woops\Core\Exception\Handler' ) ) {
-                
+            if( !class_exists( 'Woops\Core\Exception\Handler' ) )
+            {
                 // Loads the exception handler class
                 // We are now able to deal with exceptions, even if the instantiation of the class manager is not complete
                 self::$_instance->_loadClass( 'Woops\Core\Exception\Handler' );
@@ -294,29 +295,31 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             self::$_instance->_enableAop        = \Woops\Core\Config\Getter::getInstance()->getVar( 'aop', 'enable' );
             
             // If AOP is enabled, the class cache must also be enabled
-            if( self::$_instance->_enableAop ) {
-                
+            if( self::$_instance->_enableAop )
+            {
                 // Enables the class cache
                 self::$_instance->_classCache = true;
-                
-            } else {
-                
+            }
+            else
+            {
                 // Checks if we must use a class cache
                 self::$_instance->_classCache = \Woops\Core\Config\Getter::getInstance()->getVar( 'classCache', 'enable' );
             }
             
             // Checks if we must use cached classes
-            if( self::$_instance->_classCache ) {
-                
+            if( self::$_instance->_classCache )
+            {
                 // Gets the class cache directory
                 self::$_instance->_cacheDirectory = self::$_instance->_env->getPath( 'cache/classes/' );
                 
                 // Checks if the cache directory exist, and is writeable
-                if( !self::$_instance->_cacheDirectory
+                if
+                (
+                       !self::$_instance->_cacheDirectory
                     || !is_dir( self::$_instance->_cacheDirectory )
                     || !is_writeable( self::$_instance->_cacheDirectory )
-                ) {
-                    
+                )
+                {
                     // Disables the AOP and the class cache
                     // Maybe this should generate a fatal error, but in that
                     // case, and if we are installing WOOPS, this could
@@ -350,41 +353,43 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         static $instance = NULL;
         
         // Checks if the instance of the class has already been fetched
-        if( !is_object( $instance ) ) {
-            
+        if( !is_object( $instance ) )
+        {
             // Gets the instance of this class
             $instance = self::getInstance();
         }
         
         // Special processing for the error and exception handlers, as they are included by the getInstance() method
-        if( $className === 'Woops\Core\Error\Handler' || $className === 'Woops\Core\Exception\Handler' ) {
-            
+        if( $className === 'Woops\Core\Error\Handler' || $className === 'Woops\Core\Exception\Handler' )
+        {
             return true;
         }
         
         // Checks for a leading backslash
-        if( substr( $className, 0, 1 ) === '\\' ) {
-            
+        if( substr( $className, 0, 1 ) === '\\' )
+        {
             // Removes the leading backslash
             $className = substr( $className, 1 );
         }
         
         // Checks if the class belongs to the 'Woops' package
-        if( substr( $className, 0, 6 ) === 'Woops\\' ) {
-            
+        if( substr( $className, 0, 6 ) === 'Woops\\' )
+        {
             // Gets the class root package
             $rootPkg = substr( $className, 6, strpos( $className, '\\', 6 ) - 6 );
             
             // Checks if the requested class belongs to the WOOPS cources, or from a WOOPS module
-            if( isset( $instance->_packages[ $rootPkg ] )
+            if
+            (
+                   isset( $instance->_packages[ $rootPkg ] )
                 || isset( $instance->_packages[ $className . '.class.php' ] )
-            ) {
-                
+            )
+            {
                 // Loads the class
                 return $instance->_loadClass( $className );
-                
-            } elseif( $rootPkg == 'Mod' ) {
-                
+            }
+            elseif( $rootPkg == 'Mod' )
+            {
                 // Loads the class
                 return $instance->_loadClass( $className, true );
             }
@@ -420,19 +425,19 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         $cachedClassPath = $this->_cacheDirectory . str_replace( '\\', '.', $className ) . $classExt;
                 
         // Checks if the cache is enabled and if the class exists in the cache
-        if( $this->_classCache && file_exists( $cachedClassPath ) && !defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) ) {
-            
+        if( $this->_classCache && file_exists( $cachedClassPath ) && !defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) )
+        {
             // Includes the cached version
             require_once( $cachedClassPath );
             
             // Sets the class path
             $classPath = $cachedClassPath;
-            
-        } else {
-            
+        }
+        else
+        {
             // Checks if we are loading a module class or not
-            if( $moduleClass ) {
-                
+            if( $moduleClass )
+            {
                 // Gets the path to the module class
                 $modName   = substr( $className, 10, strpos( $className, '\\', 10 ) - 10 );
                 $modPath   = $this->_modManager->getModulePath( $modName );
@@ -441,9 +446,9 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
                            . DIRECTORY_SEPARATOR
                            . str_replace( '\\', DIRECTORY_SEPARATOR, substr( $className, strlen( $modName ) + 11 ) )
                            . '.class.php';
-                
-            } else {
-                
+            }
+            else
+            {
                 // Gets the class path
                 $classPath = $this->_classDir
                            . str_replace( '\\', DIRECTORY_SEPARATOR, substr( $className, 6 ) )
@@ -451,35 +456,36 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             }
             
             // Checks if the class file exists
-            if( file_exists( $classPath ) ) {
-                
+            if( file_exists( $classPath ) )
+            {
                 // Checks if we must use a cached version or not
-                if( !$this->_classCache || defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) ) {
-                    
+                if( !$this->_classCache || defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) )
+                {
                     // Includes the original class file
                     require_once( $classPath );
-                    
-                } else {
-                    
+                }
+                else
+                {
                     // Creates the cached version
                     $this->_createCachedClass( $className );
                     
                     // Includes the cached version
                     require_once( $cachedClassPath );
                 }
-            } else {
-                
+            }
+            else
+            {
                 // Class file was not found
                 return false;
             }
         }
         
         // Checks if the requested class is an interface
-        if( substr( $className, -15 ) === 'ObjectInterface' ) {
-            
+        if( substr( $className, -15 ) === 'ObjectInterface' )
+        {
             // Checks if the interface is defined
-            if( !interface_exists( $className ) ) {
-                
+            if( !interface_exists( $className ) )
+            {
                 // Error message
                 $errorMsg = 'The interface '
                           . $className
@@ -489,12 +495,12 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
                 // The class is not defined
                 self::_error( $errorMsg );
             }
-            
-        } else {
-            
+        }
+        else
+        {
             // Checks if the class is defined
-            if( !class_exists( $className ) ) {
-                
+            if( !class_exists( $className ) )
+            {
                 // Error message
                 $errorMsg = 'The class '
                           . $className
@@ -506,8 +512,8 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             }
             
             // Checks if the PHP_COMPATIBLE constant is defined
-            if( !defined( $className . '::PHP_COMPATIBLE' ) ) {
-                
+            if( !defined( $className . '::PHP_COMPATIBLE' ) )
+            {
                 // Error message
                 $errorMsg = 'The requested constant PHP_COMPATIBLE is not defined in class '
                           . $className;
@@ -517,8 +523,8 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
             }
             
             // Checks the minimal PHP version required
-            if( version_compare( PHP_VERSION, $className::PHP_COMPATIBLE, '<' ) ) {
-                
+            if( version_compare( PHP_VERSION, $className::PHP_COMPATIBLE, '<' ) )
+            {
                 // Error message
                 $errorMsg = 'Class '
                           . $className
@@ -582,8 +588,8 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         $sock     = fsockopen( $host, $port, $errno, $errstr );
         
         // Checks if the socket is active
-        if( !$sock ) {
-            
+        if( !$sock )
+        {
             // Error message
             $errorMsg = 'Error creating a socket for '
                       . $host
@@ -613,8 +619,8 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         $status = fgets( $sock, 128 );
         
         // Checks the status
-        if( !$status || substr( $status, -4, 2 ) !== 'OK' ) {
-            
+        if( !$status || substr( $status, -4, 2 ) !== 'OK' )
+        {
             // Error message
             $errorMsg = 'Error connecting to '
                       . $host
@@ -632,21 +638,21 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         $buildState = 'ERROR';
         
         // Reads the response
-        while( !feof( $sock ) ) {
-            
+        while( !feof( $sock ) )
+        {
             // Gets a line
             $line = fgets( $sock, 128 );
             
             // Checks for the end of the headers
-            if( $line === $nl ) {
-                
+            if( $line === $nl )
+            {
                 // No need to contine reading the response
                 break;
             }
             
             // Checks for the AOP build status header
-            if( substr( $line, 0, 33 ) === 'X-WOOPS-CLASS-CACHE-BUILD-STATUS:' ) {
-                
+            if( substr( $line, 0, 33 ) === 'X-WOOPS-CLASS-CACHE-BUILD-STATUS:' )
+            {
                 // Sets the build state
                 $buildState = substr( $line, 34, -2 );
                 
@@ -659,8 +665,8 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         fclose( $sock );
         
         // Checks the build state
-        if( $buildState !== 'OK' ) {
-            
+        if( $buildState !== 'OK' )
+        {
             // Error message
             $errorMsg = 'Error trying to build the cached version of class '
                       . $className;
@@ -693,15 +699,16 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         $reflection = Reflection::getClassReflector( $className );
         
         // Checks if the class is a singleton
-        if( $reflection->isSingleton() ) {
-            
+        if( $reflection->isSingleton() )
+        {
             // Returns the singleton instance
             return $className::getInstance();
-            
-        } else {
-            
+        }
+        else
+        {
             // Error, the class is not a singleton
-            throw new Manager\Exception(
+            throw new Manager\Exception
+            (
                 'The class \'' . $className . '\' is not a singleton',
                 Manager\Exception::EXCEPTION_NOT_SINGLETON
             );
@@ -721,15 +728,16 @@ final class ClassManager extends \Woops\Core\Object implements \Woops\Core\Singl
         $reflection = Reflection::getClassReflector( $className );
         
         // Checks if the class is a multi-singleton
-        if( $reflection->isMultiSingleton() ) {
-            
+        if( $reflection->isMultiSingleton() )
+        {
             // Returns the singleton instance
             return $className::getInstance( $instanceName );
-            
-        } else {
-            
+        }
+        else
+        {
             // Error, the class is not a multi-singleton
-            throw new Manager\Exception(
+            throw new Manager\Exception
+            (
                 'The class \'' . $className . '\' is not a multi-singleton',
                 Manager\Exception::EXCEPTION_NOT_MULTISINGLETON
             );

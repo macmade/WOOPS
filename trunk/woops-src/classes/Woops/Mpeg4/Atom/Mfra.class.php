@@ -38,8 +38,8 @@ final class Mfra extends \Woops\Mpeg4\ContainerAtom
     
     public function validChildType( $type )
     {
-        switch( $type ) {
-            
+        switch( $type )
+        {
             case 'tfra':
                 
                 return true;

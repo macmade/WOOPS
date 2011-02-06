@@ -45,18 +45,19 @@ class Server extends \Woops\Core\Object
     public function __construct( $wsdl )
     {
         // Checks if the Soap_Server class is available
-        if( !class_exists( 'Soap_Server' ) ) {
-            
+        if( !class_exists( 'Soap_Server' ) )
+        {
             // Error - SOAP support is disabled
-            throw new Server\Exception(
+            throw new Server\Exception
+            (
                 'The SoapServer class does not exist',
                 Server\Exception::EXCEPTION_NO_SOAP
             );
         }
         
         // Checks if we have raw POST data
-        if ( !isset( $GLOBALS[ 'HTTP_RAW_POST_DATA' ] ) ) {
-            
+        if ( !isset( $GLOBALS[ 'HTTP_RAW_POST_DATA' ] ) )
+        {
             // Sets the raw POST data (compatibility issue)
             $GLOBALS[ 'HTTP_RAW_POST_DATA' ] = file_get_contents( 'php://input' );
         }
@@ -79,11 +80,12 @@ class Server extends \Woops\Core\Object
     public function __call( $name, array $args = array() )
     {
         // Checks if the method can be called
-        if( !is_callable( array( $this->_soapServer, $name ) ) ) {
-            
+        if( !is_callable( array( $this->_soapServer, $name ) ) )
+        {
             // Called method does not exist
-            throw new Server\Exception(
-                'The method \'' . $name . '\' cannot be called on the PDO object',
+            throw new Server\Exception
+            (
+                'The method \'' . $name . '\' cannot be called on the SOAP server object',
                 Server\Exception::EXCEPTION_BAD_METHOD
             );
         }
@@ -104,8 +106,8 @@ class Server extends \Woops\Core\Object
     public static function setWsdlCache( $value )
     {
         // Checks if we can call the ini_set() function
-        if( is_callable( 'ini_set' ) && is_callable( 'ini_get' ) ) {
-            
+        if( is_callable( 'ini_set' ) && is_callable( 'ini_get' ) )
+        {
             // Gets the old value
             $oldValue = ini_get( 'soap.wsdl_cache_enabled' );
             
@@ -117,7 +119,8 @@ class Server extends \Woops\Core\Object
         }
         
         // The ini_set() function cannot be called
-        throw new Server\Exception(
+        throw new Server\Exception
+        (
             'Cannot set the WSDL cache property through the ini_set() function',
             Server\Exception::EXCEPTION_NO_INI_SET
         );

@@ -38,8 +38,8 @@ final class Mvex extends \Woops\Mpeg4\ContainerAtom
     
     public function validChildType( $type )
     {
-        switch( $type ) {
-            
+        switch( $type )
+        {
             case 'mehd':
                 
                 return true;

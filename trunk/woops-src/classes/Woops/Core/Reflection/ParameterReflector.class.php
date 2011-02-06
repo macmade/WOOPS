@@ -66,10 +66,11 @@ class ParameterReflector extends \Woops\Core\Reflection
      */
     public function getDeclaringClass()
     {
-        if( !$this->_hasDeclaringClass ) {
-            
+        if( !$this->_hasDeclaringClass )
+        {
             $declaringClass        = $this->_reflector->getDeclaringClass();
-            $this->_declaringClass = ClassReflector::getInstance(
+            $this->_declaringClass = ClassReflector::getInstance
+            (
                 $declaringClass->getName()
             );
             
@@ -84,20 +85,22 @@ class ParameterReflector extends \Woops\Core\Reflection
      */
     public function getDeclaringFunction()
     {
-        if( !$this->_hasDeclaringFunction ) {
+        if( !$this->_hasDeclaringFunction )
+        {
+            $declaringFunction = $this->_reflector->getDeclaringFunction();
             
-            $declaringFunction        = $this->_reflector->getDeclaringFunction();
-            
-            if( get_class( $declaringFunction ) === 'ReflectionMethod' ) {
-                
-                $this->_declaringFunction = ClassReflector::getInstance(
+            if( get_class( $declaringFunction ) === 'ReflectionMethod' )
+            {
+                $this->_declaringFunction = ClassReflector::getInstance
+                (
                     $declaringFunction->getDeclaringClass()->getName(),
                     $declaringFunction->getName()
                 );
-                
-            } else {
-                
-                $this->_declaringFunction = FunctionReflector::getInstance(
+            }
+            else
+            {
+                $this->_declaringFunction = FunctionReflector::getInstance
+                (
                     $declaringFunction->getName()
                 );
             }
@@ -113,18 +116,19 @@ class ParameterReflector extends \Woops\Core\Reflection
      */
     public function getClass()
     {
-        if( !$this->_hasClass ) {
-            
+        if( !$this->_hasClass )
+        {
             $class = $this->_reflector->getClass();
             
-            if( $class ) {
-                
-                $this->_class = ClassReflector::getInstance(
+            if( $class )
+            {
+                $this->_class = ClassReflector::getInstance
+                (
                     $class->getName()
                 );
-                
-            } else {
-                
+            }
+            else
+            {
                 $this->_class = $class;
             }
             

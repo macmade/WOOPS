@@ -69,14 +69,13 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
     /**
      * The valid PNG chunks, as in the PNG specification
      */
-    protected $_validChunks           = array(
-        
+    protected $_validChunks           = array
+    (
         // Critical chunks
         'IHDR' => true,
         'PLTE' => true,
         'IDAT' => true,
         'IEND' => true,
-        
         // Ancillary chunks
         'cHRM' => true,
         'gAMA' => true,
@@ -97,7 +96,8 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
     /**
      * The chunks that can be added multiple times in the file
      */
-    protected $_allowedMultipleChunks = array(
+    protected $_allowedMultipleChunks = array
+    (
         'IDAT' => true,
         'sPLT' => true,
         'iTXt' => true,
@@ -128,8 +128,8 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
         $data = $this->_signature;
         
         // Process each chunk
-        foreach( $this->_chunks as $chunk ) {
-            
+        foreach( $this->_chunks as $chunk )
+        {
             // Adds the current chunk
             $data .= ( string )$chunk;
         }
@@ -147,8 +147,8 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
     public function __get( $name )
     {
         // Checks if the chunk exists
-        if( !isset( $this->_chunksByName[ $name ] ) ) {
-            
+        if( !isset( $this->_chunksByName[ $name ] ) )
+        {
             // No such chunk
             return NULL;
         }
@@ -280,8 +280,8 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
         $data = array();
         
         // Process each chunk
-        foreach( $this->_chunks as $chunk ) {
-            
+        foreach( $this->_chunks as $chunk )
+        {
             // Creates a storage object
             $chunkData               = new \stdClass();
             
@@ -317,10 +317,11 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
         $invalid = $this->isInvalidChunk( $chunkType );
         
         // Checks the invalid state, and if invalid chunks are allowed
-        if( $invalid && !$this->_allowInvalidStucture ) {
-            
+        if( $invalid && !$this->_allowInvalidStucture )
+        {
             // Invalid chunk
-            throw new File\Exception(
+            throw new File\Exception
+            (
                 $invalid,
                 File\Exception::EXCEPTION_INVALID_CHUNK
             );
@@ -330,13 +331,13 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
         $className = 'Chunk\\' . ucfirst( strtolower( $chunkType ) );
         
         // Checks if the class exists
-        if( class_exists( $className ) ) {
-            
+        if( class_exists( $className ) )
+        {
             // Creates the chunk
             $chunk = new $className( $this );
-            
-        } else {
-            
+        }
+        else
+        {
             // Chunk is unknown - Creates an instance of the Png_UnknownChunk class
             $chunk = new UnknownChunk( $this, $chunkType );
         }
@@ -348,13 +349,13 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
         $this->_lastChunk = $chunkType;
         
         // Checks if the chunk type has already been registered
-        if( isset( $this->_chunksByName[ $chunkType ] ) ) {
-            
+        if( isset( $this->_chunksByName[ $chunkType ] ) )
+        {
             // Adds the chunk to the chunk list
             $this->_chunksByName[ $chunkType ][] = $chunk;
-            
-        } else {
-            
+        }
+        else
+        {
             // Creates the storage place for the chunk type
             $this->_chunksByName[ $chunkType ]   = array();
             
@@ -378,36 +379,35 @@ class File extends \Woops\Core\Object implements \Iterator, \ArrayAccess
     public function isInvalidChunk( $type )
     {
         // Checks if the chunk is valid
-        if( !isset( $this->_validChunks[ $type ] ) ) {
-            
+        if( !isset( $this->_validChunks[ $type ] ) )
+        {
             // Chunk is not in the PNG specification
             return 'Chunk ' . $type . ' is not part of the PNG specification';
         }
         
         // Checks if the chunk already exists and if it can be added multiple times
-        if( isset( $this->_chunksByName[ $type ] ) && !isset( $this->_allowedMultipleChunks[ $type ] ) ) {
-            
+        if( isset( $this->_chunksByName[ $type ] ) && !isset( $this->_allowedMultipleChunks[ $type ] ) )
+        {
             // Chunk cannot be added twice
             return 'Chunk ' . $type . ' cannot be added more than once';
         }
         
         // The IHDR chunk must be present before any other chunk
         if( $type !== 'IHDR' && !isset( $this->_chunksByName[ 'IHDR' ] ) ) {
-            
             // No IHDR chunk
             return 'Cannot add chunk ' . $type . ' as there is no IHDR chunk';
         }
         
         // IDAT chunks must be consecutives
-        if( $type === 'IDAT' && isset( $this->_chunksByName[ 'IDAT' ] ) && $this->_lastChunk != 'IDAT' ) {
-            
+        if( $type === 'IDAT' && isset( $this->_chunksByName[ 'IDAT' ] ) && $this->_lastChunk != 'IDAT' )
+        {
             // IDAT chunks are not consecutives
             return 'IDAT chunks must be consecutives';
         }
         
         // No chunk can be placed if the IEND chunk exists
-        if( isset( $this->_chunksByName[ 'IEND' ] ) ) {
-            
+        if( isset( $this->_chunksByName[ 'IEND' ] ) )
+        {
             // IEND already added
             return 'Cannot add chunk ' . $type . ' as the IEND chunk is already present';
         }

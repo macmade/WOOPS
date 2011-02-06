@@ -53,7 +53,8 @@ class Binary extends Base
     /**
      * The conversion operations for each unit from the default type
      */
-    protected $_types = array(
+    protected $_types = array
+    (
         'BIT'       => array( array( '*' => 8 ) ),
         'BYTE'      => array(),
         'KILOBYTE'  => array( array( '/', 1024 ) ),

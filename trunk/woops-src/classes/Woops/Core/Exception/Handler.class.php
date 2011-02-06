@@ -44,9 +44,10 @@ final class Handler extends \Woops\Core\Singleton\Base
      */
     private function _handleException( \Exception $e )
     {
-        if( !is_subclass_of( $e, 'Woops\Core\Exception\Base' ) ) {
-            
-            $e = new \Woops\Core\Php\Exception(
+        if( !is_subclass_of( $e, 'Woops\Core\Exception\Base' ) )
+        {
+            $e = new \Woops\Core\Php\Exception
+            (
                 'Exception of type ' . get_class( $e ) . ': ' . $e->getMessage(),
                 $e->getCode(), $e->getTrace()
             );
@@ -54,18 +55,18 @@ final class Handler extends \Woops\Core\Singleton\Base
         
         $report = \Woops\Core\Config\Getter::getInstance()->getVar( 'error', 'report' );
         
-        if( $report === 'development' ) {
-            
+        if( $report === 'development' )
+        {
             print $e->getInfos();
             exit();
-            
-        } elseif( $report === 'production' ) {
-            
+        }
+        elseif( $report === 'production' )
+        {
             print $e;
             exit();
-            
-        } else {
-            
+        }
+        else
+        {
             exit();
         }
     }

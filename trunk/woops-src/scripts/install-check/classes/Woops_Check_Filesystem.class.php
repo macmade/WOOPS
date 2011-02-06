@@ -20,10 +20,9 @@
 class Woops_Check_Filesystem
 {
     var $hasErrors   = false;
-    
     var $hasWarnings = false;
-    
-    var $files       = array(
+    var $files       = array
+    (
         'cache'                    => array( 'status' => '', 'message' => '', 'writecheck' => false, 'type' => 'directory' ),
         'cache/classes'            => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
         'config'                   => array( 'status' => '', 'message' => '', 'writecheck' => true,  'type' => 'directory' ),
@@ -37,13 +36,13 @@ class Woops_Check_Filesystem
     function Woops_Check_Filesystem()
     {
         // Checks if we have a Windows path, separated by slashes (PHP CGI with Apache under Windows)
-        if( substr( $_SERVER[ 'SCRIPT_FILENAME' ], 1, 2 ) === ':/' ) {
-            
+        if( substr( $_SERVER[ 'SCRIPT_FILENAME' ], 1, 2 ) === ':/' )
+        {
             // Gets the path parts
             $pathInfo = explode( '/', $_SERVER[ 'SCRIPT_FILENAME' ] );
-            
-        } else {
-            
+        }
+        else
+        {
             // Gets the path parts
             $pathInfo = explode( DIRECTORY_SEPARATOR, $_SERVER[ 'SCRIPT_FILENAME' ] );
         }
@@ -55,30 +54,27 @@ class Woops_Check_Filesystem
         
         $rootDir = implode( DIRECTORY_SEPARATOR, $pathInfo ) . DIRECTORY_SEPARATOR;
         
-        foreach( $this->files as $key => $value ) {
-            
+        foreach( $this->files as $key => $value )
+        {
             $realPath = str_replace( '/', DIRECTORY_SEPARATOR, $key );
-            
             $status   = ( $value[ 'type' ] === 'file' ) ? $this->checkFile( $rootDir . $realPath, $value[ 'writecheck' ] ) : $this->checkDir( $rootDir . $realPath, $value[ 'writecheck' ] );
             
-            if( $status == 'ERROR' ) {
-                
+            if( $status == 'ERROR' )
+            {
                 $this->files[ $key ][ 'message' ] = 'This ' . $value[ 'type' ] . ' does not exist.<br /><br />Full path is: ' . $rootDir . $key;
-                
-                $this->hasErrors                 = true;
-                
-            } elseif( $status == 'WARNING' ) {
-                
+                $this->hasErrors                  = true;
+            }
+            elseif( $status == 'WARNING' )
+            {
                 $this->files[ $key ][ 'message' ] = 'This ' . $value[ 'type' ] . ' is not writeable.<br /><br />Full path is: ' . $rootDir . $key;
-                
-                $this->hasWarnings               = true;
-                
-            } elseif( $status == 'SUCCESS' && $value[ 'writecheck' ] ) {
-                
+                $this->hasWarnings                = true;
+            }
+            elseif( $status == 'SUCCESS' && $value[ 'writecheck' ] )
+            {
                 $this->files[ $key ][ 'message' ] = 'This ' . $value[ 'type' ] . ' exists and is writeable.';
-                
-            } elseif( $status == 'SUCCESS' ) {
-                
+            }
+            elseif( $status == 'SUCCESS' )
+            {
                 $this->files[ $key ][ 'message' ] = 'This ' . $value[ 'type' ] . ' exists.';
             }
             
@@ -90,8 +86,8 @@ class Woops_Check_Filesystem
     {
         $out = array();
         
-        foreach( $this->files as $key => $value ) {
-            
+        foreach( $this->files as $key => $value )
+        {
             $status  = $value[ 'status' ];
             
             $out[] = '<div class="box-' . strtolower( $status ) . '">';
@@ -106,13 +102,13 @@ class Woops_Check_Filesystem
     
     function checkDir( $path, $writeCheck )
     {
-        if( !file_exists( $path ) || !is_dir( $path ) ) {
-            
+        if( !file_exists( $path ) || !is_dir( $path ) )
+        {
             return 'ERROR';
         }
         
-        if( $writeCheck && !is_writable( $path ) ) {
-            
+        if( $writeCheck && !is_writable( $path ) )
+        {
             return 'WARNING';
         }
         
@@ -121,13 +117,13 @@ class Woops_Check_Filesystem
     
     function checkFile( $path, $writeCheck )
     {
-        if( !file_exists( $path ) || !is_file( $path ) ) {
-            
+        if( !file_exists( $path ) || !is_file( $path ) )
+        {
             return 'ERROR';
         }
         
-        if( $writeCheck && !is_writable( $path ) ) {
-            
+        if( $writeCheck && !is_writable( $path ) )
+        {
             return 'WARNING';
         }
         

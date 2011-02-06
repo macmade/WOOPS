@@ -112,11 +112,11 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         $iterator = new \DirectoryIterator( $this->_env->getPath( 'woops-mod://Adodb/resources/php/adodb5/drivers/' ) );
         
         // Process each file
-        foreach( $iterator as $file ) {
-            
+        foreach( $iterator as $file )
+        {
             // Checks if the file is an ADODB driver
-            if( substr( $file->getFileName(), -8 ) === '.inc.php' ) {
-                
+            if( substr( $file->getFileName(), -8 ) === '.inc.php' )
+            {
                 // Gets the driver name
                 $driver = substr( $file->getFileName(), 6, -8 );
                 
@@ -144,10 +144,11 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
     public function __call( $name, array $args = array() )
     {
         // Checks if the method can be called
-        if( !is_callable( array( $this->_adodb, $name ) ) ) {
-            
+        if( !is_callable( array( $this->_adodb, $name ) ) )
+        {
             // Called method does not exist
-            throw new Engine\Exception(
+            throw new Engine\Exception
+            (
                 'The method \'' . $name . '\' cannot be called on the ADODB object',
                 Engine\Exception::EXCEPTION_BAD_METHOD
             );
@@ -179,7 +180,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
      */
     public function __clone()
     {
-        throw new \Woops\Core\Singleton\Exception(
+        throw new \Woops\Core\Singleton\Exception
+        (
             'Class ' . __CLASS__ . ' cannot be cloned',
             \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
@@ -196,8 +198,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
     public static function getInstance()
     {
         // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
+        if( !is_object( self::$_instance ) )
+        {
             // Creates the unique instance
             self::$_instance = new self();
         }
@@ -230,10 +232,11 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
     public function load( $driver, $host, $port, $database, $tablePrefix )
     {
         // Checks if ADODB supports the database driver
-        if( !isset( $this->_drivers[ $driver ] ) ) {
-            
+        if( !isset( $this->_drivers[ $driver ] ) )
+        {
             // Error - Driver not available
-            throw new Engine\Exception(
+            throw new Engine\Exception
+            (
                 'Driver ' . $driver . ' is not available in ADODB',
                 Engine\Exception::EXCEPTION_NO_ADODB_DRIVER
             );
@@ -249,18 +252,19 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         $this->_errorReporting->resetErrorReporting();
         
         // Checks if ADODB supports database driver
-        if( !$db ) {
-            
+        if( !$db )
+        {
             // Error - Driver not available
-            throw new Engine\Exception(
+            throw new Engine\Exception
+            (
                 'Error creating the ADODB object with driver ' . $driver,
                 Engine\Exception::EXCEPTION_ADODB_DRIVER_ERROR
             );
         }
         
         // Are we using an Oracle database?
-        if( $driver === 'oci8' ) {
-            
+        if( $driver === 'oci8' )
+        {
             // Yes, we'll have to deal with Oracle-like parameters
             $this->_oracle = true;
         }
@@ -276,8 +280,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         $this->_database    = $database;
         
         // Checks for a port number
-        if( $port ) {
-            
+        if( $port )
+        {
             // Adds the database port
             $this->_server .= ':' . $port;
         }
@@ -295,10 +299,11 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
         
         // Tries to establish an ADODB connection
-        if( !$this->_adodb->Connect( $this->_server, $user, $pass, $this->_database ) ) {
-            
+        if( !$this->_adodb->Connect( $this->_server, $user, $pass, $this->_database ) )
+        {
             // The ADODB object cannot be created - Reroute the exception
-            throw new Engine\Exception(
+            throw new Engine\Exception
+            (
                 'Impossible to establish an ADODB connection',
                 Engine\Exception::EXCEPTION_NO_CONNECTION
             );
@@ -386,8 +391,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
      */
     public function rowCount( $res )
     {
-        if( $res instanceof \ADORecordSet ) {
-            
+        if( $res instanceof \ADORecordSet )
+        {
             // Not sure ADODB is completely error free
             $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
             
@@ -399,7 +404,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             return $count;
         }
         
-        throw new Engine\Exception(
+        throw new Engine\Exception
+        (
             'Passed argument is not a valid ADODB record set',
             Engine\Exception::EXCEPTION_INVALID_RECORD_SET
         );
@@ -410,13 +416,13 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
      */
     public function fetchAssoc( $res )
     {
-        if( $res instanceof \ADORecordSet ) {
-            
+        if( $res instanceof \ADORecordSet )
+        {
             // Not sure ADODB is completely error free
             $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
             
-            if( $res->EOF ) {
-                
+            if( $res->EOF )
+            {
                 return false;
             }
             
@@ -424,10 +430,10 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             
             $rows = array();
             
-            foreach( $res->fields as $key => $value ) {
-                
-                if( is_string( $key ) ) {
-                    
+            foreach( $res->fields as $key => $value )
+            {
+                if( is_string( $key ) )
+                {
                     $rows[ $key ] = $value;
                 }
             }
@@ -440,7 +446,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             return $rows;
         }
         
-        throw new Engine\Exception(
+        throw new Engine\Exception
+        (
             'Passed argument is not a valid ADODB record set',
             Engine\Exception::EXCEPTION_INVALID_RECORD_SET
         );
@@ -451,13 +458,13 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
      */
     public function fetchObject( $res )
     {
-        if( $res instanceof \ADORecordSet ) {
-            
+        if( $res instanceof \ADORecordSet )
+        {
             // Not sure ADODB is completely error free
             $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
             
-            if( $res->EOF ) {
-                
+            if( $res->EOF )
+            {
                 return false;
             }
             
@@ -465,10 +472,10 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             
             $rows = new StdClass();
             
-            foreach( $res->fields as $key => $value ) {
-                
-                if( is_string( $key ) ) {
-                    
+            foreach( $res->fields as $key => $value )
+            {
+                if( is_string( $key ) )
+                {
                     $rows->$key = $value;
                 }
             }
@@ -481,7 +488,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             return $rows;
         }
         
-        throw new Engine\Exception(
+        throw new Engine\Exception
+        (
             'Passed argument is not a valid ADODB record set',
             Engine\Exception::EXCEPTION_INVALID_RECORD_SET
         );
@@ -531,10 +539,11 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         $pKey   = 'id_' . strtolower( $table );
         
         // Oracle support
-        if( $this->_oracle ) {
-            
+        if( $this->_oracle )
+        {
             // Parameters for the ADODB query
-            $params = array(
+            $params = array
+            (
                 'id' => ( int )$id
             );
             
@@ -542,11 +551,12 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             $sql = 'SELECT * FROM ' . $this->_tablePrefix . $table
                  . '    WHERE ' . $pKey . ' = :id'
                  . '    LIMIT 1';
-            
-        } else {
-            
+        }
+        else
+        {
             // Parameters for the ADODB query
-            $params = array(
+            $params = array
+            (
                 ( int )$id
             );
             
@@ -593,23 +603,23 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         $params = array();
         
         // Oracle support
-        if( $this->_oracle ) {
-            
+        if( $this->_oracle )
+        {
             // Process each field to check
-            foreach( $fieldsValues as $fieldName => $fieldValue ) {
-                
+            foreach( $fieldsValues as $fieldName => $fieldValue )
+            {
                 // Adds the parameter
                 $params[ $fieldName ] = $fieldValue;
                 
                 // Adds the statement
                 $sql .= $fieldName . ' = :' . $fieldValue . ' AND ';
             }
-            
-        } else {
-            
+        }
+        else
+        {
             // Process each field to check
-            foreach( $fieldsValues as $fieldName => $fieldValue ) {
-                
+            foreach( $fieldsValues as $fieldName => $fieldValue )
+            {
                 // Adds the parameter
                 $params[] = $fieldValue;
                 
@@ -634,11 +644,11 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         $rows = array();
         
         // Checks the query result
-        if( $query ) {
-            
+        if( $query )
+        {
             // Process each row
-            while( $row = $this->fetchObject( $query ) ) {
-                
+            while( $row = $this->fetchObject( $query ) )
+            {
                 // Stores the current row
                 $rows[ $row->$pKey ] = $row;
             }
@@ -698,8 +708,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
              . $id;
         
         // Checks for an ORDER BY clause
-        if( $orderBy ) {
-            
+        if( $orderBy )
+        {
             // Adds the order by clause
             $sql .= ' ORDER BY ' . $orderBy;
         }
@@ -714,8 +724,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         $rows = array();
         
         // Process each row
-        while( $row = $this->fetchObject( $query ) ) {
-            
+        while( $row = $this->fetchObject( $query ) )
+        {
             // Stores the current row
             $rows[ $row->$pKey ] = $row;
         }
@@ -739,10 +749,11 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         $time   = time();
         
         // Oracle support
-        if( $this->_oracle ) {
-            
+        if( $this->_oracle )
+        {
             // Parameters for the PDO query
-            $params = array(
+            $params = array
+            (
                 'ctime' => $time,
                 'mtime' => $time
             );
@@ -757,19 +768,20 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             $sql .= ' mtime = :mtime,';
             
             // Process each value
-            foreach( $values as $fieldName => $value ) {
-                
+            foreach( $values as $fieldName => $value )
+            {
                 // Adds the PDO parameter for the current value
                 $params[ $fieldName ] = $value;
                 
                 // Adds the update statement for the current value
                 $sql .= ' ' . $fieldName . ' = :' . $fieldName . ',';
             }
-            
-        } else {
-            
+        }
+        else
+        {
             // Parameters for the PDO query
-            $params = array(
+            $params = array
+            (
                 $time,
                 $time
             );
@@ -784,8 +796,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             $sql .= ' mtime = ?,';
             
             // Process each value
-            foreach( $values as $fieldName => $value ) {
-                
+            foreach( $values as $fieldName => $value )
+            {
                 // Adds the PDO parameter for the current value
                 $params[] = $value;
                 
@@ -825,10 +837,11 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         $time   = time();
         
         // Oracle support
-        if( $this->_oracle ) {
-            
+        if( $this->_oracle )
+        {
             // Parameters for the ADODB query
-            $params = array(
+            $params = array
+            (
                 $pKey => ( int )$id,
                 'mtime'    => $time
             );
@@ -840,8 +853,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             $sql .= ' mtime = :mtime,';
             
             // Process each value
-            foreach( $values as $fieldName => $value ) {
-                
+            foreach( $values as $fieldName => $value )
+            {
                 // Adds the ADODB parameter for the current value
                 $params[ $fieldName ] = $value;
                 
@@ -854,11 +867,12 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             
             // Adds the where clause
             $sql .= ' WHERE ' . $pKey . ' = :' . $pKey;
-            
-        } else {
-            
+        }
+        else
+        {
             // Parameters for the ADODB query
-            $params = array(
+            $params = array
+            (
                 $time
             );
             
@@ -869,8 +883,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             $sql .= ' mtime = ?,';
             
             // Process each value
-            foreach( $values as $fieldName => $value ) {
-                
+            foreach( $values as $fieldName => $value )
+            {
                 // Adds the ADODB parameter for the current value
                 $params[] = $value;
                 
@@ -916,20 +930,22 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
             $pKey   = 'id_' . strtolower( $table );
             
             // Oracle support
-            if( $this->_oracle ) {
-                
+            if( $this->_oracle )
+            {
                 // Parameters for the ADODB query
-                $params = array(
+                $params = array
+                (
                     'id' => $id
                 );
                 
                 // SQL for the delete statement
                 $sql = 'DELETE FROM ' . $table . ' WHERE ' . $pKey . ' = :id';
-                
-            } else {
-                
+            }
+            else
+            {
                 // Parameters for the ADODB query
-                $params = array(
+                $params = array
+                (
                     $id
                 );
                 
@@ -952,7 +968,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         }
         
         // Just sets the delete flag
-        return $this->updateRecord(
+        return $this->updateRecord
+        (
             $table,
             $id,
             array( 'deleted' => 1 )
@@ -971,7 +988,8 @@ final class Engine extends \Woops\Core\Object implements \Woops\Database\Engine\
         $this->_errorReporting->disableErrorReporting( E_NOTICE | E_STRICT );
         
         // Executes the ADODB query
-        $ret = $this->Execute(
+        $ret = $this->Execute
+        (
             'DELETE FROM ' . $table . ' WHERE deleted = 1',
             array()
         );

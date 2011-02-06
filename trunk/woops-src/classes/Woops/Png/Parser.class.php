@@ -99,18 +99,19 @@ class Parser extends \Woops\Core\Object
                    . chr( 13 )  . chr( 10 ) . chr( 26 ) . chr( 10 );
         
         // Checks the GIF signature
-        if( $this->_stream->read( 8 ) !== $signature ) {
-            
+        if( $this->_stream->read( 8 ) !== $signature )
+        {
             // Wrong file type
-            throw new Parser\Exception(
+            throw new Parser\Exception
+            (
                 'File ' . $this->_filePath . ' is not a PNG file.',
                 Parser\Exception::EXCEPTION_BAD_SIGNATURE
             );
         }
         
         // Process the file till the end
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             // Gets the chunk size
             $chunkSize       = $this->_stream->bigEndianUnsignedLong();
             
@@ -121,10 +122,11 @@ class Parser extends \Woops\Core\Object
             $invalid = $this->_pngFile->isInvalidChunk( $chunkType );
             
             // Checks the invalid state
-            if( $invalid ) {
-                
+            if( $invalid )
+            {
                 // Adds a warning
-                $this->_warnings[] = array(
+                $this->_warnings[] = array
+                (
                     'chunkType'   => $chunkType,
                     'chunkLength' => $chunkSize,
                     'fileOffset'  => $this->_stream->getOffset() - 8,
@@ -132,22 +134,22 @@ class Parser extends \Woops\Core\Object
                 );
                 
                 // Checks if we allows invalid chunks
-                if( $this->_allowInvalidStucture ) {
-                    
+                if( $this->_allowInvalidStucture )
+                {
                     // Tells the PNG file class to not complains about bad chunks
                     $this->_pngFile->allowAnyChunkType( true );
                     
                     // Adds the chunk
                     $chunk = $this->_pngFile->addChunk( $chunkType );
-                    
-                } else {
-                    
+                }
+                else
+                {
                     // No invalid chunk is allowed - The current chunk will be skipped
                     $chunk = false;
                 }
-                
-            } else {
-                
+            }
+            else
+            {
                 // Chunk is valid - Adds it
                 $chunk = $this->_pngFile->addChunk( $chunkType );
             }
@@ -156,35 +158,36 @@ class Parser extends \Woops\Core\Object
             $chunkData       = '';
             
             // Checks for data
-            if( $chunkSize > 0 ) {
-                
+            if( $chunkSize > 0 )
+            {
                 // Gets the chunk data
                 $chunkData = $this->_stream->read( $chunkSize );
                 
                 // Checks if the chunk object exists
-                if( $chunk ) {
-                    
+                if( $chunk )
+                {
                     // Stores the raw data
                     $chunk->setRawData( $chunkData );
                 }
             }
             
             // Gets the cyclic redundancy check
-            $crc     = $this->_stream->bigEndianUnsignedLong();
+            $crc = $this->_stream->bigEndianUnsignedLong();
             
             // Checks the CRC
-            if( $crc !== crc32( $chunkType . $chunkData ) ) {
-                
+            if( $crc !== crc32( $chunkType . $chunkData ) )
+            {
                 // Invalid CRC
-                throw new Parser\Exception(
+                throw new Parser\Exception
+                (
                     'Invalid cyclic redundancy check for chunk ' . $chunkType,
                     Parser\Exception::EXCEPTION_BAD_CRC
                 );
             }
             
             // Checks if the current chunk is the PNG terminator chunk
-            if( $chunkType === 'IEND' ) {
-                
+            if( $chunkType === 'IEND' )
+            {
                 // No more chunks
                 break;
             }

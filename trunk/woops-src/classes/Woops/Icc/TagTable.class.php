@@ -118,7 +118,8 @@ class TagTable extends \Woops\Core\Object implements \Iterator
     /**
      * The ICC tag types, with their corresponding PHP class
      */
-     protected static $_types = array(
+     protected static $_types = array
+     (
         0x41324230 => 'Woops\Icc\Tag\AToB0',
         0x41324231 => 'Woops\Icc\Tag\AToB1',
         0x41324232 => 'Woops\Icc\Tag\AToB2',
@@ -232,10 +233,11 @@ class TagTable extends \Woops\Core\Object implements \Iterator
         $type = ( int )$type;
         
         // Checks if the type is valid
-        if( !isset( self::$_types[ $type ] ) ) {
-            
+        if( !isset( self::$_types[ $type ] ) )
+        {
             // Error - Invalid tag type
-            throw new TagTable\Exception(
+            throw new TagTable\Exception
+            (
                 'Invalid tag type (' . $type . ')',
                 TagTable\Exception::EXCEPTION_INVALID_TAG_TYPE
             );
@@ -266,22 +268,22 @@ class TagTable extends \Woops\Core\Object implements \Iterator
         
         $tagCount = $stream->bigEndianUnsignedLong();
         
-        for( $i = 0; $i < $tagCount; $i++ ) {
-            
+        for( $i = 0; $i < $tagCount; $i++ )
+        {
             $type      = $stream->bigEndianUnsignedLong();
             $datOffset = $stream->bigEndianUnsignedLong();
             $size      = $stream->bigEndianUnsignedLong();
             
             $offset    = $stream->getOffset();
             
-            try {
-                
+            try
+            {
                 $tag = $this->newTag( $type );
-                
-            } catch( TagTable\Exception $e ) {
-                
-                if( $e->getCode() !== TagTable\Exception::EXCEPTION_INVALID_TAG_TYPE ) {
-                    
+            }
+            catch( TagTable\Exception $e )
+            {
+                if( $e->getCode() !== TagTable\Exception::EXCEPTION_INVALID_TAG_TYPE )
+                {
                     throw $e;
                 }
                 

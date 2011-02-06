@@ -12,7 +12,8 @@
 # $Id$
 
 // Includes the initialization script
-require_once(
+require_once
+(
     __DIR__
   . DIRECTORY_SEPARATOR
   . '..'

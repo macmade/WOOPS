@@ -58,7 +58,8 @@ final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\Ob
      */
     public function __clone()
     {
-        throw new \Woops\Core\Singleton\Exception(
+        throw new \Woops\Core\Singleton\Exception
+        (
             'Class ' . __CLASS__ . ' cannot be cloned',
             \Woops\Core\Singleton\Exception::EXCEPTION_CLONE
         );
@@ -76,8 +77,8 @@ final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\Ob
     public static function getInstance()
     {
         // Checks if the unique instance already exists
-        if( !is_object( self::$_instance ) ) {
-            
+        if( !is_object( self::$_instance ) )
+        {
             // Creates the unique instance
             self::$_instance = new self();
         }
@@ -101,20 +102,20 @@ final class Utils extends \Woops\Core\Object implements \Woops\Core\Singleton\Ob
     public function inRange( $number, $min, $max, $int = false )
     {
         // Checks if we must evaluate the number as an integer
-        if( $int ) {
-            
+        if( $int )
+        {
             // Converts the number to an integer
             $number = ( int )$number;
         }
         
         // Checks the number
-        if( $number > $max ) {
-            
+        if( $number > $max )
+        {
             // Number is bigger than maximum value
             $number = $max;
-            
-        } elseif( $number < $min ) {
-            
+        }
+        elseif( $number < $min )
+        {
             // Number is smaller than minimal value
             $number = $min;
         }

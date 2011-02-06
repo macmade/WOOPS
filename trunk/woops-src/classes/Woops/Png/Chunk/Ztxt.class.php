@@ -52,22 +52,23 @@ class Ztxt extends \Woops\Png\Chunk
         $this->_stream->rewind();
         
         // Storage
-        $data                           = new \stdClass();
+        $data                    = new \stdClass();
         
         // Gets the profile name
-        $data->keyword                  = $this->_stream->nullTerminatedString();
+        $data->keyword           = $this->_stream->nullTerminatedString();
         
         // Gets the compression method
-        $data->compressionMethod        = $this->_stream->unsignedChar();
+        $data->compressionMethod = $this->_stream->unsignedChar();
         
         // Checks the compression method
-        if( $data->compressionMethod === 0 ) {
-            
+        if( $data->compressionMethod === 0 )
+        {
             // Deflate
             $data->compressedTextDataStream = gzuncompress( $this->_stream->getRemainingData() );
             
-        } else {
-            
+        }
+        else
+        {
             // Unrecognized compression method - Stores the raw data
             $data->compressedTextDataStream = $this->_stream->getRemainingData();
         }

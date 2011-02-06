@@ -45,14 +45,14 @@ abstract class ContainerAtom extends Atom implements \Iterator, \ArrayAccess
         $childrenData   = '';
         $childrenLength = 0;
         
-        foreach( $this->_children as $childAtom ) {
-            
+        foreach( $this->_children as $childAtom )
+        {
             $childrenLength += $childAtom->getLength();
             $childrenData   .= ( string )$childAtom;
         }
         
-        if( $this->_extended ) {
-            
+        if( $this->_extended )
+        {
             $length = $childrenLength + 16;
             
             $length32 = $length & 0x00001111;
@@ -61,9 +61,9 @@ abstract class ContainerAtom extends Atom implements \Iterator, \ArrayAccess
             $length = pack( 'N/N', $length64, $length32 );
             
             return pack( 'N', 1 ) . $this->_type . $length . $childrenData;
-            
-        } else {
-            
+        }
+        else
+        {
             $length = pack( 'N', $childrenLength + 8 );
             
             return $length . $this->_type . $childrenData;
@@ -72,8 +72,8 @@ abstract class ContainerAtom extends Atom implements \Iterator, \ArrayAccess
     
     public function __get( $name )
     {
-        if( !isset( $this->_childrenByNames[ $name ] ) ) {
-            
+        if( !isset( $this->_childrenByNames[ $name ] ) )
+        {
             return NULL;
         }
         
@@ -134,21 +134,21 @@ abstract class ContainerAtom extends Atom implements \Iterator, \ArrayAccess
     {
         $data = array();
         
-        foreach( $this->_children as $childAtom ) {
-            
+        foreach( $this->_children as $childAtom )
+        {
             $childData = new \stdClass();
             
             $childData->type     = $childAtom->getType();
             $childData->extended = $childAtom->isExtended();
             
-            if( is_subclass_of( $childAtom, 'Mpeg4_DataAtom' ) ) {
-                
+            if( is_subclass_of( $childAtom, 'Mpeg4_DataAtom' ) )
+            {
                 $childData->final      = $childAtom->isFinal();
                 $childData->dataLength = $childAtom->getDataLength();
                 $childData->data       = $childAtom->getProcessedData();
-                
-            } else {
-                
+            }
+            else
+            {
                 $childData->children = $childAtom->getProcessedData();
             }
             
@@ -160,22 +160,23 @@ abstract class ContainerAtom extends Atom implements \Iterator, \ArrayAccess
     
     public function addChild( $childType )
     {
-        if( !$this->_allowAnyChildrenType && !$this->validChildType( $childType ) ) {
-            
-            throw new ContainerAtom\Exception(
+        if( !$this->_allowAnyChildrenType && !$this->validChildType( $childType ) )
+        {
+            throw new ContainerAtom\Exception
+            (
                 'Atom of type ' . $childType . ' cannot be contained in ' . $this->_type,
                 ContainerAtom\Exception::EXCEPTION_INVALID_ATOM
             );
         }
         
-        $className         = 'Atom\\' . ucfirst( $childType );
+        $className = 'Atom\\' . ucfirst( $childType );
         
-        if( !class_exists( $className ) ) {
-            
+        if( !class_exists( $className ) )
+        {
             $atom = new UnknownAtom( $childType );
-            
-        } else {
-            
+        }
+        else
+        {
             $atom = new $className;
         }
         
@@ -183,8 +184,8 @@ abstract class ContainerAtom extends Atom implements \Iterator, \ArrayAccess
         $this->_children[] = $atom;
         $this->_childrenCount++;
         
-        if( !isset( $this->_childrenByNames[ $childType ] ) ) {
-            
+        if( !isset( $this->_childrenByNames[ $childType ] ) )
+        {
             $this->_childrenByNames[ $childType ] = array();
         }
         
@@ -197,17 +198,17 @@ abstract class ContainerAtom extends Atom implements \Iterator, \ArrayAccess
     {
         $length = 0;
         
-        foreach( $this->_children as $childAtom ) {
-            
+        foreach( $this->_children as $childAtom )
+        {
             $length += $childAtom->getLength();
         }
         
-        if( $this->_extended ) {
-            
+        if( $this->_extended )
+        {
             return $length + 16;
-            
-        } else {
-            
+        }
+        else
+        {
             return $length + 8;
         }
     }

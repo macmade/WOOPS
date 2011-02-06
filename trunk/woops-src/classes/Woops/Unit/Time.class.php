@@ -49,7 +49,8 @@ class Time extends Base
     /**
      * The conversion operations for each unit from the default type
      */
-    protected $_types = array(
+    protected $_types = array
+    (
         'DAYS'    => array(),
         'HOURS'   => array(),
         'MINUTES' => array(),

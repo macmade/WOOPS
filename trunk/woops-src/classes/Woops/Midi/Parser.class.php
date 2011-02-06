@@ -73,8 +73,8 @@ class Parser extends \Woops\Core\Object
     protected function _parseFile()
     {
         // Process the whole stream
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             // Gets the chunk type
             $type = $this->_stream->bigEndianUnsignedLong();
             

@@ -46,8 +46,10 @@ final class Types extends \Woops\Core\Singleton\Base
      *      - text
      *      - video
      */
-    protected $_mimeTypes = array(
-        'application' => array(
+    protected $_mimeTypes = array
+    (
+        'application' => array
+        (
             'activemessage'                                    => true,    // Shapiro
             'andrew-inset'                                     => true,    // Borenstein
             'applefile'                                        => true,    // Faltstrom
@@ -704,7 +706,8 @@ final class Types extends \Woops\Core\Singleton\Base
             'xv+xml'                                           => true,    // RFC4374
             'zip'                                              => true     // Lindner
         ),
-        'audio' => array(
+        'audio' => array
+        (
             '32kadpcm'                      => true,    // RFC2421, RFC2422
             '3gpp'                          => true,    // RFC3839, RFC4281
             '3gpp2'                         => true,    // RFC4393
@@ -815,7 +818,8 @@ final class Types extends \Woops\Core\Singleton\Base
             'vorbis'                        => true,    // RFC5215
             'vorbis-config'                 => true     // RFC5215
         ),
-        'image' => array(
+        'image' => array
+        (
             'cgm'                          => true,    // Computer Graphics Metafile, Francis
             'example'                      => true,    // RFC4735
             'fits'                         => true,    // RFC4047
@@ -855,7 +859,8 @@ final class Types extends \Woops\Core\Singleton\Base
             'vnd.wap.wbmp'                 => true,    // Stark
             'vnd.xiff'                     => true     // S.Martin
         ),
-        'message' => array(
+        'message' => array
+        (
             'CPIM'                            => true,    // RFC3862
             'delivery-status'                 => true,    // RFC1894
             'disposition-notification'        => true,    // RFC2298
@@ -875,7 +880,8 @@ final class Types extends \Woops\Core\Singleton\Base
             'tracking-status'                 => true,    // RFC3886
             'vnd.si.simp'                     => true     // Parks Young
         ),
-        'model' => array(
+        'model' => array
+        (
             'example'                       => true,    // RFC4735
             'iges'                          => true,    // Parks
             'mesh'                          => true,    // RFC2077
@@ -891,7 +897,8 @@ final class Types extends \Woops\Core\Singleton\Base
             'vnd.vtu'                       => true,    // Rabinovitch
             'vrml'                          => true     // RFC2077
         ),
-        'multipart' => array(
+        'multipart' => array
+        (
             'alternative'   => true,    // RFC2045, RFC2046
             'appledouble'   => true,    // Faltstrom
             'byteranges'    => true,    // RFC2068
@@ -907,7 +914,8 @@ final class Types extends \Woops\Core\Singleton\Base
             'signed'        => true,    // RFC1847
             'voice-message' => true     // RFC2421, RFC2423
         ),
-        'text' => array(
+        'text' => array
+        (
             'calendar'                         => true,    // RFC2445
             'css'                              => true,    // RFC2318
             'csv'                              => true,    // RFC4180
@@ -959,7 +967,8 @@ final class Types extends \Woops\Core\Singleton\Base
             'xml'                              => true,    // RFC3023
             'xml-external-parsed-entity'       => true     // RFC3023
         ),
-        'video' => array(
+        'video' => array
+        (
             '3gpp'                             => true,    // RFC3839, RFC4281
             '3gpp2'                            => true,    // RFC4393
             '3gpp-tt'                          => true,    // RFC4396
@@ -1024,7 +1033,8 @@ final class Types extends \Woops\Core\Singleton\Base
     /**
      * The list of the file extensions, with their corresponding mime-type(s)
      */
-    protected $_fileExtensions = array(
+    protected $_fileExtensions = array
+    (
         '3dm'       => 'x-world/x-3dmf',
         '3dmf'      => 'x-world/x-3dmf',
         'a'         => 'application/octet-stream',
@@ -1698,13 +1708,13 @@ final class Types extends \Woops\Core\Singleton\Base
         $part2    = substr( $mimeType, $slashPos + 1 );
         
         // Checks the mime type
-        if( $allowObsolete && isset( $this->_mimeTypes[ $part1 ][ $part2 ] ) ) {
-            
+        if( $allowObsolete && isset( $this->_mimeTypes[ $part1 ][ $part2 ] ) )
+        {
             // Valid mime-type (may be obsolete)
             return true;
-            
-        } elseif( !$allowObsolete && isset( $this->_mimeTypes[ $part1 ][ $part2 ] ) && $this->_mimeTypes[ $part1 ][ $part2 ] ) {
-            
+        }
+        elseif( !$allowObsolete && isset( $this->_mimeTypes[ $part1 ][ $part2 ] ) && $this->_mimeTypes[ $part1 ][ $part2 ] )
+        {
             // Valid mime-type (and not obsolete)
             return true;
         }
@@ -1722,14 +1732,14 @@ final class Types extends \Woops\Core\Singleton\Base
     public function getMimeType( $fileName )
     {
         // Finds the position of the last dot
-        if( $extPos = strrpos( $fileName, '.' ) ) {
-            
+        if( $extPos = strrpos( $fileName, '.' ) )
+        {
             // Gets the file extension
             $extension = substr( $fileName, $extPos + 1 );
             
             // Checks if the extension is registered
-            if( isset( $this->_fileExtensions[ $extension ] ) ) {
-                
+            if( isset( $this->_fileExtensions[ $extension ] ) )
+            {
                 // Returns the corresponding mime-type
                 return $this->_fileExtensions[ $extension ];
             }

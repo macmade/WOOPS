@@ -112,33 +112,34 @@ class Generator extends \Woops\Core\Object
     public function __construct( $handlerClass, $url )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
         
         // Checks for the XmlWriter class
-        if( !class_exists( '\XMLWriter' ) ) {
-            
+        if( !class_exists( '\XMLWriter' ) )
+        {
             // Error - XmlWriter is not available
-            throw new Generator\Exception(
+            throw new Generator\Exception
+            (
                 'The XMLWriter class is not available',
                 Generator\Exception::EXCEPTION_NO_XML_WRITER
             );
         }
         
         // Checks if we have an object or a class name
-        if( is_object( $handlerClass ) ) {
-            
+        if( is_object( $handlerClass ) )
+        {
             // Creates the reflection object
             $this->_reflection = \Woops\Core\Reflection::getClassReflector( $handlerClass );
             
             // Stores the web service name
             $this->_name       = get_class( $handlerClass );
-            
-        } else {
-            
+        }
+        else
+        {
             // Creates the reflection object
             $this->_reflection = \Woops\Core\Reflection::getClassReflector( $handlerClass );
             
@@ -209,11 +210,11 @@ class Generator extends \Woops\Core\Object
         $proc    = array();
         
         // Process each methods
-        foreach( $methods as $method ) {
-            
+        foreach( $methods as $method )
+        {
             // Do not process PHP magic methods nor static methods
-            if( substr( $method->name, 0, 2 ) !== '__' && !$method->isStatic() ) {
-                
+            if( substr( $method->name, 0, 2 ) !== '__' && !$method->isStatic() )
+            {
                 // Stores the method
                 $proc[ $method->name ] = array();
                 
@@ -221,8 +222,8 @@ class Generator extends \Woops\Core\Object
                 $params                = $method->getParameters();
                 
                 // Process each parameter
-                foreach( $params as $param ) {
-                    
+                foreach( $params as $param )
+                {
                     // Stores the parameter
                     $proc[ $method->name ][] = $param->name;
                 }
@@ -241,7 +242,8 @@ class Generator extends \Woops\Core\Object
     protected function _createWsdl()
     {
         // Starts the XML document
-        $this->_xml->startDocument(
+        $this->_xml->startDocument
+        (
             '1.0',
             'utf-8'
         );
@@ -250,41 +252,48 @@ class Generator extends \Woops\Core\Object
         $this->_xml->startElement( 'wsdl:definitions' );
         
         // Adds the SOAP namespace
-        $this->_xml->writeAttribute(
+        $this->_xml->writeAttribute
+        (
             'xmlns:soap',
             self::NAMESPACE_SOAP
         );
         
         // Adds the SOAP encoding namespace
-        $this->_xml->writeAttribute(
+        $this->_xml->writeAttribute
+        (
             'xmlns:soapenc',
             self::NAMESPACE_SOAP_ENCODING
         );
         
         // Adds the XSD namespace
-        $this->_xml->writeAttribute(
+        $this->_xml->writeAttribute
+        (
             'xmlns:xsd',
             self::NAMESPACE_XSD
         );
         
         // Adds the WSDL namespace
-        $this->_xml->writeAttribute(
+        $this->_xml->writeAttribute
+        (
             'xmlns:wsdl',
             self::NAMESPACE_WSDL
         );
         
         // Adds the name parameter
-        $this->_xml->writeAttribute(
+        $this->_xml->writeAttribute
+        (
             'name',
             $this->_name
         );
         
         // Adds the target namespace
-        $this->_xml->writeAttribute(
+        $this->_xml->writeAttribute
+        (
             'targetNamespace',
             $this->_tns
         );
-        $this->_xml->writeAttribute(
+        $this->_xml->writeAttribute
+        (
             'xmlns:tns',
             $this->_tns
         );
@@ -307,15 +316,15 @@ class Generator extends \Woops\Core\Object
      */
     protected function _createWsdlMessages()
     {
-        foreach( $this->_soapProcedures as $proc => $args ) {
-            
-            if( count( $args ) ) {
-                
+        foreach( $this->_soapProcedures as $proc => $args )
+        {
+            if( count( $args ) )
+            {
                 $this->_xml->startElement( 'wsdl:message' );
                 $this->_xml->writeAttribute( 'name', $proc . 'Request' );
                 
-                foreach( $args as $arg ) {
-                    
+                foreach( $args as $arg )
+                {
                     $this->_xml->startElement( 'wsdl:part' );
                     $this->_xml->writeAttribute( 'name', $arg );
                     $this->_xml->writeAttribute( 'type', 'xsd:string' );
@@ -345,13 +354,13 @@ class Generator extends \Woops\Core\Object
         $this->_xml->startElement( 'wsdl:portType' );
         $this->_xml->writeAttribute( 'name', $this->_name . 'PortType' );
         
-        foreach( $this->_soapProcedures as $func => $args ) {
-            
+        foreach( $this->_soapProcedures as $func => $args )
+        {
             $this->_xml->startElement( 'wsdl:operation' );
             $this->_xml->writeAttribute( 'name', $func );
             
-            if( count( $args ) ) {
-                
+            if( count( $args ) )
+            {
                 $this->_xml->startElement( 'wsdl:input' );
                 $this->_xml->writeAttribute( 'message', 'tns:' . $func . 'Request' );
                 $this->_xml->endElement();
@@ -381,8 +390,8 @@ class Generator extends \Woops\Core\Object
         $this->_xml->writeAttribute( 'transport', self::NAMESPACE_SOAP_HTTP );
         $this->_xml->endElement();
         
-        foreach( $this->_soapProcedures as $func => $args ) {
-            
+        foreach( $this->_soapProcedures as $func => $args )
+        {
             $this->_xml->startElement( 'wsdl:operation' );
             $this->_xml->writeAttribute( 'name', $func );
             
@@ -390,8 +399,8 @@ class Generator extends \Woops\Core\Object
             $this->_xml->writeAttribute( 'soapAction', 'urn:xmethods-' . $this->_name . '#' . $func );
             $this->_xml->endElement();
             
-            if( count( $args ) ) {
-                
+            if( count( $args ) )
+            {
                 $this->_xml->startElement( 'wsdl:input' );
                 $this->_xml->startElement( 'soap:body' );
                 $this->_xml->writeAttribute( 'use', 'encoded' );

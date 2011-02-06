@@ -69,10 +69,11 @@ class Header extends \Woops\Core\Object
                    |   $stream->unsignedChar();
         
         // Checks the FLV signature
-        if( $signature !== self::SIGNATURE ) {
-            
+        if( $signature !== self::SIGNATURE )
+        {
             // Error - Invalid FLV signature
-            throw new Header\Exception(
+            throw new Header\Exception
+            (
                 'Invalid FLV signature (' . $signature . ')',
                 Header\Exception::EXCEPTION_BAD_SIGNATURE
             );

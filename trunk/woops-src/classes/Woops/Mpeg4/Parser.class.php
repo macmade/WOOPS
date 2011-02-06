@@ -91,8 +91,8 @@ class Parser extends \Woops\Core\Object
         
         // Reads 8 bytes of the MPEG-4 files till the end of the file
         // 8 bytes is the atom length and the atom type
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             // Gets the atom length
             $atomLength     = $this->_stream->bigEndianUnsignedLong();
             
@@ -106,8 +106,8 @@ class Parser extends \Woops\Core\Object
             $atomObject     = NULL;
             
             // Checks the parsing level (top or not)
-            if( $level === 0 ) {
-                
+            if( $level === 0 )
+            {
                 // Parent is the file itself for the top-level atoms
                 $parent = $this->_mpeg4File;
             }
@@ -115,12 +115,13 @@ class Parser extends \Woops\Core\Object
             // Checks if the current atom can be inserted in the parent, and if the atom class exists
             $validAtom          = $parent->validChildType( $atomType );
             
-            if( !$validAtom ) {
-                
+            if( !$validAtom )
+            {
                 $errorMsg = ( $level === 0 ) ? 'Atom ' . $atomType . ' cannot be stored as a top-level atom' : 'Atom ' . $atomType . ' cannot be stored in atom ' . $parent->getType();
                 
                 // Adds a warning
-                $this->_warnings[] = array(
+                $this->_warnings[] = array
+                (
                     'atomType'   => $atomType,
                     'atomLength' => $atomLength,
                     'fileOffset' => $this->_stream->getOffset() - 8,
@@ -129,51 +130,51 @@ class Parser extends \Woops\Core\Object
                     'message'    => $errorMsg
                 );
                 
-                if( $this->_allowInvalidStucture ) {
-                    
+                if( $this->_allowInvalidStucture )
+                {
                     $parent->allowAnyChildrenType( true );
                     $atomObject = $parent->addChild( $atomType );
                     $parent->allowAnyChildrenType( false );
                 }
-                
-            } else {
-                
+            }
+            else
+            {
                 $atomObject = $parent->addChild( $atomType );
             }
             
-            if( $atomLength === 0 ) {
-                
+            if( $atomLength === 0 )
+            {
                 return false;
-                
-            } elseif( $atomLength === 1 ) {
-                
+            }
+            elseif( $atomLength === 1 )
+            {
                 $length1          = $this->_stream->bigEndianUnsignedLong();
                 $length2          = $this->_stream->bigEndianUnsignedLong();
                 $atomSize         = ( double )( ( $length1 << 32 ) + $length2 );
                 $atomDataLength   = $atomDataLength + 8;
                 
-                if( $atomObject ) {
-                    
+                if( $atomObject )
+                {
                     $atomObject->setExtended( true );
                 }
             }
             
-            if( $atomDataLength ) {
-                
-                if( $atomObject && is_subclass_of( $atomObject, 'Woops\Mpeg4\ContainerAtom' ) ) {
-                    
+            if( $atomDataLength )
+            {
+                if( $atomObject && is_subclass_of( $atomObject, 'Woops\Mpeg4\ContainerAtom' ) )
+                {
                     $this->_parseFile( $atomDataLength, $level + 1, $atomObject );
-                    
-                } else {
-                    
+                }
+                else
+                {
                     $readData       = true;
                     $dataBytesCount = 0;
                     $letters        = array();
                     $binData        = '';
                     $data           = $this->_stream->read( $atomDataLength );
                     
-                    if( $atomObject ) {
-                        
+                    if( $atomObject )
+                    {
                         $atomObject->setRawData( $data );
                     }
                 }
@@ -181,8 +182,8 @@ class Parser extends \Woops\Core\Object
                 
             $bytesRead += $atomLength;
                     
-            if( $bytes > 0 && $bytes == $bytesRead ) {
-                
+            if( $bytes > 0 && $bytes == $bytesRead )
+            {
                 return false;
             }
         }

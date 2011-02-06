@@ -12,7 +12,8 @@
 # $Id$
 
 // Includes the initialization script
-require_once(
+require_once
+(
     __DIR__
   . DIRECTORY_SEPARATOR
   . 'woops-src'
@@ -27,8 +28,8 @@ declare( ENCODING = 'UTF-8' );
 $ENV = Woops\Core\Env\Getter::getInstance();
 
 // Checks if the WOOPS configuration file exists
-if( !$ENV->getPath( 'config/woops.ini.php' ) ) {
-    
+if( !$ENV->getPath( 'config/woops.ini.php' ) )
+{
     // Redirects to the WOOPS installer
     header( 'Location: ' . $ENV->getSourceWebPath( 'scripts/install/' ) );
 }

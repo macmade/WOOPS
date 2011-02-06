@@ -38,8 +38,8 @@ final class Mdia extends \Woops\Mpeg4\ContainerAtom
     
     public function validChildType( $type )
     {
-        switch( $type ) {
-            
+        switch( $type )
+        {
             case 'mdhd':
                 
                 return true;

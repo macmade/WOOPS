@@ -54,10 +54,11 @@ class PropertyReflector extends \Woops\Core\Reflection
      */
     public function getDeclaringClass()
     {
-        if( !$this->_hasDeclaringClass ) {
-            
+        if( !$this->_hasDeclaringClass )
+        {
             $declaringClass        = $this->_reflector->getDeclaringClass();
-            $this->_declaringClass = ClassReflector::getInstance(
+            $this->_declaringClass = ClassReflector::getInstance
+            (
                 $declaringClass->getName()
             );
             

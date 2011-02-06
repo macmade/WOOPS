@@ -56,13 +56,14 @@ class ExtensionReflector extends \Woops\Core\Reflection
      */
     public function getFunctions()
     {
-        if( !$this->_hasFunctions ) {
-            
+        if( !$this->_hasFunctions )
+        {
             $functions = $this->_reflector->getFunctions();
             
-            foreach( $functions as $function ) {
-                
-                $this->_functions[ $function->getName() ] = FunctionReflector::getInstance(
+            foreach( $functions as $function )
+            {
+                $this->_functions[ $function->getName() ] = FunctionReflector::getInstance
+                (
                     $function->getName()
                 );
             }
@@ -78,13 +79,14 @@ class ExtensionReflector extends \Woops\Core\Reflection
      */
     public function getClasses()
     {
-        if( !$this->_hasClasses ) {
-            
+        if( !$this->_hasClasses )
+        {
             $classes = $this->_reflector->getClasses();
             
-            foreach( $classes as $class ) {
-                
-                $this->_classes[ $class->getName() ] = ClassReflector::getInstance(
+            foreach( $classes as $class )
+            {
+                $this->_classes[ $class->getName() ] = ClassReflector::getInstance
+                (
                     $class->getName()
                 );
             }

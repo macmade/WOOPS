@@ -86,8 +86,8 @@ final class Padb extends \Woops\Mpeg4\FullBox
         $data->samples = array();
         
         // Process each priority
-        for( $i = 0; $i < ( $data->sample_count + 1 ) / 2; $i++ ) {
-            
+        for( $i = 0; $i < ( $data->sample_count + 1 ) / 2; $i++ )
+        {
             // Storage for the current entry
             $entry           = new \stdClass();
             

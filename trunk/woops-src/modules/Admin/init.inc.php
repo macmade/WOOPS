@@ -11,7 +11,8 @@
 
 # $Id: init.inc.php 190 2009-02-11 07:55:49Z macmade $
 
-Woops\Core\Module\Manager::getInstance()->registerBlock(
+Woops\Core\Module\Manager::getInstance()->registerBlock
+(
     'cms',
     $moduleName,
     'Backend',

@@ -41,7 +41,8 @@ class File extends \Woops\Core\Object
     /**
      * The FLV tag types with their corresponding PHP classname
      */
-    protected static $_types = array(
+    protected static $_types = array
+    (
         0x08 => 'Woops\Flv\Tag\Audio\Data',
         0x09 => 'Woops\Flv\Tag\Video\Data',
         0x12 => 'Woops\Flv\Tag\Script\Data'
@@ -92,10 +93,11 @@ class File extends \Woops\Core\Object
         $type = ( int )$type;
         
         // Checks for a valid tag type
-        if( !isset( self::$_types[ $type ] ) ) {
-            
+        if( !isset( self::$_types[ $type ] ) )
+        {
             // Error - Invalid tag type
-            throw new File\Exception(
+            throw new File\Exception
+            (
                 'Invalid FLV tag type (' . $type . ')',
                 File\Exception::EXCEPTION_INVALID_TAG_TYPE
             );

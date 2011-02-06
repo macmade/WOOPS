@@ -51,7 +51,8 @@ class Speed extends Base
     /**
      * The conversion operations for each unit from the default type
      */
-    protected $_types = array(
+    protected $_types = array
+    (
         'FEET_PER_MINUTE'       => array(),
         'FEET_PER_SECOND'       => array(),
         'KILOMETERS_PER_HOUR'   => array(),

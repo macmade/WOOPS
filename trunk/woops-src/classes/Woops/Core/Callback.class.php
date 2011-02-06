@@ -50,10 +50,11 @@ class Callback extends Event\Dispatcher
     public function __construct( $callback )
     {
         // Ensures the callback is valid
-        if( !is_callable( $callback ) ) {
-            
+        if( !is_callable( $callback ) )
+        {
             // Error - The callback is not valid
-            throw new Callback\Exception(
+            throw new Callback\Exception
+            (
                 'Invalid PHP callback',
                 Callback\Exception::EXCEPTION_INVALID_CALLBACK
             );
@@ -63,14 +64,14 @@ class Callback extends Event\Dispatcher
         $this->_callback = $callback;
         
         // Checks the callback type
-        if( is_array( $this->_callback ) ) {
-            
+        if( is_array( $this->_callback ) )
+        {
             // Checks if the callback returns a reference
             $ref                     = Reflection::getMethodReflector( $callback[ 0 ], $callback[ 1 ] );
             $this->_returnsReference = $ref->returnsReference();
-            
-        } else {
-            
+        }
+        else
+        {
             // Checks if the callback returns a reference
             $ref                     = Reflection::getFunctionReflector( $callback );
             $this->_returnsReference = $ref->returnsReference();
@@ -95,22 +96,22 @@ class Callback extends Event\Dispatcher
         $argsCount = count( $args );
         
         // Checks if the callback is an array
-        if( is_array( $this->_callback ) ) {
-            
+        if( is_array( $this->_callback ) )
+        {
             // Checks if we need to make a member or a static call
-            if( is_object( $this->_callback[ 0 ] ) ) {
-                
+            if( is_object( $this->_callback[ 0 ] ) )
+            {
                 // Gets the object and the method to use
                 $object = $this->_callback[ 0 ];
                 $method = $this->_callback[ 1 ];
                 
                 // Checks if we have to return a reference or not
-                if( $this->_returnsReference ) {
-                    
+                if( $this->_returnsReference )
+                {
                     // Checks the number of arguments
                     // This will avoid a call to eval() if the number of arguments is lower than ten
-                    switch( $argsCount ) {
-                        
+                    switch( $argsCount )
+                    {
                         case 0:
                             
                             $return =& $object->$method();
@@ -171,13 +172,13 @@ class Callback extends Event\Dispatcher
                             
                             eval( '$return =& $object->$method( $args[ ' . implode( ' ], $args[ ', array_keys( $args ) ) . ' ] );' );
                     }
-                    
-                } else {
-                    
+                }
+                else
+                {
                     // Checks the number of arguments
                     // This will avoid a call to eval() if the number of arguments is lower than ten
-                    switch( $argsCount ) {
-                        
+                    switch( $argsCount )
+                    {
                         case 0:
                             
                             $return = $object->$method();
@@ -239,20 +240,20 @@ class Callback extends Event\Dispatcher
                             eval( '$return = $object->$method( $args[ ' . implode( ' ], $args[ ', array_keys( $args ) ) . ' ] );' );
                     }
                 }
-                
-            } else {
-                
+            }
+            else
+            {
                 // Gets the class and the method to use
                 $class  = $this->_callback[ 0 ];
                 $method = $this->_callback[ 1 ];
                 
                 // Checks if we have to return a reference or not
-                if( $this->_returnsReference ) {
-                    
+                if( $this->_returnsReference )
+                {
                     // Checks the number of arguments
                     // This will avoid a call to eval() if the number of arguments is lower than ten
-                    switch( $argsCount ) {
-                        
+                    switch( $argsCount )
+                    {
                         case 0:
                             
                             $return =& $class::$method();
@@ -313,13 +314,13 @@ class Callback extends Event\Dispatcher
                             
                             eval( '$return =& $class::$method( $args[ ' . implode( ' ], $args[ ', array_keys( $args ) ) . ' ] );' );
                     }
-                    
-                } else {
-                    
+                }
+                else
+                {
                     // Checks the number of arguments
                     // This will avoid a call to eval() if the number of arguments is lower than ten
-                    switch( $argsCount ) {
-                        
+                    switch( $argsCount )
+                    {
                         case 0:
                             
                             $return = $class::$method();
@@ -382,19 +383,19 @@ class Callback extends Event\Dispatcher
                     }
                 }
             }
-            
-        } else {
-            
+        }
+        else
+        {
             // Name of the function to call
             $function = $this->_callback;
             
             // Checks if we have to return a reference or not
-            if( $this->_returnsReference ) {
-                
+            if( $this->_returnsReference )
+            {
                 // Checks the number of arguments
                 // This will avoid a call to eval() if the number of arguments is lower than ten
-                switch( $argsCount ) {
-                    
+                switch( $argsCount )
+                {
                     case 0:
                         
                         $return =& $function();
@@ -455,13 +456,13 @@ class Callback extends Event\Dispatcher
                         
                         eval( '$return =& $function( $args[ ' . implode( ' ], $args[ ', array_keys( $args ) ) . ' ] );' );
                 }
-                
-            } else {
-                
+            }
+            else
+            {
                 // Checks the number of arguments
                 // This will avoid a call to eval() if the number of arguments is lower than ten
-                switch( $argsCount ) {
-                    
+                switch( $argsCount )
+                {
                     case 0:
                         
                         $return = $function();

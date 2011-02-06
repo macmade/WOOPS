@@ -61,14 +61,14 @@ class Comment extends Tag
     protected function _output( $xmlCompliant = false, $level = 0 )
     {
         // Checks if the output must be XML compliant
-        if( !$xmlCompliant ) {
-            
+        if( !$xmlCompliant )
+        {
             // Gets the indent level
             $indent = str_pad( '', $level, self::$_str->TAB );
             
             // Support the multiline comments
-            if( strchr( $this->_comment, self::$_str->NL ) ) {
-                
+            if( strchr( $this->_comment, self::$_str->NL ) )
+            {
                 // Starts the comment
                 $out  = self::$_str->NL . $indent . '<!-- ' . self::$_str->NL . $indent . self::$_str->NL;
                 
@@ -80,9 +80,9 @@ class Comment extends Tag
                 
                 // Returns the multiline comment
                 return $out;
-                
-            } else {
-                
+            }
+            else
+            {
                 // Returns the single line comment
                 return self::$_str->NL . $indent . '<!-- ' . $this->_comment . ' -->' . self::$_str->NL . $indent;
             }

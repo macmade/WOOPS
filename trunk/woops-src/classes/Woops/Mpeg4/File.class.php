@@ -35,8 +35,8 @@ class File extends ContainerAtom
     {
         $childrenData = '';
         
-        foreach( $this->_children as $childAtom ) {
-            
+        foreach( $this->_children as $childAtom )
+        {
             $childrenData .= ( string )$childAtom;
         }
         
@@ -55,8 +55,8 @@ class File extends ContainerAtom
     {
         $length = 0;
         
-        foreach( $this->_children as $childAtom ) {
-            
+        foreach( $this->_children as $childAtom )
+        {
             $length += $childAtom->getLength();
         }
         
@@ -70,8 +70,8 @@ class File extends ContainerAtom
     
     public function validChildType( $type )
     {
-        switch( $type ) {
-            
+        switch( $type )
+        {
             case 'ftyp':
                 
                 return true;

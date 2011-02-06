@@ -53,7 +53,8 @@ class Area extends Base
     /**
      * The conversion operations for each unit from the default type
      */
-    protected $_types = array(
+    protected $_types = array
+    (
         'ACRE'              => array(),
         'HECTARE'           => array(),
         'SQUARE_CENTIMETER' => array(),

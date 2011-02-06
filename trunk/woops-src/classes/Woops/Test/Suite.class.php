@@ -55,23 +55,25 @@ class Suite extends \Woops\Core\Object implements \Iterator
     public function __construct( $logFile = '' )
     {
         // Checks if we have to log the results
-        if( $logFile ) {
-            
+        if( $logFile )
+        {
             // Checks if the log file exists
-            if( !file_exists( $logFile ) ) {
-                
+            if( !file_exists( $logFile ) )
+            {
                 // Error - Log file does not exists
-                throw new Suite\Exception(
+                throw new Suite\Exception
+                (
                     'The log file does not exist (path: ' . $logFile . ')',
                     Suite\Exception::EXCEPTION_NO_LOG_FILE
                 );
             }
             
             // Checks if the log file is writeable
-            if( !is_writable( $logFile ) ) {
-                
+            if( !is_writable( $logFile ) )
+            {
                 // Error - Log file is not writeable
-                throw new Suite\Exception(
+                throw new Suite\Exception
+                (
                     'The log file is not writeable (path: ' . $logFile . ')',
                     Suite\Exception::EXCEPTION_LOG_FILE_NOT_WRITEABLE
                 );
@@ -81,10 +83,11 @@ class Suite extends \Woops\Core\Object implements \Iterator
             $this->_log = fopen( $logFile, 'w' );
             
             // Checks the file handle
-            if( !$this->_log ) {
-                
+            if( !$this->_log )
+            {
                 // Error - Invalid file handle
-                throw new Suite\Exception(
+                throw new Suite\Exception
+                (
                     'Impossible to create a file handle for the log file (path: ' . $logFile . ')',
                     Suite\Exception::EXCEPTION_BAD_LOG_FILE_HANDLE
                 );
@@ -161,22 +164,23 @@ class Suite extends \Woops\Core\Object implements \Iterator
     public function run()
     {
         // Process each test unit
-        foreach( $this->_units as $index => $test ) {
-            
+        foreach( $this->_units as $index => $test )
+        {
             // Start timer
             $start = microtime( true );
             
             // No errors, as we are running tests
-            try {
-                
+            try
+            {
                 // Runs the current test unit
                 $test->run();
                 
                 // End timer
                 $end = microtime( true );
                 
-            } catch( Exception $e ) {
-                
+            }
+            catch( Exception $e )
+            {
                 // End timer
                 $end = microtime( true );
             }

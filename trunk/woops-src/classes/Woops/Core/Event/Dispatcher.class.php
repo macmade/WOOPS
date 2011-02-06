@@ -45,8 +45,8 @@ abstract class Dispatcher extends \Woops\Core\Object
         $eventClass = get_class( $this ) . '\Event';
         
         // Checks if a specific event class exists
-        if( !class_exists( '\\' . $eventClass ) ) {
-            
+        if( !class_exists( '\\' . $eventClass ) )
+        {
             // Generic event
             $eventClass = 'Woops\Core\Event';
         }
@@ -64,23 +64,23 @@ abstract class Dispatcher extends \Woops\Core\Object
         $type = $event->getType();
         
         // Process each registered event type
-        foreach( $this->_listeners as $eventType => $priorities ) {
-            
+        foreach( $this->_listeners as $eventType => $priorities )
+        {
             // Checks the event type
-            if( $type & $eventType ) {
-                
+            if( $type & $eventType )
+            {
                 // Process each priority
-                foreach( $priorities as $priority => $listeners ) {
-                    
+                foreach( $priorities as $priority => $listeners )
+                {
                     // Process each listener
-                    foreach( $listeners as $listener ) {
-                        
+                    foreach( $listeners as $listener )
+                    {
                         // Invokes the listener
                         $listener->invoke( array( $event ) );
                         
                         // Checks if we have to stop the event propagation
-                        if( !$event->isPropagating() ) {
-                            
+                        if( !$event->isPropagating() )
+                        {
                             // Do not invokes the remaining listeners
                             return;
                         }
@@ -104,15 +104,15 @@ abstract class Dispatcher extends \Woops\Core\Object
         $priority   = ( int )$priority;
         
         // Checks if the event type exists
-        if( !isset( $this->_listeners[ $eventType ] ) ) {
-            
+        if( !isset( $this->_listeners[ $eventType ] ) )
+        {
             // Creates the storage array for the requested event
             $this->_listeners[ $eventType ] = array();
         }
         
         // Checks if the priority exists
-        if( !isset( $this->_listeners[ $eventType ][ $priority ] ) ) {
-            
+        if( !isset( $this->_listeners[ $eventType ][ $priority ] ) )
+        {
             // Creates the storage array for the requested priority
             $this->_listeners[ $eventType ][ $priority ] = array();
             
@@ -144,25 +144,25 @@ abstract class Dispatcher extends \Woops\Core\Object
         $eventType = ( int )$eventType;
         
         // Checks if the event type exists
-        if( isset( $this->_listeners[ $eventType ] ) ) {
-            
+        if( isset( $this->_listeners[ $eventType ] ) )
+        {
             // Process each priority
-            foreach( $this->_listeners[ $eventType ] as $priority => &$listeners ) {
-                
+            foreach( $this->_listeners[ $eventType ] as $priority => &$listeners )
+            {
                 // Removes the listener
                 unset( $listeners[ $listenerId ] );
                 
                 // Checks if we still have event listeners in the current priority
-                if( !count( $this->_listeners[ $eventType ][ $priority ] ) ) {
-                    
+                if( !count( $this->_listeners[ $eventType ][ $priority ] ) )
+                {
                     // No more event listeners, removes the storage array
                     unset( $this->_listeners[ $eventType ][ $priority ] );
                 }
             }
             
             // Checks if we still have event listeners
-            if( !count( $this->_listeners[ $eventType ] ) ) {
-                
+            if( !count( $this->_listeners[ $eventType ] ) )
+            {
                 // No more event listeners, removes the storage array
                 unset( $this->_listeners[ $eventType ] );
             }

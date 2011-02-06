@@ -56,17 +56,19 @@ class Engine extends \Woops\Core\Singleton\Base
      */
     public function registerPageEngine( $className )
     {
-        if( !class_exists( $className ) ) {
-            
-            throw new Engine\Exception(
+        if( !class_exists( $className ) )
+        {
+            throw new Engine\Exception
+            (
                 'Cannot register unexisting class \'' . $className . '\' as a page engine',
                 Engine\Exception::EXCEPTION_NO_ENGINE_CLASS
             );
         }
         
-        if( !is_subclass_of( $className, 'Woops\Page\Engine\Base' ) ) {
-            
-            throw new Engine\Exception(
+        if( !is_subclass_of( $className, 'Woops\Page\Engine\Base' ) )
+        {
+            throw new Engine\Exception
+            (
                 'Cannot register class \'' . $className . '\' as a page engine, since it does not extends the \'Woops\Page\Engine\Base\' abstract class',
                 Engine\Exception::EXCEPTION_INVALID_ENGINE_CLASS
             );
@@ -83,26 +85,28 @@ class Engine extends \Woops\Core\Singleton\Base
      */
     public function getPageObject()
     {
-        if( !is_object( $this->_pageEngine ) ) {
-            
-            if( !is_object( $this->_pageGetter ) ) {
-                
+        if( !is_object( $this->_pageEngine ) )
+        {
+            if( !is_object( $this->_pageGetter ) )
+            {
                 $this->_pageGetter = Getter::getInstance();
             }
             
             $engineClass = $this->_pageGetter->getEngine();
             
-            if( !isset( $this->_pageEngines[ $engineClass ] ) ) {
-                
-                throw new Engine\Exception(
+            if( !isset( $this->_pageEngines[ $engineClass ] ) )
+            {
+                throw new Engine\Exception
+                (
                     'The page engine \'' . $engineClass . '\' is not a registered WOOPS page engine',
                     Engine\Exception::EXCEPTION_ENGINE_NOT_REGISTERED
                 );
             }
             
-            if( !is_subclass_of( $engineClass, 'Woops\Page\Engine\Base' ) ) {
-                
-                throw new Engine\Exception(
+            if( !is_subclass_of( $engineClass, 'Woops\Page\Engine\Base' ) )
+            {
+                throw new Engine\Exception
+                (
                     'The page engine \'' . $engineClass . '\' is not a valid WOOPS page engine, since it does extends the \'Woops\Page\Engine\Base\' abstract class',
                     Engine\Exception::EXCEPTION_ENGINE_NOT_VALID
                 );
@@ -112,8 +116,8 @@ class Engine extends \Woops\Core\Singleton\Base
             
             $engineOptions     = unserialize( $this->_pageGetter->getEngineOptions() );
             
-            if( !is_object( $engineOptions ) ) {
-                
+            if( !is_object( $engineOptions ) )
+            {
                 $engineOptions = new \stdClass();
             }
             

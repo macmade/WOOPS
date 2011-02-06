@@ -103,8 +103,8 @@ final class Tkhd extends \Woops\Mpeg4\FullBox
         $data = parent::getProcessedData();
         
         // Checks the atom version
-        if( $data->version === 1 ) {
-            
+        if( $data->version === 1 )
+        {
             // Process data
             $data->creation_time     = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
             $data->modification_time = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
@@ -119,9 +119,9 @@ final class Tkhd extends \Woops\Mpeg4\FullBox
             $data->matrix            = $this->_stream->matrix();
             $data->width             = $this->_stream->bigEndianFixedPoint( 16, 16 );
             $data->height            = $this->_stream->bigEndianFixedPoint( 16, 16 );
-            
-        } else {
-            
+        }
+        else
+        {
             // Process data
             $data->creation_time     = $this->_stream->bigEndianUnsignedLong();
             $data->modification_time = $this->_stream->bigEndianUnsignedLong();

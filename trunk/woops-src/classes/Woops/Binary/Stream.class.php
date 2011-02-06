@@ -80,8 +80,8 @@ class Stream extends \Woops\Core\Event\Dispatcher
     public function __construct( $data = '' )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -127,32 +127,33 @@ class Stream extends \Woops\Core\Event\Dispatcher
     protected function _unpackData( $format )
     {
         // Checks the unpack format
-        if( $format === 'c' || $format === 'C' ) {
-            
+        if( $format === 'c' || $format === 'C' )
+        {
             // Number of bytes to read from the data
             $readBytes = 1;
-            
-        } elseif( $format === 's' || $format === 'S' || $format === 'n' || $format === 'v' ) {
-            
+        }
+        elseif( $format === 's' || $format === 'S' || $format === 'n' || $format === 'v' )
+        {
             // Number of bytes to read from the data
             $readBytes = 2;
-            
-        } elseif( $format === 'l' || $format === 'L' || $format === 'N' || $format === 'V' || $format === 'f' ) {
-            
+        }
+        elseif( $format === 'l' || $format === 'L' || $format === 'N' || $format === 'V' || $format === 'f' )
+        {
             // Number of bytes to read from the data
             $readBytes = 4;
-            
-        } elseif( $format === 'd' ) {
-            
+        }
+        elseif( $format === 'd' )
+        {
             // Number of bytes to read from the data
             $readBytes = 8;
         }
         
         // Checks if the stream end has been reached
-        if( $this->_offset + $readBytes > $this->_dataLength ) {
-            
+        if( $this->_offset + $readBytes > $this->_dataLength )
+        {
             // Error - No more data
-            throw new Stream\Exception(
+            throw new Stream\Exception
+            (
                 'Reached the end of the binary stream',
                 Stream\Exception::EXCEPTION_END_OF_STREAM
             );
@@ -214,25 +215,26 @@ class Stream extends \Woops\Core\Event\Dispatcher
     public function seek( $offset, $whence = self::SEEK_SET )
     {
         // Checks the seek type
-        if( $whence === self::SEEK_SET ) {
-            
+        if( $whence === self::SEEK_SET )
+        {
             // Sets the offset from the stream start
             $this->_offset = 0 + $offset;
-            
-        } elseif( $whence === self::SEEK_CUR ) {
-            
+        }
+        elseif( $whence === self::SEEK_CUR )
+        {
             // Sets the offset from the current position
             $this->_offset += $offset;
-            
-        } elseif( $whence === self::SEEK_END ) {
-            
+        }
+        elseif( $whence === self::SEEK_END )
+        {
             // Sets the offset from the stream end
             $this->_offset = $this->_dataLength + $offset;
-            
-        } else {
-            
+        }
+        else
+        {
             // Error - Invalid seek type
-            throw new Stream\Exception(
+            throw new Stream\Exception
+            (
                 'Invalid seek type (' . $whence . ')',
                 Stream\Exception::EXCEPTION_INVALID_SEEK_TYPE
             );
@@ -242,13 +244,13 @@ class Stream extends \Woops\Core\Event\Dispatcher
         $this->dispatchEvent( Stream\Event::EVENT_SEEK );
         
         // Checks the offset
-        if( $this->_offset < 0 ) {
-            
+        if( $this->_offset < 0 )
+        {
             // Sets the offset to the data start
             $this->_offset = 0;
-            
-        } elseif( $this->_offset > $this->_dataLength ) {
-            
+        }
+        elseif( $this->_offset > $this->_dataLength )
+        {
             // Sets the offset to the data length
             $this->_offset = $this->_dataLength;
         }
@@ -297,10 +299,11 @@ class Stream extends \Woops\Core\Event\Dispatcher
     public function read( $readBytes = 1 )
     {
         // Checks if the stream end has been reached
-        if( $this->_offset + $readBytes > $this->_dataLength ) {
-            
+        if( $this->_offset + $readBytes > $this->_dataLength )
+        {
             // Error - No more data
-            throw new Stream\Exception(
+            throw new Stream\Exception
+            (
                 'Reached the end of the binary stream',
                 Stream\Exception::EXCEPTION_END_OF_STREAM
             );
@@ -347,10 +350,11 @@ class Stream extends \Woops\Core\Event\Dispatcher
     public function getRemainingData()
     {
         // Checks if the stream end has been reached
-        if( $this->_offset === $this->_dataLength ) {
-            
+        if( $this->_offset === $this->_dataLength )
+        {
             // Error - No more data
-            throw new Stream\Exception(
+            throw new Stream\Exception
+            (
                 'Reached the end of the binary stream',
                 Stream\Exception::EXCEPTION_END_OF_STREAM
             );
@@ -645,13 +649,13 @@ class Stream extends \Woops\Core\Event\Dispatcher
     public function bigEndianFixedPoint( $integerLength, $fractionalLength )
     {
         // Checks if the fixed point number is expressed on 16 or 32 bits
-        if( $integerLength + $fractionalLength === 16 ) {
-            
+        if( $integerLength + $fractionalLength === 16 )
+        {
             // Unsigned short - big endian
             $unpackFormat   = 'n';
-            
-        } else {
-            
+        }
+        else
+        {
             // Unsigned long - big endian
             $unpackFormat   = 'N';
         }
@@ -691,13 +695,13 @@ class Stream extends \Woops\Core\Event\Dispatcher
         $fractionalData  = $fractionnalPart * pow( 10, strlen( $fractionnalPart ) - 2 );
         
         // Checks if the fixed point number is expressed on 16 or 32 bits
-        if( $integerLength + $fractionalLength === 16 ) {
-            
+        if( $integerLength + $fractionalLength === 16 )
+        {
             // Unsigned short - big endian
             $this->writeBigEndianUnsignedShort( $integerData | $fractionalData );
-            
-        } else {
-            
+        }
+        else
+        {
             // Unsigned long - big endian
             $this->writeBigEndianUnsignedLong( $integerData | $fractionalData );
         }
@@ -717,13 +721,13 @@ class Stream extends \Woops\Core\Event\Dispatcher
     public function littleEndianFixedPoint( $integerLength, $fractionalLength )
     {
         // Checks if the fixed point number is expressed on 16 or 32 bits
-        if( $integerLength + $fractionalLength === 16 ) {
-            
+        if( $integerLength + $fractionalLength === 16 )
+        {
             // Unsigned short - little endian
             $unpackFormat   = 'v';
-            
-        } else {
-            
+        }
+        else
+        {
             // Unsigned long - little endian
             $unpackFormat   = 'V';
         }
@@ -763,13 +767,13 @@ class Stream extends \Woops\Core\Event\Dispatcher
         $fractionalData  = $fractionnalPart * pow( 10, strlen( $fractionnalPart ) - 2 );
         
         // Checks if the fixed point number is expressed on 16 or 32 bits
-        if( $integerLength + $fractionalLength === 16 ) {
-            
+        if( $integerLength + $fractionalLength === 16 )
+        {
             // Unsigned short - little endian
             $this->writeLittleEndianUnsignedShort( $integerData | $fractionalData );
-            
-        } else {
-            
+        }
+        else
+        {
             // Unsigned long - little endian
             $this->writeLitleEndianUnsignedLong( $integerData | $fractionalData );
         }
@@ -808,10 +812,11 @@ class Stream extends \Woops\Core\Event\Dispatcher
     public function writeBigEndianIso639Code( $data )
     {
         // Checks the length of the string
-        if( strlen( $data ) !== 3 ) {
-            
+        if( strlen( $data ) !== 3 )
+        {
             // Error - Language code must be 3 characters
-            throw new Stream\Exception(
+            throw new Stream\Exception
+            (
                 'Passed argument is not a valid IS0-639-2 language code',
                 Stream\Exception::EXCEPTION_BAD_ISO_639_CODE
             );
@@ -848,8 +853,8 @@ class Stream extends \Woops\Core\Event\Dispatcher
         $char = $this->read( 1 );
         
         // Process the stream till we find an ASCII NUL character
-        while( $char !== self::$_str->NUL ) {
-            
+        while( $char !== self::$_str->NUL )
+        {
             // Adds the current character
             $result .= $char;
             
@@ -1097,29 +1102,29 @@ class Stream extends \Woops\Core\Event\Dispatcher
         
         // Checks the values of the exponent and the mantissa fields to handle
         // special numbers
-        if( $exp === 0 && $mantissa === 0 ) {
-            
+        if( $exp === 0 && $mantissa === 0 )
+        {
             // Zero - No need for a computation even if it can be considered
             // as a denormalized number
             return 0;
-            
-        } elseif( $exp === 255 && $mantissa === 0 ) {
-            
+        }
+        elseif( $exp === 255 && $mantissa === 0 )
+        {
             // Infinity
             return ( $sign === 0 ) ? INF : '-' . INF;
-            
-        } elseif( $exp === 255 && $mantissa !== 0 ) {
-            
+        }
+        elseif( $exp === 255 && $mantissa !== 0 )
+        {
             // Not a number
             return NAN;
-            
-        } elseif( $exp === 0 && $mantissa !== 0 ) {
-            
+        }
+        elseif( $exp === 0 && $mantissa !== 0 )
+        {
             // Donormalized number - Exponent is fixed to -126
             $exp = -126;
-            
-        } else {
-            
+        }
+        else
+        {
             // Computes the real exponent
             $exp      = $exp - 127;
             
@@ -1131,8 +1136,8 @@ class Stream extends \Woops\Core\Event\Dispatcher
         $float = 0;
         
         // Process the 24 bits of the mantissa
-        for( $i = 0; $i > -24; $i-- ) {
-            
+        for( $i = 0; $i > -24; $i-- )
+        {
             // Checks if the current bit is set
             if( $mantissa & ( 1 << $i + 23 ) ) {
                 

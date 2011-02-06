@@ -41,20 +41,22 @@ class Stream extends Resource\Stream
     public function __construct( $filePath )
     {
         // Checks if the file exists
-        if( !file_exists( $filePath ) || !is_file( $filePath ) ) {
-            
+        if( !file_exists( $filePath ) || !is_file( $filePath ) )
+        {
             // Error - The file does not exist
-            throw new Stream\Exception(
+            throw new Stream\Exception
+            (
                 'The requested file does not exist (path: ' . $filePath . ')',
                 Stream\Exception::EXCEPTION_NO_FILE
             );
         }
         
         // Checks if the file is readable
-        if( !is_readable( $filePath ) ) {
-            
+        if( !is_readable( $filePath ) )
+        {
             // Error - The file is not readable
-            throw new Stream\Exception(
+            throw new Stream\Exception
+            (
                 'The requested file is not readable (path: ' . $filePath . ')',
                 Stream\Exception::EXCEPTION_FILE_NOT_READABLE
             );

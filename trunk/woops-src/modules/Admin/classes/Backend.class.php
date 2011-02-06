@@ -43,8 +43,10 @@ class Backend extends \Woops\Mod\Cms\Block
         $form           = $formDiv->form;
         $version        = $content->div;
         
-        $version->addTextData(
-            sprintf(
+        $version->addTextData
+        (
+            sprintf
+            (
                 $this->_lang->loginVersion,
                 self::WOOPS_VERSION . '-' . self::WOOPS_VERSION_SUFFIX
             )

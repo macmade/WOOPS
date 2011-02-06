@@ -57,7 +57,8 @@ class Writer extends \Woops\Core\Singleton\Base
     /**
      * The name of the log types
      */
-    protected $_logTypes = array(
+    protected $_logTypes = array
+    (
         0x0001 => 'LOG_TYPE_INFO',
         0x0002 => 'LOG_TYPE_NOTICE',
         0x0004 => 'LOG_TYPE_WARNING',
@@ -95,10 +96,11 @@ class Writer extends \Woops\Core\Singleton\Base
         $time = time();
         
         // Checks the log type
-        if( !isset( $this->_logTypes[ $type ] ) ) {
-            
+        if( !isset( $this->_logTypes[ $type ] ) )
+        {
             // Invalid log type
-            throw new Writer\Exception(
+            throw new Writer\Exception
+            (
                 'Invalid log type ' . $message . ' for message \'' . $message . '\'',
                 Writer\Exception::EXCEPTION_INVALID_LOG_TYPE
             );
@@ -108,8 +110,8 @@ class Writer extends \Woops\Core\Singleton\Base
         $this->dispatchEvent( Writer\Event::EVENT_LOG );
         
         // Process all the registered loggers
-        foreach( $this->_loggers as $key => $value ) {
-            
+        foreach( $this->_loggers as $key => $value )
+        {
             // Instance of the logger class
             $logger = $value[ 0 ];
             
@@ -117,10 +119,11 @@ class Writer extends \Woops\Core\Singleton\Base
             $types  = $value[ 1 ];
             
             // Checks if the logger supports the log type
-            if( $type & $types ) {
-                
+            if( $type & $types )
+            {
                 // Writes the log
-                $logger->write(
+                $logger->write
+                (
                     $message,
                     $time,
                     $type,
@@ -146,20 +149,22 @@ class Writer extends \Woops\Core\Singleton\Base
         $types = $types & self::LOG_TYPE_ALL;
         
         // Checks if the log writer is already registered
-        if( isset( $this->_loggers[ $class ] ) ) {
-            
+        if( isset( $this->_loggers[ $class ] ) )
+        {
             // Class is already registered
-            throw new Writer\Exception(
+            throw new Writer\Exception
+            (
                 'The log writer \'' . $class . '\' is already registered',
                 Writer\Exception::EXCEPTION_WRITER_EXISTS
             );
         }
         
         // Checks if the class exists
-        if( !class_exists( $class ) ) {
-            
+        if( !class_exists( $class ) )
+        {
             // The class does not exists
-            throw new Writer\Exception(
+            throw new Writer\Exception
+            (
                 'Cannot register unexisting class \'' . $class . '\' as a log writer',
                 Writer\Exception::EXCEPTION_NO_WRITER
             );
@@ -169,10 +174,11 @@ class Writer extends \Woops\Core\Singleton\Base
         $interfaces = class_implements( $class );
         
         // Checks if the log writer class implements the log writer interface
-        if( !isset( $interfaces[ 'Woops\Log\Writer\ObjectInterface' ] ) ) {
-            
+        if( !isset( $interfaces[ 'Woops\Log\Writer\ObjectInterface' ] ) )
+        {
             // Error - The log writer class must extends the log writer interface
-            throw new Writer\Exception(
+            throw new Writer\Exception
+            (
                 'Cannot register class \'' . $class . '\' as a log writer, since it does not implements the \'Woops\Log\Writer\ObjectInterface\' interface',
                 Writer\Exception::EXCEPTION_INVALID_WRITER_CLASS
             );
@@ -182,7 +188,8 @@ class Writer extends \Woops\Core\Singleton\Base
         $this->dispatchEvent( Writer\Event::EVENT_LOG_WRITER_REGISTER );
         
         // Registers the log writer class
-        $this->_loggers[ $class ] = array(
+        $this->_loggers[ $class ] = array
+        (
             \Woops\Core\ClassManager::getInstance()->getSingleton( $class ),
             $types
         );

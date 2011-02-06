@@ -79,13 +79,13 @@ final class Cprt extends \Woops\Mpeg4\FullBox
         $noticeBom      = $this->_stream->bigEndianUnsignedShort();
         
         // Checks for the byte order mark
-        if( ( $noticeBom & 0xFEFF ) === $noticeBom ) {
-            
+        if( ( $noticeBom & 0xFEFF ) === $noticeBom )
+        {
             // UTF-16 string
             $data->notice = substr( $this->_stream->getRemainingData(), 0, -1 );
-            
-        } else {
-            
+        }
+        else
+        {
             // UTF-8 string
             $this->_stream->seek( -2, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->notice = substr( $this->_stream->getRemainingData(), 0, -1 );

@@ -84,8 +84,8 @@ final class Sbgp extends \Woops\Mpeg4\FullBox
         $data->entries       = array();
         
         // Process each entry
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             // Storage for the current entry
             $entry                          = new \stdClass();
             

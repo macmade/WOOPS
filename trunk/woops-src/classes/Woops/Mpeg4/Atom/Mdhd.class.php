@@ -48,16 +48,16 @@ final class Mdhd extends \Woops\Mpeg4\FullBox
         
         $data = parent::getProcessedData();
         
-        if( $data->version === 1 ) {
-            
+        if( $data->version === 1 )
+        {
             $data->creation_time     = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
             $data->modification_time = ( $this->_stream->bigEndianUnsignedLong() << 32 ) | $this->_stream->bigEndianUnsignedLong(); // Value is 64bits - Will this work on all platforms?
             $data->timescale         = $this->_stream->bigEndianUnsignedLong();
             $data->duration          = $this->_stream->bigEndianUnsignedLong();
             $data->language          = $this->_stream->bigEndianIso639Code();
-            
-        } else {
-            
+        }
+        else
+        {
             $data->creation_time     = $this->_stream->bigEndianUnsignedLong();
             $data->modification_time = $this->_stream->bigEndianUnsignedLong();
             $data->timescale         = $this->_stream->bigEndianUnsignedLong();

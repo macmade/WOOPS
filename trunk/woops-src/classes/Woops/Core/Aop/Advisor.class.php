@@ -141,7 +141,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     /**
      * The registered AOP advices for each child class
      */
-    private static $_advices          = array(
+    private static $_advices          = array
+    (
         0x00000001 => array(),
         0x00000002 => array(),
         0x00000004 => array(),
@@ -162,7 +163,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     /**
      * The global advice types
      */
-    protected static $_globalAdvices  = array(
+    protected static $_globalAdvices  = array
+    (
         0x00000001,
         0x00000002,
         0x00000004,
@@ -178,7 +180,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     /**
      * The user advice types
      */
-    protected static $_userAdvices    = array(
+    protected static $_userAdvices    = array
+    (
         0x00000400,
         0x00000800,
         0x00001000,
@@ -224,7 +227,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
         $this->_registerAutomaticJoinPoints();
         
         // Process the __construct advices
-        self::_processGlobalAdvices(
+        self::_processGlobalAdvices
+        (
             self::ADVICE_TYPE_CONSTRUCT,
             $this,
             __FUNCTION__
@@ -245,7 +249,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     public function __destruct()
     {
         // Process the __destruct advices
-        self::_processGlobalAdvices(
+        self::_processGlobalAdvices
+        (
             self::ADVICE_TYPE_DESTRUCT,
             $this,
             __FUNCTION__
@@ -266,7 +271,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     public function __clone()
     {
         // Process the __clone advices
-        self::_processGlobalAdvices(
+        self::_processGlobalAdvices
+        (
             self::ADVICE_TYPE_CLONE,
             $this,
             __FUNCTION__
@@ -288,7 +294,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     public function __get( $name )
     {
         // Process the __get advices
-        self::_processGlobalAdvices(
+        self::_processGlobalAdvices
+        (
             self::ADVICE_TYPE_GET,
             $this,
             __FUNCTION__,
@@ -312,7 +319,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     public function __set( $name, $value )
     {
         // Process the __set advices
-        self::_processGlobalAdvices(
+        self::_processGlobalAdvices
+        (
             self::ADVICE_TYPE_SET,
             $this,
             __FUNCTION__,
@@ -335,7 +343,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     public function __isset( $name )
     {
         // Process the __isset advices
-        self::_processGlobalAdvices(
+        self::_processGlobalAdvices
+        (
             self::ADVICE_TYPE_ISSET,
             $this,
             __FUNCTION__,
@@ -359,7 +368,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     public function __unset( $name )
     {
         // Process the __unset advices
-        self::_processGlobalAdvices(
+        self::_processGlobalAdvices
+        (
             self::ADVICE_TYPE_UNSET,
             $this,
             __FUNCTION__,
@@ -381,7 +391,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     public function __sleep()
     {
         // Process the __sleep advices
-        self::_processGlobalAdvices(
+        self::_processGlobalAdvices
+        (
             self::ADVICE_TYPE_SLEEP,
             $this,
             __FUNCTION__
@@ -402,7 +413,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     public function __wakeup()
     {
         // Process the __wakeup advices
-        self::_processGlobalAdvices(
+        self::_processGlobalAdvices
+        (
             self::ADVICE_TYPE_WAKEUP,
             $this,
             __FUNCTION__
@@ -423,7 +435,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     public function __toString()
     {
         // Process the __toString advices
-        self::_processGlobalAdvices(
+        self::_processGlobalAdvices
+        (
             self::ADVICE_TYPE_TO_STRING,
             $this,
             __FUNCTION__
@@ -445,17 +458,17 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
         $className = $object->_className;
         
         // Checks for advices
-        if( isset( self::$_advices[ $type ][ $className ] ) ) {
-            
+        if( isset( self::$_advices[ $type ][ $className ] ) )
+        {
             // Adds the object instance to the arguments
             array_unshift( $args, $object );
             
             // Process the advices for the given type
-            foreach( self::$_advices[ $type ][ $className ] as $advice ) {
-                
+            foreach( self::$_advices[ $type ][ $className ] as $advice )
+            {
                 // Checks if the advice can be executed for the current instance
-                if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
-                    
+                if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash )
+                {
                     // Invokes the advice callback
                     $advice[ 0 ]->invoke( $args );
                 }
@@ -478,10 +491,11 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     public function __call( $name, array $args = array() )
     {
         // Checks if the join point has been registered
-        if( !isset( self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ] ) ) {
-            
+        if( !isset( self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ] ) )
+        {
             // Error - The join point has not been registered
-            throw new Advisor\Exception(
+            throw new Advisor\Exception
+            (
                 'No joint point named ' . $name . '. Call to undefined method ' . $this->_className . '::' . $name . '()',
                 Advisor\Exception::EXCEPTION_NO_JOINPOINT
             );
@@ -501,20 +515,20 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
         $valid             = true;
         
         // Checks if we can have advices to validate the call to the internal method
-        if( self::ADVICE_TYPE_VALID_CALL & $allowedAdviceType ) {
-            
+        if( self::ADVICE_TYPE_VALID_CALL & $allowedAdviceType )
+        {
             // Process each validation advice
-            foreach( self::$_advices[ self::ADVICE_TYPE_VALID_CALL ][ $this->_className ][ $name ] as $advice ) {
-                
+            foreach( self::$_advices[ self::ADVICE_TYPE_VALID_CALL ][ $this->_className ][ $name ] as $advice )
+            {
                 // Checks if the advice can be called on the current instance
-                if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
-                    
+                if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash )
+                {
                     // Invokes the validation advice
                     $valid = $advice[ 0 ]->invoke( $args );
                     
                     // Checks if an advice is preventing the execution of the internal method
-                    if( $valid === false ) {
-                        
+                    if( $valid === false )
+                    {
                         // Internal method won't be executed - No need to process the following advices
                         break;
                     }
@@ -523,17 +537,17 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
         }
         
         // Checks if the internal method can be executed
-        if( $valid ) {
-            
+        if( $valid )
+        {
             // Checks if we can have advices before the call to the internal method
-            if( self::ADVICE_TYPE_BEFORE_CALL & $allowedAdviceType ) {
-                
+            if( self::ADVICE_TYPE_BEFORE_CALL & $allowedAdviceType )
+            {
                 // Process each 'beforeCall' advice
-                foreach( self::$_advices[ self::ADVICE_TYPE_BEFORE_CALL ][ $this->_className ][ $name ] as $advice ) {
-                    
+                foreach( self::$_advices[ self::ADVICE_TYPE_BEFORE_CALL ][ $this->_className ][ $name ] as $advice )
+                {
                     // Checks if the advice can be called on the current instance
-                    if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
-                        
+                    if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash )
+                    {
                         // Invokes the advice
                         $advice[ 0 ]->invoke( $args );
                     }
@@ -544,50 +558,52 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
             $exceptionThrown = false;
             
             // We are catching exceptions from the internal method, so we'll be able to run the 'afterThrowing' advices
-            try {
-                
+            try
+            {
                 // Checks if the internal method returns a reference
-                if( $ref->returnsReference() ) {
-                    
+                if( $ref->returnsReference() )
+                {
                     // Gets the return value of the internal method
                     $returnValue =& $methodCallback->invoke( $args );
-                    
-                } else {
-                    
+                }
+                else
+                {
                     // Gets the return value of the internal method
                     $returnValue =  $methodCallback->invoke( $args );
                 }
-                
-            } catch( Exception $e ) {
-                
+            }
+            catch( Exception $e )
+            {
                 // An exception was thrown
                 $exceptionThrown = true;
                 
                 // Checks if we can have advices to catch exceptions thrown from the internal method, and if so, if such advices are available
-                if(    !count( self::$_advices[ self::ADVICE_TYPE_AFTER_THROWING ][ $this->_className ][ $name ] )
+                if
+                (
+                       !count( self::$_advices[ self::ADVICE_TYPE_AFTER_THROWING ][ $this->_className ][ $name ] )
                     || !( self::ADVICE_TYPE_AFTER_THROWING & $allowedAdviceType )
-                ) {
-                    
+                )
+                {
                     // No - Throws the original exception back
                     throw $e;
-                    
-                } else {
-                    
+                }
+                else
+                {
                     // Boolean value to check if the exception has been caught, and so should not be thrown
                     $exceptionCaught = false;
                     
                     // Process each 'afterThrowing' advice
-                    foreach( self::$_advices[ self::ADVICE_TYPE_AFTER_THROWING ][ $this->_className ][ $name ] as $advice ) {
-                        
+                    foreach( self::$_advices[ self::ADVICE_TYPE_AFTER_THROWING ][ $this->_className ][ $name ] as $advice )
+                    {
                         // Checks if the advice can be called on the current instance
-                        if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
-                            
+                        if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash )
+                        {
                             // Invokes the advice
                             $exceptionCaught = $advice[ 0 ]->invoke( array( $e, $this ) );
                             
                             // Checks if the exception has been caught by the advice
-                            if( $exceptionCaught === true ) {
-                                
+                            if( $exceptionCaught === true )
+                            {
                                 // Exception was caught - Do not executes the next advices
                                 break;
                             }
@@ -595,8 +611,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
                     }
                     
                     // Checks if the exception has been caught by the advice
-                    if( $exceptionCaught !== true ) {
-                        
+                    if( $exceptionCaught !== true )
+                    {
                         // Exception was not caught by an advice - Throws it back
                         throw $e;
                     }
@@ -604,17 +620,17 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
             }
             
             // Checks if we have a return value, meaning no exception was thrown
-            if( !$exceptionThrown ) {
-                
+            if( !$exceptionThrown )
+            {
                 // Checks if we ca have advices that will be able to modify the return value of the internal method
-                if( self::ADVICE_TYPE_BEFORE_RETURN & $allowedAdviceType ) {
-                    
+                if( self::ADVICE_TYPE_BEFORE_RETURN & $allowedAdviceType )
+                {
                     // Process each 'beforeReturn' advice
-                    foreach( self::$_advices[ self::ADVICE_TYPE_BEFORE_RETURN ][ $this->_className ][ $name ] as $advice ) {
-                        
+                    foreach( self::$_advices[ self::ADVICE_TYPE_BEFORE_RETURN ][ $this->_className ][ $name ] as $advice )
+                    {
                         // Checks if the advice can be called on the current instance
-                        if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
-                            
+                        if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash )
+                        {
                             // Invokes the advice and stores the return value
                             $returnValue = $advice[ 0 ]->invoke( array( $returnValue, $args ) );
                         }
@@ -622,14 +638,14 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
                 }
                 
                 // Checks if we can have advices after the call to the internal method
-                if( self::ADVICE_TYPE_AFTER_CALL & $allowedAdviceType ) {
-                    
+                if( self::ADVICE_TYPE_AFTER_CALL & $allowedAdviceType )
+                {
                     // Process each 'afterCall' advice
-                    foreach( self::$_advices[ self::ADVICE_TYPE_AFTER_CALL ][ $this->_className ][ $name ] as $advice ) {
-                        
+                    foreach( self::$_advices[ self::ADVICE_TYPE_AFTER_CALL ][ $this->_className ][ $name ] as $advice )
+                    {
                         // Checks if the advice can be called on the current instance
-                        if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash ) {
-                            
+                        if( $advice[ 1 ] === false || $advice[ 1 ] === $this->_objectHash )
+                        {
                             // Invokes the advice
                             $advice[ 0 ]->invoke( $args );
                         }
@@ -703,8 +719,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     final public static function addAdvice( $type, $callback, $target, $joinPoint = '' )
     {
         // Checks if the configuration object exists
-        if( !is_object( self::$_conf ) ) {
-            
+        if( !is_object( self::$_conf ) )
+        {
             // Gets the instance of the configuration object
             self::$_conf      = \Woops\Core\Config\Getter::getInstance();
             
@@ -713,30 +729,31 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
         }
         
         // If we are not using class caching, the AOP features must be turned off
-        if( defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) || !self::$_enableAop ) {
-            
+        if( defined( 'WOOPS_CLASS_CACHE_MODE_OFF' ) || !self::$_enableAop )
+        {
             // Nothing to do, as AOP is disabled
             return true;
         }
         
         // Checks if the callback must be executed for a specific object or for all instances
-        if( is_object( $target ) ) {
-            
+        if( is_object( $target ) )
+        {
             // Gets the class name and object hash, so the callback will be added for the specific object only
             $className  = $target->_className;
             $objectHash = $target->_objectHash;
-            
-        } else {
-            
+        }
+        else
+        {
             // Callback will be executed for all instances
             $className  = $target;
             $objectHash = false;
             
             // Checks if the class exists
-            if( !class_exists( $className ) ) {
-                
+            if( !class_exists( $className ) )
+            {
                 // Error - Unexisting class
-                throw new Advisor\Exception(
+                throw new Advisor\Exception
+                (
                     'Cannot add an advice on unexisting class ' . $className,
                     Advisor\Exception::EXCEPTION_NO_CLASS
                 );
@@ -744,23 +761,24 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
         }
         
         // Checks if the advice type is for a specific join point or not
-        if( $type & self::ADVICE_TYPE_GLOBAL ) {
-            
+        if( $type & self::ADVICE_TYPE_GLOBAL )
+        {
             // Process the global advice types
-            foreach( self::$_globalAdvices as $adviceType ) {
-                
+            foreach( self::$_globalAdvices as $adviceType )
+            {
                 // Checks if the requested type matches a global advice type
-                if( $type & $adviceType ) {
-                    
+                if( $type & $adviceType )
+                {
                     // Checks if the storage array for the advice exists
-                    if( !isset( self::$_advices[ $adviceType ][ $className ] ) ) {
-                        
+                    if( !isset( self::$_advices[ $adviceType ][ $className ] ) )
+                    {
                         // Creates the storage array for the advice
                         self::$_advices[ $adviceType ][ $className ] = array();
                     }
                     
                     // Adds the advice callback for the join point
-                    self::$_advices[ $adviceType ][ $className ][] = array(
+                    self::$_advices[ $adviceType ][ $className ][] = array
+                    (
                         new \Woops\Core\Callback( $callback ),
                         $objectHash
                     );
@@ -769,22 +787,23 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
             
             // The advice(s) was(were) added
             return true;
-            
-        } elseif( $type & self::ADVICE_TYPE_USER_DEFINED ) {
-            
+        }
+        elseif( $type & self::ADVICE_TYPE_USER_DEFINED )
+        {
             // Checks if a join point is specified
-            if( !$joinPoint ) {
-                
+            if( !$joinPoint )
+            {
                 // Error - A join point must be specified
-                throw new Advisor\Exception(
+                throw new Advisor\Exception
+                (
                     'A join point must be specified for that type of advice',
                     Advisor\Exception::EXCEPTION_NO_JOINPOINT
                 );
             }
             
             // Checks if the join point exists
-            if( !isset( self::$_joinPointsByName[ $className ][ $joinPoint ] ) ) {
-                
+            if( !isset( self::$_joinPointsByName[ $className ][ $joinPoint ] ) )
+            {
                 // Creates a reflection object for the class
                 // If no instance exist at the moment the advice is added, the automatic join points won't be declared, so we'll have to check it manually
                 $reflection = \Woops\Core\Reflection::getClassReflector( $className );
@@ -793,32 +812,36 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
                 $methodName = $joinPoint . self::JOINPOINT_METHOD_SUFFIX;
                 
                 // Checks if we are processing an automatic join point
-                if( !$reflection->hasMethod( $methodName )
+                if
+                (
+                       !$reflection->hasMethod( $methodName )
                     || !$reflection->getMethod( $methodName )->isPublic()
-                ) {
-                    
+                )
+                {
                     // Error - No such join point in the target class
-                    throw new Advisor\Exception(
+                    throw new Advisor\Exception
+                    (
                         'The join point ' . $joinPoint .' does not exist in class ' . $className,
                         Advisor\Exception::EXCEPTION_NO_JOINPOINT
                     );
                 }
                 
                 // Process the user advice types
-                foreach( self::$_userAdvices as $adviceType ) {
-                    
+                foreach( self::$_userAdvices as $adviceType )
+                {
                     // Checks if the requested type matches a user advice type
-                    if( $type & $adviceType ) {
-                        
+                    if( $type & $adviceType )
+                    {
                         // Checks if the storage array for the requested join point exists
-                        if( !isset( self::$_advices[ $adviceType ][ $className ][ $joinPoint ] ) ) {
-                            
+                        if( !isset( self::$_advices[ $adviceType ][ $className ][ $joinPoint ] ) )
+                        {
                             // Creates the storage array
                             self::$_advices[ $adviceType ][ $className ][ $joinPoint ] = array();
                         }
                         
                         // Adds the advice
-                        self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array(
+                        self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array
+                        (
                             new \Woops\Core\Callback( $callback ),
                             $objectHash
                         );
@@ -833,32 +856,34 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
             $allowedAdviceTypes = 0;
             
             // Process the join points for each instance of the target class
-            foreach( self::$_joinPoints[ $className ] as $joinPoints ) {
-                
+            foreach( self::$_joinPoints[ $className ] as $joinPoints )
+            {
                 // Adds the allowed types of advices for the joint point
                 $allowedAdviceTypes |= $joinPoints[ $joinPoint ][ 1 ];
             }
             
             // Process the user advice types
-            foreach( self::$_userAdvices as $adviceType ) {
-                
+            foreach( self::$_userAdvices as $adviceType )
+            {
                 // Checks if the requested type matches a user advice type
-                if( $type & $adviceType ) {
-                    
+                if( $type & $adviceType )
+                {
                     // Checks if the advice type is allowed
-                    if( $adviceType & $allowedAdviceTypes ) {
-                        
+                    if( $adviceType & $allowedAdviceTypes )
+                    {
                         // Adds the advice callback for the join point
-                        self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array(
+                        self::$_advices[ $adviceType ][ $className ][ $joinPoint ][] = array
+                        (
                             new \Woops\Core\Callback( $callback ),
                             $objectHash
                         );
                         return true;
-                    
-                    } else {
-                        
+                    }
+                    else
+                    {
                         // Error - The advice type is not allowed for the join point
-                        throw new Advisor\Exception(
+                        throw new Advisor\Exception
+                        (
                             'Advice of type ' . $adviceType . ' is not permitted for join point ' . $joinPoint,
                             Advisor\Exception::EXCEPTION_ADVICE_TYPE_NOT_PERMITTED
                         );
@@ -868,7 +893,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
         }
         
         // Error - Advice type is invalid
-        throw new Advisor\Exception(
+        throw new Advisor\Exception
+        (
             'Invalid advice type (' . $type . ')',
             Advisor\Exception::EXCEPTION_INVALID_ADVICE_TYPE
         );
@@ -887,8 +913,8 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     final private function _registerAutomaticJoinPoints()
     {
         // Checks if the public methods have already been get for the current class
-        if( !isset( self::$_publicMethods[ $this->_className ] ) ) {
-            
+        if( !isset( self::$_publicMethods[ $this->_className ] ) )
+        {
             // Storage array for the public methods
             self::$_publicMethods[ $this->_className ] = array();
             
@@ -897,11 +923,11 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
             self::$_joinPointsByName[ $this->_className ] = array();
             
             // Process the user advice types
-            foreach( self::$_userAdvices as $adviceType ) {
-                
+            foreach( self::$_userAdvices as $adviceType )
+            {
                 // Checks if the storage array exists (it could, if an advice was added before the creation of an instance of the current class)
-                if( !isset( self::$_advices[ $adviceType ][ $this->_className ] ) ) {
-                    
+                if( !isset( self::$_advices[ $adviceType ][ $this->_className ] ) )
+                {
                     // Creates the advice storage array for the current class
                     self::$_advices[ $adviceType ][ $this->_className ] = array();
                 }
@@ -914,17 +940,17 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
             $methods    = $reflection->getMethods( \ReflectionMethod::IS_PUBLIC );
             
             // Process each method
-            foreach( $methods as $method ) {
-                
+            foreach( $methods as $method )
+            {
                 // Do not process static methods
-                if( $method->isStatic() ) {
-                    
+                if( $method->isStatic() )
+                {
                     continue;
                 }
                 
                 // Controls if the method name has the join point suffix
-                if( substr( $method->name, -strlen( self::JOINPOINT_METHOD_SUFFIX ) ) === self::JOINPOINT_METHOD_SUFFIX ) {
-                    
+                if( substr( $method->name, -strlen( self::JOINPOINT_METHOD_SUFFIX ) ) === self::JOINPOINT_METHOD_SUFFIX )
+                {
                     // Name of the join point
                     $joinPointName = substr( $method->name, 0, -strlen( self::JOINPOINT_METHOD_SUFFIX ) );
                     
@@ -932,21 +958,23 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
                     self::$_publicMethods[ $this->_className ][ $joinPointName ] = $method->name;
                     
                     // Registers a join point for the current method
-                    $this->_registerJoinPoint(
+                    $this->_registerJoinPoint
+                    (
                         $joinPointName,
                         $method->name,
                         self::ADVICE_TYPE_ALL
                     );
                 }
             }
-            
-        } else {
-            
+        }
+        else
+        {
             // Process each public method to be defined as an automatic joint point
-            foreach( self::$_publicMethods[ $this->_className ] as $joinPoint => $method ) {
-                
+            foreach( self::$_publicMethods[ $this->_className ] as $joinPoint => $method )
+            {
                 // Registers a join point for the current method
-                $this->_registerJoinPoint(
+                $this->_registerJoinPoint
+                (
                     $joinPoint,
                     $method,
                     self::ADVICE_TYPE_ALL
@@ -987,38 +1015,40 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     final protected function _registerJoinPoint( $name, $method, $availableAdviceTypes = self::ADVICE_TYPE_ALL )
     {
         // Checks of the method for the join point exists
-        if( !method_exists( $this, $method ) ) {
-            
+        if( !method_exists( $this, $method ) )
+        {
             // Error - The method does not exist
-            throw new Advisor\Exception(
+            throw new Advisor\Exception
+            (
                 'The method ' . $method . ' for join point ' . $name .' does not exist in class ' . $this->_className,
                 Advisor\Exception::EXCEPTION_NO_JOINPOINT_METHOD
             );
         }
         
         // Checks if the storage array for the joint points of the current object already exists
-        if( !isset( self::$_joinPoints[ $this->_className ][ $this->_objectHash ] ) ) {
-            
+        if( !isset( self::$_joinPoints[ $this->_className ][ $this->_objectHash ] ) )
+        {
             // Creates the storage array for the join points of the current object
             self::$_joinPoints[ $this->_className ][ $this->_objectHash ] = array();
         }
         
         // Checks if a join point with the same name has already been registered
-        if( isset( self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ] ) ) {
-            
+        if( isset( self::$_joinPoints[ $this->_className ][ $this->_objectHash ][ $name ] ) )
+        {
             // Error - A joint point with the same name already exists
-            throw new Advisor\Exception(
+            throw new Advisor\Exception
+            (
                 'A join point named ' . $name . ' is already registered for object ' . $this->_objectHash . ' of class ' . $this->_className,
                 Advisor\Exception::EXCEPTION_JOINPOINT_EXISTS
             );
         }
         
         // Process the user advice types
-        foreach( self::$_userAdvices as $adviceType ) {
-                    
+        foreach( self::$_userAdvices as $adviceType )
+        {      
             // Checks if the storage array exists (it could, if an advice was added before the creation of an instance of the current class)
-            if( !isset( self::$_advices[ $adviceType ][ $this->_className ][ $name ] ) ) {
-                
+            if( !isset( self::$_advices[ $adviceType ][ $this->_className ][ $name ] ) )
+            {
                 // Creates the advice storage array for the join point
                 self::$_advices[ $adviceType ][ $this->_className ][ $name ] = array();
             }
@@ -1052,14 +1082,14 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     final public static function getAdviceChain( $type, $target, $joinPoint = '' )
     {
         // Checks if the target is an object or a class name
-        if( is_object( $target ) ) {
-            
+        if( is_object( $target ) )
+        {
             // Gets the class name and object hash, so we'll return only the advices added on the target object
             $className  = $target->_className;
             $objectHash = $target->_objectHash;
-            
-        } else {
-            
+        }
+        else
+        {
             // All advices for the class will be returned
             $className  = $target;
             $objectHash = false;
@@ -1069,30 +1099,30 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
         $chain = array();
         
         // Checks if we have advices for the given type and for the given class
-        if( isset( self::$_advices[ $type ][ $className ] ) ) {
-            
+        if( isset( self::$_advices[ $type ][ $className ] ) )
+        {
             // Checks if the advice is for a user-defined join point or not
-            if( $type & self::ADVICE_TYPE_GLOBAL ) {
-                
+            if( $type & self::ADVICE_TYPE_GLOBAL )
+            {
                 // Process each advice for the given type and the given class
-                foreach( self::$_advices[ $type ][ $className ] as $advice ) {
-                    
+                foreach( self::$_advices[ $type ][ $className ] as $advice )
+                {
                     // Checks if the advice is for a specific object or not
-                    if( $advice[ 1 ] === false || $advice[ 1 ] === $objectHash ) {
-                        
+                    if( $advice[ 1 ] === false || $advice[ 1 ] === $objectHash )
+                    {
                         // Adds the advice to the advice chain
                         $chain[] = $advice[ 0 ];
                     }
                 }
-                
-            } elseif( isset( self::$_advices[ $type ][ $className ][ $joinPoint ] ) ) {
-                
+            }
+            elseif( isset( self::$_advices[ $type ][ $className ][ $joinPoint ] ) )
+            {
                 // Process each advice for the given type, the given class and the given join point
-                foreach( self::$_advices[ $type ][ $className ][ $joinPoint ] as $advice ) {
-                    
+                foreach( self::$_advices[ $type ][ $className ][ $joinPoint ] as $advice )
+                {
                     // Checks if the advice is for a specific object or not
-                    if( $advice[ 1 ] === false || $advice[ 1 ] === $objectHash ) {
-                        
+                    if( $advice[ 1 ] === false || $advice[ 1 ] === $objectHash )
+                    {
                         // Adds the advice to the advice chain
                         $chain[] = $advice[ 0 ];
                     }
@@ -1113,30 +1143,30 @@ abstract class Advisor extends \Woops\Core\Event\Dispatcher
     final public static function getAvailableJoinPoints( $target )
     {
         // Checks if the target is an object or a class name
-        if( is_object( $target ) ) {
-            
+        if( is_object( $target ) )
+        {
             // Gets the class name and object hash, so we'll return only the join points available on the target object
             $className  = $target->_className;
             $objectHash = $target->_objectHash;
-            
-        } else {
-            
+        }
+        else
+        {
             // All joint points for the class will be returned
             $className  = $target;
             $objectHash = false;
         }
         
         // Checks if joint points are registered for the given class name
-        if( isset( self::$_joinPoints[ $className ] ) ) {
-            
+        if( isset( self::$_joinPoints[ $className ] ) )
+        {
             // Checks if we have to return the join points for a specific object
-            if( $objectHash !== false && isset( self::$_joinPoints[ $className ][ $objectHash ] ) ) {
-                
+            if( $objectHash !== false && isset( self::$_joinPoints[ $className ][ $objectHash ] ) )
+            {
                 // Returns all the available join points for the given object
                 return array_keys( self::$_joinPoints[ $className ][ $objectHash ] );
-                
-            } elseif( $objectHash === false ) {
-                
+            }
+            elseif( $objectHash === false )
+            {
                 // Returns all the available join points for the given class
                 return array_keys( self::$_joinPointsByName[ $className ] );
             }

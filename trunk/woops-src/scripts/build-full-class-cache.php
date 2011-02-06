@@ -17,7 +17,8 @@
 define( 'WOOPS_CLASS_CACHE_MODE_OFF', true );
 
 // Includes the initialization script
-require_once(
+require_once
+(
     __DIR__
   . DIRECTORY_SEPARATOR
   . '..'
@@ -32,18 +33,19 @@ declare( ENCODING = 'UTF-8' );
 $ENV = Woops\Core\Env\Getter::getInstance();
 
 // Creates a recursive directory iterator
-$ITERATOR = new RecursiveIteratorIterator(
+$ITERATOR = new RecursiveIteratorIterator
+(
     new RecursiveDirectoryIterator(
         $ENV->getSourcePath( 'classes/Woops/' )
     )
 );
 
 // Process each element of the iterator
-foreach( $ITERATOR as $FILEPATH => $FILE ) {
-    
+foreach( $ITERATOR as $FILEPATH => $FILE )
+{
     // Checks if the file is a class
-    if( $FILE->isFile() && substr( $FILEPATH, -10 ) === '.class.php' ) {
-        
+    if( $FILE->isFile() && substr( $FILEPATH, -10 ) === '.class.php' )
+    {
         // Gets the relative class path
         $CLASS_RELPATH = str_replace( $ENV->getSourcePath( 'classes/' ), '', $FILEPATH );
         
@@ -62,31 +64,32 @@ $MOD_MANAGER = Woops\Core\Module\Manager::getInstance();
 $MODULES = $MOD_MANAGER->getAvailableModules();
 
 // Process each module
-foreach( $MODULES as $MODNAME => $MODINFOS ) {
-    
+foreach( $MODULES as $MODNAME => $MODINFOS )
+{
     // Checks if the module is loaded
-    if( !$MOD_MANAGER->isLoaded( $MODNAME ) ) {
-        
+    if( !$MOD_MANAGER->isLoaded( $MODNAME ) )
+    {
         // Do not process not loaded modules
         continue;
     }
     
     // Checks if the module has a class directory
-    if( file_exists( $MODINFOS[ 0 ] . 'classes' ) && is_dir( $MODINFOS[ 0 ] . 'classes' ) ) {
-        
+    if( file_exists( $MODINFOS[ 0 ] . 'classes' ) && is_dir( $MODINFOS[ 0 ] . 'classes' ) )
+    {
         // Creates a recursive directory iterator
-        $ITERATOR = new RecursiveIteratorIterator(
+        $ITERATOR = new RecursiveIteratorIterator
+        (
             new RecursiveDirectoryIterator(
                 $MODINFOS[ 0 ] . 'classes/'
             )
         );
         
         // Process each element of the iterator
-        foreach( $ITERATOR as $FILEPATH => $FILE ) {
-            
+        foreach( $ITERATOR as $FILEPATH => $FILE )
+        {
             // Checks if the file is a class
-            if( $FILE->isFile() && substr( $FILEPATH, -10 ) === '.class.php' ) {
-                
+            if( $FILE->isFile() && substr( $FILEPATH, -10 ) === '.class.php' )
+            {
                 // Gets the relative class path
                 $CLASS_RELPATH = str_replace( $MODINFOS[ 0 ] . 'classes/', '', $FILEPATH );
                 
@@ -124,8 +127,8 @@ function createClassCache( $className )
     static $optimize;
     
     // Checks if we already have the environment object
-    if( !is_object( $env ) ) {
-        
+    if( !is_object( $env ) )
+    {
         // Gets the environment object
         $env      = Woops\Core\Env\Getter::getInstance();
         
@@ -146,23 +149,23 @@ function createClassCache( $className )
     $classExt = ( $aop ) ? '.aop.class.php' : '.class.php';
     
     // Checks if the cached version already exists
-    if( file_exists( $cacheDir . str_replace( '\\', '.', $className ) . $classExt ) ) {
-        
+    if( file_exists( $cacheDir . str_replace( '\\', '.', $className ) . $classExt ) )
+    {
         // Nothing to do, the cached version already exists
         return;
     }
     
     // Checks if AOP is enabled, and if the class is not an interface
-    if( $aop && substr( $className, -15 ) !== 'ObjectInterface' ) {
-        
+    if( $aop && substr( $className, -15 ) !== 'ObjectInterface' )
+    {
         // Creates an AOP version of the class
         $aopBuilder = new Woops\Core\Aop\ClassBuilder( $className );
         
         // Gets the code of the AOP version
         $classCode  = ( string )$aopBuilder;
-        
-    } else {
-        
+    }
+    else
+    {
         // Creates a reflection object
         $reflection = Woops\Core\Reflection::getClassReflector( $className );
         
@@ -171,8 +174,8 @@ function createClassCache( $className )
     }
     
     // Checks if the source code must be optimized
-    if( $optimize ) {
-        
+    if( $optimize )
+    {
         // Creates a source optimizer
         $optimizer = new Woops\Php\Source\Optimizer( $classCode );
         
@@ -181,7 +184,8 @@ function createClassCache( $className )
     }
     
     // Writes the class in the cache
-    file_put_contents(
+    file_put_contents
+    (
         $cacheDir . str_replace( '\\', '.', $className ) . $classExt,
         $classCode
     );

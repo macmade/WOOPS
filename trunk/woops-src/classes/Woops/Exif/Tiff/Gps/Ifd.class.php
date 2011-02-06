@@ -69,7 +69,8 @@ class Ifd extends \Woops\Core\Object implements \Woops\Tiff\Ifd\ObjectInterface
     /**
      * The types of the EXIF GPS TIFF tags, with their corresponding PHP class
      */
-    protected static $_types = array(
+    protected static $_types = array
+    (
         0x0000 => 'Woops\Exif\Tiff\Gps\Tag\VersionId',
         0x0001 => 'Woops\Exif\Tiff\Gps\Tag\Latitude\Ref',
         0x0002 => 'Woops\Exif\Tiff\Gps\Tag\Latitude',
@@ -204,22 +205,22 @@ class Ifd extends \Woops\Core\Object implements \Woops\Tiff\Ifd\ObjectInterface
         $entries     = ( $this->_header->isBigEndian() ) ? $stream->bigEndianUnsignedShort() : $stream->littleEndianUnsignedShort();
         
         // Process each directory entry
-        for( $i = 0; $i < $entries; $i++ ) {
-            
+        for( $i = 0; $i < $entries; $i++ )
+        {
             // Gets the tag type
             $type = ( $this->_header->isBigEndian() ) ? $stream->bigEndianUnsignedShort() : $stream->littleEndianUnsignedShort();
             
             // Prevents unknown TIFF tags to create an exceprion
-            try {
-                
+            try
+            {
                 // Creates a new tag
                 $tag = $this->newTag( $type );
-                
-            } catch( Ifd\Exception $e ) {
-                
+            }
+            catch( Ifd\Exception $e )
+            {
                 // Checks if the exception was made for an unknown TIFF tag
-                if( $e->getCode() !== Ifd\Exception::EXCEPTION_INVALID_TAG_TYPE ) {
-                    
+                if( $e->getCode() !== Ifd\Exception::EXCEPTION_INVALID_TAG_TYPE )
+                {
                     // No - Throws the exception again
                     throw $e;
                 }
@@ -271,10 +272,11 @@ class Ifd extends \Woops\Core\Object implements \Woops\Tiff\Ifd\ObjectInterface
         $type = ( int )$type;
         
         // Checks the value type
-        if( !isset( self::$_types[ $type ] ) ) {
-            
+        if( !isset( self::$_types[ $type ] ) )
+        {
             // Error - Invalid value type
-            throw new Ifd\Exception(
+            throw new Ifd\Exception
+            (
                 'Invalid tag type (' .  $type . ')',
                 Ifd\Exception::EXCEPTION_INVALID_TAG_TYPE
             );

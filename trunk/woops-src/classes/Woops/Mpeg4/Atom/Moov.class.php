@@ -38,8 +38,8 @@ final class Moov extends \Woops\Mpeg4\ContainerAtom
     
     public function validChildType( $type )
     {
-        switch( $type ) {
-            
+        switch( $type )
+        {
             case 'mvhd':
                 
                 return true;

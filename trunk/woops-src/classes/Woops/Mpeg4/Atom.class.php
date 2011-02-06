@@ -123,16 +123,16 @@ abstract class Atom extends \Woops\Core\Object
     public function getHierarchy()
     {
         // Checks for a parent atom
-        if( is_object( $this->_parent ) ) {
-            
+        if( is_object( $this->_parent ) )
+        {
             // Gets the hierarchy from the parent
             $hierarchy   = $this->_parent->getHierarchy();
             
             // Adds the current atom to the hierarchy
             $hierarchy[] = $this->_type;
-            
-        } else {
-            
+        }
+        else
+        {
             // Top level atom
             $hierarchy = array( $this->_type );
         }

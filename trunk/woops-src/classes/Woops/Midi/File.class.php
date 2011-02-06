@@ -40,7 +40,8 @@ class File extends \Woops\Core\Object
     /**
      * The MIDI chunk types with their corresponding PHP classname
      */
-    protected static $_types = array(
+    protected static $_types = array
+    (
         0x4D546864 => 'Woops\Midi\Chunk\Header',
         0x4D54726B => 'Woops\Midi\Chunk\Track'
     );
@@ -62,10 +63,11 @@ class File extends \Woops\Core\Object
         $type = ( int )$type;
         
         // Checks the chunk type
-        if( !isset( self::$_types[ $type ] ) ) {
-            
+        if( !isset( self::$_types[ $type ] ) )
+        {
             // Error - Invalid type
-            throw new File\Exception(
+            throw new File\Exception
+            (
                 'Invalid chunk type (' . $type . ')',
                 File\Exception::EXCEPTION_INVALID_CHUNK_TYPE
             );

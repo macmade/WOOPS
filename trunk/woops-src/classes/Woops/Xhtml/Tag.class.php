@@ -54,7 +54,8 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
     /**
      * The list of the XHTML empty tags (as in the XHTML 1.0 Strict DTD)
      */
-    protected static $_emptyTags      = array(
+    protected static $_emptyTags      = array
+    (
         'area'  => true,
         'base'  => true,
         'br'    => true,
@@ -118,8 +119,8 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
     public function __construct( $tagName )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -157,8 +158,8 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
      */
     public function __call( $name, array $args = array() )
     {
-        switch( $name ) {
-            
+        switch( $name )
+        {
             case 'spacer':
                 
                 return $this->_addSpacer( $args[ 0 ] );
@@ -230,12 +231,12 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
      */
     public function key()
     {
-        if( $this->_children[ $this->_iteratorIndex ] instanceof self ) {
-            
+        if( $this->_children[ $this->_iteratorIndex ] instanceof self )
+        {
             return $this->_children[ $this->_iteratorIndex ]->_tagName;
-            
-        } else {
-            
+        }
+        else
+        {
             return '';
         }
     }
@@ -296,8 +297,8 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
      */
     protected function _addComment( $text )
     {
-        if( !isset( $this->_childrenByName[ '<!--' ] ) ) {
-            
+        if( !isset( $this->_childrenByName[ '<!--' ] ) )
+        {
             $this->_childrenByName[ '<!--' ]      = array();
             $this->_childrenCountByName[ '<!--' ] = 0;
         }
@@ -321,8 +322,8 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
      */
     protected function _addChild( $name )
     {
-        if( !isset( $this->_childrenByName[ $name ] ) ) {
-            
+        if( !isset( $this->_childrenByName[ $name ] ) )
+        {
             $this->_childrenByName[ $name ]      = array();
             $this->_childrenCountByName[ $name ] = 0;
         }
@@ -354,64 +355,64 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
         $tag = '<' . $this->_tagName;
         
         // Process each registered attribute
-        foreach( $this->_attribs as $key => &$value ) {
-            
+        foreach( $this->_attribs as $key => &$value )
+        {
             // Adds the current attribute
             $tag .= ' ' . $key . '="' . $value . '"';
         }
         
         // Checks if we have children to display
-        if( !$this->_childrenCount ) {
-            
+        if( !$this->_childrenCount )
+        {
             // No - Checks if the tag is self closed
             $tag .= ( isset( self::$_emptyTags[ $this->_tagName ] ) || $xmlCompliant ) ? ' />' : '></' . $this->_tagName . '>';
-            
-        } else {
-            
+        }
+        else
+        {
             // Ends the start tag
             $tag .= '>';
             
             // Process each children
-            foreach( $this->_children as $child ) {
-                
+            foreach( $this->_children as $child )
+            {
                 // Checks the current child is a tag or a string
-                if( $child instanceof self ) {
-                    
+                if( $child instanceof self )
+                {
                     // Checks if we have to format the output
-                    if( self::$_formattedOutput ) {
-                        
+                    if( self::$_formattedOutput )
+                    {
                         // Adds the current child
                         $tag .= self::$_str->NL . str_pad( '', $level + 1, self::$_str->TAB );
                         $tag .= $child->_output( $xmlCompliant, $level + 1 );
-                        
-                    } else {
-                        
+                    }
+                    else
+                    {
                         // Adds the current child
                         $tag .= $child->_output( $xmlCompliant, $level + 1 );
                     }
-                    
-                } else {
-                    
+                }
+                else
+                {
                     // Should we be XML compliant?
-                    if( $xmlCompliant ) {
-                        
+                    if( $xmlCompliant )
+                    {
                         // Data
                         $data = ( strstr( $child, '&' ) || strstr( $child, '<' ) ) ? '<![CDATA[' . trim( ( string )$child ) . ']]>' : trim( ( string )$child );
                         
                         // If we must be XML compliant, nodes and data are not allowed in a single node
-                        if( $this->_hasNodeChildren ) {
-                            
+                        if( $this->_hasNodeChildren )
+                        {
                             // Protect the data with CDATA, and adds a span tag for the XML compliancy
                             $tag .= '<span>' . $data . '</span>';
-                            
-                        } else {
-                            
+                        }
+                        else
+                        {
                             // Protects the data with CDATA
                             $tag .= $data;
                         }
-                    
-                    } else {
-                        
+                    }
+                    else
+                    {
                         // String - Adds the child data
                         $tag .= trim( ( string )$child );
                     }
@@ -419,8 +420,8 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
             }
             
             // Checks if we have to format the output
-            if( self::$_formattedOutput && $this->_hasNodeChildren ) {
-                
+            if( self::$_formattedOutput && $this->_hasNodeChildren )
+            {
                 // Adds a new line and the current indentation
                 $tag .= self::$_str->NL . str_pad( '', $level, self::$_str->TAB );
             }
@@ -438,10 +439,10 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
      */
     public function addChildNode( \Woops\Xhtml\Tag $child )
     {
-        if( !isset( self::$_emptyTags[ $this->_tagName ] ) ) {
-            
-            if( !isset( $this->_childrenByName[ $child->_tagName ] ) ) {
-                
+        if( !isset( self::$_emptyTags[ $this->_tagName ] ) )
+        {
+            if( !isset( $this->_childrenByName[ $child->_tagName ] ) )
+            {
                 $this->_childrenByName[ $child->_tagName ]      = array();
                 $this->_childrenCountByName[ $child->_tagName ] = 0;
             }
@@ -467,16 +468,18 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
      */
     public function addTextData( $data )
     {
-        if( !isset( self::$_emptyTags[ $this->_tagName ] ) ) {
-            
-            if( $this->_childrenCount
+        if( !isset( self::$_emptyTags[ $this->_tagName ] ) )
+        {
+            if
+            (
+                   $this->_childrenCount
                 && !( $this->_children[ $this->_childrenCount - 1 ] instanceof self )
-            ) {
-                
+            )
+            {
                 $this->_children[ $this->_childrenCount - 1 ] .= $data;
-                
-            } else {
-                
+            }
+            else
+            {
                 $this->_children[] = ( string )$data;
                 $this->_childrenCount++;
             }
@@ -504,8 +507,8 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
      */
     public function getParent( $parentIndex = 0 )
     {
-        if( isset( $this->_parents[ $parentIndex ] ) ) {
-            
+        if( isset( $this->_parents[ $parentIndex ] ) )
+        {
             return $this->_parents[ $parentIndex ];
         }
         
@@ -517,15 +520,15 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
      */
     public function getTag( $name, $index = 0 )
     {
-        if( isset( $this->_childrenByName[ $name ] ) ) {
-            
-            if( $index === -1 ) {
-                
+        if( isset( $this->_childrenByName[ $name ] ) )
+        {
+            if( $index === -1 )
+            {
                 $index = $this->_childrenCountByName[ $name ] - 1;
             }
             
-            if( isset( $this->_childrenByName[ $name ][ $index ] ) ) {
-                
+            if( isset( $this->_childrenByName[ $name ][ $index ] ) )
+            {
                 return $this->_childrenByName[ $name ][ $index ][ 1 ];
             }
         }
@@ -538,28 +541,28 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
      */
     public function removeTag( $name, $index = 0 )
     {
-        if( isset( $this->_childrenByName[ $name ] ) ) {
-            
-            if( $index === -1 ) {
-                
+        if( isset( $this->_childrenByName[ $name ] ) )
+        {
+            if( $index === -1 )
+            {
                 $index = $this->_childrenCountByName[ $name ] - 1;
             }
             
-            if( isset( $this->_childrenByName[ $name ][ $index ] ) ) {
-                
+            if( isset( $this->_childrenByName[ $name ][ $index ] ) )
+            {
                 unset( $this->_children[ $this->_childrenByName[ $name ][ $index ][ 0 ] ] );
                 unset( $this->_childrenByName[ $name ][ $index ] );
                 
                 $this->_childrenCount--;
                 $this->_childrenCountByName[ $name ]--;
                 
-                if( !count( $this->_childrenCountByName[ $name ] ) ) {
-                    
+                if( !count( $this->_childrenCountByName[ $name ] ) )
+                {
                     unset( $this->_childrenCountByName[ $name ] );
                 }
                 
-                if( !count( $this->_childrenCountByName ) ) {
-                    
+                if( !count( $this->_childrenCountByName ) )
+                {
                     $this->_hasNodeChildren = false;
                 }
             }
@@ -571,8 +574,8 @@ class Tag extends \Woops\Core\Object implements \ArrayAccess, \Iterator
      */
     public function removeAllTags()
     {
-        if( $this->_childrenCount > 0 ) {
-              
+        if( $this->_childrenCount > 0 )
+        {
             $this->_children            = array();
             $this->_childrenByName      = array();
             $this->_childrenCountByName = array();

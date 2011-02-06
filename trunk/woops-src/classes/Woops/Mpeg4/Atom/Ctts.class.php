@@ -50,8 +50,8 @@ final class Ctts extends \Woops\Mpeg4\FullBox
         $data->entry_count = $this->_stream->bigEndianUnsignedLong();
         $data->entries     = array();
         
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             $entry                = new \stdClass();
             $entry->sample_count  = $this->_stream->bigEndianUnsignedLong();
             $entry->sample_offset = $this->_stream->bigEndianUnsignedLong();

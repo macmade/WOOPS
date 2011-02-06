@@ -61,7 +61,8 @@ class Stream extends \Woops\Binary\Stream
      */
     public function xyzNumber( $size )
     {
-        return array(
+        return array
+        (
             'x' => $this->s15Fixed16Number(),
             'y' => $this->s15Fixed16Number(),
             'z' => $this->s15Fixed16Number()

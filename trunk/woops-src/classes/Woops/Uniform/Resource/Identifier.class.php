@@ -141,7 +141,8 @@ class Identifier extends \Woops\Core\Object
     /**
      * The registered URI schemes (IANA)
      */
-    protected static $_schemes = array(
+    protected static $_schemes = array
+    (
         'aaa'             => true, // Diameter Protocol - RFC-3588
         'aaas'            => true, // Diameter Protocol with Secure Transport - RFC-3588
         'acap'            => true, // application configuration access protocol - RFC-2244
@@ -213,7 +214,8 @@ class Identifier extends \Woops\Core\Object
     /**
      * The default ports number for the available schemes (IANA)
      */
-    protected static $_ports   = array(
+    protected static $_ports   = array
+    (
         'aaa'             => 3868,
         'aaas'            => 3868,
         'acap'            => 674,
@@ -309,26 +311,28 @@ class Identifier extends \Woops\Core\Object
     public function __construct( $uri = '' )
     {
         // Checks if an URI is given
-        if( $uri ) {
-            
+        if( $uri )
+        {
             // Parses the URI
             $infos = parse_url( ( string )$uri );
             
             // Checks for a scheme
-            if( !isset( $infos[ 'scheme' ] ) ) {
-                
+            if( !isset( $infos[ 'scheme' ] ) )
+            {
                 // Invalid URI
-                throw new Identifier\Exception(
+                throw new Identifier\Exception
+                (
                     'Invalid URI (' . $uri . ')',
                     Identifier\Exception::EXCEPTION_INVALID_URI
                 );
             }
             
             // Checks for a valid scheme
-            if( !isset( self::$_schemes[ $infos[ 'scheme' ] ] ) ) {
-                
+            if( !isset( self::$_schemes[ $infos[ 'scheme' ] ] ) )
+            {
                 // Invalid scheme
-                throw new Identifier\Exception(
+                throw new Identifier\Exception
+                (
                     'Invalid URI scheme (' . $infos[ 'scheme' ] . ')',
                     Identifier\Exception::EXCEPTION_INVALID_SCHEME
                 );
@@ -360,8 +364,8 @@ class Identifier extends \Woops\Core\Object
     public function __toString()
     {
         // Checks for a scheme
-        if( !$this->_scheme ) {
-            
+        if( !$this->_scheme )
+        {
             // Nothing to return
             return '';
         }
@@ -370,29 +374,29 @@ class Identifier extends \Woops\Core\Object
         $uri = $this->_scheme . ':';
         
         // Checks if we have a host
-        if( $this->_host ) {
-            
+        if( $this->_host )
+        {
             // Builds the authority
             $uri .= '//' . $this->getAuthority();
         }
         
         // Checks if we have a path
-        if( $this->_path ) {
-            
+        if( $this->_path )
+        {
             // Adds the path
             $uri .= $this->_path;
         }
         
         // Checks if we have a query
-        if( $this->_query ) {
-            
+        if( $this->_query )
+        {
             // Adds the query
             $uri .= '?' . $this->_query;
         }
         
         // Checks if we have a fragment
-        if( $this->_fragment ) {
-            
+        if( $this->_fragment )
+        {
             // Adds the fragment
             $uri .= '#' . $this->_fragment;
         }
@@ -409,14 +413,14 @@ class Identifier extends \Woops\Core\Object
     protected function _setQueryParts()
     {
         // Checks if we have a query
-        if( $this->_query ) {
-            
+        if( $this->_query )
+        {
             // Gets each part
             $parts = explode( '&', $this->_query );
             
             // Process each part
-            foreach( $parts as $part ) {
-                
+            foreach( $parts as $part )
+            {
                 // Gets the name and the value
                 $subParts = explode( '=', $part );
                 
@@ -436,10 +440,11 @@ class Identifier extends \Woops\Core\Object
     public function setScheme( $value )
     {
         // Checks for a valid scheme
-        if( !isset( self::$_schemes[ $value ] ) ) {
-            
+        if( !isset( self::$_schemes[ $value ] ) )
+        {
             // Invalid scheme
-            throw new Identifier\Exception(
+            throw new Identifier\Exception
+            (
                 'Invalid URI scheme (' . $value . ')',
                 Identifier\Exception::EXCEPTION_INVALID_SCHEME
             );
@@ -514,8 +519,8 @@ class Identifier extends \Woops\Core\Object
         $value = ( string )$value;
         
         // Checks for a user part
-        if( $userPos = strpos( $value, '@' ) ) {
-            
+        if( $userPos = strpos( $value, '@' ) )
+        {
             // Gets the user infos
             $userInfos   = explode( ':', substr( $value, 0, $userPos ) );
             $value       = substr( $value, $userPos + 1 );
@@ -558,8 +563,8 @@ class Identifier extends \Woops\Core\Object
     public function setQuery( $value )
     {
         // Checks if the passed argument is an array
-        if( is_array( $value ) ) {
-            
+        if( is_array( $value ) )
+        {
             // Stores the query parts array
             $this->_queryParts = $value;
             
@@ -567,17 +572,17 @@ class Identifier extends \Woops\Core\Object
             $query             = '';
             
             // Process each entry of the query parts array
-            foreach( $value as $queryName => $queryValue ) {
-                
+            foreach( $value as $queryName => $queryValue )
+            {
                 // Adds the current query element
                 $query .= $queryName . '=' . $queryValue . '&';
             }
             
             // Stores the query string
             $this->_query = substr( $query, -1 );
-            
-        } else {
-            
+        }
+        else
+        {
             // Stores the query
             $this->_query = ( string )$value;
             
@@ -646,8 +651,8 @@ class Identifier extends \Woops\Core\Object
     public function getPort( $addDefaultPort = true )
     {
         // Checks if the port number is set
-        if( !$this->_port && $addDefaultPort && isset( self::$_ports[ $this->_scheme ] ) ) {
-            
+        if( !$this->_port && $addDefaultPort && isset( self::$_ports[ $this->_scheme ] ) )
+        {
             // Return the default port
             return self::$_ports[ $this->_scheme ];
         }
@@ -667,16 +672,16 @@ class Identifier extends \Woops\Core\Object
         $authority = '';
         
         // Checks if we have a host
-        if( $this->_host ) {
-            
+        if( $this->_host )
+        {
             // Checks for a user part
-            if( $this->_user && $this->_pass ) {
-                
+            if( $this->_user && $this->_pass )
+            {
                 // Adds the username and password
                 $authority .= $this->_user . ':' . $this->_pass . '@';
-                
-            } elseif( $this->_user ) {
-                
+            }
+            elseif( $this->_user )
+            {
                 // Adds the username
                 $authority .= $this->_user . '@';
             }
@@ -685,8 +690,8 @@ class Identifier extends \Woops\Core\Object
             $authority .= $this->_host;
             
             // Checks if we have a port number
-            if( $this->_port ) {
-                
+            if( $this->_port )
+            {
                 // Adds the port number
                 $authority .= ':' . $this->_port;
             }

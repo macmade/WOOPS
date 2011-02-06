@@ -44,8 +44,8 @@ abstract class Tag extends \Woops\Core\Object
      */
     public function getType( $asString = false )
     {
-        if( $asString ) {
-            
+        if( $asString )
+        {
             $type = chr( ( $this->_type >> 24 ) )
                   . chr( ( $this->_type >> 16 ) & 0xFF )
                   . chr( ( $this->_type >> 8 )  & 0xFF )

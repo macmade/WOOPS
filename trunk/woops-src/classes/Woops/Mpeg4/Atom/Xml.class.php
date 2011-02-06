@@ -74,13 +74,13 @@ final class Xml extends \Woops\Mpeg4\FullBox
         $bom  = $this->_stream->bigEndianUnsignedShort();
         
         // Checks for the byte order mark
-        if( ( $bom & 0xFEFF ) === $bom ) {
-            
+        if( ( $bom & 0xFEFF ) === $bom )
+        {
             // UTF-16 XML
             $data->xml = substr( $this->_stream->getRemainingData(), 0, -1 );
-            
-        } else {
-            
+        }
+        else
+        {
             // UTF-8 XML
             $this->_stream->seek( -2, \Woops\Mpeg4\Binary\Stream::SEEK_CUR );
             $data->xml = substr( $this->_stream->getRemainingData(), 0, -1 );

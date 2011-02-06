@@ -45,8 +45,8 @@ abstract class Unit extends \Woops\Core\Object
     public function __construct( $title = '' )
     {
         // Checks if we have a title
-        if( $title ) {
-            
+        if( $title )
+        {
             // Sets the title
             $this->_title = ( string )$title;
         }

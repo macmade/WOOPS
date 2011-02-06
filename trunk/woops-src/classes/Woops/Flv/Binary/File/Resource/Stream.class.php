@@ -42,10 +42,11 @@ class Stream extends \Woops\Flv\Binary\Stream
     public function __construct( $handle, $closeHandle = true )
     {
         // Checks if the file exists
-        if( !is_resource( $handle ) ) {
-            
+        if( !is_resource( $handle ) )
+        {
             // Error - The file does not exist
-            throw new Stream\Exception(
+            throw new Stream\Exception
+            (
                 'Passed argument must be a valid file handle',
                 Stream\Exception::EXCEPTION_NO_RESOURCE
             );
@@ -55,15 +56,15 @@ class Stream extends \Woops\Flv\Binary\Stream
         $data = '';
         
         // Reads until the end of the file handle
-        while( !feof( $handle ) ) {
-            
+        while( !feof( $handle ) )
+        {
             // Reads from the file handle
             $data .= fread( $handle, 8192 );
         }
         
         // Checks if we must close the file handle
-        if( $closeHandle ) {
-            
+        if( $closeHandle )
+        {
             // Closes the file handle
             fclose( $handle );
         }

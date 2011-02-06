@@ -51,7 +51,8 @@ class Length extends Base
     /**
      * The conversion operations for each unit from the default type
      */
-    protected $_types = array(
+    protected $_types = array
+    (
         'CENTIMETER'    => array(),
         'FOOT'          => array(),
         'INCH'          => array(),

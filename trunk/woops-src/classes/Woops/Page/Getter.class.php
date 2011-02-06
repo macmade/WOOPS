@@ -97,25 +97,27 @@ class Getter extends \Woops\Core\Singleton\Base
     {
         $id = ( int )$this->_request->pid;
         
-        if( !$id || !$this->_db->getRecord( 'pageinfos', $id ) ) {
-            
-            $homeRecords = $this->_db->getRecordsByFields(
+        if( !$id || !$this->_db->getRecord( 'pageinfos', $id ) )
+        {
+            $homeRecords = $this->_db->getRecordsByFields
+            (
                 'pageinfos',
-                array(
+                array
+                (
                     'home' => 1
                 )
             );
             
-            if( !count( $homeRecords ) ) {
-                
-                throw new Getter\Exception(
+            if( !count( $homeRecords ) )
+            {
+                throw new Getter\Exception
+                (
                     'No home page is defined in the database',
                     Getter\Exception::EXCEPTION_NO_HOMEPAGE
                 );
             }
             
             $homePage = array_shift( $homeRecords );
-            
             $id       = $homePage->id_pageinfos;
         }
         
@@ -129,14 +131,15 @@ class Getter extends \Woops\Core\Singleton\Base
     {
         $lang = $this->_request->lang;
         
-        if( !$lang ) {
-            
+        if( !$lang )
+        {
             $lang = $this->_conf->getVar( 'lang', 'defaultLanguage' );
         }
         
-        if( !$lang ) {
-            
-            throw new Getter\Exception(
+        if( !$lang )
+        {
+            throw new Getter\Exception
+            (
                 'The WOOPS default language is not configured',
                 Getter\Exception::EXCEPTION_NO_DEFAULT_LANG
             );
@@ -150,28 +153,33 @@ class Getter extends \Woops\Core\Singleton\Base
      */
     protected function _getPage( $id, $lang )
     {
-        $page = $this->_db->getRecordsByFields(
+        $page = $this->_db->getRecordsByFields
+        (
             'pageheaders',
-            array(
+            array
+            (
                 'id_pageinfos' => $id,
                 'lang'         => $lang
             )
         );
         
-        if( !count( $page ) ) {
-            
-            $page = $this->_db->getRecordsByFields(
+        if( !count( $page ) )
+        {
+            $page = $this->_db->getRecordsByFields
+            (
                 'pageheaders',
-                array(
+                array
+                (
                     'id_pageinfos' => $id,
                     'lang'         => $this->_conf->getVar( 'lang', 'defaultLanguage' )
                 )
             );
         }
         
-        if( !count( $page ) ) {
-            
-            throw new Getter\Exception(
+        if( !count( $page ) )
+        {
+            throw new Getter\Exception
+            (
                 'Cannot find a page record for page ID ' . $id,
                 Getter\Exception::EXCEPTION_NO_PAGE
             );
@@ -187,19 +195,20 @@ class Getter extends \Woops\Core\Singleton\Base
     {
         $template = $this->_db->getRecord( 'templates', $id );
         
-        if( !is_object( $template ) ) {
-            
-            throw new Getter\Exception(
+        if( !is_object( $template ) )
+        {
+            throw new Getter\Exception
+            (
                 'Cannot find a template record for page ID ' . $this->_pageId,
                 Getter\Exception::EXCEPTION_NO_TEMPLATE
             );
         }
         
-        if( $template->id_parent ) {
-            
-            $parent                   = $this->_getTemplate( $template->id_parent );
-            $template->file           = $parent->file;
-            $template->engine         = $parent->engine;
+        if( $template->id_parent )
+        {
+            $parent           = $this->_getTemplate( $template->id_parent );
+            $template->file   = $parent->file;
+            $template->engine = $parent->engine;
         }
         
         return $template;

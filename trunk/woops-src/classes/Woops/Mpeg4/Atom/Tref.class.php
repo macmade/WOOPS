@@ -63,8 +63,8 @@ final class Tref extends \Woops\Mpeg4\DataAtom
         $data->entries = array();
         
         // Process each entry
-        while( !$this->_stream->endOfStream() ) {
-            
+        while( !$this->_stream->endOfStream() )
+        {
             // Length of the current entry
             $entryLength           = $this->_stream->bigEndianUnsignedLong();
             
@@ -78,8 +78,8 @@ final class Tref extends \Woops\Mpeg4\DataAtom
             $entry->track_IDs      = array();
             
             // Process each track ID
-            for( $i = 8; $i < $entryLength; $i +=4 ) {
-                
+            for( $i = 8; $i < $entryLength; $i +=4 )
+            {
                 // Gets the track ID
                 $entry->track_IDs[] = $this->_stream->bigEndianUnsignedLong();
             }

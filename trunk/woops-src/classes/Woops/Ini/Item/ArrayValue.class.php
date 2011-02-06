@@ -61,8 +61,8 @@ class ArrayValue extends \Woops\Core\Object
     public function __construct( $name, array $values = array() )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -71,8 +71,8 @@ class ArrayValue extends \Woops\Core\Object
         $this->_name = ( string )$name;
         
         // Process each passed values
-        foreach( $values as $value ) {
-            
+        foreach( $values as $value )
+        {
             // Adds the value item
             $this->addValue( $value );
         }
@@ -86,8 +86,8 @@ class ArrayValue extends \Woops\Core\Object
     public function __toString()
     {
         // Checks for values
-        if( !count( $this->_values ) ) {
-            
+        if( !count( $this->_values ) )
+        {
             // Noting to return
             return '';
         }
@@ -96,8 +96,8 @@ class ArrayValue extends \Woops\Core\Object
         $array = '';
         
         // Process ech value
-        foreach( $this->_values as $key => $value ) {
-            
+        foreach( $this->_values as $key => $value )
+        {
             // Adds the current value
             $array .= ( string )$value . self::$_str->NL;
         }

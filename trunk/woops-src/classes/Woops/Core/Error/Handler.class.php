@@ -68,9 +68,10 @@ final class Handler extends \Woops\Core\Singleton\Base
      */
     private function _handleError( $code , $message, $file = '', $line = 0, array $context = array() )
     {
-        if( !( $code & $this->_disabledErrors ) ) {
-            
-            throw new \Woops\Core\Php\Error\Exception(
+        if( !( $code & $this->_disabledErrors ) )
+        {
+            throw new \Woops\Core\Php\Error\Exception
+            (
                 \Woops\Core\Exception\Base::getExceptionString( 'Woops\Core\Php\Error\Exception', $code ) . ': ' . $message,
                 $code
             );

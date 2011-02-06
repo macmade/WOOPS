@@ -61,8 +61,8 @@ class FunctionReflector extends \Woops\Core\Reflection
      */
     public function getNameSpace()
     {
-        if( !isset( $this->_nameSpace ) ) {
-            
+        if( !isset( $this->_nameSpace ) )
+        {
             $name = $this->getName();
             $ns   = substr( $name, 0, strrpos( $name, '\\' ) );
             $this->_nameSpace = NameSpaceReflector::getInstance( $ns );
@@ -76,13 +76,14 @@ class FunctionReflector extends \Woops\Core\Reflection
      */
     public function getParameters()
     {
-        if( !$this->_hasParameters ) {
-            
+        if( !$this->_hasParameters )
+        {
             $parameters = $this->_reflector->getParameters();
             
-            foreach( $parameters as $parameter ) {
-                
-                $this->_parameters[ $parameter->getName() ] = ParameterReflector::getInstance(
+            foreach( $parameters as $parameter )
+            {
+                $this->_parameters[ $parameter->getName() ] = ParameterReflector::getInstance
+                (
                     $this->_reflector->getName(),
                     $parameter->getName()
                 );
@@ -99,18 +100,19 @@ class FunctionReflector extends \Woops\Core\Reflection
      */
     public function getExtension()
     {
-        if( !$this->_hasExtension ) {
-            
+        if( !$this->_hasExtension )
+        {
             $extension = $this->_reflector->getExtension();
             
-            if( $extension ) {
-                
-                $this->_extension = ExtensionReflector::getInstance(
+            if( $extension )
+            {
+                $this->_extension = ExtensionReflector::getInstance
+                (
                     $extension->getName()
                 );
-                
-            } else {
-                
+            }
+            else
+            {
                 $this->_extension = $extension;
             }
             

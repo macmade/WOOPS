@@ -89,7 +89,8 @@ class Response extends \Woops\Core\Object
     /**
      * The HTTP response codes, with their messages
      */
-    protected static $_codes   = array(
+    protected static $_codes   = array
+    (
         
         // Informational
         100 => 'Continue',
@@ -190,8 +191,8 @@ class Response extends \Woops\Core\Object
     protected function __construct( $code, array $headers, $rawBody, $body, $httpVersion )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -201,10 +202,11 @@ class Response extends \Woops\Core\Object
         $httpVersion = ( float )$httpVersion;
         
         // Ensures the response code is valid
-        if( !isset( self::$_codes[ $code ] ) ) {
-            
+        if( !isset( self::$_codes[ $code ] ) )
+        {
             // Invalid HTTP response code
-            throw new Response\Exception(
+            throw new Response\Exception
+            (
                 'Invalid HTTP code (' . $code . ')',
                 Response\Exception::EXCEPTION_INVALID_CODE
             );
@@ -218,11 +220,11 @@ class Response extends \Woops\Core\Object
         $this->_body        = $body;
         
         // Checks for the 'Set-Cookie' header
-        if( isset( $headers[ 'Set-Cookie' ] ) ) {
-            
+        if( isset( $headers[ 'Set-Cookie' ] ) )
+        {
             // Process each cookie
-            foreach( $headers[ 'Set-Cookie' ] as $cookie ) {
-                
+            foreach( $headers[ 'Set-Cookie' ] as $cookie )
+            {
                 // Creates a cookie object
                 $cookie                               = Cookie::createCookieObject( trim( $cookie ) );
                 
@@ -252,8 +254,8 @@ class Response extends \Woops\Core\Object
                   . $CRLF;
         
         // Process the headers
-        foreach( $this->_headers as $key => $value ) {
-            
+        foreach( $this->_headers as $key => $value )
+        {
             // Adds the current header
             $response .= $key
                       .  ': '
@@ -296,17 +298,18 @@ class Response extends \Woops\Core\Object
     public static function createResponseObject( $socket )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
         
         // Checks if we have a resource
-        if( !is_resource( $socket ) ) {
-            
+        if( !is_resource( $socket ) )
+        {
             // Invalid status line
-            throw new Response\Exception(
+            throw new Response\Exception
+            (
                 'Passed argument must be a valid resource',
                 Response\Exception::EXCEPTION_INVALID_RESOURCE
             );
@@ -316,10 +319,11 @@ class Response extends \Woops\Core\Object
         $CRLF    = self::$_str->CR . self::$_str->LF;
         
         // Checks if we have data to read
-        if( feof( $socket ) ) {
-            
+        if( feof( $socket ) )
+        {
             // Nothing to read
-            throw new Response\Exception(
+            throw new Response\Exception
+            (
                 'No more data to read in the resource',
                 Response\Exception::EXCEPTION_NO_DATA
             );
@@ -332,10 +336,11 @@ class Response extends \Woops\Core\Object
         $statusParts  = explode( ' ', $status );
         
         // Checks the status parts
-        if( count( $statusParts ) < 2 ) {
-            
+        if( count( $statusParts ) < 2 )
+        {
             // Invalid status line
-            throw new Response\Exception(
+            throw new Response\Exception
+            (
                 'Invalid HTTP status line (' . $status . ')',
                 Response\Exception::EXCEPTION_INVALID_HTTP_STATUS
             );
@@ -349,14 +354,14 @@ class Response extends \Woops\Core\Object
         $headers = array();
         
         // Reads each line of the socket to find the headers
-        while( !feof( $socket ) ) {
-            
+        while( !feof( $socket ) )
+        {
             // Reads a line
             $line = fgets( $socket );
             
             // Checks for the end of the headers
-            if( $line === $CRLF ) {
-                
+            if( $line === $CRLF )
+            {
                 // Ends of the headers
                 break;
             }
@@ -369,20 +374,20 @@ class Response extends \Woops\Core\Object
             $value  = ( isset( $header[ 1 ] ) ) ? trim( $header[ 1 ] ) : '';
             
             // Special processing for the 'Set-Cookie' header, which can appears multiple times
-            if( $name === 'Set-Cookie' ) {
-                
+            if( $name === 'Set-Cookie' )
+            {
                 // Checks if the storage array exists
-                if( !isset( $headers[ $name ] ) ) {
-                    
+                if( !isset( $headers[ $name ] ) )
+                {
                     // Creates the storage array for the cookies
                     $headers[ $name ] = array();
                 }
                 
                 // Adds the cookie
                 $headers[ $name ][] = $value;
-                
-            } else {
-                
+            }
+            else
+            {
                 // Adds the current header
                 $headers[ $name ] = $value;
             }
@@ -393,11 +398,11 @@ class Response extends \Woops\Core\Object
         $rawBody = '';
         
         // Checks if the transfer encoding is set to chunked or if we have a content length
-        if( isset( $headers[ 'Transfer-Encoding' ] ) && $headers[ 'Transfer-Encoding' ] === 'chunked' ) {
-            
+        if( isset( $headers[ 'Transfer-Encoding' ] ) && $headers[ 'Transfer-Encoding' ] === 'chunked' )
+        {
             // Reads until the end of the socket
-            while( !feof( $socket ) ) {
-                
+            while( !feof( $socket ) )
+            {
                 // Gets the chunk size
                 $chunkSize = fgets( $socket );
                 
@@ -405,8 +410,8 @@ class Response extends \Woops\Core\Object
                 $left = hexdec( trim( $chunkSize ) );
                 
                 // Reads until the end of the socket, or until the end of the chunk length
-                while( !feof( $socket ) && $left > 0 ) {
-                    
+                while( !feof( $socket ) && $left > 0 )
+                {
                     // Reads from the socket
                     $data     = fread( $socket, $left );
                     
@@ -418,23 +423,25 @@ class Response extends \Woops\Core\Object
                     $left    -= strlen( $data );
                 }
             }
-            
-        } elseif( isset( $headers[ 'Transfer-Encoding' ] ) ) {
-            
+        }
+        elseif( isset( $headers[ 'Transfer-Encoding' ] ) )
+        {
             // Unrecognized transfer encoding
-            throw new Response\Exception(
+            throw new Response\Exception
+            (
                 'Invalid transfer encoding (' . $headers[ 'Content-Encoding' ] . ')',
                 Response\Exception::EXCEPTION_INVALID_TRANSFER_ENCODING
             );
             
-        } elseif( isset( $headers[ 'Content-Length' ] ) ) {
-            
+        }
+        elseif( isset( $headers[ 'Content-Length' ] ) )
+        {
             // Data to read
             $left = $headers[ 'Content-Length' ];
             
             // Reads until the end of the socket, or until the end of the content length
-            while( !feof( $socket ) && $left > 0 ) {
-                
+            while( !feof( $socket ) && $left > 0 )
+            {
                 // Reads from the socket
                 $data     = fread( $socket, $left );
                 
@@ -445,12 +452,12 @@ class Response extends \Woops\Core\Object
                 // Decrease the number of bytes to read
                 $left    -= strlen( $data );
             }
-            
-        } else {
-            
+        }
+        else
+        {
             // Reads until the end of the socket
-            while( !feof( $socket ) ) {
-                
+            while( !feof( $socket ) )
+            {
                 // Reads from the socket
                 $data    .= fread( $socket, 8192 );
                 
@@ -461,14 +468,15 @@ class Response extends \Woops\Core\Object
         }
         
         // Checks if the body is encoded
-        if( isset( $headers[ 'Content-Encoding' ] ) ) {
-            
+        if( isset( $headers[ 'Content-Encoding' ] ) )
+        {
             // Decodes the body
             $body = self::_decodeBody( $body, $headers[ 'Content-Encoding' ] );
         }
         
         // Creates the response object
-        $response = new self(
+        $response = new self
+        (
             $code,
             $headers,
             $rawBody,
@@ -494,13 +502,14 @@ class Response extends \Woops\Core\Object
     protected static function _decodeBody( $body, $encoding )
     {
         // Checks if encoding type
-        if( $encoding === 'deflate' ) {
-            
+        if( $encoding === 'deflate' )
+        {
             // Checks if the gzuncompress() function is available
-            if( !function_exists( 'gzuncompress' ) ) {
-                
+            if( !function_exists( 'gzuncompress' ) )
+            {
                 // Error - Cannot process the body
-                throw new Response_Exception(
+                throw new Response_Exception
+                (
                     'The PHP function \'gzuncompress()\' is not available',
                     Response_Exception::EXCEPTION_NO_GZUNCOMPRESS
                 );
@@ -508,14 +517,15 @@ class Response extends \Woops\Core\Object
             
             // Uncompress the body
             $body = gzuncompress( $body );
-            
-        } elseif( $encoding === 'gzip' ) {
-            
+        }
+        elseif( $encoding === 'gzip' )
+        {
             // Checks if the gzuncompress() function is available
-            if( !function_exists( 'gzinflate' ) ) {
-                
+            if( !function_exists( 'gzinflate' ) )
+            {
                 // Error - Cannot process the body
-                throw new Response\Exception(
+                throw new Response\Exception
+                (
                     'The PHP function \'gzinflate()\' is not available',
                     Response\Exception::EXCEPTION_NO_GZINFLATE
                 );
@@ -630,10 +640,10 @@ class Response extends \Woops\Core\Object
     public function setCookie( $name )
     {
         // Checks if the cookie exists
-        if( isset( $this->_cookies[ $name ] ) ) {
-            
+        if( isset( $this->_cookies[ $name ] ) )
+        {
             // Sets the cookie
-            return $this->_cookies[ $name ];
+            return $this->_cookies[ $name ]->set();
         }
     }
     
@@ -645,10 +655,10 @@ class Response extends \Woops\Core\Object
     public function setCookies()
     {
         // Process all the cookies
-        foreach( $this->_cookies as $cookie ) {
-            
+        foreach( $this->_cookies as $cookie )
+        {
             // Sets the cookie
-            $cookie->setCookie();
+            $cookie->set();
         }
     }
     

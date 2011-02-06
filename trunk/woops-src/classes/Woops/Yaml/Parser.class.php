@@ -55,8 +55,8 @@ class Parser extends \Woops\Core\Object
     public function __construct( $yaml )
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -68,13 +68,14 @@ class Parser extends \Woops\Core\Object
         $this->_lines = explode( self::$_str->NL, $yaml );
         
         // Process each line
-        foreach( $this->_lines as $key => $value ) {
-            
+        foreach( $this->_lines as $key => $value )
+        {
             // Checks for a tabulation character
-            if( strchr( $line, self::$_str->TAB ) ) {
-                
+            if( strchr( $line, self::$_str->TAB ) )
+            {
                 // Tabulation characters are not allowed
-                throw new Parser\Exception(
+                throw new Parser\Exception
+                (
                     'Found a tab character at line ' . $key + 1 . '. Tab characters are not allowed in YAML',
                     Parser\Exception::EXCEPTION_TAB_CHAR
                 );

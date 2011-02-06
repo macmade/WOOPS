@@ -47,7 +47,8 @@ class Event extends \Woops\Core\Object
     /**
      * The MIDI event types, with their corresponding PHP classname
      */
-    protected static $_types = array(
+    protected static $_types = array
+    (
         0x08 => 'Woops\Midi\Event\Note\Off',
         0x09 => 'Woops\Midi\Event\Note\On',
         0x0A => 'Woops\Midi\Event\Note\AfterTouch',
@@ -85,20 +86,20 @@ class Event extends \Woops\Core\Object
         // Gets the event type
         $eventType        = $eventByte >> 4;
         
-        if( $eventType === 0x0F ) {
-            
+        if( $eventType === 0x0F )
+        {
             $eventType = $eventByte;
         }
         
-        try {
-            
+        try
+        {
             $event = $this->setEvent( $eventType );
             $event->processData( $stream );
-            
-        } catch( Event\Exception $e ) {
-            
-            if( $e->getCode() !== Event\Exception::EXCEPTION_INVALID_EVENT_TYPE ) {
-                
+        }
+        catch( Event\Exception $e )
+        {
+            if( $e->getCode() !== Event\Exception::EXCEPTION_INVALID_EVENT_TYPE )
+            {
                 throw $e;
             }
         }
@@ -111,9 +112,10 @@ class Event extends \Woops\Core\Object
     {
         $type = ( int )$type;
         
-        if( !isset( self::$_types[ $type ] ) ) {
-            
-            throw new Event\Exception(
+        if( !isset( self::$_types[ $type ] ) )
+        {
+            throw new Event\Exception
+            (
                 'Invalid MIDI event type (' . $type . ')',
                 Event\Exception::EXCEPTION_INVALID_EVENT_TYPE
             );

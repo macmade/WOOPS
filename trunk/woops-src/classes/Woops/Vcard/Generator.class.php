@@ -66,7 +66,8 @@ class Generator extends \Woops\Core\Object
     /**
      * The vCard properties storage array
      */
-    protected $_vCard               = array(
+    protected $_vCard               = array
+    (
         'ADR'         => array(),   // Delivery address
         'BDAY'        => array(),   // Birthdate
         'CATEGORIES'  => array(),   // Category information
@@ -138,8 +139,8 @@ class Generator extends \Woops\Core\Object
     public function __construct()
     {
         // Checks if the static variables are set
-        if( !self::$_hasStatic ) {
-            
+        if( !self::$_hasStatic )
+        {
             // Sets the static variables
             self::_setStaticVars();
         }
@@ -173,18 +174,18 @@ class Generator extends \Woops\Core\Object
     protected function _escapeValue( $input )
     {
         // Checks if the value is an array
-        if( is_array( $input ) ) {
-            
+        if( is_array( $input ) )
+        {
             // Process each entry
-            foreach( $input as $key => $value ) {
-                
+            foreach( $input as $key => $value )
+            {
                 // Escapes the vCard reserved characters (ASCII 44 & 59)
                 $input[ $key ] = str_replace( ',', '\,', $value );
                 $input[ $key ] = str_replace( ';', '\;', $value );
             }
-            
-        } else {
-            
+        }
+        else
+        {
             // Escapes the vCard reserved characters (ASCII 44 & 59)
             $input = str_replace( ',', '\,', $input );
             $input = str_replace( ';', '\;', $input );
@@ -204,14 +205,14 @@ class Generator extends \Woops\Core\Object
         $vCard .= 'VERSION:' . $this->_version . self::$_str->NL;
         
         // Process the vCard properties
-        foreach( $this->_vCard as $property => $items ) {
-            
+        foreach( $this->_vCard as $property => $items )
+        {
             // Checks if the property contains data
-            if( count( $items ) ) {
-                
+            if( count( $items ) )
+            {
                 // Process the property items
-                foreach( $items as $item ) {
-                    
+                foreach( $items as $item )
+                {
                     // Adds the property name
                     $vCard .= $property;
                     
@@ -243,8 +244,8 @@ class Generator extends \Woops\Core\Object
         $params = '';
         
         // Process each value
-        foreach( $items as $key => $value ) {
-            
+        foreach( $items as $key => $value )
+        {
             // Adds the parameter name
             $params .= ';' . $key . '=';
             
@@ -266,8 +267,8 @@ class Generator extends \Woops\Core\Object
         $values = '';
         
         // Process each value
-        foreach( $items as $key => $value ) {
-            
+        foreach( $items as $key => $value )
+        {
             // Adds the value separator
             $values .= ( $key > 0 ) ? ';' : '';
             
@@ -289,8 +290,8 @@ class Generator extends \Woops\Core\Object
         $name = $this->_extendedName( $name );
         
         // Checks if property already exists
-        if ( !isset( $this->_vCard[ $name ] ) ) {
-            
+        if ( !isset( $this->_vCard[ $name ] ) )
+        {
             // Adds the extended property
             $this->_vCard[ $name ] = array();
         }
@@ -368,7 +369,8 @@ class Generator extends \Woops\Core\Object
     public function addFormattedName( $name )
     {
         // Storage
-        $store = array(
+        $store = array
+        (
             'params' => array(),
             'values' => array(),
         );
@@ -416,7 +418,8 @@ class Generator extends \Woops\Core\Object
     public function addName( $fN, $gN, $aN = '', $hP = '', $hS = '' )
     {
         // Storage
-        $store = array(
+        $store = array
+        (
             'params' => array(),
             'values' => array(),
         );
@@ -438,7 +441,8 @@ class Generator extends \Woops\Core\Object
     public function addNickname( $nickname )
     {
         // Storage
-        $store = array(
+        $store = array
+        (
             'params' => array(),
             'values' => array(),
         );

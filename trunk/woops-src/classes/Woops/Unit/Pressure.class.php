@@ -49,7 +49,8 @@ class Pressure extends Base
     /**
      * The conversion operations for each unit from the default type
      */
-    protected $_types = array(
+    protected $_types = array
+    (
         'ATMOSPHERES'                => array(),
         'BARS'                       => array(),
         'CENTIMETERS_OF_MERCURY'     => array(),

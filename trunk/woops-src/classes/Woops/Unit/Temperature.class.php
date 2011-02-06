@@ -46,7 +46,8 @@ class Temperature extends Base
     /**
      * The conversion operations for each unit from the default type
      */
-    protected $_types = array(
+    protected $_types = array
+    (
         'CELSIUS'    => array(),
         'FAHRENHEIT' => array( array( '*' , 9 ), array( '/', 5 ), array( '+', 32 ) ),
         'KELVIN'     => array( array( '-', 273.16 ) )
