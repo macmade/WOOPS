@@ -6,8 +6,8 @@
 	<title>DBAL - ADODB</title>
 	<description>Database abstraction layer using ADODB.</description>
 	<author>Jean-David Gadina</author>
-	<company>eosgarden</company>
-	<email>macmade@eosgarden.com</email>
+	<company>XS-Labs</company>
+	<email></email>
 	<version>0.0.0</version>
 	<category>DBAL</category>
 	<state>experimental</state>

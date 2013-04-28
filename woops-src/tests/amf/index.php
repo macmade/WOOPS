@@ -39,7 +39,7 @@
 		#                                                                              #
 		#                               COPYRIGHT NOTICE                               #
 		#                                                                              #
-		# Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)                 #
+		# Copyright (C) 2009 Jean-David Gadina - www.xs-labs.com                       #
 		# All rights reserved                                                          #
 		################################################################################
 		
@@ -49,9 +49,7 @@
 		<title>WOOPS - Web Object Oriented Programming System</title>
 		<link rel="schema.dc" href="http://purl.org/metadata/dublin_core_elements" />
 		<link rel="stylesheet" rev="stylesheet" href="css/base.css" type="text/css" media="screen" charset="utf-8" />
-		<link rev="made" href="mailto:macmade@eosgarden.com" />
 		<meta http-equiv="content-language" content="en" />
-		<meta http-equiv="reply-to" content="macmade@eosgarden.com" />
 		<meta name="author" content="Jean-David Gadina" />
 		<meta name="copyright" content="Copyright (C) 2009 Jean-David Gadina" />
 		<meta name="DC.Creator" content="Jean-David Gadina" />
