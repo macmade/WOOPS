@@ -5,7 +5,7 @@
 #                                                                              #
 #                               COPYRIGHT NOTICE                               #
 #                                                                              #
-# Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)                 #
+# Copyright (C) 2009 Jean-David Gadina - www.xs-labs.com                       #
 # All rights reserved                                                          #
 ################################################################################
 
@@ -18,7 +18,7 @@
  * red, green, and blue display primaries used in the image, and the referenced
  * white point.
  *
- * @author      Jean-David Gadina <macmade@eosgarden.com>
+ * @author      Jean-David Gadina - www.xs-labs.com
  * @version     1.0
  * @package     Woops.Png.Chunk
  */

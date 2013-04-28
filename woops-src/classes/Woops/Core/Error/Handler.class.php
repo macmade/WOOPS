@@ -5,7 +5,7 @@
 #                                                                              #
 #                               COPYRIGHT NOTICE                               #
 #                                                                              #
-# Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)                 #
+# Copyright (C) 2009 Jean-David Gadina - www.xs-labs.com                       #
 # All rights reserved                                                          #
 ################################################################################
 
@@ -33,7 +33,7 @@
  *      - E_DEPRECATED         - Since PHP 5.3.0
  *      - E_USER_DEPRECATED    - Since PHP 5.3.0
  *
- * @author      Jean-David Gadina <macmade@eosgarden.com>
+ * @author      Jean-David Gadina - www.xs-labs.com
  * @version     1.0
  * @package     Woops.Core.Error
  */

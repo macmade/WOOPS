@@ -5,7 +5,7 @@
 #                                                                              #
 #                               COPYRIGHT NOTICE                               #
 #                                                                              #
-# Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)                 #
+# Copyright (C) 2009 Jean-David Gadina - www.xs-labs.com                       #
 # All rights reserved                                                          #
 ################################################################################
 
@@ -14,7 +14,7 @@
 /**
  * Abstract for the module blocks
  *
- * @author      Jean-David Gadina <macmade@eosgarden.com>
+ * @author      Jean-David Gadina - www.xs-labs.com
  * @version     1.0
  * @package     Woops.Core.Module
  */

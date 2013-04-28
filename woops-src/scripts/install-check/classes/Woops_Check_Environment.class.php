@@ -5,7 +5,7 @@
 #                                                                              #
 #                               COPYRIGHT NOTICE                               #
 #                                                                              #
-# Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)                 #
+# Copyright (C) 2009 Jean-David Gadina - www.xs-labs.com                       #
 # All rights reserved                                                          #
 ################################################################################
 
@@ -14,7 +14,7 @@
 /**
  * Woops PHP environment check (PHP 4 class, as we want this to run on all boxes)
  *
- * @author      Jean-David Gadina <macmade@eosgarden.com>
+ * @author      Jean-David Gadina - www.xs-labs.com
  * @version     1.0
  */
 class Woops_Check_Environment

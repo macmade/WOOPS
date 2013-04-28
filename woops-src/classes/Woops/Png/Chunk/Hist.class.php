@@ -5,7 +5,7 @@
 #                                                                              #
 #                               COPYRIGHT NOTICE                               #
 #                                                                              #
-# Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)                 #
+# Copyright (C) 2009 Jean-David Gadina - www.xs-labs.com                       #
 # All rights reserved                                                          #
 ################################################################################
 
@@ -20,7 +20,7 @@
  * the histogram may help it decide how to choose a subset of the colours
  * for display.
  *
- * @author      Jean-David Gadina <macmade@eosgarden.com>
+ * @author      Jean-David Gadina - www.xs-labs.com
  * @version     1.0
  * @package     Woops.Png.Chunk
  */

@@ -5,7 +5,7 @@
 #                                                                              #
 #                               COPYRIGHT NOTICE                               #
 #                                                                              #
-# Copyright (C) 2009 Jean-David Gadina (macmade@eosgarden.com)                 #
+# Copyright (C) 2009 Jean-David Gadina - www.xs-labs.com                       #
 # All rights reserved                                                          #
 ################################################################################
 
@@ -31,7 +31,7 @@ require_once( realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' ) . DIR
  * because of the particularity of the SPL autoload method. So no fancy
  * error reporting here, unfortunately.
  *
- * @author      Jean-David Gadina <macmade@eosgarden.com>
+ * @author      Jean-David Gadina - www.xs-labs.com
  * @version     1.0
  * @package     Woops.Core.Class
  */

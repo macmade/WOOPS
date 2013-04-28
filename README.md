@@ -2,7 +2,8 @@ WOOPS - PHP 5.3 framework
 =========================
 
 WOOPS was a PHP 5.3 framework project, targeting complex object-oriented PHP applications.  
-This project is no longer developed, nor maintained.
+The project was started around 2009.  
+It is no longer developed, nor maintained.
 
 Features
 --------
