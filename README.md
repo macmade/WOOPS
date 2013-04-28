@@ -1,9 +1,7 @@
-
 WOOPS - PHP 5.3 framework
-==========================
+=========================
 
 WOOPS is a PHP 5.3 framework, targeting complex object-oriented PHP applications.  
-WOOPS is currently under development, and no release date has been set yet.
 
 Features
 --------
@@ -18,7 +16,7 @@ Here's a non-exhaustive list of the WOOPS features, at the actual development st
  * Event dispatcher
  * Enhanced reflection
  * Enhanced exception and error handling
- * Built-in localization support
+ * Built-in localisation support
  * Request and session abstraction
  * Database abstraction layer, supporting virtually any kind of DBAL system (PDO and ADODB included by default)
  * Unit testing
@@ -29,4 +27,3 @@ Here's a non-exhaustive list of the WOOPS features, at the actual development st
  * Easy configuration and installation (with a built-in installer)
  * CMS (Content Management System) engine
  * Support for third-party modules
- * …
