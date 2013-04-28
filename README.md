@@ -1,7 +1,8 @@
 WOOPS - PHP 5.3 framework
 =========================
 
-WOOPS is a PHP 5.3 framework, targeting complex object-oriented PHP applications.  
+WOOPS was a PHP 5.3 framework project, targeting complex object-oriented PHP applications.  
+This project is no longer developed, nor maintained.
 
 Features
 --------
@@ -27,3 +28,14 @@ Here's a non-exhaustive list of the WOOPS features, at the actual development st
  * Easy configuration and installation (with a built-in installer)
  * CMS (Content Management System) engine
  * Support for third-party modules
+
+Repository Infos
+----------------
+
+    Owner:			Jean-David Gadina - XS-Labs
+    Web:			www.xs-labs.com
+    Blog:			www.noxeos.com
+    Twitter:		@macmade
+    GitHub:			github.com/macmade
+    LinkedIn:		ch.linkedin.com/in/macmade/
+    StackOverflow:	stackoverflow.com/users/182676/macmade
