@@ -1,6 +1,11 @@
 WOOPS - PHP 5.3 framework
 =========================
 
+[![Issues](http://img.shields.io/github/issues/macmade/WOOPS.svg?style=flat)](https://github.com/macmade/WOOPS/issues)
+![Status](https://img.shields.io/badge/status-inactive-lightgray.svg?style=flat)
+![License](https://img.shields.io/badge/license-none-lightgray.svg?style=flat)
+[![Contact](https://img.shields.io/badge/contact-@macmade-blue.svg?style=flat)](https://twitter.com/macmade)
+
 WOOPS was a PHP 5.3 framework project, targeting complex object-oriented PHP applications.  
 The project was started around 2009.  
 It is no longer developed, nor maintained.
